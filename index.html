@@ -60,6 +60,8 @@ svg { display:block; }
   -webkit-overflow-scrolling:touch;
 }
 .view.active { display:flex; }
+/* Ensure nav never covers action buttons */
+.view { padding-bottom: 90px; }
 @keyframes slideUp {
   from { transform:translateY(22px); opacity:0; }
   to   { transform:translateY(0);    opacity:1; }
@@ -218,7 +220,7 @@ svg { display:block; }
 /* =============================================
    ONBOARDING
 ============================================= */
-#view-onboarding { background:var(--dark); }
+#view-onboarding { background:var(--dark); padding-bottom:90px; }
 .ob-header { padding:28px 20px 0; text-align:center; }
 .ob-logo { font-family:'Bebas Neue',sans-serif; font-size:28px; }
 .ob-logo span { color:var(--gold); }
@@ -280,7 +282,7 @@ svg { display:block; }
 /* =============================================
    QUIZ SCREEN
 ============================================= */
-#view-quiz { background:var(--dark); }
+#view-quiz { background:var(--dark); padding-bottom:90px; }
 .quiz-top {
   padding:12px 16px;
   display:flex; align-items:center; justify-content:space-between;
@@ -378,7 +380,7 @@ svg { display:block; }
 /* =============================================
    RESULT SCREEN
 ============================================= */
-#view-result { background:var(--dark); padding:0 0 40px; align-items:center; }
+#view-result { background:var(--dark); padding:0 0 90px; align-items:center; }
 .result-header {
   width:100%; text-align:center;
   padding:40px 20px 24px;
@@ -457,7 +459,7 @@ svg { display:block; }
 ============================================= */
 #view-daily-complete {
   background:var(--dark); align-items:center; justify-content:center;
-  padding:24px; text-align:center;
+  padding:24px 24px 90px; text-align:center;
 }
 .dcc-icon    { font-size:64px; margin-bottom:16px; }
 .dcc-title   { font-family:'Bebas Neue',sans-serif; font-size:38px; color:var(--gold); }
@@ -536,7 +538,7 @@ svg { display:block; }
 /* ── Saturday Complete view ────────────────────────────────────── */
 #view-saturday-complete {
   display:flex; flex-direction:column; align-items:center;
-  padding:36px 24px 40px; min-height:100%;
+  padding:36px 24px 90px; min-height:100%;
   background:linear-gradient(170deg,#0d1f08 0%,var(--dark) 55%);
   overflow-y:auto;
 }
@@ -574,7 +576,7 @@ svg { display:block; }
 .debrief-btn { background:var(--card); border:1px solid var(--border); color:var(--text); border-radius:var(--radius-sm); padding:9px 14px; font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer; }
 
 /* ── 19th Hole Debrief view ────────────────────────────────────── */
-#view-debrief { min-height:100%; overflow-y:auto; }
+#view-debrief { min-height:100%; overflow-y:auto; padding-bottom:90px; }
 .db-header { padding:16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; position:sticky; top:0; background:var(--dark); z-index:10; }
 .db-header-title { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--text); }
 .db-body { padding:20px 16px; }
@@ -768,97 +770,6 @@ svg { display:block; }
 .ib-text strong { color:var(--gold); }
 .ib-btn  { background:var(--gold); color:#111; border-radius:var(--radius-sm); padding:8px 16px; font-weight:700; font-size:13px; white-space:nowrap; border:none; cursor:pointer; }
 .ib-close { color:var(--muted); font-size:20px; cursor:pointer; flex-shrink:0; background:none; border:none; }
-
-/* ── Fix-It Outcome Section ─────────────────────────── */
-.fixit-section { padding:0 16px; margin:4px 0 0; }
-.fixit-prompt  { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; padding-top:16px; }
-.fixit-item    { display:flex; align-items:center; gap:12px; background:var(--card); border-radius:var(--radius); padding:13px 16px; margin-bottom:8px; cursor:pointer; border:1px solid var(--border); transition:opacity .15s; }
-.fixit-item:active { opacity:.7; }
-.fixit-top     { background:var(--card2); border-color:rgba(200,168,75,.5); }
-.fixit-ritual  { border-style:dashed; opacity:.8; }
-.fixit-emoji   { font-size:20px; flex-shrink:0; width:28px; text-align:center; }
-.fixit-text    { flex:1; }
-.fixit-label   { font-size:14px; font-weight:600; color:var(--text); line-height:1.2; }
-.fixit-desc    { font-size:11px; color:var(--muted); margin-top:2px; line-height:1.4; }
-.fixit-badge   { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(200,168,75,.5); border-radius:4px; padding:3px 8px; flex-shrink:0; white-space:nowrap; }
-.fixit-arrow   { color:var(--muted); font-size:18px; flex-shrink:0; line-height:1; }
-
-/* ── Pre-Round Ritual ───────────────────────────────── */
-#view-preround { background:var(--dark); }
-.pr-header { display:flex; align-items:center; justify-content:space-between; padding:20px 16px 0; }
-.pr-title  { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--text); letter-spacing:.06em; }
-.pr-close  { background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; padding:4px; }
-.pr-progress { display:flex; gap:6px; padding:16px 16px 20px; }
-.pr-dot { height:3px; border-radius:2px; flex:1; background:var(--border); transition:background .35s; }
-.pr-dot.active { background:var(--gold); }
-.pr-dot.done   { background:var(--correct); }
-.pr-card  { margin:0 16px; background:var(--card); border-radius:var(--radius); padding:20px; border:1px solid var(--border); }
-.pr-q-label { font-size:9px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
-.pr-q-text  { font-size:17px; font-weight:600; color:var(--text); line-height:1.45; margin-bottom:18px; }
-.pr-opt { display:block; width:100%; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 15px; margin-bottom:9px; font-size:13px; color:var(--text); cursor:pointer; transition:border-color .2s,background .2s; font-family:inherit; line-height:1.45; }
-.pr-opt.selected { border-color:var(--gold); background:rgba(200,168,75,.1); }
-.pr-cue-wrap  { padding:20px 16px 32px; }
-.pr-cue-label { font-size:9px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); text-align:center; margin-bottom:20px; }
-.pr-cue-card  { background:var(--card); border:1px solid rgba(200,168,75,.4); border-radius:var(--radius); padding:24px 20px; margin-bottom:8px; }
-.pr-cue-text  { font-size:15px; line-height:1.65; color:var(--text); font-style:italic; text-align:center; }
-.pr-cue-sub   { font-size:11px; color:var(--muted); text-align:center; margin-top:12px; }
-.pr-cue-actions { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
-
-
-/* ── V1.1 Action Tip hero ─────────────────────────────── */
-.exp-tip-hero { background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.4); border-radius:var(--radius); padding:14px 16px; margin-bottom:4px; }
-.exp-tip-hero-label { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
-.exp-tip-hero-text { font-size:14px; color:var(--text); line-height:1.55; font-weight:500; }
-.round-intent-btn { display:block; width:100%; margin-top:10px; background:transparent; border:1px solid rgba(200,168,75,.5); color:var(--gold); border-radius:var(--radius-sm); padding:11px 16px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; text-align:center; transition:background .2s,border-color .2s; }
-.round-intent-btn.saved { border-color:var(--correct); color:var(--correct); }
-
-/* ── V1.1 Tomorrow hook ───────────────────────────────── */
-.tomorrow-hook { background:var(--card2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin:16px 0; text-align:center; }
-.th-label { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
-.th-text  { font-size:14px; color:var(--text); line-height:1.55; }
-.th-next  { font-size:12px; color:var(--muted); margin-top:6px; }
-
-/* ── V1.1 Feedback form ───────────────────────────────── */
-.feedback-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 16px; margin:16px; }
-.fb-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:4px; }
-.fb-sub   { font-size:12px; color:var(--muted); margin-bottom:16px; }
-.fb-q     { font-size:13px; font-weight:600; color:var(--text); margin-bottom:8px; }
-.fb-opts  { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
-.fb-opt   { flex:1; min-width:80px; background:var(--card2); border:1px solid var(--border); color:var(--text); border-radius:var(--radius-sm); padding:9px 8px; font-size:12px; font-weight:500; cursor:pointer; font-family:inherit; text-align:center; transition:border-color .15s,background .15s; }
-.fb-opt.selected { border-color:var(--gold); background:rgba(200,168,75,.12); color:var(--gold); }
-.fb-opt-wide { flex-basis:calc(50% - 4px); }
-.fb-submit   { width:100%; padding:12px; background:var(--gold); color:#111; font-weight:700; font-size:14px; border:none; border-radius:var(--radius); cursor:pointer; font-family:inherit; margin-top:4px; }
-.fb-done     { text-align:center; padding:8px 0 4px; color:var(--correct); font-size:14px; font-weight:600; }
-
-/* ── V1.1 Hole intro card ─────────────────────────────── */
-.hole-intro-overlay { position:absolute; inset:0; background:rgba(0,0,0,.85); z-index:10; display:flex; align-items:center; justify-content:center; padding:32px; }
-.hole-intro-card { background:var(--card); border:1px solid rgba(200,168,75,.4); border-radius:var(--radius); padding:32px 24px; max-width:320px; width:100%; text-align:center; }
-.hic-emoji { font-size:48px; margin-bottom:16px; }
-.hic-title { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--gold); letter-spacing:.04em; margin-bottom:12px; }
-.hic-body  { font-size:14px; color:var(--text); line-height:1.7; margin-bottom:24px; }
-.hic-btn   { width:100%; padding:14px; background:var(--gold); color:#111; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:.06em; border:none; border-radius:var(--radius); cursor:pointer; }
-
-/* ── V1.1 Daily-complete updates ─────────────────────── */
-#view-daily-complete { display:flex; flex-direction:column; align-items:center; padding:48px 16px 32px; overflow-y:auto; }
-.dcc-tomorrow { width:100%; max-width:320px; }
-
-/* ── V1.1 Home subtitle ───────────────────────────────── */
-.home-subtitle { font-size:11px; color:var(--muted); letter-spacing:.04em; margin-top:2px; }
-
-/* ── V1.1 Pre-Round Sharpener card ───────────────────── */
-.home-play-hole { margin:0 16px 12px; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; display:flex; align-items:center; gap:14px; cursor:pointer; transition:opacity .15s; }
-.home-play-hole:active { opacity:.75; }
-.hph-left  { flex:1; }
-.hph-badge { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
-.hph-title { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--text); line-height:1; margin-bottom:4px; }
-.hph-sub   { font-size:12px; color:var(--muted); line-height:1.45; }
-.hph-arrow { font-size:22px; color:var(--gold); }
-
-/* ── Social Challenge ───────────────────────────────── */
-.social-challenge { margin:16px 16px 0; background:var(--card2); border-radius:var(--radius); padding:16px 16px 14px; border-left:3px solid var(--gold); }
-.sc-eyebrow { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
-.sc-chal-text { font-size:14px; color:var(--text); line-height:1.55; margin-bottom:14px; }
-.sc-chal-btn  { background:transparent; border:1px solid rgba(200,168,75,.5); color:var(--gold); border-radius:var(--radius-sm); padding:11px 16px; font-size:13px; font-weight:600; width:100%; cursor:pointer; font-family:inherit; }
 </style>
 </head>
 <body>
@@ -890,7 +801,6 @@ svg { display:block; }
   <div class="home-header" id="home-header">
     <div>
       <div class="logo-wordmark"><span class="lw-w">GAME</span><span class="lw-g">SHARP</span></div>
-      <div class="home-subtitle">Train your golf IQ before your next round.</div>
       <div class="home-arch-greeting" id="home-arch-greeting"></div>
     </div>
     <div class="streak-badge">
@@ -901,7 +811,16 @@ svg { display:block; }
     <button class="profile-btn" id="profile-btn">👤</button>
   </div>
 
-  <!-- 1. Daily Challenge — primary habit action -->
+  <div class="hole-entry-card" onclick="startHole()">
+    <div class="hec-badge">SIGNATURE MODE</div>
+    <div class="hec-title">PLAY A HOLE</div>
+    <div class="hec-sub">Make every decision. Live with the outcome.</div>
+    <div class="hec-meta">Par 4 · 385 yards · The Dogleg</div>
+    <button class="hec-btn">PLAY NOW →</button>
+  </div>
+
+  <div id="saturday-card-wrap"></div>
+
   <div class="daily-card">
     <div class="dc-label">Daily Challenge</div>
     <div class="dc-title">TODAY'S ROUND</div>
@@ -913,18 +832,12 @@ svg { display:block; }
     <button class="daily-btn" id="daily-btn" onclick="startDaily()">PLAY TODAY'S CHALLENGE →</button>
   </div>
 
-  <!-- 2. Pre-Round Sharpener — real-world use case -->
-  <div id="saturday-card-wrap"></div>
-
-  <!-- 3. Play a Hole — differentiator -->
-  <div id="hole-home-wrap"></div>
-
-  <!-- 4. Debrief — post-round personalisation -->
   <div id="debrief-card-wrap"></div>
 
-  <!-- 5. Explore — pillars & pro lens below fold -->
+  <div id="crash-card-wrap"></div>
+
   <div class="home-section">
-    <p class="section-title">Explore</p>
+    <p class="section-title">Your Pillars</p>
     <div class="pillar-grid" id="pillar-grid"></div>
   </div>
 
@@ -932,9 +845,6 @@ svg { display:block; }
     <p class="section-title" style="padding:0 16px;margin-top:20px">Pro Lens</p>
     <div class="pro-lens-scroll" id="pro-lens-scroll"></div>
   </div>
-
-  <!-- Crash Course — shown only after 10+ questions -->
-  <div id="crash-card-wrap"></div>
 
   <div style="height:20px"></div>
 
@@ -996,11 +906,6 @@ svg { display:block; }
       <span class="verdict-text" id="verdict-text"></span>
     </div>
     <div class="exp-body">
-      <div class="exp-tip-hero" id="exp-tip-hero">
-        <div class="exp-tip-hero-label">⛳ Take This to the Course</div>
-        <div class="exp-tip-hero-text" id="exp-tip"></div>
-        <button class="round-intent-btn" id="round-intent-btn" onclick="saveRoundIntent()">⛳ I'll use this next round</button>
-      </div>
       <div><div class="exp-label">Why this is right</div><div class="exp-text" id="exp-why"></div></div>
       <div class="pro-insight-box">
         <div class="pi-label">🏆 Pro Lens</div>
@@ -1008,6 +913,7 @@ svg { display:block; }
         <div class="pi-disclaimer">Reflects the player's known philosophy</div>
       </div>
       <div><div class="exp-label">⚠️ Common Pitfall</div><div class="exp-text" id="exp-pitfall"></div></div>
+      <div><div class="exp-label">✅ Action Tip</div><div class="exp-text" id="exp-tip"></div></div>
       <div class="anim-wrap">
         <div class="anim-label" id="anim-label">Scenario ·</div>
         <div class="anim-container" id="anim-container"></div>
@@ -1040,14 +946,12 @@ svg { display:block; }
     <button class="btn btn-gold"  id="result-share-btn">Share Result</button>
     <button class="btn btn-dark"  onclick="showView('home')">Back to Home</button>
   </div>
-  <div id="social-challenge-wrap"></div>
 </div>
 
 <!-- ============================== PROFILE ============================== -->
 <div class="view" id="view-profile">
   <div class="profile-hero">
     <button class="profile-back" onclick="showView('home')">← Back</button>
-    <button class="profile-back" style="right:16px;left:auto;font-size:10px;padding:6px 10px;color:var(--muted)" onclick="exportEvents()">Export Data</button>
     <div class="profile-arch-row">
       <div class="profile-arch-icon" id="pa-icon">🏆</div>
       <div>
@@ -1081,26 +985,24 @@ svg { display:block; }
 
 <!-- ============================== DAILY COMPLETE ============================== -->
 <div class="view" id="view-daily-complete">
+  <div class="dcc-score-wrap" style="text-align:center;margin:32px 0 8px">
+    <div id="dcc-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--gold);line-height:1">0</div>
+    <div id="dcc-score-denom" style="font-size:18px;color:var(--muted);margin-top:-4px">/5</div>
+  </div>
   <div class="dcc-icon">⛳</div>
   <div class="dcc-title">Round Complete!</div>
-  <div class="dcc-sub" id="dcc-sub">You've finished today's Daily Challenge.</div>
+  <div class="dcc-sub">You've finished today's Daily Challenge.<br>Come back tomorrow to keep your streak alive.</div>
   <div class="dcc-streak-num"   id="dcc-streak-num">1</div>
   <div class="dcc-streak-label">Day Streak 🔥</div>
-  <div class="dcc-tomorrow tomorrow-hook" id="dcc-tomorrow" style="display:none">
-    <div class="th-label">Tomorrow</div>
-    <div class="th-text" id="dcc-tomorrow-text"></div>
-    <div class="th-next" id="dcc-tomorrow-next"></div>
-  </div>
-  <div class="dcc-actions" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:10px;">
-    <button class="btn btn-gold"  onclick="navTo('home')">Back to Home</button>
+  <div class="dcc-actions">
+    <button class="btn btn-gold"  onclick="showView('home')">Back to Home</button>
     <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Score</button>
   </div>
-  <div id="dcc-feedback-wrap" style="width:100%;max-width:320px;"></div>
 </div>
 
 <!-- ============================== SATURDAY COMPLETE ============================== -->
 <div class="view" id="view-saturday-complete">
-  <div class="sc-week" id="sc-week">PRE-ROUND SHARPENER</div>
+  <div class="sc-week" id="sc-week">PRE-ROUND WARM-UP</div>
   <div class="sc-score-wrap">
     <div class="sc-score" id="sc-score">3</div>
     <div class="sc-score-of">/3</div>
@@ -1112,13 +1014,8 @@ svg { display:block; }
   <div class="sc-actions">
     <button class="sc-share" id="sc-share-btn">Share with Your Foursome →</button>
     <button class="sc-again" onclick="startSaturdayCard()">Play Again</button>
-    <button class="sc-again" onclick="navTo('home')">Back to Home</button>
+    <button class="sc-again" onclick="showView('home');renderHome()">Back to Home</button>
   </div>
-  <div class="sc-tomorrow tomorrow-hook" id="sc-tomorrow" style="display:none;margin:12px 16px 0;text-align:left;">
-    <div class="th-label">After your round</div>
-    <div class="th-text" id="sc-tomorrow-text"></div>
-  </div>
-  <div id="sc-feedback-wrap" style="width:100%;"></div>
 </div>
 
 <!-- ============================== 19TH HOLE DEBRIEF ============================== -->
@@ -3919,34 +3816,9 @@ const S = {
   streak: 0,
   lastDaily: null,
   dailyDone: false,
-  lastPreround: null,
-  lastSaturday: null,
-  dailySessions: 0,
-  completed: {},
-  pillarStats: {}
+  completed: {},   // { qid: 'correct'|'wrong' }
+  pillarStats: {}  // { pillarName: { correct:0, total:0 } }
 };
-
-// ── Event logging ───────────────────────────────────────
-function logEvent(name, data){
-  try{
-    const events = JSON.parse(localStorage.getItem('gsg_events') || '[]');
-    events.push({ event:name, ts: Date.now(), ...(data||{}) });
-    if(events.length > 500) events.splice(0, events.length - 500);
-    localStorage.setItem('gsg_events', JSON.stringify(events));
-  } catch(e){}
-}
-
-function exportEvents(){
-  try{
-    const events = JSON.parse(localStorage.getItem('gsg_events') || '[]');
-    const feedback = JSON.parse(localStorage.getItem('gsg_feedback') || '[]');
-    const intents  = JSON.parse(localStorage.getItem('gsg_round_intents') || '[]');
-    const data = { events, feedback, intents, exported: new Date().toISOString() };
-    const text = JSON.stringify(data, null, 2);
-    if(navigator.share){ navigator.share({ title:'GameSharp Data Export', text }).catch(()=>{}); }
-    else { navigator.clipboard && navigator.clipboard.writeText(text).then(()=>alert('Copied to clipboard!')); }
-  } catch(e){ alert('No data yet.'); }
-}
 
 const LS = {
   get(k){ try{ return JSON.parse(localStorage.getItem('gsg_'+k)); }catch(e){ return null; } },
@@ -3954,28 +3826,21 @@ const LS = {
 };
 
 function loadState(){
-  S.profile      = LS.get('profile')      || null;
-  S.streak       = LS.get('streak')       || 0;
-  S.lastDaily    = LS.get('lastDaily')    || null;
-  S.lastPreround = LS.get('lastPreround') || null;
-  S.lastSaturday = LS.get('lastSaturday') || null;
-  S.dailySessions= LS.get('dailySessions')|| 0;
-  S.completed    = LS.get('completed')    || {};
-  S.pillarStats  = LS.get('pillarStats')  || {};
-  const today    = todayStr();
-  S.dailyDone    = S.lastDaily === today;
-  logEvent('app_open');
+  S.profile    = LS.get('profile') || null;
+  S.streak     = LS.get('streak')  || 0;
+  S.lastDaily  = LS.get('lastDaily') || null;
+  S.completed  = LS.get('completed') || {};
+  S.pillarStats= LS.get('pillarStats') || {};
+  const today  = todayStr();
+  S.dailyDone  = S.lastDaily === today;
 }
 
 function saveState(){
-  LS.set('profile',      S.profile);
-  LS.set('streak',       S.streak);
-  LS.set('lastDaily',    S.lastDaily);
-  LS.set('lastPreround', S.lastPreround);
-  LS.set('lastSaturday', S.lastSaturday);
-  LS.set('dailySessions',S.dailySessions);
-  LS.set('completed',    S.completed);
-  LS.set('pillarStats',  S.pillarStats);
+  LS.set('profile',    S.profile);
+  LS.set('streak',     S.streak);
+  LS.set('lastDaily',  S.lastDaily);
+  LS.set('completed',  S.completed);
+  LS.set('pillarStats',S.pillarStats);
 }
 
 function todayStr(){
@@ -4006,8 +3871,6 @@ function setPillarColor(color){
 
 // ── Home Screen ────────────────────────────────────────
 function renderHome(){
-  renderFixIt();
-
   // Archetype greeting — subtle identity signal in header
   const greetEl = document.getElementById('home-arch-greeting');
   if(greetEl){
@@ -4082,35 +3945,22 @@ function renderHome(){
     grid.appendChild(card);
   });
 
-  // Pre-Round Sharpener
+  // Saturday Card
   const satWrap = document.getElementById('saturday-card-wrap');
   if(satWrap){
     const done = S.lastSaturday === weekNumber();
     satWrap.innerHTML = `<div class="saturday-card" onclick="startSaturdayCard()">
-      <div class="saturday-badge">⭐ Pre-Round Sharpener</div>
-      <div class="saturday-title">PRE-ROUND<br>SHARPENER</div>
-      <div class="saturday-sub">Five decisions to take to the course today.</div>
+      <div class="saturday-badge">⭐ Pre-Round Ritual</div>
+      <div class="saturday-title">THIS WEEK'S<br>WARM-UP</div>
+      <div class="saturday-sub">3 questions. 90 seconds. Send it to your foursome before you tee off.</div>
       <div class="saturday-pills">
         <span class="saturday-pill">3 Questions</span>
-        <span class="saturday-pill">Under 90 seconds</span>
+        <span class="saturday-pill">Same for everyone this week</span>
         <span class="saturday-pill">Shareable</span>
       </div>
       ${done
         ? `<div class="saturday-done">✓ Done this week — Play Again</div>`
-        : `<button class="saturday-btn">START SHARPENER →</button>`}
-    </div>`;
-  }
-
-  // Play a Hole card
-  const holeHomeWrap = document.getElementById('hole-home-wrap');
-  if(holeHomeWrap){
-    holeHomeWrap.innerHTML = `<div class="home-play-hole" onclick="startHole()">
-      <div class="hph-left">
-        <div class="hph-badge">DIFFERENTIATOR</div>
-        <div class="hph-title">PLAY A HOLE</div>
-        <div class="hph-sub">Make every decision. Live with the outcome.</div>
-      </div>
-      <div class="hph-arrow">⛳</div>
+        : `<button class="saturday-btn">START WARM-UP →</button>`}
     </div>`;
   }
 
@@ -4127,13 +3977,9 @@ function renderHome(){
     </div>`;
   }
 
-  // Crash Course card — only show after 10+ questions answered
+  // Crash Course card
   const crashWrap = document.getElementById('crash-card-wrap');
   if(crashWrap){
-    const totalAnswered = Object.keys(S.completed).length;
-    if(totalAnswered < 10){
-      crashWrap.innerHTML = '';
-    } else {
     const answered = Object.keys(S.pillarStats).filter(k => (S.pillarStats[k]||{}).total >= 1);
     if(answered.length){
       let weakPillar = null, weakPct = 1;
@@ -4162,7 +4008,6 @@ function renderHome(){
         <div class="crash-lock-text">Complete a pillar to unlock your Crash Course</div>
       </div>`;
     }
-  }
   }
 
   // Pro Lens strip — bias toward player's strongest pillar
@@ -4256,23 +4101,11 @@ function startQuiz(pillar, module, questions){
 
 function startDaily(){
   if(S.dailyDone){ renderHome(); return; }
+  // Seed daily questions from today's date
   const seed  = todayStr().replace(/-/g,'');
   const rng   = seededRng(parseInt(seed));
-  // Difficulty filter: first 10 sessions favour Club/Rookie questions
-  let pool;
-  if(S.dailySessions < 10){
-    const clubPool = QUESTIONS.filter(q => q.difficulty === 'Club' || q.difficulty === 'Rookie');
-    pool = [...clubPool].sort(()=> rng() - 0.5);
-  } else if(S.dailySessions < 20){
-    // Gradual introduction: 70% Club, 30% Competitor+
-    const club = QUESTIONS.filter(q => q.difficulty === 'Club' || q.difficulty === 'Rookie');
-    const comp = QUESTIONS.filter(q => q.difficulty === 'Competitor' || q.difficulty === 'Tactician');
-    pool = [...club.sort(()=> rng() - 0.5).slice(0, 4),
-            ...comp.sort(()=> rng() - 0.5).slice(0, 1)].sort(()=> rng() - 0.5);
-  } else {
-    pool = [...QUESTIONS].sort(()=> rng() - 0.5);
-  }
-  const daily = pool.slice(0, 5);
+  const pool  = [...QUESTIONS].sort(()=> rng() - 0.5);
+  const daily = pool.slice(0,5);
   S.quiz = {
     qs: daily, idx:0, score:0, answers:[],
     pillar: {name:'Daily Challenge', color:'#c8a84b', emoji:'⛳'},
@@ -4283,7 +4116,6 @@ function startDaily(){
   document.getElementById('qt-pillar').textContent = 'Daily Challenge';
   document.getElementById('qt-pillar').style.color  = '#c8a84b';
   document.getElementById('quiz-prog').style.background = '#c8a84b';
-  logEvent('session_start', { mode:'daily', session: S.dailySessions });
   loadQuestion();
   showView('quiz');
 }
@@ -4360,9 +4192,6 @@ function startSaturdayCard(){
 }
 
 function showSaturdayComplete(score, total){
-  S.lastSaturday = weekNumber();
-  saveState();
-  logEvent('session_complete', { mode:'saturday', score, total });
   const arch = deriveArchetype();
   const wn   = weekNumber();
   const weekLabel = `Week ${wn % 100} · Pre-Round Warm-Up`;
@@ -4391,19 +4220,10 @@ function showSaturdayComplete(score, total){
     }
   };
 
-  // Mark week done (lastSaturday set at top of function)
+  // Mark week done
+  S.lastSaturday = weekNumber();
   saveState();
-
-  // Tomorrow hook
-  const scTomorrow = document.getElementById('sc-tomorrow');
-  const scTomorrowText = document.getElementById('sc-tomorrow-text');
-  if(scTomorrow && scTomorrowText){
-    scTomorrowText.textContent = 'You completed your Pre-Round Sharpener. After your round, come back for a 2-minute debrief to find your biggest leak.';
-    scTomorrow.style.display = '';
-  }
-
   showView('saturday-complete');
-  renderFeedback('sc-feedback-wrap', 'saturday');
 }
 
 // ── 19th Hole Debrief ─────────────────────────────────────────────
@@ -4641,18 +4461,6 @@ function showExplanation(q, isCorrect){
   }
 
   card.classList.add('show');
-  logEvent('explanation_viewed', { qid: q.id, pillar: q.pillar, isCorrect });
-
-  // Round intent button
-  const intentBtn = document.getElementById('round-intent-btn');
-  if(intentBtn){
-    intentBtn.textContent = "⛳ I'll use this next round";
-    intentBtn.className = 'round-intent-btn';
-    intentBtn.dataset.qid = q.id;
-    intentBtn.dataset.pillar = q.pillar;
-    intentBtn.dataset.module = q.module || '';
-    intentBtn.onclick = saveRoundIntent;
-  }
 
   // Next button
   const nextBtn = document.getElementById('next-btn');
@@ -4664,7 +4472,9 @@ function showExplanation(q, isCorrect){
 
   // Scroll to explanation
   setTimeout(() => {
-    card.scrollIntoView({ behavior:'smooth', block:'start' });
+    if(card && typeof card.scrollIntoView === 'function') {
+      card.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
   }, 300);
 }
 
@@ -4687,7 +4497,7 @@ function finishQuiz(){
   const { score, qs, mode, pillar } = S.quiz;
   const total = qs.length;
 
-  // Pre-Round Sharpener (saturday mode)
+  // Saturday Card
   if(mode === 'saturday'){
     showSaturdayComplete(score, total);
     return;
@@ -4704,28 +4514,16 @@ function finishQuiz(){
     }
     S.lastDaily = today;
     S.dailyDone = true;
-    S.dailySessions++;
     saveState();
-    logEvent('session_complete', { mode:'daily', score, total, streak: S.streak });
-
-    // Build tomorrow hook
-    const nextTopic = deriveNextTopic();
-    const hookEl = document.getElementById('dcc-tomorrow');
-    const hookText = document.getElementById('dcc-tomorrow-text');
-    const hookNext = document.getElementById('dcc-tomorrow-next');
-    if(hookEl && hookText){
-      hookText.textContent = `You scored ${score}/${total} today. Streak: ${S.streak} day${S.streak!==1?'s':''}.`;
-      if(hookNext && nextTopic) hookNext.textContent = `Tomorrow: ${nextTopic}`;
-      hookEl.style.display = '';
-    }
-
+    // Show daily complete screen
     document.getElementById('dcc-streak-num').textContent = S.streak;
+    const dccScoreEl = document.getElementById('dcc-score-num');
+    const dccDenomEl = document.getElementById('dcc-score-denom');
+    if(dccScoreEl) dccScoreEl.textContent = score;
+    if(dccDenomEl) dccDenomEl.textContent = '/' + total;
     const shareBtn = document.getElementById('dcc-share-btn');
     shareBtn.onclick = () => shareResult(score, total, 'daily');
-
-    // Show feedback then completion screen
     showView('daily-complete');
-    renderFeedback('dcc-feedback-wrap', 'daily');
     return;
   }
 
@@ -4771,9 +4569,6 @@ function renderResult(score, total, pillar){
 
   // Share button
   document.getElementById('result-share-btn').onclick = () => shareResult(score, total, S.quiz.mode);
-
-  // Social challenge — fires at ≤60% or surprising weakness
-  renderSocialChallenge(pct, pillar.name);
 }
 
 function deriveArchetype(){
@@ -4799,342 +4594,6 @@ function shareResult(score, total, mode){
   } else {
     navigator.clipboard && navigator.clipboard.writeText(text).then(()=> alert('Copied to clipboard!'));
   }
-}
-
-// ── Fix-It Outcome Section ─────────────────────────────
-
-const OUTCOME_DEFS = [
-  { id:'hole',    emoji:'⛳', label:'Play a hole',        desc:'Full branching decisions — live with every call',  fn:'startHole()' },
-  { id:'doubles', emoji:'🚫', label:'Avoid doubles',      desc:'Stop big numbers from wrecking your scorecard',    fn:'startOutcome("doubles")' },
-  { id:'tee',     emoji:'🏌️', label:'Smarter tee shots',  desc:'Find more fairways and start holes on your terms', fn:'startOutcome("tee")' },
-  { id:'putt',    emoji:'🎱', label:'Stop three-putting',  desc:'Leave yourself makeable putts, not knee-knockers', fn:'startOutcome("putt")' },
-  { id:'short',   emoji:'🎯', label:'Better short game',   desc:'Save pars from anywhere inside 50 yards',          fn:'startOutcome("short")' },
-];
-
-function deriveTopOutcome(){
-  if(!S.profile?.answers) return 'doubles';
-  const w = S.profile.answers.weakness; // 0=tee 1=approach 2=short 3=putt
-  const f = S.profile.answers.fear;     // 0=tight tee 1=short putt 2=bunker 3=competition
-  if(w === 0 || f === 0) return 'tee';
-  if(w === 3 || f === 1) return 'putt';
-  if(w === 2 || f === 2) return 'short';
-  return 'doubles';
-}
-
-function renderFixIt(){
-  const wrap = document.getElementById('fix-it-wrap');
-  if(!wrap) return;
-  const topId  = deriveTopOutcome();
-  const sorted = [...OUTCOME_DEFS].sort((a,b) => a.id===topId ? -1 : b.id===topId ? 1 : 0);
-  const todayDone = S.lastPreround === todayStr();
-
-  wrap.innerHTML = `<div class="fixit-section">
-    <p class="fixit-prompt">What do you want to fix before your next round?</p>
-    ${sorted.map((o,i) => `
-      <div class="fixit-item${i===0?' fixit-top':''}" onclick='${o.fn}'>
-        <span class="fixit-emoji">${o.emoji}</span>
-        <div class="fixit-text">
-          <div class="fixit-label">${o.label}</div>
-          <div class="fixit-desc">${o.desc}</div>
-        </div>
-        ${i===0 ? '<div class="fixit-badge">FOR YOU</div>' : '<span class="fixit-arrow">›</span>'}
-      </div>`).join('')}
-    <div class="fixit-item fixit-ritual" onclick="showPreround()">
-      <span class="fixit-emoji">🧘</span>
-      <div class="fixit-text">
-        <div class="fixit-label">Pre-round ritual${todayDone?' ✓':''}</div>
-        <div class="fixit-desc">3 commitments · under 90 seconds · walk to the first tee ready</div>
-      </div>
-      <span class="fixit-arrow">›</span>
-    </div>
-  </div>`;
-}
-
-function startOutcome(id){
-  const map = {
-    doubles:{ pillar:'Score Smart', module:'Recovery Strategy' },
-    tee:    { pillar:'Score Smart', module:'Tee Shot Strategy' },
-    putt:   { pillar:'Short Game',  module:'Putting from Off-Green' },
-    short:  { pillar:'Short Game',  module:'Scrambling' },
-  };
-  const target = map[id];
-  if(!target) return;
-  const pillar = PILLARS.find(p => p.name === target.pillar);
-  if(!pillar) return;
-  let qs = QUESTIONS.filter(q => q.pillar === target.pillar && q.module === target.module);
-  if(qs.length < 5) qs = QUESTIONS.filter(q => q.pillar === target.pillar); // fallback to full pillar
-  const shuffled = [...qs].sort(() => Math.random() - .5).slice(0, 10);
-  PILLARS.forEach(p => { S.pillarStats[p.name] = S.pillarStats[p.name] || {correct:0,total:0}; });
-  S.quiz = { qs:shuffled, idx:0, score:0, answers:[], pillar, module:target.module, mode:'pillar' };
-  setPillarColor(pillar.color);
-  loadQuestion();
-  showView('quiz');
-}
-
-// ── Pre-Round Ritual ────────────────────────────────────
-
-const PREROUND_QS = [
-  {
-    label:'TEE SHOT COMMITMENT',
-    q:'Pick one thing you commit to on every tee today:',
-    opts:[
-      { text:'Aim to the wider side of the fairway — not the perfect line', cue:'aim wide, not perfect' },
-      { text:'Pick an intermediate target 3 feet ahead before every shot',  cue:'use an intermediate target' },
-      { text:'Club down on any hole tighter than 35 yards wide',            cue:'club down on tight holes' },
-      { text:'Decide on the shot fully before stepping into the address',   cue:'decide first, then commit' },
-    ]
-  },
-  {
-    label:'SHORT GAME COMMITMENT',
-    q:'Inside 50 yards, your one rule today is:',
-    opts:[
-      { text:'Land every chip before the flag — always',                  cue:'land before the flag' },
-      { text:'Read the lie before choosing the club',                     cue:'read the lie first' },
-      { text:'Chip to a 3-foot circle around the hole, not the hole',     cue:'aim for the 3-foot circle' },
-      { text:"Never lob when a bump-and-run gets the job done",           cue:'keep it low when you can' },
-    ]
-  },
-  {
-    label:'MENTAL RESET',
-    q:'When a hole goes wrong today, you will:',
-    opts:[
-      { text:'Take three slow breaths before walking to the next tee',         cue:'three breaths, then move on' },
-      { text:'Walk to the next tee without replaying the last hole',           cue:'walk forward, not backward' },
-      { text:"Say one word — 'next' — and actually mean it",                  cue:"say 'next' and mean it" },
-      { text:'Remind yourself: one bad hole is already in the past',          cue:"let go — it's already gone" },
-    ]
-  }
-];
-
-let prIdx = 0;
-const prAnswers = [];
-
-function showPreround(){
-  prIdx = 0;
-  prAnswers.length = 0;
-  document.getElementById('pr-cue-wrap').style.display    = 'none';
-  document.getElementById('pr-question-wrap').style.display = '';
-  updatePrDots();
-  renderPrQ();
-  showView('preround');
-}
-
-function updatePrDots(){
-  PREROUND_QS.forEach((_,i) => {
-    const d = document.getElementById('prd-'+i);
-    if(!d) return;
-    d.className = 'pr-dot' + (i < prIdx ? ' done' : i === prIdx ? ' active' : '');
-  });
-}
-
-function renderPrQ(){
-  const q = PREROUND_QS[prIdx];
-  document.getElementById('pr-question-wrap').innerHTML = `
-    <div class="pr-card">
-      <div class="pr-q-label">${q.label}</div>
-      <div class="pr-q-text">${q.q}</div>
-      ${q.opts.map((o,i) =>
-        `<button class="pr-opt" onclick="selectPrOpt(${prIdx},${i})">${o.text}</button>`
-      ).join('')}
-    </div>`;
-}
-
-function selectPrOpt(qIdx, optIdx){
-  if(qIdx !== prIdx) return;
-  prAnswers[qIdx] = PREROUND_QS[qIdx].opts[optIdx];
-  document.querySelectorAll('.pr-opt')[optIdx].classList.add('selected');
-  setTimeout(() => {
-    prIdx++;
-    if(prIdx >= PREROUND_QS.length) finishPreround();
-    else { updatePrDots(); renderPrQ(); }
-  }, 320);
-}
-
-function finishPreround(){
-  const cue = `Tee: ${prAnswers[0].cue}. Short game: ${prAnswers[1].cue}. When it goes wrong: ${prAnswers[2].cue}.`;
-  document.getElementById('pr-cue-text').textContent = '“' + cue + '”';
-  document.getElementById('pr-question-wrap').style.display = 'none';
-  document.getElementById('pr-cue-wrap').style.display = '';
-  PREROUND_QS.forEach((_,i) => {
-    const d = document.getElementById('prd-'+i);
-    if(d) d.className = 'pr-dot done';
-  });
-  S.lastPreround = todayStr();
-  LS.set('lastPreround', S.lastPreround);
-  document.getElementById('pr-share-btn').onclick = () => {
-    const text = `My game plan for today's round ⛳\n\n${cue}\n\nGameSharp Golf — gamesharp.golf`;
-    if(navigator.share) navigator.share({ title:'My Game Plan Today', text }).catch(()=>{});
-    else navigator.clipboard?.writeText(text).then(() => alert('Copied!'));
-  };
-}
-
-// ── Social Challenge ────────────────────────────────────
-
-const SOCIAL_BY_PILLAR = {
-  'Score Smart':   "Send this to the mate who always goes for the green in two. They need to see it.",
-  'Course IQ':     "Who in your foursome still takes the same club regardless of the wind? This is for them.",
-  'Short Game':    "Tag the player who thinks a lob wedge solves everything around the green.",
-  'Mental Game':   "Know someone who completely loses it after a double bogey? Share this — quietly.",
-  'The 19th Hole': "Challenge your foursome. Bet they don't all get 3 out of 5."
-};
-
-const SOCIAL_BY_ARCH = {
-  'THE COURSE MANAGER':   "Send this to the most reckless player in your group. They're giving shots away.",
-  'THE COMPETITOR':       "Who in your foursome is the biggest Driver Addict? This is your challenge to them.",
-  'THE SHORT GAME ARTIST':"Know a player who's terrified of greenside bunkers? Five minutes with this changes that.",
-  'THE STUDENT':          "Your foursome thinks they know the rules. Test them. Most will fail halfway through.",
-  'THE VETERAN':          "You've seen it all. Someone in your group hasn't. Pass it on."
-};
-
-function renderSocialChallenge(pct, pillarName){
-  const wrap = document.getElementById('social-challenge-wrap');
-  if(!wrap) return;
-  if(pct > 60){ wrap.innerHTML = ''; return; }
-
-  const arch = deriveArchetype();
-  const text = SOCIAL_BY_PILLAR[pillarName] || SOCIAL_BY_ARCH[arch.name] || "Send this to your foursome. See who actually knows the game.";
-
-  wrap.innerHTML = `
-    <div class="social-challenge">
-      <div class="sc-eyebrow">💬 Challenge your foursome</div>
-      <div class="sc-chal-text">${text}</div>
-      <button class="sc-chal-btn" onclick="shareChallenge('${pillarName.replace(/'/g,"\\'")}')">Send the challenge →</button>
-    </div>`;
-}
-
-function shareChallenge(pillarName){
-  const pct  = Math.round(S.quiz.score / S.quiz.qs.length * 100);
-  const dots  = (S.quiz.answers||[]).map(a => a.isCorrect ? '🟢' : '🔴').join('');
-  const text  = `I scored ${pct}% on ${pillarName || 'Golf IQ'} on GameSharp Golf ⛳\n${dots}\n\nCan you beat it?\ngamesharp.golf`;
-  if(navigator.share) navigator.share({ title:'GameSharp Golf Challenge', text }).catch(()=>{});
-  else navigator.clipboard?.writeText(text).then(() => alert('Copied!'));
-}
-
-// ── Round Intent ──────────────────────────────────────────────
-function saveRoundIntent(){
-  const btn = document.getElementById('round-intent-btn');
-  if(!btn || btn.classList.contains('saved')) return;
-  const intent = {
-    qid: btn.dataset.qid,
-    pillar: btn.dataset.pillar,
-    module: btn.dataset.module,
-    timestamp: Date.now()
-  };
-  try{
-    const intents = JSON.parse(localStorage.getItem('gsg_round_intents') || '[]');
-    intents.push(intent);
-    localStorage.setItem('gsg_round_intents', JSON.stringify(intents));
-  } catch(e){}
-  btn.textContent = '✓ Added to your round plan';
-  btn.classList.add('saved');
-  logEvent('round_intent_saved', intent);
-}
-
-// ── Feedback capture ──────────────────────────────────────────
-const FB_QUESTIONS = [
-  { key:'useful',    q:'Was this useful for your next round?',  opts:['Yes','Somewhat','Not really'] },
-  { key:'preround',  q:'Would you use this before playing?',    opts:['Yes','Maybe','No'] },
-  { key:'next_help', q:'What do you want help with next?',
-    opts:['Tee shots','Approach shots','Short game','Putting','Course strategy','Mental game','Recovery shots','Rules / etiquette'],
-    wide: true }
-];
-let _fbAnswers = {};
-let _fbMode = '';
-
-function renderFeedback(wrapId, mode){
-  const wrap = document.getElementById(wrapId);
-  if(!wrap) return;
-  _fbAnswers = {};
-  _fbMode = mode;
-
-  wrap.innerHTML = `<div class="feedback-card">
-    <div class="fb-title">Quick feedback</div>
-    <div class="fb-sub">2 taps — helps us improve for your next round.</div>
-    ${FB_QUESTIONS.map((fq, qi) => `
-      <div class="fb-q" id="fbq-${qi}">${fq.q}</div>
-      <div class="fb-opts" id="fbo-${qi}">
-        ${fq.opts.map((o,oi) =>
-          `<button class="fb-opt${fq.wide?' fb-opt-wide':''}" onclick="fbSelect(${qi},${oi},'${o.replace(/'/g,"\'")}','${fq.key}')">${o}</button>`
-        ).join('')}
-      </div>`).join('')}
-    <button class="fb-submit" id="fb-submit" onclick="submitFeedback('${wrapId}')">Done →</button>
-  </div>`;
-}
-
-function fbSelect(qi, oi, val, key){
-  _fbAnswers[key] = val;
-  document.querySelectorAll(`#fbo-${qi} .fb-opt`).forEach((b,i) =>
-    b.classList.toggle('selected', i === oi));
-}
-
-function submitFeedback(wrapId){
-  const wrap = document.getElementById(wrapId);
-  const entry = { mode: _fbMode, answers: _fbAnswers, ts: Date.now() };
-  try{
-    const fb = JSON.parse(localStorage.getItem('gsg_feedback') || '[]');
-    fb.push(entry);
-    localStorage.setItem('gsg_feedback', JSON.stringify(fb));
-  } catch(e){}
-  logEvent('feedback_submitted', entry);
-  if(wrap) wrap.innerHTML = '<div class="fb-done">✓ Thanks — see you tomorrow!</div>';
-}
-
-// ── Tomorrow topic ─────────────────────────────────────────────
-function deriveNextTopic(){
-  // Find the pillar with the lowest accuracy that has unanswered questions
-  let weakName = null, weakPct = 1;
-  PILLARS.forEach(p => {
-    const st = S.pillarStats[p.name];
-    if(!st || !st.total) return;
-    const pct = st.correct / st.total;
-    if(pct < weakPct){ weakPct = pct; weakName = p.name; }
-  });
-  if(weakName) return weakName;
-  // fallback: first pillar with unanswered questions
-  for(const p of PILLARS){
-    const unanswered = QUESTIONS.filter(q => q.pillar === p.name && !S.completed[q.id]);
-    if(unanswered.length) return p.name;
-  }
-  return null;
-}
-
-// ── Play a Hole intro ──────────────────────────────────────────
-let _holeIntroSeen = false;
-
-function showHoleIntro(cb){
-  if(LS.get('holeIntroSeen')){ cb(); return; }
-  // Inject overlay
-  const holeView = document.getElementById('view-hole');
-  if(!holeView){ cb(); return; }
-  let overlay = document.createElement('div');
-  overlay.className = 'hole-intro-overlay';
-  overlay.id = 'hole-intro-overlay';
-  overlay.innerHTML = `<div class="hole-intro-card">
-    <div class="hic-emoji">⛳</div>
-    <div class="hic-title">PLAY A HOLE</div>
-    <div class="hic-body">Make shot-by-shot decisions.<br>Every choice has a consequence.<br>Try to make par.</div>
-    <button class="hic-btn" onclick="dismissHoleIntro()">Let's play →</button>
-  </div>`;
-  holeView.style.position = 'relative';
-  holeView.appendChild(overlay);
-  _holeIntroSeen = true;
-  window._holeIntroCb = cb;
-}
-
-function dismissHoleIntro(){
-  const overlay = document.getElementById('hole-intro-overlay');
-  if(overlay) overlay.remove();
-  LS.set('holeIntroSeen', true);
-  if(window._holeIntroCb) window._holeIntroCb();
-}
-
-// ── Play Next Hole ─────────────────────────────────────────────
-let _currentHoleIndex = 0;
-
-function playNextHole(){
-  const nextIdx = (_currentHoleIndex + 1) % ALL_HOLES.length;
-  logEvent('hole_started', { holeIndex: nextIdx, holeName: ALL_HOLES[nextIdx]?.name });
-  beginHole(nextIdx);
 }
 
 // ── Onboarding ─────────────────────────────────────────
@@ -7121,8 +6580,7 @@ let HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
 
 function startHole(){
   showView('hole');
-  showHoleIntro(showHolePicker);
-  logEvent('hole_started', {});
+  showHolePicker();
 }
 
 function showHolePicker(){
@@ -7178,7 +6636,6 @@ function showHolePicker(){
 }
 
 function beginHole(index){
-  _currentHoleIndex = index;
   HOLE = ALL_HOLES[index];
   HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
   document.getElementById('hole-picker').style.display = 'none';
@@ -7308,7 +6765,7 @@ function renderScorecard(finalNode){
     <div class="sc-decisions-header">YOUR DECISIONS</div>
     <div class="sc-decisions">${decisionSummary}</div>
     <div class="sc-actions">
-      <button class="btn btn-gold" onclick="playNextHole()">PLAY NEXT HOLE →</button>
+      <button class="btn btn-gold" onclick="startHole()">PLAY AGAIN</button>
       <button class="btn btn-dark" onclick="showView('home')">HOME</button>
     </div>`;
 }
@@ -7634,54 +7091,30 @@ function renderHoleMap(state){
 
 // ================================================================
 function init(){
-  // PWA manifest via blob (no separate file needed)
-  const mf = {name:'GameSharp Golf',short_name:'GameSharp',start_url:'.',display:'standalone',background_color:'#111111',theme_color:'#111111',icons:[{src:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" fill="%23111111"/><text y="140" x="50%" dominant-baseline="middle" text-anchor="middle" font-size="120">⛳</text></svg>',sizes:'192x192',type:'image/svg+xml'}]};
-  const mfBlob = new Blob([JSON.stringify(mf)],{type:'application/manifest+json'});
-  const mfLink = document.createElement('link');
-  mfLink.rel = 'manifest'; mfLink.href = URL.createObjectURL(mfBlob);
-  document.head.appendChild(mfLink);
-
-  loadState();
+  try {
+    loadState();
+  } catch(e) {
+    console.warn('GameSharp: loadState failed, using defaults', e);
+  }
   // Brief splash delay then route
   setTimeout(() => {
-    if(!LS.get('onboarded')){
-      startOnboarding();
-    } else {
-      setPillarColor('#c8a84b');
-      renderHome();
-      showView('home');
+    try {
+      if(!LS.get('onboarded')){
+        startOnboarding();
+      } else {
+        setPillarColor('#c8a84b');
+        renderHome();
+        showView('home');
+      }
+    } catch(e) {
+      console.error('GameSharp: init routing failed', e);
+      // Fallback — go straight to onboarding
+      try { startOnboarding(); } catch(e2) { showView('home'); }
     }
-  }, 900);
+  }, 400);
 }
 
 init();
 </script>
-<!-- ============================== PRE-ROUND RITUAL ============================== -->
-<div class="view" id="view-preround">
-  <div class="pr-header">
-    <div class="pr-title">PRE-ROUND RITUAL</div>
-    <button class="pr-close" onclick="showView('home');renderHome()">✕</button>
-  </div>
-  <div class="pr-progress">
-    <div class="pr-dot" id="prd-0"></div>
-    <div class="pr-dot" id="prd-1"></div>
-    <div class="pr-dot" id="prd-2"></div>
-  </div>
-  <div id="pr-question-wrap"></div>
-  <div id="pr-cue-wrap" style="display:none">
-    <div class="pr-cue-wrap">
-      <div class="pr-cue-label">⛳ Your Game Plan Today</div>
-      <div class="pr-cue-card">
-        <div class="pr-cue-text" id="pr-cue-text"></div>
-        <div class="pr-cue-sub">Say this walking to the first tee.</div>
-      </div>
-      <div class="pr-cue-actions">
-        <button class="btn btn-gold" id="pr-share-btn">Share with Your Foursome →</button>
-        <button class="btn btn-dark" onclick="showView('home');renderHome()">Back to Home</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
