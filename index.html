@@ -110,6 +110,7 @@ svg { display:block; }
    HOME
 ============================================= */
 #view-home { background:var(--dark); padding-bottom:80px; }
+#view-home > * { flex-shrink:0; }
 .home-header {
   display:flex; align-items:center; justify-content:space-between;
   padding:16px 16px 12px;
@@ -458,15 +459,28 @@ svg { display:block; }
    DAILY COMPLETE
 ============================================= */
 #view-daily-complete {
-  background:var(--dark); align-items:center; justify-content:center;
-  padding:24px 24px 90px; text-align:center;
+  background:var(--dark); align-items:center; justify-content:flex-start;
+  padding:8px 0 90px; text-align:center; overflow-y:auto;
 }
 .dcc-icon    { font-size:64px; margin-bottom:16px; }
 .dcc-title   { font-family:'Bebas Neue',sans-serif; font-size:38px; color:var(--gold); }
 .dcc-sub     { font-size:15px; color:var(--muted); margin-top:8px; line-height:1.5; }
-.dcc-streak-num   { font-family:'Bebas Neue',sans-serif; font-size:80px; color:var(--gold); line-height:1; margin-top:20px; }
-.dcc-streak-label { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:24px; }
-.dcc-actions { width:100%; max-width:320px; display:flex; flex-direction:column; gap:10px; }
+.dcc-streak-num   { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--gold); line-height:1; }
+.dcc-streak-label { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+.dcc-streak-inline { display:inline-flex; align-items:baseline; gap:7px; }
+.dcc-actions { width:100%; max-width:340px; display:flex; flex-direction:column; gap:10px; margin:0 auto; }
+
+/* Today's Shot Saver completion blocks */
+.tss-eyebrow { font-size:10px; font-weight:700; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; }
+.tss-blocks  { width:100%; max-width:380px; margin:18px auto 22px; display:flex; flex-direction:column; gap:11px; padding:0 16px; box-sizing:border-box; }
+.tss-block   { text-align:left; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:13px 15px; }
+.tss-block-label { font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:5px; }
+.tss-block-body  { font-size:14px; line-height:1.45; color:var(--text); }
+.tss-edge     { border-left-color:var(--gold); }
+.tss-saved    { border-left-color:#4caf50; }
+.tss-try      { border-left-color:#5b9bd5; }
+.tss-tomorrow { border-left-color:rgba(255,255,255,.3); }
+.tss-tomorrow .tss-block-body { color:var(--muted); font-style:italic; }
 
 /* =============================================
    PLAY A HOLE
@@ -491,6 +505,21 @@ svg { display:block; }
 .hec-meta   { position:relative; display:flex; align-items:center; gap:10px; margin-bottom:16px; }
 .hec-pill   { background:rgba(255,255,255,.1); border-radius:20px; padding:4px 10px; font-size:11px; color:rgba(255,255,255,.8); font-weight:500; }
 .hec-btn    { position:relative; background:var(--gold); color:#111; border:none; border-radius:var(--radius-sm); padding:12px 24px; font-weight:700; font-size:15px; cursor:pointer; }
+
+/* Hero variant — dominant Play a Hole card */
+.hole-entry-card.hero {
+  margin:16px 16px 18px;
+  padding:26px 22px 24px;
+  border:1.5px solid var(--gold);
+  box-shadow:0 0 0 1px rgba(200,168,75,.15), 0 12px 40px -8px rgba(0,0,0,.6), 0 0 60px -20px rgba(200,168,75,.4);
+  background:linear-gradient(135deg,#0a2e0a 0%,#1f5a1f 55%,#0a2e0a 100%);
+}
+.hole-entry-card.hero::before { opacity:0.8; }
+.hole-entry-card.hero .hec-badge { background:var(--gold); font-size:10px; padding:4px 11px; margin-bottom:13px; }
+.hole-entry-card.hero .hec-title { font-size:46px; letter-spacing:.5px; }
+.hole-entry-card.hero .hec-sub { font-size:14.5px; color:rgba(255,255,255,.82); margin:8px 0 12px; }
+.hole-entry-card.hero .hec-meta { font-size:11.5px; color:rgba(255,255,255,.6); margin-bottom:18px; display:block; }
+.hole-entry-card.hero .hec-btn { width:100%; padding:15px; font-size:16px; letter-spacing:.3px; }
 
 /* Crash Course card */
 .crash-card {
@@ -716,7 +745,19 @@ svg { display:block; }
 }
 .oc-result       { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:10px; }
 .oc-consequence  { font-size:14px; line-height:1.65; color:var(--text); margin-bottom:12px; }
+.oc-effects      { display:flex; gap:8px; margin-bottom:12px; }
+.oc-effect       { flex:1; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 9px; }
+.oc-effect-label { font-size:8.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.oc-effect-val   { font-size:12px; font-weight:600; line-height:1.3; }
 .oc-pro          { font-size:12px; line-height:1.6; color:var(--muted); font-style:italic; border-top:1px solid var(--border); padding-top:12px; }
+/* End-of-hole takeaways */
+.sc-takeaways    { width:100%; display:flex; flex-direction:column; gap:9px; margin:14px 0 16px; }
+.sc-take         { text-align:left; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:11px 13px; }
+.sc-take.smart   { border-left-color:#4caf50; }
+.sc-take.costly  { border-left-color:#e05252; }
+.sc-take.rule    { border-left-color:var(--gold); }
+.sc-take-label   { font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:4px; }
+.sc-take-body    { font-size:13.5px; line-height:1.4; color:var(--text); }
 .oc-pro-label    { display:inline-block; background:var(--gold); color:#111; font-size:9px; font-weight:700; letter-spacing:.1em; border-radius:20px; padding:2px 7px; margin-right:6px; font-style:normal; }
 .hole-next-btn   {
   margin:12px 0 0; background:var(--gold); color:#111; border:none;
@@ -811,36 +852,42 @@ svg { display:block; }
     <button class="profile-btn" id="profile-btn">👤</button>
   </div>
 
-  <div class="hole-entry-card" onclick="startHole()">
+  <!-- HERO: Play a Hole -->
+  <div class="hole-entry-card hero" onclick="startHole()">
     <div class="hec-badge">SIGNATURE MODE</div>
     <div class="hec-title">PLAY A HOLE</div>
     <div class="hec-sub">Make every decision. Live with the outcome.</div>
-    <div class="hec-meta">Par 4 · 385 yards · The Dogleg</div>
+    <div class="hec-meta">Shot-by-shot · Real consequences · Scorecard</div>
     <button class="hec-btn">PLAY NOW →</button>
   </div>
 
-  <div id="saturday-card-wrap"></div>
-
+  <!-- Today's Shot Saver (was Daily Challenge) -->
   <div class="daily-card">
-    <div class="dc-label">Daily Challenge</div>
-    <div class="dc-title">TODAY'S ROUND</div>
-    <div class="dc-sub">5 Questions · Mixed Pillars</div>
+    <div class="dc-label">Today's Shot Saver</div>
+    <div class="dc-title">ONE EDGE FOR TODAY</div>
+    <div class="dc-sub">3 decisions · 60 seconds · One shot saved</div>
     <div class="dc-streak">
       <span class="dc-streak-flame">🔥</span>
       <span class="dc-streak-text" id="dc-streak-text">Keep your streak alive</span>
     </div>
-    <button class="daily-btn" id="daily-btn" onclick="startDaily()">PLAY TODAY'S CHALLENGE →</button>
+    <button class="daily-btn" id="daily-btn" onclick="startDaily()">GET TODAY'S EDGE →</button>
   </div>
 
+  <!-- 19th Hole Debrief -->
   <div id="debrief-card-wrap"></div>
+
+  <!-- Pre-Round Sharpener -->
+  <div id="saturday-card-wrap"></div>
 
   <div id="crash-card-wrap"></div>
 
-  <div class="home-section">
-    <p class="section-title">Your Pillars</p>
+  <!-- Sharpen Your Game (pillars, lower) -->
+  <div class="home-section" id="sharpen-section">
+    <p class="section-title">Sharpen Your Game</p>
     <div class="pillar-grid" id="pillar-grid"></div>
   </div>
 
+  <!-- Pro Lens (supporting, lower) -->
   <div class="home-section" style="padding:0">
     <p class="section-title" style="padding:0 16px;margin-top:20px">Pro Lens</p>
     <div class="pro-lens-scroll" id="pro-lens-scroll"></div>
@@ -852,8 +899,11 @@ svg { display:block; }
     <div class="nav-item active" data-nav="home" onclick="navTo('home')">
       <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
     </div>
-    <div class="nav-item" data-nav="daily" onclick="startDaily()">
-      <span class="nav-icon">📅</span><span class="nav-label">Daily</span>
+    <div class="nav-item" data-nav="play" onclick="navTo('play')">
+      <span class="nav-icon">⛳</span><span class="nav-label">Play</span>
+    </div>
+    <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
+      <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
     </div>
     <div class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
@@ -985,18 +1035,36 @@ svg { display:block; }
 
 <!-- ============================== DAILY COMPLETE ============================== -->
 <div class="view" id="view-daily-complete">
-  <div class="dcc-score-wrap" style="text-align:center;margin:32px 0 8px">
-    <div id="dcc-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--gold);line-height:1">0</div>
-    <div id="dcc-score-denom" style="font-size:18px;color:var(--muted);margin-top:-4px">/5</div>
+  <div style="text-align:center;margin:28px 0 4px">
+    <div class="tss-eyebrow">TODAY'S SHOT SAVER</div>
+    <div class="dcc-score-wrap" style="margin:6px 0 2px">
+      <span id="dcc-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--gold);line-height:1">0</span><span id="dcc-score-denom" style="font-size:20px;color:var(--muted)">/3</span>
+    </div>
+    <div class="dcc-streak-inline"><span class="dcc-streak-num" id="dcc-streak-num">1</span> <span class="dcc-streak-label">day streak 🔥</span></div>
   </div>
-  <div class="dcc-icon">⛳</div>
-  <div class="dcc-title">Round Complete!</div>
-  <div class="dcc-sub">You've finished today's Daily Challenge.<br>Come back tomorrow to keep your streak alive.</div>
-  <div class="dcc-streak-num"   id="dcc-streak-num">1</div>
-  <div class="dcc-streak-label">Day Streak 🔥</div>
-  <div class="dcc-actions">
+
+  <div class="tss-blocks">
+    <div class="tss-block tss-edge">
+      <div class="tss-block-label">⚡ TODAY'S EDGE</div>
+      <div class="tss-block-body" id="tss-edge-body">—</div>
+    </div>
+    <div class="tss-block tss-saved">
+      <div class="tss-block-label">🛡️ THE SHOT YOU SAVED</div>
+      <div class="tss-block-body" id="tss-saved-body">—</div>
+    </div>
+    <div class="tss-block tss-try">
+      <div class="tss-block-label">🎯 TRY THIS NEXT ROUND</div>
+      <div class="tss-block-body" id="tss-try-body">—</div>
+    </div>
+    <div class="tss-block tss-tomorrow">
+      <div class="tss-block-label">🌅 TOMORROW</div>
+      <div class="tss-block-body" id="tss-tomorrow-body">—</div>
+    </div>
+  </div>
+
+  <div class="dcc-actions" style="padding:0 16px 24px">
     <button class="btn btn-gold"  onclick="showView('home')">Back to Home</button>
-    <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Score</button>
+    <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Edge</button>
   </div>
 </div>
 
@@ -1118,6 +1186,7 @@ svg { display:block; }
   <div class="outcome-card" id="outcome-card" style="display:none">
     <div class="oc-result" id="oc-result"></div>
     <div class="oc-consequence" id="oc-consequence"></div>
+    <div class="oc-effects" id="oc-effects"></div>
     <div class="oc-pro" id="oc-pro"></div>
     <button class="hole-next-btn" id="hole-next-btn" onclick="advanceHole()">NEXT SHOT →</button>
   </div>
@@ -1651,6 +1720,15 @@ function showView(id){
 
 function navTo(id){
   if(id === 'home')    { renderHome(); showView('home'); }
+  else if(id === 'play'){ startHole(); }
+  else if(id === 'sharpen'){
+    renderHome();
+    showView('home');
+    setTimeout(() => {
+      const sec = document.getElementById('sharpen-section');
+      if(sec && sec.scrollIntoView) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 120);
+  }
   else if(id === 'profile'){ showProfile(); }
 }
 
@@ -1692,7 +1770,7 @@ function renderHome(){
       ? `🔥 <strong>${S.streak}-day streak</strong> — keep it going!`
       : `Start your streak today!`;
     dcText.innerHTML = streakMsg;
-    dcBtn.textContent = 'PLAY TODAY\'S CHALLENGE →';
+    dcBtn.textContent = "GET TODAY'S EDGE →";
     dcBtn.classList.remove('done');
     dcBtn.onclick = startDaily;
   }
@@ -1895,15 +1973,15 @@ function startDaily(){
   const seed  = todayStr().replace(/-/g,'');
   const rng   = seededRng(parseInt(seed));
   const pool  = [...QUESTIONS].sort(()=> rng() - 0.5);
-  const daily = pool.slice(0,5);
+  const daily = pool.slice(0,3);
   S.quiz = {
     qs: daily, idx:0, score:0, answers:[],
-    pillar: {name:'Daily Challenge', color:'#c8a84b', emoji:'⛳'},
+    pillar: {name:"Today's Shot Saver", color:'#c8a84b', emoji:'⛳'},
     module: 'Daily',
     mode: 'daily'
   };
   setPillarColor('#c8a84b');
-  document.getElementById('qt-pillar').textContent = 'Daily Challenge';
+  document.getElementById('qt-pillar').textContent = "Today's Shot Saver";
   document.getElementById('qt-pillar').style.color  = '#c8a84b';
   document.getElementById('quiz-prog').style.background = '#c8a84b';
   loadQuestion();
@@ -2238,16 +2316,24 @@ function showExplanation(q, isCorrect){
   document.getElementById('exp-pitfall').textContent= q.common_pitfall || '';
   document.getElementById('exp-tip').textContent    = q.action_tip || '';
 
-  // Animation
+  // Decision visual — start position, target zone, danger zone, wrong-shot consequence, tactical label
   const animLabel = document.getElementById('anim-label');
   const animCont  = document.getElementById('anim-container');
-  animLabel.textContent = 'Scenario · ' + (q.hook_type || q.pillar);
-  if(q.techAnim && typeof renderAnimation === 'function'){
+  animLabel.textContent = 'The decision · ' + (q.hook_type || q.pillar);
+  // Show the decision visual only when this question's visual must teach a shot decision.
+  const showVisual = (q.visual_must_show !== false);
+  if(showVisual && typeof renderGolfDecisionVisual === 'function'){
+    animCont.innerHTML = renderGolfDecisionVisual(q, isCorrect);
+    animCont.style.minHeight = '160px';
+    animLabel.style.display = '';
+  } else if(q.techAnim && typeof renderAnimation === 'function'){
     animCont.innerHTML = renderAnimation(q.techAnim, q.techAnimParams || {}, isCorrect);
     animCont.style.minHeight = '160px';
+    animLabel.style.display = '';
   } else {
     animCont.innerHTML = '';
     animCont.style.minHeight = '0';
+    animLabel.style.display = 'none';
   }
 
   card.classList.add('show');
@@ -2283,6 +2369,49 @@ function exitQuiz(){
   renderHome();
 }
 
+// Build the Today's Shot Saver debrief: Today's Edge / The Shot You Saved / Try This Next Round / Tomorrow
+function buildDailyDebrief(qs){
+  // Pick the teaching question: first one answered wrong, else the highest-stakes / first.
+  const answers = (S.quiz && S.quiz.answers) || [];
+  let primary = null;
+  for(const a of answers){
+    if(!a.isCorrect){ primary = qs.find(q => q.id === a.qid); if(primary) break; }
+  }
+  if(!primary) primary = qs[0];
+
+  // Today's Edge — the principle. Use the first sentence of why_right.
+  let edge = primary.why_right || primary.action_tip || 'Play the percentages, not the hero shot.';
+  edge = edge.split(/(?<=[.!?])\s/)[0].trim();
+
+  // The Shot You Saved — map the score leak to a concrete bad outcome.
+  const leakMap = {
+    'Double bogey'  : 'The double bogey from the blow-up hole.',
+    'Three-putt'    : 'The three-putt from long range.',
+    'Penalty'       : 'The penalty stroke from water or OB.',
+    'Short-sided'   : 'The short-sided chip you can’t get close.',
+    'Failed recovery':'The wasted stroke from a forced recovery.'
+  };
+  const saved = leakMap[primary.primary_score_leak] || 'A needless dropped shot.';
+
+  // Try This Next Round — the concrete action.
+  const tryNext = primary.action_tip || 'Pick the safe miss before every swing.';
+
+  // Tomorrow teaser — peek at tomorrow's seeded first question.
+  let tomorrow = 'A new edge to sharpen your game.';
+  try {
+    const t = new Date(Date.now() + 86400000).toISOString().slice(0,10).replace(/-/g,'');
+    const rng = seededRng(parseInt(t));
+    const pool = [...QUESTIONS].sort(()=> rng() - 0.5);
+    const tq = pool[0];
+    if(tq){
+      const topic = tq.hook_type || tq.module || tq.pillar;
+      tomorrow = topic + '.';
+    }
+  } catch(e){}
+
+  return { edge, saved, tryNext, tomorrow };
+}
+
 function finishQuiz(){
   const { score, qs, mode, pillar } = S.quiz;
   const total = qs.length;
@@ -2311,6 +2440,13 @@ function finishQuiz(){
     const dccDenomEl = document.getElementById('dcc-score-denom');
     if(dccScoreEl) dccScoreEl.textContent = score;
     if(dccDenomEl) dccDenomEl.textContent = '/' + total;
+    // Build the four-block debrief
+    const deb = buildDailyDebrief(qs);
+    const setTxt = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+    setTxt('tss-edge-body', deb.edge);
+    setTxt('tss-saved-body', deb.saved);
+    setTxt('tss-try-body', deb.tryNext);
+    setTxt('tss-tomorrow-body', deb.tomorrow);
     const shareBtn = document.getElementById('dcc-share-btn');
     shareBtn.onclick = () => shareResult(score, total, 'daily');
     showView('daily-complete');
@@ -2562,6 +2698,109 @@ function renderAnimation(key, params, isCorrect){
   const fn = fns[key];
   if(!fn) return '<div style="padding:20px;color:#666;text-align:center;font-size:12px">Scenario visual</div>';
   return fn(params || {}, isCorrect);
+}
+
+// ── Decision Visual Engine ──────────────────────────────
+// Every visual shows: start ball position · correct target zone · danger zone ·
+// wrong-shot consequence (after answer) · short tactical label.
+function renderGolfDecisionVisual(q, wasCorrect){
+  const tags = ((q.tags||'') + ' ' + (q.module||'') + ' ' + (q.question||'')).toLowerCase();
+  const leak = q.primary_score_leak || '';
+  const dtype = q.decision_type || '';
+
+  // Tactical label from the decision type
+  const labelMap = {
+    'Risk':'RISK vs REWARD', 'Club':'CLUB SELECTION', 'Target':'PICK YOUR TARGET',
+    'Recovery':'SMART RECOVERY', 'Mental':'STAY DISCIPLINED', 'Rules':'KNOW THE PLAY'
+  };
+  const tacticalLabel = labelMap[dtype] || 'THE SMART PLAY';
+
+  // Consequence phrase from the score leak
+  const leakMap = {
+    'Double bogey':'DOUBLE BOGEY', 'Three-putt':'THREE-PUTT', 'Penalty':'PENALTY DROP',
+    'Short-sided':'SHORT-SIDED', 'Failed recovery':'BLOW-UP HOLE'
+  };
+  const consequence = leakMap[leak] || 'DROPPED SHOT';
+
+  const G='#4caf50', GD='#2d7a2d', GOLD='#c8a84b', R='#e05252';
+
+  // Putting scene for putt / three-putt decisions
+  const isPutt = /putt|green-?read|lag|three-?putt/.test(tags) || leak === 'Three-putt';
+  if(isPutt){
+    const startX=140, startY=150, holeX=150, holeY=40;
+    const correctPath = `M${startX},${startY} Q120,95 ${holeX-4},${holeY+6}`;
+    const wrongPath   = `M${startX},${startY} Q118,90 138,${holeY-26}`; // races past
+    const ballColor = wasCorrect ? G : R;
+    const body = `
+      <rect width="280" height="170" fill="#1b3a1b"/>
+      <ellipse cx="140" cy="95" rx="120" ry="78" fill="#2d6a2d"/>
+      <ellipse cx="140" cy="95" rx="120" ry="78" fill="none" stroke="#3d8a3d" stroke-width="1"/>
+      <!-- 3-foot target zone -->
+      <circle cx="${holeX}" cy="${holeY}" r="26" fill="none" stroke="${G}" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.8"/>
+      ${label(holeX,holeY-32,'TAP-IN ZONE',G,8)}
+      <!-- hole + pin -->
+      <circle cx="${holeX}" cy="${holeY}" r="5" fill="#0a1a0a"/>
+      <line x1="${holeX}" y1="${holeY}" x2="${holeX}" y2="${holeY-22}" stroke="#ccc" stroke-width="1.5"/>
+      <polygon points="${holeX},${holeY-22} ${holeX+15},${holeY-17} ${holeX},${holeY-12}" fill="${R}"/>
+      <!-- danger: 3-putt distance past hole -->
+      ${label(holeX,holeY+90,'BALL',GOLD,8)}
+      <circle cx="${startX}" cy="${startY}" r="5" fill="#fff" opacity="0.5"/>
+      ${trail(wasCorrect?correctPath:wrongPath, ballColor, 0.3, 1.1)}
+      ${mball(wasCorrect?correctPath:wrongPath, ballColor, 0.3, 1.1)}
+      ${wasCorrect
+        ? badge(holeX, holeY+50, '✓ TAP-IN PAR', G, 1.5)
+        : badge(140, holeY-44, '→ '+consequence, R, 1.5)}
+      ${label(140,164,tacticalLabel,'rgba(255,255,255,.85)',9)}`;
+    return svg(280,170,body);
+  }
+
+  // Approach / tee scene — top-down, ball at bottom, green + danger up top
+  const isWater = /water|carry|lake|pond|hazard|penalty area/.test(tags) || (leak==='Penalty' && !/ob|out of bounds/.test(tags));
+  const isOB    = /\bob\b|out of bounds/.test(tags);
+  const isTrees = /tree|trees|forest|woods/.test(tags);
+  // danger geometry guards the front of the green
+  const dCx=178, dCy=92, dRx=40, dRy=16;
+  const dangerFill = isWater?'#2a6cb0':(isOB?'rgba(224,82,82,.18)':(isTrees?'#173417':'#d4b896'));
+  const dangerLabel = isWater?'WATER':(isOB?'OUT OF BOUNDS':(isTrees?'TREES':'BUNKER'));
+  const dangerLabelColor = isWater?'#bcdcff':(isOB?R:(isTrees?'#7cb37c':'#8B6914'));
+
+  const startX=120, startY=152;
+  const safeX=206, safeY=46;            // fat of the green (correct target)
+  const correctPath = `M${startX},${startY} Q150,70 ${safeX},${safeY}`;
+  const wrongPath   = `M${startX},${startY} Q150,96 ${dCx},${dCy}`;  // going at the pin, comes up in the danger
+  const ballColor = wasCorrect ? G : R;
+
+  const dangerShape = isOB
+    ? `<rect x="${dCx-dRx}" y="${dCy-dRy}" width="${dRx*2}" height="${dRy*2}" fill="${dangerFill}" stroke="${R}" stroke-width="1.2" stroke-dasharray="5 4"/>`
+    : `<ellipse cx="${dCx}" cy="${dCy}" rx="${dRx}" ry="${dRy}" fill="${dangerFill}"/>`;
+  const effect = wasCorrect ? '' : (isWater ? splash(dCx,dCy,1.5) : (isOB ? badge(dCx,dCy,'✗',R,1.5) : sand(dCx,dCy,1.5)));
+
+  const body = `
+    <rect width="280" height="170" fill="#1b2e1b"/>
+    <ellipse cx="80" cy="150" rx="70" ry="40" fill="#234a22" opacity="0.5"/>
+    <!-- TARGET green -->
+    <ellipse cx="200" cy="50" rx="50" ry="28" fill="${GD}"/>
+    <ellipse cx="200" cy="50" rx="38" ry="20" fill="#3d9a3d"/>
+    <line x1="190" y1="44" x2="190" y2="24" stroke="#ccc" stroke-width="1.5"/>
+    <polygon points="190,24 175,30 190,36" fill="${R}"/>
+    <!-- correct target zone (fat side) -->
+    <ellipse cx="${safeX}" cy="${safeY}" rx="22" ry="13" fill="none" stroke="${G}" stroke-width="1.5" stroke-dasharray="4 4"/>
+    ${label(safeX,safeY-16,'TARGET',G,8)}
+    <!-- danger -->
+    ${dangerShape}
+    ${label(dCx,dCy+3,dangerLabel,dangerLabelColor,7.5)}
+    <!-- start ball -->
+    <circle cx="${startX}" cy="${startY}" r="5.5" fill="${GOLD}"/>
+    ${label(startX,startY+15,'YOUR BALL',GOLD,8)}
+    ${trail(wasCorrect?correctPath:wrongPath, ballColor, 0.3, 1.1)}
+    ${mball(wasCorrect?correctPath:wrongPath, ballColor, 0.3, 1.1)}
+    ${effect}
+    ${wasCorrect
+      ? badge(safeX, safeY+24, '✓ SAFE — PAR LOOK', G, 1.6)
+      : badge(dCx, dCy-26, '→ '+consequence, R, 1.6)}
+    <rect x="0" y="0" width="280" height="16" fill="rgba(0,0,0,.35)"/>
+    ${label(140,11,tacticalLabel,GOLD,9)}`;
+  return svg(280,170,body);
 }
 
 // ── Animation helpers ────────────────────────────────────────────
@@ -4473,7 +4712,7 @@ function renderHoleNode(nodeId){
 
 function selectHoleChoice(choice, node){
   HS.shotCount++;
-  HS.decisions.push({ shot: node.shot, label: choice.label, badge: choice.badge });
+  HS.decisions.push({ shot: node.shot, label: choice.label, badge: choice.badge, type: choice.type, sub: choice.sub });
   HS.pendingNext = choice.next;
 
   const nextNode = HOLE.nodes[choice.next];
@@ -4489,6 +4728,14 @@ function selectHoleChoice(choice, node){
   }
 }
 
+// Classify an outcome's valence from its result label: good / bad / neutral
+function outcomeValence(result){
+  const r = result || '';
+  if(/✅|🎯|🏆|🔥|💚/.test(r)) return 'good';
+  if(/💥|⚠️|🚫|❌|😬|💧/.test(r)) return 'bad';
+  return 'neutral';
+}
+
 function showHoleOutcome(node){
   document.getElementById('shot-panel').style.display = 'none';
   const oc = document.getElementById('outcome-card');
@@ -4496,6 +4743,31 @@ function showHoleOutcome(node){
   document.getElementById('oc-result').textContent = node.result;
   document.getElementById('oc-consequence').textContent = node.consequence;
   document.getElementById('oc-pro').innerHTML = `<span class="oc-pro-label">PRO LENS</span> ${node.pro}`;
+
+  // Tag the decision that led here with its outcome valence (for the end summary)
+  const valence = outcomeValence(node.result);
+  const lastDec = HS.decisions[HS.decisions.length - 1];
+  if(lastDec) lastDec.valence = valence;
+
+  // Consequence strip: risk taken · where it leaves you · score pace
+  const riskMap = {
+    agg:  { t:'High',     c:'#e05252' },
+    smart:{ t:'Balanced', c:'#4caf50' },
+    safe: { t:'Low',      c:'#5b9bd5' },
+    exec: { t:'Execution',c:'#c8a84b' }
+  };
+  const risk = riskMap[(lastDec && lastDec.type) || 'smart'] || riskMap.smart;
+  const posMap  = { good:'Better', bad:'Worse', neutral:'Holding' };
+  const posCol  = { good:'#4caf50', bad:'#e05252', neutral:'#c8a84b' };
+  const scorePace = `${HS.shotCount} shot${HS.shotCount===1?'':'s'} · par ${HOLE.par}`;
+  const effects = document.getElementById('oc-effects');
+  if(effects){
+    effects.innerHTML = `
+      <div class="oc-effect"><div class="oc-effect-label">Risk taken</div><div class="oc-effect-val" style="color:${risk.c}">${risk.t}</div></div>
+      <div class="oc-effect"><div class="oc-effect-label">Position now</div><div class="oc-effect-val" style="color:${posCol[valence]}">${posMap[valence]}</div></div>
+      <div class="oc-effect"><div class="oc-effect-label">Score pace</div><div class="oc-effect-val">${scorePace}</div></div>`;
+  }
+
   renderHoleMap(node.mapState || 'tee');
 
   const btn = document.getElementById('hole-next-btn');
@@ -4544,6 +4816,8 @@ function renderScorecard(finalNode){
     `<div class="sc-decision"><span class="sc-shot-num">Shot ${d.shot}</span><span class="dc-badge ${d.badge.toLowerCase()} sc-badge">${d.badge}</span><span class="sc-dec-label">${d.label}</span></div>`
   ).join('');
 
+  const takeaways = buildHoleTakeaways(finalNode, scoreToPar);
+
   box.innerHTML = `
     <div class="sc-hole-name">${HOLE.name}</div>
     <div class="sc-par-row"><span>Par ${HOLE.par}</span><span>${HOLE.yardage} yards</span></div>
@@ -4552,12 +4826,54 @@ function renderScorecard(finalNode){
       <div class="sc-score-big" style="color:${finalNode.color}">${finalNode.score}</div>
       <div class="sc-score-par">${parLabel}</div>
     </div>
+    <div class="sc-takeaways">
+      <div class="sc-take smart"><div class="sc-take-label">🏆 Smartest Decision</div><div class="sc-take-body">${takeaways.smartest}</div></div>
+      <div class="sc-take costly"><div class="sc-take-label">💸 Costliest Decision</div><div class="sc-take-body">${takeaways.costliest}</div></div>
+      <div class="sc-take rule"><div class="sc-take-label">📌 One Rule for Your Next Round</div><div class="sc-take-body">${takeaways.rule}</div></div>
+    </div>
     <div class="sc-decisions-header">YOUR DECISIONS</div>
     <div class="sc-decisions">${decisionSummary}</div>
     <div class="sc-actions">
       <button class="btn btn-gold" onclick="startHole()">PLAY AGAIN</button>
       <button class="btn btn-dark" onclick="showView('home')">HOME</button>
     </div>`;
+}
+
+// Derive Smartest / Costliest / One Rule from the decisions taken this hole
+function buildHoleTakeaways(finalNode, scoreToPar){
+  const decs = HS.decisions || [];
+  const goodTypes = { smart:1, exec:1, safe:1 };
+
+  // Smartest: a good-outcome decision, preferring disciplined choices; else any good outcome; else the first.
+  let smart = decs.find(d => d.valence === 'good' && goodTypes[d.type])
+           || decs.find(d => d.valence === 'good')
+           || decs.find(d => goodTypes[d.type])
+           || decs[0];
+
+  // Costliest: a bad-outcome decision, preferring aggressive ones; else any bad outcome.
+  let costly = decs.find(d => d.valence === 'bad' && d.type === 'agg')
+            || decs.find(d => d.valence === 'bad')
+            || null;
+
+  const smartest = smart
+    ? `Shot ${smart.shot}: ${smart.label}. ${smart.valence === 'good' ? 'It put you in the best position on the hole.' : 'A disciplined choice that kept the big number off the card.'}`
+    : 'You kept your decisions clean and gave yourself a look at every shot.';
+
+  let costliest, rule;
+  if(costly){
+    costliest = `Shot ${costly.shot}: ${costly.label}. The aggressive line brought trouble into play and cost you strokes.`;
+    rule = costly.type === 'agg'
+      ? 'When the safe miss costs one shot and the hero shot risks three, take the safe miss.'
+      : 'Pick the target that makes your worst result a bogey, not a blow-up.';
+  } else if(scoreToPar > 0){
+    costliest = 'No single blow-up — small misses added up. Tighten your approach targeting.';
+    rule = 'Aim for the fat of the green, not the flag. Two-putt pars win rounds.';
+  } else {
+    costliest = 'Nothing costly — you avoided every trap on the hole.';
+    rule = 'Keep stacking disciplined decisions. That is exactly how good rounds hold together.';
+  }
+
+  return { smartest, costliest, rule };
 }
 
 // ── Famous Hole SVG Maps ──────────────────────────────────────────
