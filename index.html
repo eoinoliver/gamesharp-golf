@@ -166,6 +166,66 @@ svg { display:block; }
 
 /* Section header */
 .home-section { padding:0 16px; margin-top:20px; }
+
+/* ── Technique · Fix a Shot ─────────────────────────────── */
+.tech-entry-card {
+  display:flex; align-items:center; gap:13px; margin-bottom:12px;
+  background:linear-gradient(135deg,#16241a 0%,#1d3322 60%,#16241a 100%);
+  border:1px solid #2d5a28; border-radius:var(--radius); padding:15px 16px; cursor:pointer;
+}
+.tech-entry-card:active { opacity:.88; }
+.tech-entry-icon { font-size:26px; flex-shrink:0; }
+.tech-entry-body { flex:1; min-width:0; }
+.tech-entry-eyebrow { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); text-transform:uppercase; margin-bottom:3px; }
+.tech-entry-title { font-family:'Bebas Neue',sans-serif; font-size:23px; color:#fff; line-height:1; }
+.tech-entry-sub { font-size:12px; color:rgba(255,255,255,.6); margin-top:3px; line-height:1.4; }
+.tech-entry-arrow { color:var(--gold); font-size:20px; flex-shrink:0; }
+
+#view-technique { background:var(--dark); padding-bottom:40px; }
+#view-technique > * { flex-shrink:0; }
+.tech-topbar { display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--dark); z-index:5; }
+.tech-back, .tech-close { background:none; border:none; color:var(--muted); font-size:14px; font-weight:600; cursor:pointer; padding:4px; }
+.tech-close { font-size:18px; }
+.tech-topbar-title { font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); }
+.tech-app { padding:18px 16px; }
+
+.tech-eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; color:var(--gold); text-transform:uppercase; }
+.tech-h1 { font-family:'Bebas Neue',sans-serif; font-size:34px; color:#fff; line-height:1; margin:5px 0 8px; }
+.tech-intro { font-size:13.5px; color:var(--muted); line-height:1.55; margin-bottom:18px; }
+.tech-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tech-stroke-card { position:relative; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius); padding:15px 14px; cursor:pointer; }
+.tech-stroke-card:active { opacity:.85; }
+.tech-stroke-emoji { font-size:26px; }
+.tech-stroke-name { font-family:'Bebas Neue',sans-serif; font-size:21px; color:#fff; margin-top:7px; line-height:1; }
+.tech-stroke-meta { font-size:11.5px; color:var(--muted); margin-top:4px; }
+
+.tech-dots { display:flex; gap:6px; margin-bottom:14px; }
+.tech-dot { flex:1; height:4px; border-radius:3px; background:var(--border); }
+.tech-dot.done { background:rgba(200,168,75,.5); }
+.tech-dot.now  { background:var(--gold); }
+.tech-qtag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.tech-situation { font-size:16px; line-height:1.5; color:var(--text); margin-bottom:6px; }
+.tech-prompt { font-size:13.5px; color:var(--muted); margin-bottom:14px; }
+.tech-visual { background:#13211a; border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:14px; overflow:hidden; }
+.tech-opts { display:flex; flex-direction:column; gap:9px; }
+.tech-opt { display:flex; align-items:flex-start; gap:11px; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 14px; cursor:pointer; transition:border-color .15s; }
+.tech-opt-letter { width:24px; height:24px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--muted); flex-shrink:0; }
+.tech-opt-body { flex:1; }
+.tech-opt-label { font-size:14px; color:var(--text); line-height:1.35; }
+.tech-opt-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.tech-opt.sel   { border-color:#4caf50; background:rgba(76,175,80,.1); }
+.tech-opt.sel   .tech-opt-letter { border-color:#4caf50; color:#4caf50; }
+.tech-opt.wrong { border-color:var(--wrong); background:rgba(224,82,82,.1); }
+.tech-opt.wrong .tech-opt-letter { border-color:var(--wrong); color:var(--wrong); }
+.tech-opt.dim   { opacity:.45; }
+.tech-reveal { margin-top:16px; }
+.tech-rtag { font-size:13px; font-weight:700; margin-bottom:6px; }
+.tech-rwhy { font-size:14px; line-height:1.55; color:var(--text); margin-bottom:14px; }
+.tech-cue { background:linear-gradient(135deg,#1a2c0a 0%,#243d14 100%); border:1px solid #3d6622; border-radius:var(--radius-sm); padding:13px 15px; margin-bottom:16px; }
+.tech-cue-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+.tech-cue-feel { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; line-height:1; margin-bottom:6px; }
+.tech-cue-drill { font-size:13px; line-height:1.5; color:rgba(255,255,255,.78); }
+.tech-cta { width:100%; background:var(--gold); color:#111; border:none; border-radius:var(--radius-sm); padding:14px; font-size:15px; font-weight:700; cursor:pointer; }
 .section-title { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
 
 /* Pillar Grid */
@@ -884,6 +944,15 @@ svg { display:block; }
   <!-- Sharpen Your Game (pillars, lower) -->
   <div class="home-section" id="sharpen-section">
     <p class="section-title">Sharpen Your Game</p>
+    <div class="tech-entry-card" onclick="openTechnique()">
+      <div class="tech-entry-icon">🛠️</div>
+      <div class="tech-entry-body">
+        <div class="tech-entry-eyebrow">TECHNIQUE · FIX A SHOT</div>
+        <div class="tech-entry-title">Find the culprit</div>
+        <div class="tech-entry-sub">Your common misses — and the one cue that fixes each.</div>
+      </div>
+      <div class="tech-entry-arrow">→</div>
+    </div>
     <div class="pillar-grid" id="pillar-grid"></div>
   </div>
 
@@ -1197,6 +1266,17 @@ svg { display:block; }
     </div>
   </div><!-- /hole-game -->
 </div><!-- /view-hole -->
+</div><!-- close stray wrapper so following views are direct children of #app -->
+
+<!-- ============================== TECHNIQUE · FIX A SHOT ============================== -->
+<div class="view" id="view-technique">
+  <div class="tech-topbar">
+    <button class="tech-back" id="tech-back" onclick="techBack()">‹ Back</button>
+    <div class="tech-topbar-title" id="tech-topbar-title">Fix a Shot</div>
+    <button class="tech-close" onclick="showView('home')">✕</button>
+  </div>
+  <div class="tech-app" id="tech-app"><!-- rendered by JS --></div>
+</div>
 
 <!-- Install Prompt -->
 <div id="install-bar">
@@ -2658,6 +2738,365 @@ function showProfile(){
 
   setPillarColor('#1c3c18');
   showView('profile');
+}
+
+// ════════ TECHNIQUE · FIX A SHOT ════════
+// Browsable library: pick a club/stroke, step through its common faults
+// ("find the culprit"), reveal the real cause + a one-line range cue.
+const GOLF_TECHNIQUE = [
+  { key:'driver', label:'Driver', emoji:'🏌️', faults:[
+    { name:'The slice',
+      situation:'Every drive starts okay then peels hard right into trouble. Your big miss, all day.',
+      options:[
+        { label:'Clubface open to your swing path at impact', sub:'Tilt on the face = sideways spin', correct:true },
+        { label:"You're not swinging hard enough" },
+        { label:'The ball is teed too low' } ],
+      why:'A slice is almost always a face-open-to-path issue. The face pointing right of your path puts cutting sidespin on the ball — speed and tee height barely matter.',
+      cue:{ feel:'See two knuckles', drill:'Strengthen your lead-hand grip until you see 2–3 knuckles at address, and feel the glove logo turn down through impact to square the face.' },
+      vis:{ mode:'direction', shape:'slice' } },
+    { name:'The sky / pop-up',
+      situation:'You catch the top edge — a weak balloon that goes 120 yards and leaves a scuff on the crown.',
+      options:[
+        { label:'Steep, downward strike on a forward-teed ball', sub:'Hitting down instead of up', correct:true },
+        { label:'Standing too far from the ball' },
+        { label:'Gripping too tightly' } ],
+      why:'Sky-marks come from chopping down on the driver. It is the one club you hit on the up — a steep angle slides under the ball and pops it off the top edge.',
+      cue:{ feel:'Tee it high, sweep up', drill:'Tee the ball so half of it sits above the crown, play it off your lead heel, and feel like you brush up after the low point.' },
+      vis:{ mode:'contact', shape:'pop' } },
+    { name:'The snap-hook',
+      situation:'Misses dive low and left, sometimes snapping into the next fairway.',
+      options:[
+        { label:'Hands flipping the face closed through impact', sub:'Face pointing left of path', correct:true },
+        { label:'Aiming too far right' },
+        { label:'Too much loft on the driver' } ],
+      why:'A hook is the mirror of a slice — the face is closed to the path, usually from over-active hands rolling it shut. Quiet the hands and turn the body through to fix it.',
+      cue:{ feel:'Body turns, hands quiet', drill:'Feel your chest keep rotating to the target through impact while the hands stay passive — let the turn square the face, not a flip.' },
+      vis:{ mode:'direction', shape:'hook' } } ] },
+
+  { key:'irons', label:'Irons', emoji:'⛳', faults:[
+    { name:'The thin / blade',
+      situation:'Iron shots come off the bottom edge — a low screamer that flies the green.',
+      options:[
+        { label:'Trying to lift the ball, low point behind it', sub:'Weight hanging back', correct:true },
+        { label:'The club is too short for you' },
+        { label:'Swinging too hard' } ],
+      why:'Thin contact comes from trying to help the ball up. When your weight hangs back, the swing bottoms out behind the ball and the club is rising at contact — you catch it with the leading edge.',
+      cue:{ feel:'Hit down, ball then turf', drill:'Get pressure into your lead foot by impact and feel the clubhead bottom out a ball-width in front. Take your divot after the ball, not behind it.' },
+      vis:{ mode:'contact', shape:'thin' } },
+    { name:'The fat / heavy',
+      situation:'You hit the ground first — a chunk that comes up 30 yards short.',
+      options:[
+        { label:'Low point is behind the ball', sub:'Weight stuck on the back foot', correct:true },
+        { label:'Standing too close to the ball' },
+        { label:'Too strong a grip' } ],
+      why:'Fat and thin share a cause: a low point behind the ball. Your weight stays back, the club digs in early, and the strike is heavy. Shifting pressure forward moves the low point ahead of the ball.',
+      cue:{ feel:'Buttons ahead of the ball', drill:'At impact, feel your sternum stacked ahead of the ball with pressure in your lead foot. Practice brushing the grass just in front of a tee.' },
+      vis:{ mode:'contact', shape:'fat' } },
+    { name:'The push / block',
+      situation:'Solid contact, but the ball starts right of target and stays there.',
+      options:[
+        { label:'Early extension — hips thrust in, arms get stuck', sub:'Path swings out to the right', correct:true },
+        { label:'Closing the face too soon' },
+        { label:'Ball position is the only cause' } ],
+      why:'A straight push usually means your body stood up through impact (early extension), pushing the swing path out to the right with the face matching it. Keeping your posture lets the arms swing down the line.',
+      cue:{ feel:'Hold your tush line', drill:'Feel your backside stay against an imaginary wall through impact instead of thrusting at the ball — that keeps room for the arms to swing left of the push.' },
+      vis:{ mode:'direction', shape:'push' } } ] },
+
+  { key:'wedges', label:'Wedges', emoji:'🎯', faults:[
+    { name:'Inconsistent distance',
+      situation:'From 50 yards your wedges fly anywhere from 35 to 60 yards. No control.',
+      options:[
+        { label:'Decelerating — steering distance with a slowing hit', sub:'Backswing too long, then you quit', correct:true },
+        { label:'Wrong wedge in the bag' },
+        { label:'Not enough wrist hinge' } ],
+      why:'Inconsistent wedge distance is a deceleration problem. A too-long backswing forces you to quit on the way down to scale it back — and that slowdown is where fat, thin and flips come from.',
+      cue:{ feel:'Clock-face backswings', drill:'Build three set backswing lengths (7:30, 9:00, 10:30) and always accelerate through. Same tempo, different lengths — repeatable distance.' },
+      vis:{ mode:'contact', shape:'short' } },
+    { name:'The thin pitch',
+      situation:'From a tight lie you blade the pitch and it rockets over the green.',
+      options:[
+        { label:'Flipping the hands to scoop it up', sub:'Lead wrist breaks down', correct:true },
+        { label:'Ball positioned too far back' },
+        { label:'Too lofted a wedge' } ],
+      why:'Scooping — adding loft with the hands — moves the low point behind the ball and the leading edge catches it thin. Covering the ball with a forward-leaning shaft delivers the bounce, not the edge.',
+      cue:{ feel:'Cover it, handle leads', drill:'Feel the grip stay ahead of the clubhead through impact. The glove logo points at the target after contact — no scoop.' },
+      vis:{ mode:'contact', shape:'thin' } },
+    { name:'The chunked pitch',
+      situation:'The clubhead thuds into the turf behind the ball and it goes nowhere.',
+      options:[
+        { label:'Sliding / hanging back, low point drops behind the ball', sub:'Weight drifts back', correct:true },
+        { label:'Looking up too early' },
+        { label:'Standing too tall' } ],
+      why:'A chunk is a low point behind the ball, usually from sliding or hanging back instead of rotating through. Stay over your lead side and turn through to keep the bottom of the arc in front of the ball.',
+      cue:{ feel:'Weight forward, rotate', drill:'Set 60% of your weight on your lead foot and keep it there. Feel your belt buckle turn to the target through the shot — rotation, not slide.' },
+      vis:{ mode:'contact', shape:'fat' } } ] },
+
+  { key:'chipping', label:'Chipping', emoji:'🚩', faults:[
+    { name:'The chunk',
+      situation:'Greenside, you catch it heavy and the ball moves three feet.',
+      options:[
+        { label:'Weight on the back foot, trying to lift it', sub:'Low point behind the ball', correct:true },
+        { label:'Using too much loft' },
+        { label:'Standing too far away' } ],
+      why:'Fat chips come from weight hanging back and a scooping motion. Set up with weight forward and the handle leaning at the target so the club bottoms out on or after the ball.',
+      cue:{ feel:'Lean handle, weight forward', drill:'60/40 weight on your lead foot, hands ahead of the ball, and feel a small body turn brush the grass under the ball — no flick.' },
+      vis:{ mode:'contact', shape:'fat' } },
+    { name:'The blade across the green',
+      situation:'You try to help the chip up and skull it across the green.',
+      options:[
+        { label:'Lead wrist breaking down to add loft', sub:'Leading edge catches the equator', correct:true },
+        { label:'Too narrow a stance' },
+        { label:'Gripping down too far' } ],
+      why:'Skulled chips come from the lead wrist breaking down as you scoop. Keep the back of the lead wrist flat and let the loft of the club do the lifting — quiet hands, moving chest.',
+      cue:{ feel:'Flat lead wrist, chest moves', drill:'Feel the back of your lead hand stay flat through impact and your chest keep turning. Trap the ball — let loft, not hands, get it up.' },
+      vis:{ mode:'contact', shape:'blade' } },
+    { name:'Stubbed off a tight lie',
+      situation:'Off a tight, firm lie the club digs and stubs into the ground.',
+      options:[
+        { label:'Too steep — digging the leading edge into firm ground', sub:'No use of the bounce', correct:true },
+        { label:'Not enough loft' },
+        { label:'Ball too far forward only' } ],
+      why:'On tight lies a steep, digging strike leaves no margin — the leading edge sticks. Shallow it out and use the bounce: a more level low point glides off firm turf instead of digging.',
+      cue:{ feel:'Shallow, use the bounce', drill:'Feel the clubhead sweep low and level through the grass rather than chopping down. Picture brushing a tee out of the ground, not stabbing it.' },
+      vis:{ mode:'contact', shape:'fat' } } ] },
+
+  { key:'bunker', label:'Bunker', emoji:'🏖️', faults:[
+    { name:"Won't come out",
+      situation:'Greenside bunker — you keep leaving it in the sand.',
+      options:[
+        { label:'Closed face + digging, with no acceleration', sub:'The club buries instead of splashing', correct:true },
+        { label:'Hitting the ball first' },
+        { label:'Standing too open' } ],
+      why:'Leaving it in means the club dug instead of splashed, and you decelerated. Open the face to expose the bounce, enter the sand a couple inches behind the ball, and accelerate so the sand throws it out.',
+      cue:{ feel:'Open face, splash sand', drill:'Draw a line two inches behind the ball and commit to splashing the sand from that line all the way through — accelerate, never quit.' },
+      vis:{ mode:'contact', shape:'bunkerIn' } },
+    { name:'The skull over the green',
+      situation:'You catch the ball first and skull it over the green.',
+      options:[
+        { label:'Leaning back to lift it — ball before sand', sub:'Hanging on the back foot', correct:true },
+        { label:'Too much sand behind the ball' },
+        { label:'Face too open' } ],
+      why:'Skulled bunker shots come from trying to lift the ball and hanging back, so the club catches the ball before the sand. Stay over the shot and trust the splash — hit the sand, not the ball.',
+      cue:{ feel:'Hit the sand, not the ball', drill:'Keep your sternum over the ball and commit to entering the sand a couple inches behind it. Eyes on the sand, not the ball.' },
+      vis:{ mode:'contact', shape:'thin' } },
+    { name:'Too much sand, comes up short',
+      situation:'You enter way behind the ball, take a ton of sand, and it dribbles out short.',
+      options:[
+        { label:'Entry point too far behind + too steep', sub:'Sand absorbs the speed', correct:true },
+        { label:'Not enough loft' },
+        { label:'Ball too far back is the only fault' } ],
+      why:'Entering too far behind and chopping down dumps the speed into the sand before it reaches the ball. Tighten the entry to a couple inches and shallow the swing so the club splashes through.',
+      cue:{ feel:'Shallow splash, 2 inches behind', drill:'Narrow your entry point and feel the clubhead skim a long, shallow patch of sand through the ball — accelerate so the sand carries it all the way out.' },
+      vis:{ mode:'contact', shape:'short' } } ] },
+
+  { key:'putting', label:'Putting', emoji:'🥏', faults:[
+    { name:'Push / pull off the face',
+      situation:'Good speed, but putts inside 8 feet slide just past the edge — right or left.',
+      options:[
+        { label:'Face angle pointing off-target at impact', sub:'Face controls most of the start line', correct:true },
+        { label:'Reading too much break' },
+        { label:'Standing too close to the ball' } ],
+      why:'On short putts the face angle at impact controls roughly 80%+ of the start line. A face a degree or two off misses the edge. Square the face and quiet the hands — path matters far less from close range.',
+      cue:{ feel:'Square it — gate drill', drill:'Set two tees just wider than your putter as a gate a foot ahead and roll putts through it. Train the face to start the ball on line.' },
+      vis:{ mode:'putt', shape:'push' } },
+    { name:'Leaving it short',
+      situation:'Your lag putts keep dying just short of the hole, every time.',
+      options:[
+        { label:'Decelerating into the ball', sub:'Backstroke too long, then you quit', correct:true },
+        { label:'Reading the green wrong' },
+        { label:'Standing too tall' } ],
+      why:'Consistently short means deceleration — usually too long a backstroke you slow down to control. A shorter back, longer through-stroke accelerates the ball to the hole. A putt left short never goes in.',
+      cue:{ feel:'Short back, accelerate', drill:'Make your through-stroke longer than your backstroke and aim to roll every putt 17 inches past. Pace beats a perfect read.' },
+      vis:{ mode:'putt', shape:'short' } },
+    { name:'Three-jacks from range',
+      situation:'From 40 feet you leave the first putt 6 feet short or long and three-putt.',
+      options:[
+        { label:'Poor speed control — eyes on the line, not the distance', sub:'No feel for pace', correct:true },
+        { label:'Wrong putter length' },
+        { label:'Too much wrist in the stroke' } ],
+      why:'Three-putts from range are almost always speed, not line. Obsessing over the exact line costs you feel for distance. Aim to leave every long putt inside a 3-foot circle and the three-putts disappear.',
+      cue:{ feel:'Putt to a 3-foot circle', drill:'On long putts take a few looks at the hole — not the ball — to feel distance, then roll it to stop inside a 3-foot radius. Lag for tap-ins.' },
+      vis:{ mode:'putt', shape:'long' } } ] }
+];
+
+let techState = { strokeIdx:-1, faultIdx:0, answered:false };
+
+function openTechnique(){
+  techState = { strokeIdx:-1, faultIdx:0, answered:false };
+  techRenderHome();
+  showView('technique');
+}
+function techBack(){
+  if(techState.strokeIdx >= 0){ techRenderHome(); }
+  else { renderHome(); showView('home'); }
+}
+function techSetTop(title, backLabel){
+  const t = document.getElementById('tech-topbar-title'); if(t) t.textContent = title;
+  const b = document.getElementById('tech-back'); if(b) b.textContent = backLabel;
+}
+function techApp(){ return document.getElementById('tech-app'); }
+
+function techRenderHome(){
+  techState.strokeIdx = -1;
+  techSetTop('Fix a Shot', '‹ Sharpen');
+  const cards = GOLF_TECHNIQUE.map((g,i) =>
+    `<button class="tech-stroke-card" onclick="techOpenStroke(${i})">
+      <div class="tech-stroke-emoji">${g.emoji}</div>
+      <div class="tech-stroke-name">${g.label}</div>
+      <div class="tech-stroke-meta">${g.faults.length} common misses</div>
+    </button>`).join('');
+  techApp().innerHTML = `
+    <div class="tech-eyebrow">Technique</div>
+    <h1 class="tech-h1">Find the culprit</h1>
+    <p class="tech-intro">Pick a club. We'll show the misses you actually make — and the one cue that fixes each.</p>
+    <div class="tech-grid">${cards}</div>`;
+  techApp().parentElement.scrollTop = 0;
+}
+function techOpenStroke(i){ techState.strokeIdx = i; techState.faultIdx = 0; techRenderFault(); }
+
+function techRenderFault(){
+  techState.answered = false;
+  const g = GOLF_TECHNIQUE[techState.strokeIdx];
+  const f = g.faults[techState.faultIdx];
+  techSetTop(g.label, '‹ Clubs');
+  let dots = '';
+  for(let d=0; d<g.faults.length; d++){
+    dots += `<div class="tech-dot${d < techState.faultIdx ? ' done' : (d === techState.faultIdx ? ' now' : '')}"></div>`;
+  }
+  const opts = f.options.map((o,k) =>
+    `<button class="tech-opt" id="techOpt${k}" onclick="techAnswer(${k})">
+      <div class="tech-opt-letter">${String.fromCharCode(65+k)}</div>
+      <div class="tech-opt-body"><div class="tech-opt-label">${o.label}</div>${o.sub ? `<div class="tech-opt-sub">${o.sub}</div>` : ''}</div>
+    </button>`).join('');
+  techApp().innerHTML = `
+    <div class="tech-dots">${dots}</div>
+    <div class="tech-qtag">${g.label} · fault ${techState.faultIdx+1} of ${g.faults.length}</div>
+    <div class="tech-situation">${f.situation}</div>
+    <div class="tech-prompt">What's the usual culprit?</div>
+    <div class="tech-visual">${techVisual(f.vis, false)}</div>
+    <div class="tech-opts">${opts}</div>
+    <div id="techReveal"></div>`;
+  techApp().parentElement.scrollTop = 0;
+}
+
+function techAnswer(k){
+  if(techState.answered) return;
+  techState.answered = true;
+  const g = GOLF_TECHNIQUE[techState.strokeIdx];
+  const f = g.faults[techState.faultIdx];
+  const chosen = f.options[k];
+  const ci = f.options.findIndex(o => o.correct);
+  // Re-render the visual to its fixed state
+  const vWrap = document.querySelector('#view-technique .tech-visual');
+  if(vWrap) vWrap.innerHTML = techVisual(f.vis, true);
+  document.querySelectorAll('#view-technique .tech-opt').forEach((el, idx) => {
+    if(idx === k) el.classList.add(chosen.correct ? 'sel' : 'wrong');
+    else if(idx === ci) el.classList.add('sel');
+    else el.classList.add('dim');
+    el.onclick = null;
+  });
+  const last = techState.faultIdx >= g.faults.length - 1;
+  document.getElementById('techReveal').innerHTML = `
+    <div class="tech-reveal">
+      <div class="tech-rtag" style="color:${chosen.correct ? '#4caf50' : '#e05252'}">${chosen.correct ? '✓ Nailed it' : '✗ Not quite'}</div>
+      <div class="tech-rwhy">${f.why}</div>
+      <div class="tech-cue">
+        <div class="tech-cue-label">On the range, feel</div>
+        <div class="tech-cue-feel">${f.cue.feel}</div>
+        <div class="tech-cue-drill">${f.cue.drill}</div>
+      </div>
+      <button class="tech-cta" onclick="${last ? 'techRenderHome()' : 'techNextFault()'}">${last ? 'Back to clubs →' : 'Next miss →'}</button>
+    </div>`;
+  setTimeout(() => { const r = document.getElementById('techReveal'); if(r) r.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 120);
+}
+function techNextFault(){
+  techState.faultIdx++;
+  if(techState.faultIdx >= GOLF_TECHNIQUE[techState.strokeIdx].faults.length) techRenderHome();
+  else techRenderFault();
+}
+
+// ── Technique ball-flight / impact visuals ──────────────
+function techTWrap(body){ return `<svg viewBox="0 0 280 180" width="100%" style="display:block;max-height:200px" xmlns="http://www.w3.org/2000/svg">${body}</svg>`; }
+function techTLabel(x,y,t,c,s){ return `<text x="${x}" y="${y}" fill="${c||'#fff'}" font-size="${s||9}" font-family="DM Sans,sans-serif" font-weight="700" text-anchor="middle">${t}</text>`; }
+function techVisual(vis, rev){
+  const v = vis || { mode:'direction', shape:'slice' };
+  if(v.mode === 'putt')    return techVisualPutt(v.shape, rev);
+  if(v.mode === 'contact') return techVisualContact(v.shape, rev);
+  return techVisualDirection(v.shape, rev);
+}
+function techVisualDirection(shape, rev){
+  const GOLD='#c8a84b', R='#e05252', G='#4caf50';
+  const paths = {
+    slice:{ d:'M140,160 C137,120 152,86 214,64', ex:214, ey:64, danger:'TREES' },
+    hook: { d:'M140,160 C143,120 128,86 66,64',  ex:66,  ey:64, danger:'TROUBLE' },
+    push: { d:'M140,160 L208,46', ex:208, ey:46, danger:'ROUGH' },
+    pull: { d:'M140,160 L72,46',  ex:72,  ey:46, danger:'ROUGH' }
+  };
+  const p = paths[shape] || paths.slice;
+  return techTWrap(`
+    <rect width="280" height="180" fill="#16271a"/>
+    <ellipse cx="140" cy="58" rx="78" ry="42" fill="#1f3d22"/>
+    <line x1="140" y1="160" x2="140" y2="34" stroke="rgba(255,255,255,.25)" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <line x1="140" y1="34" x2="140" y2="16" stroke="#ccc" stroke-width="1.5"/>
+    <polygon points="140,16 154,21 140,26" fill="${G}"/>
+    ${techTLabel(140,12,'TARGET',G,8)}
+    <path d="${p.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="${p.ex}" cy="${p.ey}" r="4" fill="${R}"/>
+    ${techTLabel(p.ex, p.ey-7, p.danger, R, 7.5)}
+    ${rev ? `<path d="M140,160 L140,30" stroke="${G}" stroke-width="2.5" fill="none"/>${techTLabel(118,98,'FIXED',G,8)}` : ''}
+    <circle cx="140" cy="160" r="5.5" fill="${GOLD}"/>
+    ${techTLabel(140,176,'YOUR MISS',R,8)}`);
+}
+function techVisualContact(shape, rev){
+  const GOLD='#c8a84b', R='#e05252', G='#4caf50';
+  const faults = {
+    thin:    { d:'M44,143 L268,122', lab:'OVER GREEN', lx:236, ly:114 },
+    fat:     { d:'M44,143 Q92,124 126,144', lab:'SHORT', lx:128, ly:138 },
+    pop:     { d:'M44,143 Q92,24 152,144', lab:'SHORT', lx:152, ly:138 },
+    blade:   { d:'M44,143 L268,139', lab:'SKULLED', lx:236, ly:131 },
+    short:   { d:'M44,143 Q138,74 180,144', lab:'SHORT', lx:182, ly:138 },
+    bunkerIn:{ d:'M44,141 Q64,134 90,142', lab:'STAYS IN', lx:96, ly:136 }
+  };
+  const f = faults[shape] || faults.thin;
+  const sand = shape === 'bunkerIn'
+    ? `<ellipse cx="44" cy="148" rx="40" ry="8" fill="#d4b896" opacity="0.85"/>` : '';
+  return techTWrap(`
+    <rect width="280" height="180" fill="#16271a"/>
+    <rect x="0" y="150" width="280" height="30" fill="#1c3a1f"/>
+    <line x1="0" y1="150" x2="280" y2="150" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+    ${sand}
+    <ellipse cx="232" cy="150" rx="34" ry="6" fill="#3d8b38"/>
+    <line x1="232" y1="150" x2="232" y2="132" stroke="#ccc" stroke-width="1.2"/>
+    <polygon points="232,132 244,136 232,140" fill="${G}"/>
+    ${techTLabel(232,166,'GREEN',G,7.5)}
+    <path d="M44,143 Q150,52 230,148" stroke="rgba(76,175,80,.32)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+    <path d="${f.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    ${techTLabel(f.lx, f.ly, f.lab, R, 7)}
+    ${rev ? `<path d="M44,143 Q150,52 230,148" stroke="${G}" stroke-width="2.5" fill="none"/>${techTLabel(150,46,'FIXED',G,8)}` : ''}
+    <circle cx="44" cy="143" r="5.5" fill="${GOLD}"/>`);
+}
+function techVisualPutt(shape, rev){
+  const GOLD='#c8a84b', R='#e05252', G='#4caf50';
+  const faults = {
+    push: { d:'M140,150 L168,52', mx:168, my:48, lab:'MISSED RIGHT' },
+    short:{ d:'M140,150 L140,86', mx:140, my:84, lab:'SHORT' },
+    long: { d:'M140,150 L140,20', mx:140, my:18, lab:'RACED PAST' }
+  };
+  const f = faults[shape] || faults.push;
+  return techTWrap(`
+    <rect width="280" height="180" fill="#163016"/>
+    <ellipse cx="140" cy="95" rx="124" ry="82" fill="#2d6a2d"/>
+    <line x1="140" y1="150" x2="140" y2="46" stroke="rgba(255,255,255,.2)" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <circle cx="140" cy="44" r="24" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1" stroke-dasharray="4 4"/>
+    <circle cx="140" cy="44" r="5" fill="#0a1a0a"/>
+    <line x1="140" y1="44" x2="140" y2="24" stroke="#ccc" stroke-width="1.3"/>
+    <polygon points="140,24 153,28 140,32" fill="${R}"/>
+    <path d="${f.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="${f.mx}" cy="${f.my}" r="4.5" fill="${R}"/>
+    ${techTLabel(f.mx, f.my-7, f.lab, R, 7.5)}
+    ${rev ? `<path d="M140,150 L140,49" stroke="${G}" stroke-width="2.5" fill="none"/>` : ''}
+    <circle cx="140" cy="150" r="5.5" fill="${GOLD}"/>
+    ${techTLabel(140,168,'YOUR PUTT',GOLD,8)}`);
 }
 
 // ── PWA Install ────────────────────────────────────────
