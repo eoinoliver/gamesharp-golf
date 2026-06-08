@@ -2751,7 +2751,7 @@ const GOLF_TECHNIQUE = [
         { label:'Clubface open to your swing path at impact', sub:'Tilt on the face = sideways spin', correct:true },
         { label:"You're not swinging hard enough" },
         { label:'The ball is teed too low' } ],
-      why:'A slice is almost always a face-open-to-path issue. The face pointing right of your path puts cutting sidespin on the ball — speed and tee height barely matter.',
+      why:'A slice is almost always a face-open-to-path issue: the face pointing right of your swing path puts cutting sidespin on the ball. An over-the-top, out-to-in path makes it worse — but the open face is what bends it right, so square the face first. Speed and tee height barely matter.',
       cue:{ feel:'See two knuckles', drill:'Strengthen your lead-hand grip until you see 2–3 knuckles at address, and feel the glove logo turn down through impact to square the face.' },
       vis:{ mode:'direction', shape:'slice' } },
     { name:'The sky / pop-up',
@@ -2795,11 +2795,11 @@ const GOLF_TECHNIQUE = [
     { name:'The push / block',
       situation:'Solid contact, but the ball starts right of target and stays there.',
       options:[
-        { label:'Early extension — hips thrust in, arms get stuck', sub:'Path swings out to the right', correct:true },
+        { label:'In-to-out path with the face square to it', sub:'Arms trapped behind as the body stalls', correct:true },
         { label:'Closing the face too soon' },
         { label:'Ball position is the only cause' } ],
-      why:'A straight push usually means your body stood up through impact (early extension), pushing the swing path out to the right with the face matching it. Keeping your posture lets the arms swing down the line.',
-      cue:{ feel:'Hold your tush line', drill:'Feel your backside stay against an imaginary wall through impact instead of thrusting at the ball — that keeps room for the arms to swing left of the push.' },
+      why:'A pure push — starts right, no curve — is an in-to-out path with the face square to that path. Usually the lower body slides or stands up (early extension), the arms get trapped behind your chest, and they swing out to the right. Hold your posture and keep rotating so the arms swing back down the line.',
+      cue:{ feel:'Hold posture, rotate through', drill:'Feel your backside stay against an imaginary wall and your chest keep turning through impact — that keeps room for the arms to swing left of the push instead of getting stuck behind you.' },
       vis:{ mode:'direction', shape:'push' } } ] },
 
   { key:'wedges', label:'Wedges', emoji:'🎯', faults:[
@@ -2816,7 +2816,7 @@ const GOLF_TECHNIQUE = [
       situation:'From a tight lie you blade the pitch and it rockets over the green.',
       options:[
         { label:'Flipping the hands to scoop it up', sub:'Lead wrist breaks down', correct:true },
-        { label:'Ball positioned too far back' },
+        { label:'Gripping the club too tightly' },
         { label:'Too lofted a wedge' } ],
       why:'Scooping — adding loft with the hands — moves the low point behind the ball and the leading edge catches it thin. Covering the ball with a forward-leaning shaft delivers the bounce, not the edge.',
       cue:{ feel:'Cover it, handle leads', drill:'Feel the grip stay ahead of the clubhead through impact. The glove logo points at the target after contact — no scoop.' },
@@ -2856,8 +2856,8 @@ const GOLF_TECHNIQUE = [
         { label:'Too steep — digging the leading edge into firm ground', sub:'No use of the bounce', correct:true },
         { label:'Not enough loft' },
         { label:'Ball too far forward only' } ],
-      why:'On tight lies a steep, digging strike leaves no margin — the leading edge sticks. Shallow it out and use the bounce: a more level low point glides off firm turf instead of digging.',
-      cue:{ feel:'Shallow, use the bounce', drill:'Feel the clubhead sweep low and level through the grass rather than chopping down. Picture brushing a tee out of the ground, not stabbing it.' },
+      why:'On tight lies a steep, digging strike sticks the leading edge into firm ground. Shallow your angle of attack so the sole — not the leading edge — slides along the turf, and ease the forward shaft lean so you sweep the ball off the top instead of chopping down on it.',
+      cue:{ feel:'Shallow sweep, ease the lean', drill:'Off a tight lie, level out your attack and brush the grass long and low through the ball — sweep it off the surface rather than trapping it with a steep, leaning strike.' },
       vis:{ mode:'contact', shape:'fat' } } ] },
 
   { key:'bunker', label:'Bunker', emoji:'🏖️', faults:[
@@ -2913,7 +2913,7 @@ const GOLF_TECHNIQUE = [
       options:[
         { label:'Poor speed control — eyes on the line, not the distance', sub:'No feel for pace', correct:true },
         { label:'Wrong putter length' },
-        { label:'Too much wrist in the stroke' } ],
+        { label:'Standing too far from the ball' } ],
       why:'Three-putts from range are almost always speed, not line. Obsessing over the exact line costs you feel for distance. Aim to leave every long putt inside a 3-foot circle and the three-putts disappear.',
       cue:{ feel:'Putt to a 3-foot circle', drill:'On long putts take a few looks at the hole — not the ball — to feel distance, then roll it to stop inside a 3-foot radius. Lag for tap-ins.' },
       vis:{ mode:'putt', shape:'long' } } ] }
