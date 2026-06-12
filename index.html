@@ -3690,6 +3690,7 @@ function sand(cx, cy, begin=1.4){
 // ── 1. Par 3, Into the Wind ──────────────────────────────
 function animPar3Wind(p, isCorrect){
   const G='#4caf50', R='#e05252';
+  const dw=/tail|helping|behind|down/.test(String(p.wind||p.direction||''));
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <ellipse cx="218" cy="72" rx="42" ry="24" fill="#2d7a2d"/>
@@ -3700,15 +3701,15 @@ function animPar3Wind(p, isCorrect){
     ${label(162,110,'BUNKER','#8B6914',7.5)}
     <circle cx="42" cy="140" r="5" fill="#c8a84b"/>
     ${label(42,153,'TEE','#c8a84b',8)}
-    <line x1="115" y1="20" x2="72" y2="20" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
-    <line x1="130" y1="32" x2="87" y2="32" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
-    ${label(148,23,'HEADWIND','#64b5f6',8)}`;
+    <line x1="${dw?72:115}" y1="20" x2="${dw?115:72}" y2="20" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
+    <line x1="${dw?87:130}" y1="32" x2="${dw?130:87}" y2="32" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
+    ${label(148,23, dw?'DOWNWIND':'HEADWIND','#64b5f6',8)}`;
   if(isCorrect){
     const d='M42,140 Q128,58 214,75';
     return svg(280,160,`${geo}
       ${trail(d,G)}${mball(d,G,0.3,1.1)}
       ${badge(194,48,'✓ ON THE GREEN',G,1.6)}
-      ${label(130,46,'Extra club · lower flight','#aaa',8)}`);
+      ${label(130,46, dw?'Less club · let it ride':'Extra club · lower flight','#aaa',8)}`);
   }
   const dBad='M42,140 Q115,28 168,105', dGood='M42,140 Q128,58 214,75';
   return svg(280,160,`${geo}
@@ -3753,6 +3754,7 @@ function animDogleg(p, isCorrect){
 // ── 3. Pin Position — Aim Away from Danger ───────────────
 function animGreenPin(p, isCorrect){
   const G='#4caf50', R='#e05252';
+  const lieLab=/flier/.test(String(p.lie||''))?'FLIER LIE':(/tight/.test(String(p.lie||''))?'TIGHT LIE':'');
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <ellipse cx="140" cy="82" rx="100" ry="64" fill="#2d7a2d"/>
@@ -3771,7 +3773,8 @@ function animGreenPin(p, isCorrect){
     <ellipse cx="80" cy="80" rx="26" ry="16" fill="${R}" opacity="0.16"
       stroke="${R}" stroke-width="1" stroke-dasharray="3,3"/>
     <circle cx="140" cy="150" r="5" fill="#c8a84b"/>
-    ${label(140,157,'YOUR APPROACH','#c8a84b',7.5)}`;
+    ${label(140,157,'YOUR APPROACH','#c8a84b',7.5)}
+    ${lieLab?label(206,150,lieLab,'#c8a84b',7.5):''}`;
   if(isCorrect){
     const d='M140,150 Q144,112 148,82';
     return svg(280,160,`${geo}
@@ -3790,6 +3793,7 @@ function animGreenPin(p, isCorrect){
 // ── 4. Bunker Escape — Clear the Lip ────────────────────
 function animBunker(p, isCorrect){
   const G='#4caf50', R='#e05252';
+  const buried=/buried|plugged|fried/.test(String(p.lie||''));
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <rect x="0" y="0" width="280" height="108" fill="#1a2535" opacity="0.4"/>
@@ -3803,7 +3807,8 @@ function animBunker(p, isCorrect){
     <ellipse cx="238" cy="103" rx="34" ry="21" fill="#3d9a3d"/>
     <line x1="238" y1="82" x2="238" y2="62" stroke="#ccc" stroke-width="1.5"/>
     <polygon points="238,62 253,68 238,74" fill="${R}"/>
-    <circle cx="66" cy="116" r="5.5" fill="#fff" filter="url(#bs)"/>
+    <circle cx="66" cy="${buried?120:116}" r="5.5" fill="#fff" filter="url(#bs)"/>
+    ${buried?`<path d="M57,120 Q66,112 75,120" stroke="#d4b896" stroke-width="5" fill="none"/>`+label(66,136,'BURIED','#c8a060',7.5):''}
     ${label(66,108,'YOUR BALL','#ddd',8)}`;
   if(isCorrect){
     const d='M66,116 Q82,44 234,106';
@@ -3823,6 +3828,9 @@ function animBunker(p, isCorrect){
 // ── 5. Reading the Break — Aim Above the Hole ────────────
 function animPutt(p, isCorrect){
   const G='#4caf50', R='#e05252', gold='#c8a84b';
+  const shortP=/short/.test(String(p.length||'')) || (typeof p.distance==='number' && p.distance<=8);
+  const bx=shortP?122:50, by=shortP?90:94;
+  const downP=/down/.test(String(p.slope||''));
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <rect x="14" y="12" width="252" height="140" rx="16" fill="#3d9a3d"/>
@@ -3835,16 +3843,17 @@ function animPutt(p, isCorrect){
     ${label(256,15,'LOW','#64b5f6',8.5)}
     <circle cx="214" cy="84" r="9" fill="#111" stroke="#666" stroke-width="1.5"/>
     ${label(214,68,'HOLE','#bbb',8)}
-    <circle cx="50" cy="94" r="5.5" fill="#fff" filter="url(#bs)"/>
-    ${label(50,110,'BALL','#ddd',8)}`;
+    <circle cx="${bx}" cy="${by}" r="5.5" fill="#fff" filter="url(#bs)"/>
+    ${label(bx,by+16,'BALL','#ddd',8)}
+    ${downP?label(140,152,'DOWNHILL — HALF THE PACE',gold,7.5):''}`;
   if(isCorrect){
-    const d='M50,94 Q118,52 207,82';
+    const d=`M${bx},${by} Q${Math.round((bx+207)/2)},52 207,82`;
     return svg(280,160,`${geo}
       ${trail(d,G)}${mball(d,G,0.3,1.2)}
       ${badge(214,46,'✓ DROPS IN THE HOLE',G,1.7)}
       ${label(118,40,'Aim above — let it break down',G,8)}`);
   }
-  const dBad='M50,94 Q132,94 207,92', dGood='M50,94 Q118,52 207,82';
+  const dBad=`M${bx},${by} Q${Math.round((bx+207)/2)+14},${by} 207,92`, dGood=`M${bx},${by} Q${Math.round((bx+207)/2)},52 207,82`;
   return svg(280,160,`${geo}
     ${trail(dBad,R)}${mball(dBad,R,0.3,1.2)}
     ${badge(207,112,'✗ MISSES LOW SIDE',R,1.7)}
@@ -3855,6 +3864,12 @@ function animPutt(p, isCorrect){
 // ── 6. Approach — Take One More Club ─────────────────────
 function animApproach(p, isCorrect){
   const G='#4caf50', R='#e05252';
+  const slopeStr=String(p.slope||p.lie||'');
+  const apExtra =
+    (/two_tier/.test(String(p.green||'')) ? `<line x1="86" y1="28" x2="194" y2="28" stroke="#1f5a1f" stroke-width="2.5"/>${label(140,42,'UPPER TIER','#9fd99f',7)}` : '') +
+    (/uphill/.test(slopeStr)   ? label(48,148,'UPHILL · +1 CLUB','#c8a84b',7.5) : '') +
+    (/downhill/.test(slopeStr) ? label(48,148,'DOWNHILL · −1 CLUB','#c8a84b',7.5) : '') +
+    (/wet|soft/.test(String(p.conditions||'')) ? label(232,148,'SOFT — NO RUN','#64b5f6',7.5) : '');
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <rect x="92" y="18" width="96" height="112" rx="10" fill="#2d6a2d"/>
@@ -3869,7 +3884,8 @@ function animApproach(p, isCorrect){
     <line x1="138" y1="7" x2="138" y2="-5" stroke="#ccc" stroke-width="1.5"/>
     <polygon points="138,-5 152,1 138,7" fill="${R}"/>
     <circle cx="140" cy="148" r="5.5" fill="#fff" filter="url(#bs)"/>
-    ${label(140,156,'YOUR BALL','#ddd',7.5)}`;
+    ${label(140,156,'YOUR BALL','#ddd',7.5)}
+    ${apExtra}`;
   if(isCorrect){
     const d='M140,148 Q150,78 158,26';
     return svg(280,160,`${geo}
@@ -3888,11 +3904,14 @@ function animApproach(p, isCorrect){
 // ── 7. Fairway Bunker — Don't Try to Be a Hero ───────────
 function animFairwayBunker(p, isCorrect){
   const G='#4caf50', R='#e05252';
+  const highLip=/high/.test(String(p.lip_height||''));
+  const goFB=/go/.test(String(p.correct||''));
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <rect x="18" y="60" width="248" height="50" rx="12" fill="#2d6a2d"/>
     <ellipse cx="172" cy="85" rx="42" ry="21" fill="#d4b896"/>
     ${label(172,88,'BUNKER','#8B6914',8.5)}
+    ${highLip?`<path d="M132,72 Q172,54 212,72" stroke="#a08000" stroke-width="4.5" fill="none" stroke-linecap="round"/>`+label(172,48,'HIGH LIP','#c8a84b',8):''}
     <ellipse cx="256" cy="85" rx="22" ry="17" fill="#3d9a3d"/>
     <line x1="256" y1="68" x2="256" y2="52" stroke="#ccc" stroke-width="1.5"/>
     <polygon points="256,52 270,58 256,64" fill="${R}"/>
@@ -3902,10 +3921,10 @@ function animFairwayBunker(p, isCorrect){
     ${label(122,130,'LAYUP ZONE',G,7.5)}
     ${label(122,141,'EASY WEDGE IN',G,7)}`;
   if(isCorrect){
-    const d='M42,85 Q82,60 120,85';
+    const d = goFB ? 'M42,85 Q150,28 252,82' : 'M42,85 Q82,60 120,85';
     return svg(280,160,`${geo}
-      ${trail(d,G)}${mball(d,G,0.3,0.9)}
-      ${badge(82,44,'✓ SAFE — EASY WEDGE IN',G,1.4)}`);
+      ${trail(d,G)}${mball(d,G,0.3,goFB?1.2:0.9)}
+      ${goFB ? badge(210,44,'✓ ON THE GREEN — CHECKLIST PASSED',G,1.7) : badge(82,44,'✓ SAFE — EASY WEDGE IN',G,1.4)}`);
   }
   const dBad='M42,85 Q158,36 198,83', dGood='M42,85 Q82,60 120,85';
   return svg(280,160,`${geo}
@@ -3919,6 +3938,8 @@ function animFairwayBunker(p, isCorrect){
 // ── 8. Into the Wind — Punch It Low ─────────────────────
 function animWindFlight(p, isCorrect){
   const G='#4caf50', R='#e05252';
+  const wd=String(p.wind||p.direction||'head');
+  const tailW=/tail/.test(wd), crossW=/cross|left_to_right|right_to_left/.test(wd);
   const geo=`
     <rect width="280" height="160" fill="#1b2e1b"/>
     <rect width="280" height="118" fill="#1a2535" opacity="0.45"/>
@@ -3928,10 +3949,10 @@ function animWindFlight(p, isCorrect){
     <polygon points="236,82 251,88 236,94" fill="${R}"/>
     <circle cx="40" cy="117" r="5" fill="#c8a84b"/>
     ${label(40,132,'TEE','#c8a84b',8)}
-    <line x1="224" y1="28" x2="176" y2="28" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
-    <line x1="224" y1="42" x2="176" y2="42" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
-    <line x1="224" y1="56" x2="176" y2="56" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
-    ${label(238,38,'WIND','#64b5f6',9)}`;
+    <line x1="${tailW?176:224}" y1="28" x2="${tailW?224:176}" y2="28" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
+    <line x1="${tailW?176:224}" y1="42" x2="${tailW?224:176}" y2="42" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
+    <line x1="${tailW?176:224}" y1="56" x2="${tailW?224:176}" y2="56" stroke="#64b5f6" stroke-width="2.5" marker-end="url(#wnd)"/>
+    ${label(238,38, crossW?'CROSS':(tailW?'TAIL':'WIND'),'#64b5f6',9)}`;
   if(isCorrect){
     const d='M40,117 Q132,66 233,116';
     return svg(280,160,`${geo}
@@ -3997,12 +4018,21 @@ function animPar5(p, isCorrect){
     <line x1="122" y1="112" x2="122" y2="122" stroke="${G}" stroke-width="1.5" stroke-dasharray="3,2"/>
     ${label(122,132,'LAYUP ZONE',G,7.5)}
     ${label(122,143,'EASY WEDGE IN',G,7)}`;
+  const goRight=/go|close/.test(String(p.correct||''));
   if(isCorrect){
-    const d='M40,87 Q80,58 120,87';
+    const d = goRight ? 'M40,87 Q150,24 250,84' : 'M40,87 Q80,58 120,87';
     return svg(280,160,`${geo}
-      ${trail(d,G)}${mball(d,G,0.3,0.9)}
-      ${badge(80,42,'✓ SHORT AND SAFE',G,1.4)}
-      ${label(80,32,'Wedge in · make the putt',G,8)}`);
+      ${trail(d,G)}${mball(d,G,0.3,goRight?1.2:0.9)}
+      ${goRight ? badge(214,46,'✓ CARRIES — ON IN TWO',G,1.7) : badge(80,42,'✓ SHORT AND SAFE',G,1.4)}
+      ${goRight ? label(150,14,'Green light · margin + reliability',G,8) : label(80,32,'Wedge in · make the putt',G,8)}`);
+  }
+  if(goRight){
+    const dBad='M40,87 Q80,58 120,87', dGood='M40,87 Q150,24 250,84';
+    return svg(280,160,`${geo}
+      ${trail(dBad,R)}${mball(dBad,R,0.3,0.9)}
+      ${badge(96,46,'✗ TOO TIMID — STROKE LEFT OUT THERE',R,1.4)}
+      ${trail(dGood,G,2.0,1.1)}
+      ${label(208,30,'The carry was on →',G,8)}`);
   }
   const dBad='M40,87 Q148,28 200,85', dGood='M40,87 Q80,58 120,87';
   return svg(280,160,`${geo}
@@ -5896,6 +5926,16 @@ function mapAugusta13(state){
   </svg>`;
 }
 
+// Per-map geography: real tee/green routes and hazard zones for the famous holes,
+// so consequences land where they actually happen (Rae's Creek gets its splash).
+const FAMOUS_GEO = {
+  augusta_12:  { tee:[29,72],  route:[[210,72]],                   water:[180,122], sand:[148,96] },
+  sawgrass_17: { tee:[32,80],  route:[[210,80]],                   water:[150,118], sand:[245,98], drop:[110,80] },
+  standrews_17:{ tee:[29,143], route:[[150,110],[268,72]],         sand:[232,80],   ob:[262,26],   road:[292,100] },
+  pebble_7:    { tee:[36,110], route:[[218,72]],                   water:[150,58],  sand:[196,88] },
+  augusta_13:  { tee:[314,149],route:[[210,115],[140,84],[48,72]], water:[78,82],   sand:[125,52] }
+};
+
 // Animated ball flight over the hole map: journey anchors by shot count,
 // kicked offline on bad outcomes, with splash/sand/lost cues from the consequence text.
 function animateHoleBall(node, valence){
@@ -5903,17 +5943,35 @@ function animateHoleBall(node, valence){
   const svg  = wrap && wrap.querySelector('svg');
   if(!svg) return;
   // journey anchors in the shared 340x160 frame (tee left → green right)
-  const J = [[29,77],[120,86],[195,84],[248,80],[258,79]];
-  // progress scaled by par: a par-3 tee shot reaches the green, a par-5 takes three
-  const par = (HOLE && HOLE.par) || 4;
-  const idx = Math.min(4, 1 + Math.round(3 * Math.min(HS.shotCount,par) / Math.max(2, par - 1)));
-  let end = J[idx].slice();
   const txt = ((node.consequence||'')+' '+(node.result||'')).toLowerCase();
-  const inWater  = /water|creek|wet|splash|drink|pond|burn/.test(txt) && valence==='bad';
+  const inWater  = /water|creek|splash|drink|pond|burn|ocean|pacific|rae/.test(txt) && valence==='bad';
   const inSand   = /bunker|sand/.test(txt) && valence==='bad';
   const offline  = valence==='bad';
-  if(offline){ end[1] += (HS.shotCount % 2 ? -18 : 18); end[0] -= 8; }
-  const start = HS.ballPos || J[0];
+  const par = (HOLE && HOLE.par) || 4;
+  const geo = FAMOUS_GEO[HOLE && HOLE.mapType];
+  let start, end;
+  if(geo){
+    // bespoke choreography: hazards in the consequence route the ball to the real zone
+    start = HS.ballPos || geo.tee;
+    if(inWater && geo.water)                                end = geo.water.slice();
+    else if(inSand && geo.sand)                             end = geo.sand.slice();
+    else if(/road/.test(txt) && geo.road)                   end = geo.road.slice();
+    else if(/out of bounds|hotel|o\.b\./.test(txt) && geo.ob) end = geo.ob.slice();
+    else if(/drop zone|drop area/.test(txt) && geo.drop)    end = geo.drop.slice();
+    else {
+      const route=[geo.tee].concat(geo.route);
+      const ri=Math.min(route.length-1, Math.max(1, Math.round((route.length-1)*Math.min(HS.shotCount,par)/Math.max(1,par-1))));
+      end=route[ri].slice();
+      if(offline){ end[0]+=(geo.tee[0]<route[route.length-1][0]?-10:10); end[1]+=(HS.shotCount%2?-14:14); }
+    }
+  } else {
+    const J=[[29,77],[120,86],[195,84],[248,80],[258,79]];
+    // progress scaled by par: a par-3 tee shot reaches the green, a par-5 takes three
+    const idx=Math.min(4, 1+Math.round(3*Math.min(HS.shotCount,par)/Math.max(2,par-1)));
+    end=J[idx].slice();
+    if(offline){ end[1]+=(HS.shotCount%2?-18:18); end[0]-=8; }
+    start = HS.ballPos || J[0];
+  }
   HS.ballPos = end;
   const midX=(start[0]+end[0])/2, midY=Math.min(start[1],end[1])-26;
   const d=`M${start[0]},${start[1]} Q${midX},${midY} ${end[0]},${end[1]}`;
