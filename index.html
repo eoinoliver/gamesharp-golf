@@ -226,6 +226,10 @@ svg { display:block; }
 .tech-cue-feel { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; line-height:1; margin-bottom:6px; }
 .tech-cue-drill { font-size:13px; line-height:1.5; color:rgba(255,255,255,.78); }
 .tech-cta { width:100%; background:var(--gold); color:#111; border:none; border-radius:var(--radius-sm); padding:14px; font-size:15px; font-weight:700; cursor:pointer; }
+.gsw-ctrl { display:flex; align-items:center; gap:8px; padding:8px 10px; border-top:1px solid var(--border); }
+.gsw-btn  { background:var(--card2); border:1px solid var(--border); color:var(--muted); border-radius:20px; padding:5px 11px; font-size:10.5px; font-weight:700; letter-spacing:.06em; cursor:pointer; }
+.gsw-btn.on { border-color:var(--gold); color:var(--gold); }
+.gsw-scrub { flex:1; accent-color:var(--gold); height:4px; }
 .section-title { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
 
 /* Pillar Grid */
@@ -2088,7 +2092,7 @@ const DAILY_LEAKS = [
 function techFaultAsQuestion(seedNum){
   try{
     const flat=[];
-    GOLF_TECHNIQUE.forEach(g => g.faults.forEach(f => flat.push({g,f})));
+    GOLF_TECHNIQUE.forEach(g => g.faults.forEach((f,fi) => flat.push({g,f,fi})));
     if(!flat.length) return null;
     // prefer faults not yet seen, rotating by date
     const seen=new Set(getSeenIds());
@@ -2110,7 +2114,7 @@ function techFaultAsQuestion(seedNum){
       pro_insight:"On the range, feel: '"+f.cue.feel+"' — "+f.cue.drill,
       common_pitfall:'', action_tip:f.cue.drill,
       tags:'technique,'+g.key, tier:'Free',
-      _techVis:f.vis
+      _techVis:f.vis, _figKey:g.key+':'+pick.fi
     };
   }catch(e){ return null; }
 }
@@ -2503,7 +2507,10 @@ function showExplanation(q, isCorrect){
   // Show the decision visual only when this question's visual must teach a shot decision.
   const showVisual = (q.visual_must_show !== false);
   if(q._techVis && typeof techVisual === 'function'){
-    animCont.innerHTML = techVisual(q._techVis, isCorrect);
+    animCont.innerHTML = '<div id="dailyTechStage"></div><div class="gsw-ctrl" id="dailyTechCtrl"></div>';
+    if(!(q._figKey && mountGolfSwing('dailyTechStage','dailyTechCtrl', q._figKey, isCorrect ? 'fix' : 'miss', true))){
+      animCont.innerHTML = techVisual(q._techVis, isCorrect);
+    }
     animCont.style.minHeight = '160px';
     animLabel.style.display = '';
   } else if(showVisual && typeof renderGolfDecisionVisual === 'function'){
@@ -3019,6 +3026,240 @@ const GOLF_TECHNIQUE = [
       vis:{ mode:'putt', shape:'long' } } ] }
 ];
 
+
+// ════════ GOLF SWING FIGURE ENGINE ════════
+// Keyframed stick-figure swings, face-on (target = viewer's right).
+// Each Technique fault overrides specific keyframes (top / impact / finish)
+// so the MISS and the FIX are visibly different mechanics, with a scrub
+// control and an outcome flight + label after impact.
+
+const GSW_BASES = {
+  full: { ball:[162,196], frames:[
+    {head:[150,50],hip:[150,116],hands:[158,142],club:[162,196]},
+    {head:[150,50],hip:[151,116],hands:[120,134],club:[84,168]},
+    {head:[152,52],hip:[148,116],hands:[108,70], club:[74,32]},
+    {head:[148,54],hip:[158,114],hands:[166,138],club:[162,196]},
+    {head:[146,53],hip:[160,113],hands:[198,118],club:[232,150]},
+    {head:[152,50],hip:[160,112],hands:[192,56], club:[214,22]} ] },
+  chip: { ball:[166,196], frames:[
+    {head:[152,56],hip:[152,120],hands:[160,150],club:[166,196]},
+    {head:[152,56],hip:[152,120],hands:[140,136],club:[122,164]},
+    {head:[152,56],hip:[151,120],hands:[128,118],club:[108,150]},
+    {head:[151,57],hip:[158,118],hands:[170,146],club:[166,196]},
+    {head:[151,57],hip:[159,118],hands:[184,134],club:[204,162]},
+    {head:[152,56],hip:[160,117],hands:[190,120],club:[210,140]} ] },
+  bunker: { ball:[166,193], frames:[
+    {head:[150,52],hip:[150,118],hands:[158,146],club:[164,198]},
+    {head:[150,52],hip:[151,118],hands:[124,132],club:[92,162]},
+    {head:[152,54],hip:[149,118],hands:[112,76], club:[80,40]},
+    {head:[148,56],hip:[157,115],hands:[164,142],club:[152,200]},
+    {head:[146,55],hip:[159,114],hands:[196,122],club:[228,152]},
+    {head:[152,52],hip:[160,113],hands:[190,60], club:[212,28]} ] },
+  putt: { ball:[166,196], frames:[
+    {head:[152,62],hip:[152,124],hands:[158,150],club:[164,196]},
+    {head:[152,62],hip:[152,124],hands:[148,148],club:[142,194]},
+    {head:[152,62],hip:[152,124],hands:[144,148],club:[134,193]},
+    {head:[152,62],hip:[152,124],hands:[160,150],club:[166,196]},
+    {head:[152,62],hip:[152,124],hands:[172,148],club:[192,192]},
+    {head:[152,62],hip:[152,124],hands:[176,148],club:[200,191]} ] }
+};
+
+// Per-fault keyframe overrides + annotations + outcomes. Keys: strokeKey:faultIndex.
+const TECH_FIGS = {
+ 'driver:0':{base:'full',
+   miss:{i:{hands:[160,140]},faceOpen:true,note:'FACE OPEN TO PATH',out:['low','→ SLICED INTO TREES']},
+   fix:{note:'FACE SQUARE — SEE TWO KNUCKLES',out:['normal','→ FLUSH DOWN THE LINE']}},
+ 'driver:1':{base:'full',tee:true,
+   miss:{i:{club:[154,203]},note:'STEEP — HITTING DOWN ON IT',out:['pop','→ SKY BALL, 120 YARDS']},
+   fix:{i:{club:[164,193]},note:'SWEEP UP THROUGH THE BALL',out:['high','→ PURE, FULL CARRY']}},
+ 'driver:2':{base:'full',
+   miss:{i:{hands:[170,144]},faceClosed:true,note:'HANDS FLIP — FACE SLAMS SHUT',out:['hook','→ SNAP HOOK LEFT']},
+   fix:{note:'BODY TURNS, HANDS QUIET',out:['normal','→ STRAIGHT FLIGHT']}},
+ 'irons:0':{base:'full',
+   miss:{i:{hip:[142,118],hands:[154,142],club:[150,191]},note:'LOW POINT BEHIND THE BALL',out:['low','→ THINNED OVER THE GREEN']},
+   fix:{i:{hip:[160,113],hands:[170,137]},divot:true,note:'BALL FIRST, THEN TURF',out:['normal','→ COMPRESSED, PIN HIGH']}},
+ 'irons:1':{base:'full',
+   miss:{i:{hip:[142,118],hands:[152,144],club:[150,203]},turfBehind:true,note:'GROUND FIRST — WEIGHT BACK',out:['dribble','→ CHUNKED, 30 SHORT']},
+   fix:{i:{hip:[160,113],hands:[170,137]},divot:true,note:'PRESSURE INTO THE LEAD FOOT',out:['normal','→ CRISP CONTACT']}},
+ 'irons:2':{base:'full',
+   miss:{i:{hip:[166,120],hands:[160,144]},note:'BODY STALLS — ARMS STUCK BEHIND',out:['low','→ BLOCKED RIGHT']},
+   fix:{note:'HOLD POSTURE, CHEST KEEPS TURNING',out:['normal','→ ON LINE']}},
+ 'wedges:0':{base:'full',
+   miss:{t:{hands:[104,66],club:[68,28]},f:{hands:[178,120],club:[200,150]},note:'LONG BACK… THEN QUIT',out:['short','→ 15 YARDS SHORT']},
+   fix:{t:{hands:[122,92],club:[96,62]},note:'9 O\'CLOCK BACK — ACCELERATE',out:['normal','→ PIN HIGH']}},
+ 'wedges:1':{base:'full',
+   miss:{i:{hands:[152,148],club:[172,190]},note:'LEAD WRIST BREAKS DOWN',out:['low','→ BLADED ACROSS']},
+   fix:{i:{hands:[172,140]},note:'HANDLE LEADS THE CLUBHEAD',out:['short','→ CHECKS UP CLOSE']}},
+ 'wedges:2':{base:'full',
+   miss:{i:{hip:[140,118],club:[154,203]},turfBehind:true,note:'WEIGHT HANGS BACK',out:['dribble','→ CHUNKED']},
+   fix:{i:{hip:[160,112]},note:'ROTATE OVER THE LEAD SIDE',out:['short','→ CRISP AND CLOSE']}},
+ 'chipping:0':{base:'chip',
+   miss:{i:{hip:[146,122],hands:[154,152],club:[158,203]},turfBehind:true,note:'WEIGHT BACK, TRYING TO LIFT',out:['stub','→ MOVED THREE FEET']},
+   fix:{i:{hands:[174,144]},note:'HANDS AHEAD, WEIGHT FORWARD',out:['roll','→ ROLLING AT THE PIN']}},
+ 'chipping:1':{base:'chip',
+   miss:{i:{hands:[150,154],club:[178,190]},note:'LEAD WRIST FLIPS UP',out:['low','→ SKULLED OVER']},
+   fix:{i:{hands:[172,144]},note:'FLAT WRIST — CHEST TURNS',out:['roll','→ LANDS SOFT, RELEASES']}},
+ 'chipping:2':{base:'chip',
+   miss:{t:{hands:[126,104],club:[118,126]},i:{club:[162,203]},note:'TOO STEEP — LEADING EDGE DIGS',out:['stub','→ STUBBED']},
+   fix:{t:{hands:[134,124],club:[112,154]},note:'SHALLOW — SWEEP THE GRASS',out:['roll','→ RUNS OUT NICELY']}},
+ 'bunker:0':{base:'bunker',
+   miss:{i:{club:[160,202]},f:{hands:[176,130],club:[204,158]},note:'DIGS AND QUITS',out:['stay','→ STILL IN THE SAND']},
+   fix:{splash:true,note:'SPLASH THE SAND — FULL FINISH',out:['out','→ OUT SOFT, ON THE GREEN']}},
+ 'bunker:1':{base:'bunker',
+   miss:{i:{hip:[140,120],hands:[156,140],club:[168,191]},note:'LEANING BACK — BALL FIRST',out:['low','→ SKULLED OVER THE GREEN']},
+   fix:{i:{hip:[158,114]},splash:true,note:'STERNUM OVER IT — SAND FIRST',out:['out','→ FLOATS OUT']}},
+ 'bunker:2':{base:'bunker',
+   miss:{i:{club:[140,202]},entryFar:true,note:'ENTERS 5 INCHES BEHIND',out:['stub','→ BARELY MOVES']},
+   fix:{splash:true,note:'TWO INCHES BEHIND — NO MORE',out:['out','→ CARRIES OUT']}},
+ 'putting:0':{base:'putt',cup:true,
+   miss:{faceOpen:true,note:'FACE A DEGREE OPEN AT IMPACT',out:['puttVeer','→ SLIDES PAST THE EDGE']},
+   fix:{gate:true,note:'SQUARE THROUGH THE GATE',out:['puttIn','→ CENTER CUP']}},
+ 'putting:1':{base:'putt',cup:true,
+   miss:{b:{hands:[136,146],club:[118,191]},f:{hands:[166,149],club:[178,194]},note:'BIG BACKSTROKE… THEN DECEL',out:['puttShort','→ A FOOT SHORT']},
+   fix:{f:{hands:[182,147],club:[210,190]},note:'SHORT BACK, LONG THROUGH',out:['puttIn','→ DEAD-WEIGHT IN']}},
+ 'putting:2':{base:'putt',cup:true,
+   miss:{b:{hands:[150,149],club:[148,195]},f:{hands:[168,149],club:[184,193]},note:'EYES ON THE LINE, NOT THE DISTANCE',out:['puttShort','→ SIX FEET SHORT']},
+   fix:{b:{hands:[140,147],club:[124,192]},f:{hands:[182,147],club:[212,189]},note:'LOOK AT THE HOLE — FEEL THE PACE',out:['puttIn','→ TAP-IN RANGE']}}
+};
+
+let _gsw = null;
+function gswLerp(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]; }
+
+function gswFrames(figKey, mode){
+  const cfg = TECH_FIGS[figKey]; if(!cfg) return null;
+  const base = GSW_BASES[cfg.base];
+  const ov = cfg[mode] || {};
+  const frames = base.frames.map(f => ({head:f.head.slice(),hip:f.hip.slice(),hands:f.hands.slice(),club:f.club.slice()}));
+  const apply=(idx,o)=>{ if(!o) return; ['head','hip','hands','club'].forEach(k=>{ if(o[k]) frames[idx][k]=o[k].slice(); }); };
+  apply(1, ov.b); apply(2, ov.t); apply(3, ov.i); apply(4, ov.r); apply(5, ov.f);
+  return { cfg, base, ov, frames };
+}
+
+function gswPose(frames, p){
+  const T=[0,.14,.40,.55,.74,1];
+  if(p<=0) return frames[0]; if(p>=1) return frames[5];
+  let i=0; while(p>T[i+1]) i++;
+  const t=(p-T[i])/(T[i+1]-T[i]);
+  const o={};
+  ['head','hip','hands','club'].forEach(k=> o[k]=gswLerp(frames[i][k],frames[i+1][k],t));
+  return o;
+}
+
+function gswFlight(kind, ball, p){
+  const [bx,by]=ball;
+  const Q=(x1,y1,cx,cy,x2,y2,t)=>{ const u=1-t; return [u*u*x1+2*u*t*cx+t*t*x2, u*u*y1+2*u*t*cy+t*t*y2]; };
+  switch(kind){
+    case 'normal': return Q(bx,by,215,72,272,128,p);
+    case 'high':   return Q(bx,by,210,40,268,108,p);
+    case 'low':    return Q(bx,by,225,168,276,172,p);
+    case 'pop':    return Q(bx,by,178,30,196,178,p);
+    case 'dribble':return Q(bx,by,185,188,206,193,p);
+    case 'hook':   return Q(bx,by,150,140,108,182,p);
+    case 'short':  return Q(bx,by,205,118,238,168,p);
+    case 'stub':   return Q(bx,by,176,188,184,194,p);
+    case 'stay':   return Q(bx,by,170,184,173,192,p);
+    case 'out':    return Q(bx,by,200,138,234,168,p);
+    case 'roll':   return Q(bx,by,205,182,244,192,p);
+    case 'puttIn':    return [bx+(258-bx)*p, by + (p>0.93? (p-0.93)*60 : 0)];
+    case 'puttShort': return [bx+(224-bx)*p, by];
+    case 'puttVeer':  return [bx+(250-bx)*p, by-6*p];
+    default: return [bx,by];
+  }
+}
+
+function gswRender(t){
+  if(!_gsw) return;
+  const {frames,cfg,base,ov} = _gsw.data;
+  const SW = 0.62;                       // swing portion of the timeline
+  const sp = Math.min(t/SW, 1);
+  const pose = gswPose(frames, sp);
+  const fp = t>SW ? (t-SW)/(1-SW) : 0;   // flight portion
+  const mode=_gsw.mode, MISS=mode==='miss';
+  const AC = MISS ? '#e05252' : '#4caf50';
+  const ball = base.ball;
+  const neck=[pose.head[0],pose.head[1]+15];
+  const kL=[pose.hip[0]-21,150], kR=[pose.hip[0]+21,150];
+  const L=(a,b,w,c)=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${c||'#dfe8da'}" stroke-width="${w||7}" stroke-linecap="round"/>`;
+  let g='';
+  // ground + extras
+  g+=`<line x1="14" y1="200" x2="280" y2="200" stroke="rgba(255,255,255,.25)" stroke-width="2"/>`;
+  if(cfg.base==='bunker') g+=`<ellipse cx="170" cy="199" rx="34" ry="7" fill="#d4b896" opacity=".85"/>`;
+  if(cfg.tee) g+=`<line x1="${ball[0]}" y1="${ball[1]+4}" x2="${ball[0]}" y2="200" stroke="#caa" stroke-width="2"/>`;
+  if(cfg.cup) g+=`<rect x="255" y="196" width="11" height="6" fill="#0a1a0a"/><line x1="260" y1="196" x2="260" y2="178" stroke="#ccc" stroke-width="1.2"/><polygon points="260,178 270,181 260,184" fill="#e05252"/>`;
+  if(ov.gate) g+=`<circle cx="186" cy="192" r="2.2" fill="none" stroke="#4caf50" stroke-width="1.4"/><circle cx="186" cy="200" r="2.2" fill="none" stroke="#4caf50" stroke-width="1.4"/>`;
+  if(ov.entryFar) g+=`<line x1="140" y1="190" x2="140" y2="200" stroke="#e05252" stroke-width="2" stroke-dasharray="3 2"/>`;
+  if(ov.splash && sp>0.5) g+=`<line x1="152" y1="190" x2="152" y2="200" stroke="#4caf50" stroke-width="2" stroke-dasharray="3 2"/>`;
+  if(ov.divot && sp>0.56) g+=`<path d="M${ball[0]+4},199 q7,-5 14,0" stroke="#8a6a30" stroke-width="3" fill="none"/>`;
+  if(ov.turfBehind && sp>0.5) g+=`<path d="M${ball[0]-18},199 q6,-6 13,-1" stroke="#8a6a30" stroke-width="3" fill="none"/>`;
+  if(ov.splash && sp>0.56 && sp<0.85) g+=`<circle cx="${ball[0]-6}" cy="${ball[1]-6}" r="${6+10*(sp-0.56)}" fill="#d4b896" opacity="${0.8-(sp-0.56)*2}"/>`;
+  // figure
+  g+=L(neck,pose.hip,8)+L(pose.hip,kL)+L(kL,[kL[0]-4,188])+L(pose.hip,kR)+L(kR,[kR[0]+4,188]);
+  g+=L([neck[0]-9,neck[1]+3],pose.hands,6)+L([neck[0]+9,neck[1]+3],pose.hands,6);
+  g+=L(pose.hands,pose.club,3.5,'#c8a84b');
+  g+=`<circle cx="${pose.head[0]}" cy="${pose.head[1]}" r="11" fill="#dfe8da"/>`;
+  g+=`<circle cx="${pose.club[0]}" cy="${pose.club[1]}" r="4" fill="#c8a84b"/>`;
+  // face angle marker at impact
+  if((ov.faceOpen||ov.faceClosed) && sp>0.5 && sp<0.66){
+    const a=ov.faceOpen? -35: 215;
+    g+=`<line x1="${pose.club[0]}" y1="${pose.club[1]}" x2="${pose.club[0]+12*Math.cos(a*Math.PI/180)}" y2="${pose.club[1]+12*Math.sin(a*Math.PI/180)}" stroke="${AC}" stroke-width="3" stroke-linecap="round"/>`;
+  }
+  // ball: at rest until impact, then flying
+  if(fp<=0) g+=`<circle cx="${ball[0]}" cy="${ball[1]}" r="4" fill="#fff"/>`;
+  else{
+    const bp=gswFlight((ov.out||['normal'])[0], ball, Math.min(fp,1));
+    g+=`<circle cx="${bp[0]}" cy="${bp[1]}" r="4" fill="#fff"/>`;
+    if(fp>0.15){ const tr=gswFlight((ov.out||['normal'])[0], ball, Math.min(fp,1)*0.55); g+=`<circle cx="${tr[0]}" cy="${tr[1]}" r="2" fill="#fff" opacity=".35"/>`; }
+  }
+  // annotation + outcome label
+  g+=`<text x="16" y="22" fill="${AC}" font-size="10" font-weight="700" font-family="DM Sans,sans-serif" letter-spacing=".06em">${MISS?'THE MISS':'THE FIX'} · ${ov.note||''}</text>`;
+  if(fp>0.82 && ov.out) g+=`<text x="264" y="${cfg.base==='putt'?170:54}" text-anchor="end" fill="${AC}" font-size="11" font-weight="800" font-family="DM Sans,sans-serif">${ov.out[1]}</text>`;
+  _gsw.svg.innerHTML=g;
+  if(_gsw.scrub && !_gsw.scrubbing) _gsw.scrub.value = Math.round(t*100);
+}
+
+function gswPlay(){
+  if(!_gsw) return;
+  cancelAnimationFrame(_gsw.raf);
+  const t0=performance.now(), DUR=2300;
+  const step=(now)=>{ if(!_gsw) return;
+    const t=Math.min((now-t0)/DUR,1);
+    gswRender(t);
+    if(t<1) _gsw.raf=requestAnimationFrame(step); };
+  _gsw.raf=requestAnimationFrame(step);
+}
+
+function gswSetMode(mode, autoplay){
+  if(!_gsw) return;
+  _gsw.mode=mode;
+  _gsw.data=gswFrames(_gsw.figKey, mode);
+  const mb=document.getElementById(_gsw.ctrlId+'-miss'), fb=document.getElementById(_gsw.ctrlId+'-fix');
+  if(mb) mb.classList.toggle('on', mode==='miss');
+  if(fb) fb.classList.toggle('on', mode==='fix');
+  if(autoplay) gswPlay(); else gswRender(1);
+}
+
+function mountGolfSwing(stageId, ctrlId, figKey, mode, autoplay){
+  const stage=document.getElementById(stageId), ctrl=document.getElementById(ctrlId);
+  if(!stage) return false;
+  if(!TECH_FIGS[figKey]){ return false; }
+  if(_gsw) cancelAnimationFrame(_gsw.raf);
+  stage.innerHTML=`<svg viewBox="0 0 280 220" width="100%" style="display:block;max-height:230px" xmlns="http://www.w3.org/2000/svg"></svg>`;
+  _gsw={ figKey, mode, ctrlId, svg:stage.querySelector('svg'), raf:0, scrub:null, scrubbing:false,
+         data:gswFrames(figKey,mode) };
+  if(ctrl){
+    ctrl.innerHTML=`
+      <button class="gsw-btn" onclick="gswPlay()">▶ REPLAY</button>
+      <button class="gsw-btn ${mode==='miss'?'on':''}" id="${ctrlId}-miss" onclick="gswSetMode('miss',true)">MISS</button>
+      <button class="gsw-btn ${mode==='fix'?'on':''}" id="${ctrlId}-fix" onclick="gswSetMode('fix',true)">FIX</button>
+      <input class="gsw-scrub" type="range" min="0" max="100" value="0"
+        oninput="if(_gsw){_gsw.scrubbing=true;cancelAnimationFrame(_gsw.raf);gswRender(this.value/100);}"
+        onchange="if(_gsw)_gsw.scrubbing=false;">`;
+    _gsw.scrub=ctrl.querySelector('.gsw-scrub');
+  }
+  if(autoplay) gswPlay(); else gswRender(0);
+  return true;
+}
+
 let techState = { strokeIdx:-1, faultIdx:0, answered:false };
 
 function openTechnique(){
@@ -3073,9 +3314,14 @@ function techRenderFault(){
     <div class="tech-qtag">${g.label} · fault ${techState.faultIdx+1} of ${g.faults.length}</div>
     <div class="tech-situation">${f.situation}</div>
     <div class="tech-prompt">What's the usual culprit?</div>
-    <div class="tech-visual">${techVisual(f.vis, false)}</div>
+    <div class="tech-visual"><div id="techStage"></div><div class="gsw-ctrl" id="techCtrl"></div></div>
     <div class="tech-opts">${opts}</div>
     <div id="techReveal"></div>`;
+  const figKey = g.key + ':' + techState.faultIdx;
+  if(!mountGolfSwing('techStage','techCtrl', figKey, 'miss', true)){
+    document.getElementById('techStage').innerHTML = techVisual(f.vis, false);
+    document.getElementById('techCtrl').style.display = 'none';
+  }
   techApp().parentElement.scrollTop = 0;
 }
 
@@ -3086,9 +3332,13 @@ function techAnswer(k){
   const f = g.faults[techState.faultIdx];
   const chosen = f.options[k];
   const ci = f.options.findIndex(o => o.correct);
-  // Re-render the visual to its fixed state
-  const vWrap = document.querySelector('#view-technique .tech-visual');
-  if(vWrap) vWrap.innerHTML = techVisual(f.vis, true);
+  // Switch the live swing figure to the FIX and replay it
+  if(_gsw && TECH_FIGS[g.key + ':' + techState.faultIdx]){
+    gswSetMode('fix', true);
+  } else {
+    const vWrap = document.querySelector('#view-technique .tech-visual');
+    if(vWrap) vWrap.innerHTML = techVisual(f.vis, true);
+  }
   document.querySelectorAll('#view-technique .tech-opt').forEach((el, idx) => {
     if(idx === k) el.classList.add(chosen.correct ? 'sel' : 'wrong');
     else if(idx === ci) el.classList.add('sel');
