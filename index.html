@@ -1114,6 +1114,7 @@ svg { display:block; }
       <span id="dcc-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--gold);line-height:1">0</span><span id="dcc-score-denom" style="font-size:20px;color:var(--muted)">/3</span>
     </div>
     <div class="dcc-streak-inline"><span class="dcc-streak-num" id="dcc-streak-num">1</span> <span class="dcc-streak-label">day streak 🔥</span></div>
+    <div id="dcc-mulligan" style="display:none;margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#4caf50">🛡 MULLIGAN — your streak survived a missed day (1 per month)</div>
   </div>
 
   <div class="tss-blocks">
@@ -1136,7 +1137,8 @@ svg { display:block; }
   </div>
 
   <div class="dcc-actions" style="padding:0 16px 24px">
-    <button class="btn btn-gold"  onclick="showView('home')">Back to Home</button>
+    <button class="btn btn-gold"  onclick="startHole()">Keep Sharpening — Play a Hole →</button>
+    <button class="btn btn-dark"  onclick="renderHome();showView('home')">Back to Home</button>
     <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Edge</button>
   </div>
 </div>
@@ -1758,6 +1760,22 @@ const LS = {
   set(k,v){ try{ localStorage.setItem('gsg_'+k, JSON.stringify(v)); }catch(e){} }
 };
 
+// Until the first 19th Hole Debrief, seed the leak from the onboarding
+// self-report so Fix Your Leak works from day one.
+function provisionalLeak(){
+  if(S.leak || !S.profile || !S.profile.answers) return;
+  const w = S.profile.answers.weakness;
+  const MAP = [
+    { key:'tee',     label:'Tee Shot Strategy',       icon:'🏌️', pillarName:'Score Smart', leakTags:['Penalty','Double bogey'] },
+    { key:'approach',label:'Approach & Positioning',  icon:'🎯', pillarName:'Course IQ',   leakTags:['Double bogey','Short-sided'] },
+    { key:'short',   label:'Chipping & Short Game',   icon:'⛳', pillarName:'Short Game',  leakTags:['Short-sided','Failed recovery'] },
+    { key:'putting', label:'Putting & Green Reading', icon:'⛳', pillarName:'Short Game',  leakTags:['Three-putt'] }
+  ];
+  if(typeof w === 'number' && MAP[w]){
+    S.leak = Object.assign({ date: todayStr(), provisional: true }, MAP[w]);
+  }
+}
+
 function loadState(){
   S.profile    = LS.get('profile') || null;
   S.streak     = LS.get('streak')  || 0;
@@ -1766,6 +1784,8 @@ function loadState(){
   S.pillarStats= LS.get('pillarStats') || {};
   S.leak       = LS.get('leak') || null;
   S.todayDebrief = LS.get('todayDebrief') || null;
+  S.mulliganMonth = LS.get('mulliganMonth') || null;
+  provisionalLeak();
   const today  = todayStr();
   S.dailyDone  = S.lastDaily === today;
 }
@@ -1777,6 +1797,7 @@ function saveState(){
   LS.set('completed',  S.completed);
   LS.set('pillarStats',S.pillarStats);
   LS.set('leak',       S.leak);
+  LS.set('mulliganMonth', S.mulliganMonth);
 }
 
 function localDateStr(d){
@@ -1918,7 +1939,7 @@ function renderHome(){
   if(debriefWrap){
     debriefWrap.innerHTML = S.leak ? `<div class="debrief-entry" onclick="launchLeakSession()">
       <div class="debrief-left">
-        <div class="debrief-eyebrow">⚠ YOUR DIAGNOSED LEAK</div>
+        <div class="debrief-eyebrow">⚠ ${S.leak.provisional ? 'YOUR LIKELY LEAK' : 'YOUR DIAGNOSED LEAK'}</div>
         <div class="debrief-title">${S.leak.icon} ${S.leak.label}</div>
         <div class="debrief-sub">5 decisions targeting your leak · <span style="text-decoration:underline" onclick="event.stopPropagation();showDebrief()">re-analyse</span></div>
       </div>
@@ -2038,6 +2059,22 @@ function openPillar(pillar){
   showView('pillar');
 }
 
+// ── Handicap-band personalization ──────────────────────
+// Onboarding handicap answer (0..3) maps onto the question band ladder.
+// Pools are stably re-ordered so band-appropriate questions come first —
+// nothing is excluded, the mix just fits the player.
+const BAND_LADDER = ['Beginner','Club','Competitor','Low Handicap'];
+function userBand(){
+  const h = S.profile && S.profile.answers && S.profile.answers.handicap;
+  return (typeof h === 'number') ? (BAND_LADDER[h] || null) : null;
+}
+function bandPrefer(pool){
+  const b = userBand(); if(!b) return pool;
+  const bi = BAND_LADDER.indexOf(b);
+  const dist = q => { const qi = BAND_LADDER.indexOf(q.handicap_band); return qi < 0 ? 1 : Math.abs(qi - bi); };
+  return [...pool].sort((x,y) => dist(x) - dist(y));
+}
+
 // ── Anti-repeat memory ─────────────────────────────────
 // Tracks served question ids so daily + quizzes prefer unseen content.
 const SEEN_KEY = 'gs_golf_seen_v1';
@@ -2060,7 +2097,7 @@ function preferUnseen(pool){
 // ── Quiz Engine ────────────────────────────────────────
 function startQuiz(pillar, module, questions){
   S.quiz = {
-    qs: preferUnseen(shuffle(questions)),
+    qs: preferUnseen(bandPrefer(shuffle(questions))),
     idx: 0, score: 0,
     answers: [],
     pillar, module,
@@ -2151,8 +2188,8 @@ function startDaily(){
 
   // Theme pool, freshest first, deterministic seeded shuffle (true Fisher-Yates)
   const seededShuffle = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-  let pool = preferUnseen(seededShuffle(QUESTIONS.filter(q => q.primary_score_leak === leak.tag)));
-  if(pool.length < 6) pool = pool.concat(preferUnseen(seededShuffle(QUESTIONS)));
+  let pool = preferUnseen(bandPrefer(seededShuffle(QUESTIONS.filter(q => q.primary_score_leak === leak.tag))));
+  if(pool.length < 6) pool = pool.concat(preferUnseen(bandPrefer(seededShuffle(QUESTIONS))));
 
   // Build the arc: one decision off the tee, one on the approach, one around the green
   const phases = ['tee','approach','short'];
@@ -2406,7 +2443,7 @@ function launchLeakSession(){
   // Primary pool: questions tagged with the diagnosed score-leak, freshest first
   let pool = leak ? QUESTIONS.filter(q => leak.leakTags.includes(q.primary_score_leak)) : [];
   if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
-  const qs = preferUnseen(shuffle(pool)).slice(0, 5);
+  const qs = preferUnseen(bandPrefer(shuffle(pool))).slice(0, 5);
   S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Fix Your Leak', mode:'crash' };
   setPillarColor(pillar.color);
   document.getElementById('qt-pillar').textContent = leak ? ('Fix Your Leak · ' + leak.label) : 'Fix Your Leak';
@@ -2645,10 +2682,20 @@ function finishQuiz(){
   if(mode === 'daily'){
     const today = todayStr();
     const yesterday = localDateStr(new Date(Date.now() - 86400000));
+    let mulliganUsed = false;
     if(S.lastDaily === yesterday){
       S.streak++;
     } else if(S.lastDaily !== today){
-      S.streak = 1;
+      // Mulligan: one missed day per calendar month doesn't kill the streak
+      const gap = S.lastDaily ? Math.round((new Date(today) - new Date(S.lastDaily)) / 86400000) : 99;
+      const mKey = today.slice(0,7);
+      if(gap === 2 && S.streak >= 2 && S.mulliganMonth !== mKey){
+        S.mulliganMonth = mKey;
+        S.streak++;
+        mulliganUsed = true;
+      } else {
+        S.streak = 1;
+      }
     }
     S.lastDaily = today;
     S.dailyDone = true;
@@ -2674,6 +2721,8 @@ function finishQuiz(){
     setTxt('tss-saved-body', deb.saved);
     setTxt('tss-try-body', deb.tryNext);
     setTxt('tss-tomorrow-body', deb.tomorrow);
+    const mb = document.getElementById('dcc-mulligan');
+    if(mb) mb.style.display = mulliganUsed ? '' : 'none';
     const shareBtn = document.getElementById('dcc-share-btn');
     shareBtn.onclick = shareDaily;
     showView('daily-complete');
