@@ -2540,17 +2540,12 @@ function buildDailyDebrief(qs){
   // Try This Next Round — the concrete action.
   const tryNext = primary.action_tip || 'Pick the safe miss before every swing.';
 
-  // Tomorrow teaser — peek at tomorrow's seeded first question.
+  // Tomorrow teaser — name tomorrow's actual leak theme from the daily rotation.
   let tomorrow = 'A new edge to sharpen your game.';
   try {
     const t = new Date(Date.now() + 86400000).toISOString().slice(0,10).replace(/-/g,'');
-    const rng = seededRng(parseInt(t));
-    const pool = [...QUESTIONS].sort(()=> rng() - 0.5);
-    const tq = pool[0];
-    if(tq){
-      const topic = tq.hook_type || tq.module || tq.pillar;
-      tomorrow = topic + '.';
-    }
+    const tl = DAILY_LEAKS[parseInt(t) % DAILY_LEAKS.length];
+    if(tl) tomorrow = tl.theme.charAt(0) + tl.theme.slice(1).toLowerCase() + ' — stop losing strokes to ' + tl.edge + '.';
   } catch(e){}
 
   return { edge, saved, tryNext, tomorrow };
