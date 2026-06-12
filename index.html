@@ -925,7 +925,7 @@ svg { display:block; }
   <div class="daily-card">
     <div class="dc-label">Today's Shot Saver</div>
     <div class="dc-title">ONE EDGE FOR TODAY</div>
-    <div class="dc-sub">3 decisions · 60 seconds · One shot saved</div>
+    <div class="dc-sub">3 decisions + 1 swing fix · One shot saved</div>
     <div class="dc-streak">
       <span class="dc-streak-flame">🔥</span>
       <span class="dc-streak-text" id="dc-streak-text">Keep your streak alive</span>
@@ -2084,6 +2084,37 @@ const DAILY_LEAKS = [
   { tag:'Failed recovery', theme:'THE RECOVERY LEAK',   edge:'compounding mistakes' }
 ];
 
+// Convert a Technique fault into a quiz-pipeline question (the daily's 4th rep)
+function techFaultAsQuestion(seedNum){
+  try{
+    const flat=[];
+    GOLF_TECHNIQUE.forEach(g => g.faults.forEach(f => flat.push({g,f})));
+    if(!flat.length) return null;
+    // prefer faults not yet seen, rotating by date
+    const seen=new Set(getSeenIds());
+    const ordered=flat.filter(x=>!seen.has('T-'+x.g.key+'-'+x.f.name)).concat(flat.filter(x=>seen.has('T-'+x.g.key+'-'+x.f.name)));
+    const pick=ordered[seedNum % Math.max(1,ordered.length)] || flat[0];
+    const {g,f}=pick;
+    const ci=f.options.findIndex(o=>o.correct);
+    const opts=f.options.map(o=>o.label);
+    while(opts.length<4) opts.push('The equipment — wrong club for this shot');
+    return {
+      id:'T-'+g.key+'-'+f.name, pillar:'Technique', module:g.label+' · '+f.name,
+      difficulty:'Club', handicap_band:'Club', format:'Scenario', hook_type:'THE RANGE FIX',
+      decision_type:'Recovery', primary_score_leak:'Failed recovery',
+      visual_must_show:true, confidence_level:'High',
+      question:f.situation+' What is the usual culprit?',
+      option_a:opts[0], option_b:opts[1], option_c:opts[2], option_d:opts[3],
+      correct_answer:'ABCD'[ci],
+      why_right:f.why,
+      pro_insight:"On the range, feel: '"+f.cue.feel+"' — "+f.cue.drill,
+      common_pitfall:'', action_tip:f.cue.drill,
+      tags:'technique,'+g.key, tier:'Free',
+      _techVis:f.vis
+    };
+  }catch(e){ return null; }
+}
+
 function startDaily(){
   if(S.dailyDone){ renderHome(); return; }
   // Seed from today's date: same linked hole for everyone, every day
@@ -2107,12 +2138,17 @@ function startDaily(){
   });
   while(daily.length < 3){ const p = pool.find(q => !used.has(q.id)); if(!p) break; used.add(p.id); daily.push(p); }
 
+  // 4th rep: one swing fix from the Technique library
+  const techQ = techFaultAsQuestion(parseInt(seed));
+  const steps = daily.map(q => stepLabels[phaseOf(q)] || 'THE DECISION');
+  if(techQ){ daily.push(techQ); steps.push('THE RANGE FIX'); }
+
   S.quiz = {
     qs: daily, idx:0, score:0, answers:[],
     pillar: {name:"Today's Shot Saver", color:'#c8a84b', emoji:'⛳'},
     module: 'Daily',
     mode: 'daily',
-    thread: { theme: leak.theme, steps: daily.map(q => stepLabels[phaseOf(q)] || 'THE DECISION') }
+    thread: { theme: leak.theme, steps }
   };
   setPillarColor('#c8a84b');
   document.getElementById('qt-pillar').textContent = "Today's Shot Saver";
@@ -2466,7 +2502,11 @@ function showExplanation(q, isCorrect){
   animLabel.textContent = 'The decision · ' + (q.hook_type || q.pillar);
   // Show the decision visual only when this question's visual must teach a shot decision.
   const showVisual = (q.visual_must_show !== false);
-  if(showVisual && typeof renderGolfDecisionVisual === 'function'){
+  if(q._techVis && typeof techVisual === 'function'){
+    animCont.innerHTML = techVisual(q._techVis, isCorrect);
+    animCont.style.minHeight = '160px';
+    animLabel.style.display = '';
+  } else if(showVisual && typeof renderGolfDecisionVisual === 'function'){
     animCont.innerHTML = renderGolfDecisionVisual(q, isCorrect);
     animCont.style.minHeight = '160px';
     animLabel.style.display = '';
@@ -3103,7 +3143,7 @@ function techVisualDirection(shape, rev){
     <path d="${p.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <circle cx="${p.ex}" cy="${p.ey}" r="4" fill="${R}"/>
     ${techTLabel(p.ex, p.ey-7, p.danger, R, 7.5)}
-    ${rev ? `<path d="M140,160 L140,30" stroke="${G}" stroke-width="2.5" fill="none"/>${techTLabel(118,98,'FIXED',G,8)}` : ''}
+    ${rev ? `<path d="M140,160 L140,30" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.25s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.25s" fill="freeze"/><animateMotion dur="0.9s" begin="0.25s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M140,160 L140,30"/></circle>${techTLabel(118,98,'FIXED',G,8)}` : ''}
     <circle cx="140" cy="160" r="5.5" fill="${GOLD}"/>
     ${techTLabel(140,176,'YOUR MISS',R,8)}`);
 }
@@ -3132,7 +3172,7 @@ function techVisualContact(shape, rev){
     <path d="M44,143 Q150,52 230,148" stroke="rgba(76,175,80,.32)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
     <path d="${f.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     ${techTLabel(f.lx, f.ly, f.lab, R, 7)}
-    ${rev ? `<path d="M44,143 Q150,52 230,148" stroke="${G}" stroke-width="2.5" fill="none"/>${techTLabel(150,46,'FIXED',G,8)}` : ''}
+    ${rev ? `<path d="M44,143 Q150,52 230,148" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.25s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.25s" fill="freeze"/><animateMotion dur="0.9s" begin="0.25s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M44,143 Q150,52 230,148"/></circle>${techTLabel(150,46,'FIXED',G,8)}` : ''}
     <circle cx="44" cy="143" r="5.5" fill="${GOLD}"/>`);
 }
 function techVisualPutt(shape, rev){
@@ -3154,7 +3194,7 @@ function techVisualPutt(shape, rev){
     <path d="${f.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <circle cx="${f.mx}" cy="${f.my}" r="4.5" fill="${R}"/>
     ${techTLabel(f.mx, f.my-7, f.lab, R, 7.5)}
-    ${rev ? `<path d="M140,150 L140,49" stroke="${G}" stroke-width="2.5" fill="none"/>` : ''}
+    ${rev ? `<path d="M140,150 L140,49" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.25s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.25s" fill="freeze"/><animateMotion dur="0.9s" begin="0.25s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M140,150 L140,49"/></circle>` : ''}
     <circle cx="140" cy="150" r="5.5" fill="${GOLD}"/>
     ${techTLabel(140,168,'YOUR PUTT',GOLD,8)}`);
 }
@@ -3206,6 +3246,16 @@ function renderGolfDecisionVisual(q, wasCorrect){
   const tags = ((q.tags||'') + ' ' + (q.module||'') + ' ' + (q.question||'')).toLowerCase();
   const leak = q.primary_score_leak || '';
   const dtype = q.decision_type || '';
+  // per-question salt: varies geometry so back-to-back visuals never look identical
+  const salt = (q.id||'').split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+  const flip = salt % 2 === 1;
+  const hasWind = /wind|mph|breeze|gust/.test(tags);
+  const windDir = /into|head/.test(tags) ? 'head' : (/tail|downwind|behind|back/.test(tags) ? 'tail' : (flip ? 'left' : 'right'));
+  const windArrow = hasWind ? (()=>{
+    const aw={head:'M150,30 L130,52', tail:'M130,52 L150,30', left:'M200,24 L150,24', right:'M80,24 L130,24'}[windDir];
+    const lx={head:162,tail:162,left:175,right:105}[windDir], ly={head:40,tail:40,left:18,right:18}[windDir];
+    return `<path d="${aw}" stroke="#64b5f6" stroke-width="2.5" fill="none" marker-end="url(#wnd)"/><text x="${lx}" y="${ly}" fill="#64b5f6" font-size="8" font-family="DM Sans,sans-serif" font-weight="700">WIND</text>`;
+  })() : '';
 
   // Tactical label from the decision type
   const labelMap = {
@@ -3226,14 +3276,24 @@ function renderGolfDecisionVisual(q, wasCorrect){
   // Putting scene for putt / three-putt decisions
   const isPutt = /putt|green-?read|lag|three-?putt/.test(tags) || leak === 'Three-putt';
   if(isPutt){
-    const startX=140, startY=150, holeX=150, holeY=40;
-    const correctPath = `M${startX},${startY} Q120,95 ${holeX-4},${holeY+6}`;
-    const wrongPath   = `M${startX},${startY} Q118,90 138,${holeY-26}`; // races past
+    const startX=140, startY=150, holeX=132+(salt%3)*9, holeY=40;
+    const correctPath = `M${startX},${startY} Q${holeX-22},95 ${holeX-3},${holeY+6}`;
+    // miss scene chosen by what the question actually teaches
+    const missKind = /lag|speed|distance|pace|short/.test(tags) ? 'short'
+                   : (/three-putt|long putt|30 |35 |40 /.test(tags) ? 'long' : (flip ? 'push' : 'pull'));
+    const wrongPaths = {
+      short: `M${startX},${startY} Q${startX-12},118 ${holeX-4},${holeY+42}`,
+      long:  `M${startX},${startY} Q${holeX-22},88 ${holeX-10},${holeY-30}`,
+      push:  `M${startX},${startY} Q${startX+16},96 ${holeX+26},${holeY+10}`,
+      pull:  `M${startX},${startY} Q${startX-20},96 ${holeX-30},${holeY+10}`
+    };
+    const wrongPath = wrongPaths[missKind];
     const ballColor = wasCorrect ? G : R;
     const body = `
       <rect width="280" height="170" fill="#1b3a1b"/>
       <ellipse cx="140" cy="95" rx="120" ry="78" fill="#2d6a2d"/>
       <ellipse cx="140" cy="95" rx="120" ry="78" fill="none" stroke="#3d8a3d" stroke-width="1"/>
+      ${windArrow}
       <!-- 3-foot target zone -->
       <circle cx="${holeX}" cy="${holeY}" r="26" fill="none" stroke="${G}" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.8"/>
       ${label(holeX,holeY-32,'TAP-IN ZONE',G,8)}
@@ -3257,16 +3317,17 @@ function renderGolfDecisionVisual(q, wasCorrect){
   const isWater = /water|carry|lake|pond|hazard|penalty area/.test(tags) || (leak==='Penalty' && !/ob|out of bounds/.test(tags));
   const isOB    = /\bob\b|out of bounds/.test(tags);
   const isTrees = /tree|trees|forest|woods/.test(tags);
-  // danger geometry guards the front of the green
-  const dCx=178, dCy=92, dRx=40, dRy=16;
+  // danger geometry guards the front of the green; mirror the whole scene per question
+  const X = x => flip ? 280 - x : x;
+  const dCx=X(178), dCy=92, dRx=40, dRy=16;
   const dangerFill = isWater?'#2a6cb0':(isOB?'rgba(224,82,82,.18)':(isTrees?'#173417':'#d4b896'));
   const dangerLabel = isWater?'WATER':(isOB?'OUT OF BOUNDS':(isTrees?'TREES':'BUNKER'));
   const dangerLabelColor = isWater?'#bcdcff':(isOB?R:(isTrees?'#7cb37c':'#8B6914'));
 
-  const startX=120, startY=152;
-  const safeX=206, safeY=46;            // fat of the green (correct target)
-  const correctPath = `M${startX},${startY} Q150,70 ${safeX},${safeY}`;
-  const wrongPath   = `M${startX},${startY} Q150,96 ${dCx},${dCy}`;  // going at the pin, comes up in the danger
+  const startX=X(120), startY=152;
+  const safeX=X(206), safeY=46;         // fat of the green (correct target)
+  const correctPath = `M${startX},${startY} Q${X(150)},70 ${safeX},${safeY}`;
+  const wrongPath   = `M${startX},${startY} Q${X(150)},96 ${dCx},${dCy}`;  // going at the pin, comes up in the danger
   const ballColor = wasCorrect ? G : R;
 
   const dangerShape = isOB
@@ -3278,10 +3339,11 @@ function renderGolfDecisionVisual(q, wasCorrect){
     <rect width="280" height="170" fill="#1b2e1b"/>
     <ellipse cx="80" cy="150" rx="70" ry="40" fill="#234a22" opacity="0.5"/>
     <!-- TARGET green -->
-    <ellipse cx="200" cy="50" rx="50" ry="28" fill="${GD}"/>
-    <ellipse cx="200" cy="50" rx="38" ry="20" fill="#3d9a3d"/>
-    <line x1="190" y1="44" x2="190" y2="24" stroke="#ccc" stroke-width="1.5"/>
-    <polygon points="190,24 175,30 190,36" fill="${R}"/>
+    <ellipse cx="${X(200)}" cy="50" rx="50" ry="28" fill="${GD}"/>
+    <ellipse cx="${X(200)}" cy="50" rx="38" ry="20" fill="#3d9a3d"/>
+    <line x1="${X(190)}" y1="44" x2="${X(190)}" y2="24" stroke="#ccc" stroke-width="1.5"/>
+    <polygon points="${X(190)},24 ${X(175)},30 ${X(190)},36" fill="${R}"/>
+    ${windArrow}
     <!-- correct target zone (fat side) -->
     <ellipse cx="${safeX}" cy="${safeY}" rx="22" ry="13" fill="none" stroke="${G}" stroke-width="1.5" stroke-dasharray="4 4"/>
     ${label(safeX,safeY-16,'TARGET',G,8)}
@@ -5165,7 +5227,7 @@ function showHolePicker(){
 
 function beginHole(index){
   HOLE = ALL_HOLES[index];
-  HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
+  HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [], ballPos: null };
   document.getElementById('hole-picker').style.display = 'none';
   document.getElementById('hole-game').style.display = '';
   document.getElementById('hvh-name').textContent = HOLE.name;
@@ -5268,6 +5330,7 @@ function showHoleOutcome(node){
   }
 
   renderHoleMap(node.mapState || 'tee');
+  animateHoleBall(node, valence);
 
   const btn = document.getElementById('hole-next-btn');
   const nextNode = HOLE.nodes[node.next];
@@ -5581,6 +5644,37 @@ function mapAugusta13(state){
   <!-- Yardage -->
   <text x="170" y="153" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.5)" font-family="DM Sans">Augusta National · 13th "Azalea" · Par 5 · 510 yds</text>
   </svg>`;
+}
+
+// Animated ball flight over the hole map: journey anchors by shot count,
+// kicked offline on bad outcomes, with splash/sand/lost cues from the consequence text.
+function animateHoleBall(node, valence){
+  const wrap = document.getElementById('hole-map-wrap');
+  const svg  = wrap && wrap.querySelector('svg');
+  if(!svg) return;
+  // journey anchors in the shared 340x160 frame (tee left → green right)
+  const J = [[29,77],[120,86],[195,84],[248,80],[258,79]];
+  // progress scaled by par: a par-3 tee shot reaches the green, a par-5 takes three
+  const par = (HOLE && HOLE.par) || 4;
+  const idx = Math.min(4, 1 + Math.round(3 * Math.min(HS.shotCount,par) / Math.max(2, par - 1)));
+  let end = J[idx].slice();
+  const txt = ((node.consequence||'')+' '+(node.result||'')).toLowerCase();
+  const inWater  = /water|creek|wet|splash|drink|pond|burn/.test(txt) && valence==='bad';
+  const inSand   = /bunker|sand/.test(txt) && valence==='bad';
+  const offline  = valence==='bad';
+  if(offline){ end[1] += (HS.shotCount % 2 ? -18 : 18); end[0] -= 8; }
+  const start = HS.ballPos || J[0];
+  HS.ballPos = end;
+  const midX=(start[0]+end[0])/2, midY=Math.min(start[1],end[1])-26;
+  const d=`M${start[0]},${start[1]} Q${midX},${midY} ${end[0]},${end[1]}`;
+  const col = valence==='bad' ? '#e05252' : (valence==='good' ? '#4caf50' : '#c8a84b');
+  let fx='';
+  if(inWater) fx=`<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.05;.6;1" dur=".9s" begin="1.15s" fill="freeze"/><circle cx="${end[0]}" cy="${end[1]}" r="11" fill="none" stroke="#64b5f6" stroke-width="1.5"/><line x1="${end[0]}" y1="${end[1]-4}" x2="${end[0]-5}" y2="${end[1]-14}" stroke="#64b5f6" stroke-width="2" stroke-linecap="round"/><line x1="${end[0]}" y1="${end[1]-4}" x2="${end[0]+5}" y2="${end[1]-14}" stroke="#64b5f6" stroke-width="2" stroke-linecap="round"/></g>`;
+  else if(inSand) fx=`<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.05;.55;1" dur=".85s" begin="1.15s" fill="freeze"/><circle cx="${end[0]}" cy="${end[1]}" r="8" fill="#d4b896" opacity=".75"/><line x1="${end[0]}" y1="${end[1]}" x2="${end[0]-6}" y2="${end[1]-12}" stroke="#c8a060" stroke-width="2" stroke-linecap="round"/><line x1="${end[0]}" y1="${end[1]}" x2="${end[0]+6}" y2="${end[1]-12}" stroke="#c8a060" stroke-width="2" stroke-linecap="round"/></g>`;
+  svg.insertAdjacentHTML('beforeend', `<g>
+    <path d="${d}" stroke="${col}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".45" stroke-dasharray="420" stroke-dashoffset="420"><animate attributeName="stroke-dashoffset" from="420" to="0" dur="1s" begin=".15s" fill="freeze"/></path>
+    <circle r="4.5" fill="${col}" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".05s" begin=".15s" fill="freeze"/><animateMotion dur="1s" begin=".15s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="${d}"/></circle>
+    ${fx}</g>`);
 }
 
 function renderHoleMap(state){
