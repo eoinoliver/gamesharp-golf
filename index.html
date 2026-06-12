@@ -900,7 +900,7 @@ svg { display:block; }
 <div class="view" id="view-onboarding">
   <div class="ob-header">
     <div class="ob-logo">GAME<span>SHARP</span> Golf</div>
-    <p class="ob-sub">8 questions to find where you're losing shots — and how to stop.</p>
+    <p class="ob-sub">Two quick questions — then straight to saving shots.</p>
     <div class="ob-dots" id="ob-dots"></div>
   </div>
   <div class="ob-qwrap" id="ob-qwrap"></div>
@@ -1728,11 +1728,6 @@ const ARCHETYPES = [
 
 const ONBOARDING_QUESTIONS = [
   {
-    q:'How many rounds of golf do you play per month on average?',
-    opts:['Less than 1 — I am just starting out','1–2 rounds','3–4 rounds','5 or more rounds'],
-    key:'frequency'
-  },
-  {
     q:'What is your current handicap (or rough level)?',
     opts:['28+ (Rookie — new to the game)','18–27 (Club — finding my feet)','8–17 (Competitor — playing regularly)','0–7 (Tactician — low handicap)'],
     key:'handicap'
@@ -1741,31 +1736,6 @@ const ONBOARDING_QUESTIONS = [
     q:'Where do you lose most of your shots?',
     opts:['Off the tee — wild drives cost me','On approach — I miss too many greens','Around the green — chipping and pitching','On the putting green — too many three-putts'],
     key:'weakness'
-  },
-  {
-    q:'What is your go-to style of play?',
-    opts:['Aggressive — I go for flags and attack par 5s','Conservative — I play to the fat of the green','Percentage — I read each hole and decide','Reactive — I play how I feel on the day'],
-    key:'style'
-  },
-  {
-    q:'Which part of the game do you most enjoy thinking about?',
-    opts:['Strategy and course management','Short game creativity around the greens','The mental and pressure side','Rules, history and golf knowledge'],
-    key:'interest'
-  },
-  {
-    q:'How do you handle a bad hole in the middle of a round?',
-    opts:['I get angry and it affects the next few holes','I reset quickly and move on','I get quiet and lose my rhythm','I stay calm — one hole is one hole'],
-    key:'mental'
-  },
-  {
-    q:'Biggest fear on the course?',
-    opts:['A tight tee shot with OB in play','A short putt to win or halve','A greenside bunker with no room','Playing in a competition for the first time'],
-    key:'fear'
-  },
-  {
-    q:'What would improving your golf most mean to you?',
-    opts:['Beating my regular playing partners','Breaking a scoring milestone (80, 90, 100)','Winning a club competition','Just enjoying the game more'],
-    key:'goal'
   }
 ];
 
@@ -2600,6 +2570,7 @@ function showExplanation(q, isCorrect){
   }
 
   card.classList.add('show');
+  setTimeout(() => { try{ card.scrollIntoView({ behavior:'smooth', block:'start' }); }catch(e){} }, 180);
 
   // Next button
   const nextBtn = document.getElementById('next-btn');
@@ -5553,11 +5524,40 @@ function startHole(){
   showHolePicker();
 }
 
+// Continuous play: straight into the next hole — the "one more hole" loop
+function nextHole(){
+  const i = ALL_HOLES.indexOf(HOLE);
+  showView('hole');
+  beginHole((i + 1) % ALL_HOLES.length);
+}
+
+// Hole of the day: date-rotating featured hole for one-tap tee off
+function holeOfTheDayIndex(){
+  return parseInt(todayStr().replace(/-/g,'')) % ALL_HOLES.length;
+}
+
 function showHolePicker(){
   document.getElementById('hole-picker').style.display = '';
   document.getElementById('hole-game').style.display = 'none';
   const cards = document.getElementById('hp-cards');
   cards.innerHTML = '';
+
+  // One-tap entry: hole of the day, no browsing required
+  const hodIdx = holeOfTheDayIndex();
+  const hod = ALL_HOLES[hodIdx];
+  const hodCard = document.createElement('div');
+  hodCard.className = 'hp-card famous';
+  hodCard.style.borderColor = 'var(--gold)';
+  hodCard.innerHTML = `
+    <div class="hpc-famous-tag" style="background:var(--gold);color:#111">⚡ Hole of the Day</div>
+    ${hod.course ? `<div class="hpc-course">${hod.course}</div>` : ''}
+    <div class="hpc-hole-name">${hod.name}</div>
+    <div class="hpc-pills">
+      <span class="hpc-pill">Par ${hod.par}</span>
+      <span class="hpc-pill">${hod.yardage} yards</span>
+    </div>
+    <button class="hpc-btn famous" onclick="beginHole(${hodIdx})">TEE OFF NOW →</button>`;
+  cards.appendChild(hodCard);
 
   const famous   = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.famous);
   const practice = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>!h.famous);
@@ -5776,8 +5776,9 @@ function renderScorecard(finalNode){
     <div class="sc-decisions-header">YOUR DECISIONS</div>
     <div class="sc-decisions">${decisionSummary}</div>
     <div class="sc-actions">
-      <button class="btn btn-gold" onclick="startHole()">PLAY AGAIN</button>
-      <button class="btn btn-dark" onclick="showView('home')">HOME</button>
+      <button class="btn btn-gold" onclick="nextHole()">NEXT HOLE →</button>
+      <button class="btn btn-dark" onclick="startHole()">CHOOSE A HOLE</button>
+      <button class="btn btn-dark" onclick="renderHome();showView('home')">HOME</button>
     </div>`;
 }
 
