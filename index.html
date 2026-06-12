@@ -1765,6 +1765,7 @@ function loadState(){
   S.completed  = LS.get('completed') || {};
   S.pillarStats= LS.get('pillarStats') || {};
   S.leak       = LS.get('leak') || null;
+  S.todayDebrief = LS.get('todayDebrief') || null;
   const today  = todayStr();
   S.dailyDone  = S.lastDaily === today;
 }
@@ -1778,8 +1779,11 @@ function saveState(){
   LS.set('leak',       S.leak);
 }
 
+function localDateStr(d){
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
 function todayStr(){
-  return new Date().toISOString().slice(0,10);
+  return localDateStr(new Date());
 }
 
 // ── Navigation ─────────────────────────────────────────
@@ -1837,10 +1841,11 @@ function renderHome(){
   const dcText = document.getElementById('dc-streak-text');
   const dcBtn  = document.getElementById('daily-btn');
   if(S.dailyDone){
-    dcText.innerHTML = `<strong>Done for today!</strong> Come back tomorrow.`;
-    dcBtn.textContent = '✓ COMPLETED';
+    const hasReview = S.todayDebrief && S.todayDebrief.date === today;
+    dcText.innerHTML = `<strong>Done for today!</strong> ${hasReview ? "Revisit today's edge any time." : 'Come back tomorrow.'}`;
+    dcBtn.textContent = hasReview ? "REVIEW TODAY'S EDGE" : '✓ COMPLETED';
     dcBtn.classList.add('done');
-    dcBtn.onclick = null;
+    dcBtn.onclick = hasReview ? showDailyReview : null;
   } else {
     const streakMsg = S.streak > 0
       ? `🔥 <strong>${S.streak}-day streak</strong> — keep it going!`
@@ -2096,8 +2101,9 @@ function techFaultAsQuestion(seedNum){
     if(!flat.length) return null;
     // prefer faults not yet seen, rotating by date
     const seen=new Set(getSeenIds());
-    const ordered=flat.filter(x=>!seen.has('T-'+x.g.key+'-'+x.f.name)).concat(flat.filter(x=>seen.has('T-'+x.g.key+'-'+x.f.name)));
-    const pick=ordered[seedNum % Math.max(1,ordered.length)] || flat[0];
+    const unseen=flat.filter(x=>!seen.has('T-'+x.g.key+'-'+x.f.name));
+    const pool=unseen.length ? unseen : flat;
+    const pick=pool[seedNum % pool.length];
     const {g,f}=pick;
     const ci=f.options.findIndex(o=>o.correct);
     const opts=f.options.map(o=>o.label);
@@ -2119,16 +2125,34 @@ function techFaultAsQuestion(seedNum){
   }catch(e){ return null; }
 }
 
+// Reopen today's completed debrief (Edge / Saved / Try / Tomorrow) for review
+function showDailyReview(){
+  const d = S.todayDebrief;
+  if(!d || d.date !== todayStr()){ renderHome(); showView('home'); return; }
+  const setTxt=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+  setTxt('dcc-streak-num', d.streak);
+  setTxt('dcc-score-num', d.score);
+  setTxt('dcc-score-denom', '/' + d.total);
+  setTxt('tss-edge-body', d.edge);
+  setTxt('tss-saved-body', d.saved);
+  setTxt('tss-try-body', d.tryNext);
+  setTxt('tss-tomorrow-body', d.tomorrow);
+  const shareBtn = document.getElementById('dcc-share-btn');
+  if(shareBtn) shareBtn.onclick = shareDaily;
+  showView('daily-complete');
+}
+
 function startDaily(){
-  if(S.dailyDone){ renderHome(); return; }
+  if(S.dailyDone){ showDailyReview(); return; }
   // Seed from today's date: same linked hole for everyone, every day
   const seed  = todayStr().replace(/-/g,'');
   const rng   = seededRng(parseInt(seed));
   const leak  = DAILY_LEAKS[parseInt(seed) % DAILY_LEAKS.length];
 
-  // Theme pool, freshest first, deterministic order
-  let pool = preferUnseen(QUESTIONS.filter(q => q.primary_score_leak === leak.tag).sort(()=> rng() - 0.5));
-  if(pool.length < 6) pool = pool.concat(preferUnseen([...QUESTIONS].sort(()=> rng() - 0.5)));
+  // Theme pool, freshest first, deterministic seeded shuffle (true Fisher-Yates)
+  const seededShuffle = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  let pool = preferUnseen(seededShuffle(QUESTIONS.filter(q => q.primary_score_leak === leak.tag)));
+  if(pool.length < 6) pool = pool.concat(preferUnseen(seededShuffle(QUESTIONS)));
 
   // Build the arc: one decision off the tee, one on the approach, one around the green
   const phases = ['tee','approach','short'];
@@ -2142,9 +2166,17 @@ function startDaily(){
   });
   while(daily.length < 3){ const p = pool.find(q => !used.has(q.id)); if(!p) break; used.add(p.id); daily.push(p); }
 
+  // play the hole in order: tee, then approach, then around the green
+  const phaseOrder = { tee:0, approach:1, any:1.5, short:2, putt:3 };
+  daily.sort((a,b) => (phaseOrder[phaseOf(a)] ?? 1.5) - (phaseOrder[phaseOf(b)] ?? 1.5));
+
   // 4th rep: one swing fix from the Technique library
   const techQ = techFaultAsQuestion(parseInt(seed));
-  const steps = daily.map(q => stepLabels[phaseOf(q)] || 'THE DECISION');
+  let steps = daily.map(q => stepLabels[phaseOf(q)] || 'THE DECISION');
+  // all-putting days get a real arc instead of "ON THE GREEN" three times
+  if(steps.length===3 && steps.every(x=>x===steps[0])){
+    steps = steps[0]==='ON THE GREEN' ? ['THE READ','THE PACE','THE PRESSURE PUTT'] : ['DECISION ONE','DECISION TWO','DECISION THREE'];
+  }
   if(techQ){ daily.push(techQ); steps.push('THE RANGE FIX'); }
 
   S.quiz = {
@@ -2590,7 +2622,7 @@ function buildDailyDebrief(qs){
   // Tomorrow teaser — name tomorrow's actual leak theme from the daily rotation.
   let tomorrow = 'A new edge to sharpen your game.';
   try {
-    const t = new Date(Date.now() + 86400000).toISOString().slice(0,10).replace(/-/g,'');
+    const t = localDateStr(new Date(Date.now() + 86400000)).replace(/-/g,'');
     const tl = DAILY_LEAKS[parseInt(t) % DAILY_LEAKS.length];
     if(tl) tomorrow = tl.theme.charAt(0) + tl.theme.slice(1).toLowerCase() + ' — stop losing strokes to ' + tl.edge + '.';
   } catch(e){}
@@ -2612,7 +2644,7 @@ function finishQuiz(){
   // Handle daily streak
   if(mode === 'daily'){
     const today = todayStr();
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    const yesterday = localDateStr(new Date(Date.now() - 86400000));
     if(S.lastDaily === yesterday){
       S.streak++;
     } else if(S.lastDaily !== today){
@@ -2627,15 +2659,23 @@ function finishQuiz(){
     const dccDenomEl = document.getElementById('dcc-score-denom');
     if(dccScoreEl) dccScoreEl.textContent = score;
     if(dccDenomEl) dccDenomEl.textContent = '/' + total;
-    // Build the four-block debrief
+    // Build the four-block debrief and persist it for same-day review
     const deb = buildDailyDebrief(qs);
+    S.todayDebrief = {
+      date: today, score, total,
+      theme: (S.quiz.thread && S.quiz.thread.theme) || '',
+      dots: (S.quiz.answers||[]).map(a => a.isCorrect ? '🟢' : '🔴').join(''),
+      streak: S.streak,
+      edge: deb.edge, saved: deb.saved, tryNext: deb.tryNext, tomorrow: deb.tomorrow
+    };
+    LS.set('todayDebrief', S.todayDebrief);
     const setTxt = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
     setTxt('tss-edge-body', deb.edge);
     setTxt('tss-saved-body', deb.saved);
     setTxt('tss-try-body', deb.tryNext);
     setTxt('tss-tomorrow-body', deb.tomorrow);
     const shareBtn = document.getElementById('dcc-share-btn');
-    shareBtn.onclick = () => shareResult(score, total, 'daily');
+    shareBtn.onclick = shareDaily;
     showView('daily-complete');
     return;
   }
@@ -2697,11 +2737,18 @@ function deriveArchetype(){
   return ARCHETYPES.find(a => a.pillars.includes(best)) || ARCHETYPES[0];
 }
 
+function shareDaily(){
+  const d = S.todayDebrief; if(!d) return;
+  const text = `⛳ Today's Shot Saver — ${d.theme}\n${d.dots}\n${d.score}/${d.total} · 🔥 ${d.streak}-day streak\ngamesharpgolf.com`;
+  if(navigator.share){ navigator.share({ title:"Today's Shot Saver", text }).catch(()=>{}); }
+  else { navigator.clipboard && navigator.clipboard.writeText(text).then(()=> alert('Copied to clipboard!')); }
+}
+
 function shareResult(score, total, mode){
   const pct  = Math.round(score/total*100);
   const dots = (S.quiz.answers || []).map(a => a.isCorrect ? '🟢' : '🔴').join('');
   const arch = deriveArchetype();
-  const text = `GameSharp Golf ⛳\n${dots}\n${score}/${total} · ${pct}%\n${arch.name}\nPlay at gamesharp.golf`;
+  const text = `GameSharp Golf ⛳\n${dots}\n${score}/${total} · ${pct}%\n${arch.name}\ngamesharpgolf.com`;
   if(navigator.share){
     navigator.share({ title:'GameSharp Golf', text }).catch(()=>{});
   } else {
