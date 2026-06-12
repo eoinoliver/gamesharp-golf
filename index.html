@@ -18,6 +18,8 @@
    DESIGN SYSTEM — GAMESHARP GOLF
 ============================================= */
 :root {
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --dark:    #111111;
   --card:    #1c1c1c;
   --card2:   #242424;
@@ -172,6 +174,70 @@ svg { display:block; }
 /* Section header */
 .home-section { padding:0 16px; margin-top:20px; }
 
+/* ── WELCOME ONBOARDING (premium, mirrors tennis v2) ─────────────── */
+#welcomeOnboardScreen{ -webkit-tap-highlight-color:transparent; font-family:'DM Sans',sans-serif; }
+#welcomeOnboardScreen #wObInner{ max-width:560px; margin:0 auto; width:100%; }
+.wob-top{ display:flex; align-items:center; justify-content:space-between; padding:52px 24px 0; max-width:560px; margin:0 auto; width:100%; }
+.wob-brand{ font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:3px; color:var(--gold); }
+.wob-step{ font-size:10px; letter-spacing:1.6px; color:rgba(255,255,255,.26); text-transform:uppercase; font-weight:600; }
+.wob-hero{ position:relative; width:100%; height:150px; border-radius:16px; overflow:hidden; margin:2px 0 22px; box-shadow:0 10px 30px rgba(0,0,0,.4); animation:wobFadeUp .55s var(--ease-out-quint) both; }
+.wob-hero svg{ position:absolute; inset:0; width:100%; height:100%; }
+.wob-hero-tag{ position:absolute; left:17px; right:17px; bottom:13px; z-index:2; }
+.wob-hero-tag .t2{ font-family:'Bebas Neue',sans-serif; font-size:23px; letter-spacing:.6px; color:#fff; line-height:1.04; }
+.wob-next{ margin-top:18px; animation:wobFadeUp .4s var(--ease-out-quint) .12s both; }
+.cold-eyebrow{ font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:#4caf50; font-weight:700; margin-bottom:12px; }
+.wob-course{ position:relative; max-width:340px; margin:6px auto 0; border-radius:12px; overflow:hidden; background:#13211a; box-shadow:inset 0 0 26px rgba(0,0,0,.5); }
+.wob-course svg{ display:block; width:100%; }
+.wob-card.cold-wrong{ border-color:#e07070; background:rgba(224,112,112,.12); box-shadow:0 0 0 1px #e07070; }
+.wob-card.cold-wrong .wob-cardtick{ display:flex; background:#e07070; }
+.cold-verdict{ margin-top:18px; border-left:3px solid rgba(76,175,80,.5); padding:2px 0 2px 14px; opacity:0; }
+.cold-verdict.show{ animation:wobFadeUp .5s var(--ease-out-quint) both; }
+.cv-tag{ font-size:12px; letter-spacing:1.5px; text-transform:uppercase; font-weight:800; margin-bottom:8px; }
+.cv-body{ font-size:14.5px; color:#fff; line-height:1.55; margin-bottom:12px; }
+.cv-insight{ font-size:13px; color:rgba(255,255,255,.55); line-height:1.55; font-style:italic; }
+.wob-diag{ background:rgba(76,175,80,.08); border:1px solid rgba(76,175,80,.22); border-radius:12px; padding:13px 15px; margin-bottom:20px; }
+.wob-diag-eyebrow{ font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#4caf50; font-weight:800; margin-bottom:6px; }
+.wob-diag-text{ font-size:14.5px; color:#fff; line-height:1.55; }
+.wob-streak-badge{ display:inline-flex; align-items:center; gap:7px; background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.3); color:#e3c878; font-size:12px; font-weight:700; letter-spacing:.3px; padding:7px 13px; border-radius:20px; margin-top:2px; }
+.wob-track{ position:relative; display:flex; align-items:center; gap:6px; margin:0 0 30px; height:12px; }
+.wob-dot{ flex:1; height:6px; border-radius:3px; background:rgba(255,255,255,.15); transition:all .4s var(--ease-out-quint); }
+.wob-dot.done{ background:#4caf50; }
+.wob-dot.now{ background:#4caf50; box-shadow:0 0 10px rgba(76,175,80,.55); }
+.wob-ball{ position:absolute; top:50%; width:11px; height:11px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff,#d8d8d8 72%); box-shadow:0 0 9px rgba(200,168,75,.85); transform:translate(-50%,-50%); z-index:3; }
+.wob-ball.glide{ transition:left .5s var(--ease-spring); }
+.wob-headline{ font-family:'Bebas Neue',sans-serif; font-size:33px; letter-spacing:1.4px; color:#fff; line-height:1.06; margin-bottom:9px; }
+.wob-sub{ font-size:14px; color:rgba(255,255,255,.55); margin-bottom:6px; line-height:1.5; }
+.wob-sub-sm{ font-size:12.5px; color:rgba(255,255,255,.36); margin-bottom:22px; line-height:1.45; }
+.wob-sub.solo{ margin-bottom:22px; }
+.wob-card{ width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:13px; margin-bottom:10px; cursor:pointer; text-align:left; transition:border-color .18s,background .18s,transform .15s,box-shadow .25s,opacity .3s,filter .3s; }
+.wob-card:active{ transform:scale(.985); }
+.wob-card.sel{ border-color:#4caf50; background:rgba(76,175,80,.12); box-shadow:0 0 0 1px #4caf50,0 0 22px rgba(76,175,80,.26); animation:wobGlow .55s var(--ease-spring); }
+.wob-card.dim{ opacity:.3; filter:saturate(.55); }
+.wob-emoji{ font-size:25px; flex-shrink:0; width:30px; text-align:center; }
+.wob-label{ display:block; font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; color:#fff; }
+.wob-sublabel{ display:block; font-size:12px; color:rgba(255,255,255,.5); margin-top:1px; }
+.wob-chev{ color:rgba(255,255,255,.22); font-size:16px; }
+.wob-card.sel .wob-chev{ display:none; }
+.wob-cardtick{ width:23px; height:23px; border-radius:50%; background:#4caf50; color:#06140a; display:none; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; }
+.wob-card.sel .wob-cardtick{ display:flex; animation:wobTick .42s var(--ease-spring) both; }
+.wob-confirm{ display:flex; align-items:flex-start; gap:8px; margin:16px 2px 4px; font-size:13.5px; line-height:1.5; color:#9fe0ad; font-weight:500; }
+.wob-confirm.show{ animation:wobFadeUp .45s var(--ease-out-quint) .05s both; }
+.wob-confirm .ck{ color:#4caf50; font-weight:800; flex-shrink:0; }
+.wob-course-wrap{ margin:18px 0 2px; }
+.wob-course-wrap.show{ animation:wobFadeUp .5s var(--ease-out-quint) .08s both; }
+.wob-build-row{ display:flex; align-items:center; gap:13px; padding:13px 15px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px; margin-bottom:10px; opacity:0; transform:translateY(10px); }
+.wob-build-row.in{ animation:wobFadeUp .5s var(--ease-out-quint) both; }
+.wob-build-tick{ width:23px; height:23px; border-radius:50%; background:#4caf50; color:#06140a; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex-shrink:0; }
+.wob-build-k{ font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.4); font-weight:700; }
+.wob-build-v{ font-size:15px; color:#fff; font-weight:600; margin-top:1px; }
+.wob-ready{ opacity:0; }
+.wob-ready.show{ animation:wobFadeUp .55s var(--ease-out-quint) both; }
+.wob-cta{ width:100%; background:#4caf50; color:#06140a; font-family:'Bebas Neue',sans-serif; font-size:19px; letter-spacing:1.5px; border:none; border-radius:13px; padding:15px; cursor:pointer; transition:transform .15s,box-shadow .25s; box-shadow:0 6px 22px rgba(76,175,80,.28); }
+.wob-cta:active{ transform:scale(.98); }
+@keyframes wobGlow{ 0%{box-shadow:0 0 0 1px #4caf50,0 0 0 rgba(76,175,80,0);} 55%{box-shadow:0 0 0 1px #4caf50,0 0 26px rgba(76,175,80,.42);} 100%{box-shadow:0 0 0 1px #4caf50,0 0 22px rgba(76,175,80,.26);} }
+@keyframes wobTick{ from{transform:scale(0) rotate(-20deg);opacity:0;} to{transform:scale(1) rotate(0);opacity:1;} }
+@keyframes wobFadeUp{ from{opacity:0;transform:translateY(9px);} to{opacity:1;transform:translateY(0);} }
+
 /* ── Technique · Fix a Shot ─────────────────────────────── */
 .tech-entry-card {
   display:flex; align-items:center; gap:13px; margin:12px 16px;
@@ -290,27 +356,7 @@ svg { display:block; }
 /* =============================================
    ONBOARDING
 ============================================= */
-#view-onboarding { background:var(--dark); padding-bottom:90px; }
-.ob-header { padding:28px 20px 0; text-align:center; }
-.ob-logo { font-family:'Bebas Neue',sans-serif; font-size:28px; }
-.ob-logo span { color:var(--gold); }
-.ob-sub { font-size:14px; color:var(--muted); margin-top:6px; }
-.ob-dots { display:flex; justify-content:center; gap:6px; margin:20px 0 0; }
-.ob-dot { width:6px; height:6px; border-radius:50%; background:var(--border); transition:background .3s; }
-.ob-dot.active { background:var(--gold); }
-.ob-dot.done   { background:var(--correct); }
-.ob-qwrap { padding:28px 20px; flex:1; }
-.ob-qlabel { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
-.ob-qtext  { font-size:20px; font-weight:600; line-height:1.4; margin-bottom:24px; }
-.ob-options { display:flex; flex-direction:column; gap:10px; }
-.ob-option {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:14px 16px;
-  font-size:15px; color:var(--text); text-align:left;
-  cursor:pointer; transition:border-color .15s,background .15s;
-}
-.ob-option:active  { border-color:var(--gold); background:var(--card2); }
-.ob-option.selected { border-color:var(--gold); background:rgba(200,168,75,.1); }
+
 
 /* =============================================
    PILLAR SCREEN
@@ -897,15 +943,6 @@ svg { display:block; }
 </div>
 
 <!-- ============================== ONBOARDING ============================== -->
-<div class="view" id="view-onboarding">
-  <div class="ob-header">
-    <div class="ob-logo">GAME<span>SHARP</span> Golf</div>
-    <p class="ob-sub">Two quick questions — then straight to saving shots.</p>
-    <div class="ob-dots" id="ob-dots"></div>
-  </div>
-  <div class="ob-qwrap" id="ob-qwrap"></div>
-</div>
-
 <!-- ============================== HOME ============================== -->
 <div class="view" id="view-home">
   <div class="home-header" id="home-header">
@@ -1309,6 +1346,18 @@ svg { display:block; }
     <button class="tech-close" onclick="renderSharpen();showView('sharpen')">✕</button>
   </div>
   <div class="tech-app" id="tech-app"><!-- rendered by JS --></div>
+</div>
+
+<!-- WELCOME ONBOARDING OVERLAY (first-visit only) -->
+<div id="welcomeOnboardScreen" style="display:none;position:fixed;inset:0;background:var(--dark);z-index:1000;flex-direction:column;overflow:hidden;">
+  <div class="wob-top">
+    <div class="wob-brand">GAMESHARP GOLF</div>
+    <div class="wob-step" id="wObStep"></div>
+  </div>
+  <div id="wObInner" style="flex:1;overflow-y:auto;padding:24px 24px 8px;-webkit-overflow-scrolling:touch;"></div>
+  <div id="wObSkip" style="padding:12px 24px 32px;text-align:center;">
+    <button onclick="skipWelcomeOnboarding()" style="background:none;border:none;font-size:13px;color:rgba(255,255,255,0.3);cursor:pointer;padding:8px 16px;">Skip for now</button>
+  </div>
 </div>
 
 <!-- Install Prompt -->
@@ -1726,18 +1775,7 @@ const ARCHETYPES = [
   {icon:'🎖️', name:'THE VETERAN',          desc:'You have seen it all and know where every shot goes before you hit it. Experience and course knowledge are your biggest weapons.',    pillars:['Score Smart','Course IQ','The 19th Hole']}
 ];
 
-const ONBOARDING_QUESTIONS = [
-  {
-    q:'What is your current handicap (or rough level)?',
-    opts:['28+ (Rookie — new to the game)','18–27 (Club — finding my feet)','8–17 (Competitor — playing regularly)','0–7 (Tactician — low handicap)'],
-    key:'handicap'
-  },
-  {
-    q:'Where do you lose most of your shots?',
-    opts:['Off the tee — wild drives cost me','On approach — I miss too many greens','Around the green — chipping and pitching','On the putting green — too many three-putts'],
-    key:'weakness'
-  }
-];
+
 
 // ── State ──────────────────────────────────────────────
 const S = {
@@ -2779,57 +2817,7 @@ function shareResult(score, total, mode){
   }
 }
 
-// ── Onboarding ─────────────────────────────────────────
-let obIdx = 0;
-const obAnswers = {};
 
-function startOnboarding(){
-  obIdx = 0;
-  renderObQuestion();
-  showView('onboarding');
-}
-
-function renderObQuestion(){
-  const q    = ONBOARDING_QUESTIONS[obIdx];
-  const wrap = document.getElementById('ob-qwrap');
-  const dots = document.getElementById('ob-dots');
-
-  // Dots
-  dots.innerHTML = ONBOARDING_QUESTIONS.map((_,i) =>
-    `<div class="ob-dot ${i < obIdx ? 'done' : i === obIdx ? 'active' : ''}"></div>`
-  ).join('');
-
-  wrap.innerHTML = `
-    <div class="ob-qlabel">Question ${obIdx+1} of ${ONBOARDING_QUESTIONS.length}</div>
-    <div class="ob-qtext">${q.q}</div>
-    <div class="ob-options">
-      ${q.opts.map((o,i) => `<button class="ob-option" onclick="obSelect(${i})">${o}</button>`).join('')}
-    </div>`;
-}
-
-function obSelect(i){
-  const q = ONBOARDING_QUESTIONS[obIdx];
-  obAnswers[q.key] = i;
-  document.querySelectorAll('.ob-option').forEach((btn,idx) => {
-    btn.classList.toggle('selected', idx === i);
-  });
-  setTimeout(() => {
-    obIdx++;
-    if(obIdx >= ONBOARDING_QUESTIONS.length){
-      finishOnboarding();
-    } else {
-      renderObQuestion();
-    }
-  }, 350);
-}
-
-function finishOnboarding(){
-  S.profile = { answers: obAnswers, onboarded: true, isPro: false };
-  saveState();
-  LS.set('onboarded', true);
-  renderHome();
-  showView('home');
-}
 
 // ── Profile Screen ─────────────────────────────────────
 function showProfile(){
@@ -6197,6 +6185,497 @@ function renderHoleMap(state){
   }
 }
 
+
+// ════════ WELCOME ONBOARDING (mirrors tennis v2) ════════
+// The logic: (1) show VALUE first — one real shot-saving decision before any
+// questions; (2) personalise — each answer tunes the engine; (3) educate —
+// the questions themselves tour what the app offers (the leak system, the
+// five pillars, the daily habit).
+
+const WELCOME_QUESTIONS = [
+  {
+    key: 'player_level',
+    headline: 'What kind of golfer are you?',
+    subtext: 'This sets your starting level — every situation is tuned to your game.',
+    confirm: "Got it — we'll meet you where your game is now.",
+    opts: [
+      { emoji: '🌱', label: 'New to golf', sublabel: '28+ handicap, or no handicap yet', tag: 'beginner', confirm: "Perfect — at this stage one clear idea per round beats ten swing thoughts. We'll keep it simple." },
+      { emoji: '⛳', label: 'Club golfer', sublabel: '18–27 · finding my game', tag: 'club', confirm: "Good — most of your shots are lost to a handful of repeat decisions. We'll find them first." },
+      { emoji: '🎯', label: 'Competitor', sublabel: '8–17 · playing regularly', tag: 'competitor', confirm: "This is the level where course management decides scores more than ball-striking — exactly where we'll sharpen." },
+      { emoji: '⚡', label: 'Low handicap', sublabel: '0–7 · chasing the margins', tag: 'low', confirm: "At your level the margins are tiny. We'll hunt the 1%-ers that turn 74s into 71s." }
+    ]
+  },
+  {
+    key: 'frustration',
+    headline: 'What costs you the most shots right now?',
+    subtext: 'Be honest — this is where your training starts.',
+    opts: [
+      { emoji: '🏌️', label: 'Wild tee shots', sublabel: 'OB, penalties, blocked drives', tag: 'tee', confirm: "The expensive miss. We'll train you to pick lines that make the big number impossible — before you swing." },
+      { emoji: '🎯', label: 'Missing greens', sublabel: 'Wrong club, wrong target', tag: 'approach', confirm: "The data says approach play is where most strokes leak. We'll train target picking — when to attack, when to play fat." },
+      { emoji: '😖', label: 'Wasted shots around the green', sublabel: 'Chunks, blades, wrong shot choice', tag: 'short', confirm: "The scoring zone. We'll drill the chip-or-pitch call and the misses that turn 4s into 6s." },
+      { emoji: '😤', label: 'Three-putting', sublabel: 'Pace, reads, pressure putts', tag: 'putting', confirm: "Three-putts are a pace problem wearing a line costume. We'll fix the speed first — the reads follow." }
+    ]
+  },
+  {
+    key: 'play_style',
+    headline: 'How do you usually play?',
+    subtext: 'Casual rounds and competition golf reward different decisions.',
+    subtextSm: "We'll weight your situations toward how you actually play.",
+    special: 'green',
+    opts: [
+      { emoji: '🤝', label: 'Social rounds', sublabel: 'Weekend golf with mates', tag: 'social', confirm: "Great — we'll bias toward the decisions that keep a casual round fun: avoiding blow-ups and finishing strong." },
+      { emoji: '🏆', label: 'Competitions', sublabel: 'Medals, stablefords, matchplay', tag: 'comp', confirm: "Card-in-hand golf changes the maths. We'll weight pressure holes, scoring formats and protecting a lead." },
+      { emoji: '⛳', label: 'Both', sublabel: 'Depends on the week', tag: 'both', confirm: "Smart — the golfers who switch well think in expected strokes, not habits. We'll keep both sharp." }
+    ]
+  },
+  {
+    key: 'sharpen_focus',
+    headline: 'What do you most want to sharpen?',
+    subtext: 'GameSharp has five pillars. Pick the one that matters most right now.',
+    opts: [
+      { emoji: '🏌️', label: 'Score Smart', sublabel: 'Strategy, lay-up vs attack, risk calls', tag: 'score_smart', confirm: "Here's the truth: club rounds are lost, not won. We'll start by plugging the leaks that hand shots away." },
+      { emoji: '🗺️', label: 'Course IQ', sublabel: 'Reading holes, wind, lies and greens', tag: 'course_iq', confirm: "Every hole is designed to trick you. We'll teach you to read the architect's trap before you fall in it." },
+      { emoji: '🎯', label: 'Short Game', sublabel: 'Chipping, pitching, bunkers, putting', tag: 'short_game', confirm: "More than half your shots happen inside 50 yards. We'll make that zone your weapon, not your leak." },
+      { emoji: '🧠', label: 'Mental Game', sublabel: 'Pressure, resets and closing rounds', tag: 'mental', confirm: "Most rounds turn on two or three decisions made under heat. We'll train your head to make them calmly." },
+      { emoji: '🍺', label: 'The 19th Hole', sublabel: 'Rules that save shots, formats, golf IQ', tag: 'nineteenth', confirm: "The rules are full of free shots most golfers never claim. We'll make sure you never give one back." }
+    ]
+  },
+  {
+    key: 'progress_goal',
+    headline: 'What would progress feel like in 30 days?',
+    subtext: "Pick the outcome you'd most like GameSharp to help with.",
+    confirm: "Good target — we'll build your daily Shot Saver around that.",
+    opts: [
+      { emoji: '🏆', label: 'Break my barrier', sublabel: '100, 90, 80 — whatever it is', tag: 'break_barrier', confirm: "Then we'll bias your training toward the decisions that actually move the card — not highlight-reel shots." },
+      { emoji: '🛡️', label: 'Stop the blow-up holes', sublabel: 'No more card-wreckers', tag: 'stop_blowups', confirm: "Then we'll drill damage control: pricing every miss before you swing, and taking your medicine early." },
+      { emoji: '🎯', label: 'Sharper course management', sublabel: 'Right club, right target, every time', tag: 'course_mgmt', confirm: "Then we'll train the attack-or-protect call until the smart choice is the automatic one." },
+      { emoji: '⚡', label: 'Calm under pressure', sublabel: 'Play my game when it counts', tag: 'pressure', confirm: "Then we'll rehearse the pressure holes again and again, so they feel routine by the time they arrive." },
+      { emoji: '🔥', label: 'Learn something daily', sublabel: 'A sharper golf brain every day', tag: 'learn_daily', confirm: "Then we'll feed you one sharp, memorable edge a day — small enough to use on Saturday." }
+    ]
+  }
+];
+
+const WOB_KEY_LABEL = { player_level:'Level', frustration:'Fix First', play_style:'Format', sharpen_focus:'Focus', progress_goal:'30-Day Goal' };
+function wobLabelFor(key, tag){
+  const q = WELCOME_QUESTIONS.find(x => x.key === key);
+  const o = q && q.opts.find(x => x.tag === tag);
+  return o ? o.label : tag;
+}
+
+let wObState = { idx: 0, answers: {} };
+let wObDismissed = false;
+
+// ── COLD OPEN: one real decision on a hole BEFORE any questions ──
+const GOLF_COLD_OPENS = [
+  {
+    situation: "150 yards in. The pin is cut left, tucked behind a deep bunker. The right half of the green is wide open.",
+    question: "Where do you aim?",
+    you: { x: 100, y: 128 },
+    geo: `<ellipse cx="100" cy="42" rx="58" ry="24" fill="#2d7a2d"/><ellipse cx="100" cy="42" rx="46" ry="17" fill="#3d9a3d"/>
+      <ellipse cx="52" cy="64" rx="20" ry="10" fill="#d4b896"/><text x="52" y="67" text-anchor="middle" font-size="6" fill="#8B6914" font-family="DM Sans">BUNKER</text>
+      <line x1="66" y1="36" x2="66" y2="20" stroke="#ccc" stroke-width="1.3"/><polygon points="66,20 77,24 66,28" fill="#e05252"/>`,
+    options: [
+      { label: 'At the pin', sub: 'That is what it is there for', target: { x: 66, y: 40 }, correct: false,
+        verdict: "This is the miss that wrecks cards. A slight pull and you're in the bunker, short-sided to a tucked pin — the hardest up-and-down in golf. The flag is information, not an instruction." },
+      { label: 'Fat of the green, right', sub: 'Big target, putt at it', target: { x: 124, y: 40 }, correct: true,
+        verdict: "Right. The centre-right gives you the whole green to land in and a makeable putt. Your dispersion covers the pin anyway — and the bad miss simply can't happen from this line." },
+      { label: 'Lay up short', sub: 'Take no risk at all', target: { x: 100, y: 88 }, correct: false,
+        verdict: "Too timid — there's nothing short of the green to fear. Laying up here protects against a danger that doesn't exist and donates a stroke to the field." }
+    ],
+    insight: "Tiger Woods built his dominance on a quiet rule: every approach had a pre-chosen miss. The skill isn't hitting the green — it's deciding, before you swing, where the bad shot is allowed to go."
+  },
+  {
+    situation: "Par 5. 220 to carry the water and reach the green. Your reliable 3-wood carries 235, and you pull this shot off 8 times out of 10.",
+    question: "What's the call?",
+    you: { x: 54, y: 128 },
+    geo: `<rect x="20" y="62" width="160" height="26" rx="6" fill="#1a4a8a" opacity="0.92"/><text x="100" y="78" text-anchor="middle" font-size="7" fill="#64b5f6" font-family="DM Sans">WATER</text>
+      <ellipse cx="150" cy="34" rx="28" ry="15" fill="#2d7a2d"/><ellipse cx="150" cy="34" rx="20" ry="10" fill="#3d9a3d"/>
+      <line x1="150" y1="28" x2="150" y2="14" stroke="#ccc" stroke-width="1.3"/><polygon points="150,14 161,18 150,22" fill="#e05252"/>`,
+    options: [
+      { label: 'Go for it', sub: '15 yards of margin, 8 of 10', target: { x: 148, y: 36 }, correct: true,
+        verdict: "Yes. This is a green light: your reliable carry beats the number by 15 yards AND you execute 8 of 10. Eagle looks are live and your rare miss still finishes near the green. Protecting here costs you strokes over a season." },
+      { label: 'Lay up to a full wedge', sub: 'The classic safe play', target: { x: 60, y: 96 }, correct: false,
+        verdict: "Usually wise — but you priced this one wrong. The lay-up rule exists for penalty risk you can't cover. With this much margin and reliability, the timid play is the expensive one." },
+      { label: 'Smash driver off the deck', sub: 'Send absolutely everything', target: { x: 172, y: 40 }, correct: false,
+        verdict: "Now you've left your reliable game. The 3-wood was the green light because it's repeatable — the hero version of the same shot turns a good gamble into a bad one." }
+    ],
+    insight: "Modern strokes-gained analysis is symmetrical: it punishes false bravery and false caution equally. The skill GameSharp trains is knowing which one this shot is — before you pull a club."
+  },
+  {
+    situation: "Tight driving hole. Out of bounds all down the left. Thick rough — but only rough — on the right.",
+    question: "Where do you aim the tee shot?",
+    you: { x: 100, y: 132 },
+    geo: `<rect x="60" y="14" width="80" height="104" rx="10" fill="#2d6a2d"/>
+      <line x1="48" y1="10" x2="48" y2="120" stroke="#e05252" stroke-width="2" stroke-dasharray="5 4"/><text x="36" y="64" text-anchor="middle" font-size="6.5" fill="#e05252" font-family="DM Sans">OB</text>
+      <rect x="140" y="14" width="34" height="104" rx="8" fill="#1a3d1a"/><text x="157" y="66" text-anchor="middle" font-size="6" fill="#7cb37c" font-family="DM Sans">ROUGH</text>
+      <ellipse cx="100" cy="26" rx="22" ry="11" fill="#3d9a3d"/>`,
+    options: [
+      { label: 'Down the middle', sub: 'Split the difference', target: { x: 100, y: 60 }, correct: false,
+        verdict: "Feels safe — but the middle splits the difference between a one-shot miss and a THREE-shot miss. Half your dispersion pattern still hangs over the OB line. You're gambling without getting paid." },
+      { label: 'At the right rough', sub: 'Take OB out of play entirely', target: { x: 136, y: 58 }, correct: true,
+        verdict: "Right. Aim where your WORST miss is rough — one shot at most — and your good shot finds fairway. The OB side of your pattern is now empty. That's how good players make big numbers impossible." },
+      { label: 'Iron way back', sub: 'Refuse to play the hole', target: { x: 100, y: 96 }, correct: false,
+        verdict: "Over-protection. You've left 200 yards in to dodge a miss that aiming right would have removed for free. The leak with no scorecard symptom — it just quietly pays out." }
+    ],
+    insight: "Elite caddies walk a tight hole backwards: find the cheap miss first, then aim so the shot pattern leans into it. Steve Williams called that the whole job — the target is rarely the middle."
+  }
+];
+let GOLF_COLD = GOLF_COLD_OPENS[0];
+
+function coldOpenScene(chosenIdx){
+  const co = GOLF_COLD, you = co.you, opts = co.options;
+  const revealed = chosenIdx != null;
+  const correctIdx = opts.findIndex(o => o.correct);
+  const markers = opts.map((o,i)=>{
+    let fill='rgba(255,255,255,.16)', stroke='rgba(255,255,255,.4)', txt='rgba(255,255,255,.6)';
+    if(revealed){
+      if(i===chosenIdx){ fill = o.correct?'rgba(76,175,80,.95)':'rgba(224,82,82,.95)'; stroke='#fff'; txt='#06140a'; }
+      else if(i===correctIdx){ fill='rgba(76,175,80,.9)'; stroke='#fff'; txt='#06140a'; }
+      else { fill='rgba(255,255,255,.07)'; stroke='rgba(255,255,255,.18)'; txt='rgba(255,255,255,.28)'; }
+    }
+    const pulse = (revealed && i===correctIdx && chosenIdx!==correctIdx) ? `<animate attributeName="r" values="7;9;7" dur="1s" repeatCount="indefinite"/>` : '';
+    return `<circle cx="${o.target.x}" cy="${o.target.y}" r="7" fill="${fill}" stroke="${stroke}" stroke-width="1">${pulse}</circle>
+      <text x="${o.target.x}" y="${o.target.y+2.6}" text-anchor="middle" font-size="6.5" font-weight="700" fill="${txt}" font-family="DM Sans,sans-serif">${String.fromCharCode(65+i)}</text>`;
+  }).join('');
+  let action='';
+  if(revealed){
+    const o=opts[chosenIdx], t=o.target;
+    const cx=(you.x+t.x)/2, cy=Math.min(you.y,t.y)-18;
+    action=`<circle r="3.6" fill="${o.correct?'#b6ff8a':'#ff8a8a'}"><animateMotion dur="0.75s" fill="freeze" path="M${you.x},${you.y} Q${cx},${cy} ${t.x},${t.y}" calcMode="spline" keySplines="0.3 0 0.2 1" keyTimes="0;1"/></circle>`;
+    if(!o.correct){
+      const ct=opts[correctIdx].target, ccx=(you.x+ct.x)/2, ccy=Math.min(you.y,ct.y)-18;
+      action+=`<path d="M${you.x},${you.y} Q${ccx},${ccy} ${ct.x},${ct.y}" stroke="rgba(76,175,80,.75)" stroke-width="1.6" fill="none" stroke-dasharray="4,3" opacity="0"><animate attributeName="opacity" from="0" to="1" begin="0.45s" dur="0.4s" fill="freeze"/></path>`;
+    }
+  }
+  return `<div class="wob-course"><svg viewBox="0 0 200 150">
+    <rect width="200" height="150" fill="#16271a"/>
+    ${co.geo}
+    ${action}
+    ${markers}
+    <circle cx="${you.x}" cy="${you.y}" r="5.5" fill="#c8a84b"/>
+    <text x="${you.x}" y="${you.y+13}" text-anchor="middle" font-size="6" fill="rgba(200,168,75,.7)" font-family="DM Sans,sans-serif">YOU</text>
+  </svg></div>`;
+}
+
+function showWelcomeOnboarding(){
+  wObState = { idx:0, answers:{}, stage:'cold', coldAnswered:false };
+  wObDismissed = false;
+  const el = document.getElementById('welcomeOnboardScreen');
+  if(el) el.style.display = 'flex';
+  const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='block';
+  showColdOpen();
+}
+
+function showColdOpen(){
+  wObState.stage='cold'; wObState.coldAnswered=false;
+  GOLF_COLD = GOLF_COLD_OPENS[Math.floor(Math.random()*GOLF_COLD_OPENS.length)];
+  const inner = document.getElementById('wObInner'); if(!inner) return;
+  const step = document.getElementById('wObStep'); if(step) step.textContent='';
+  const opts = GOLF_COLD.options.map((o,i)=>
+    `<button class="wob-card cold-opt" data-i="${i}" onclick="coldChoose(${i})">
+      <span class="wob-emoji" style="font-size:15px;font-weight:800;color:#4caf50;">${String.fromCharCode(65+i)}</span>
+      <span style="flex:1;"><span class="wob-label">${o.label}</span><span class="wob-sublabel">${o.sub}</span></span>
+      <span class="wob-chev">›</span><span class="wob-cardtick">✓</span>
+    </button>`).join('');
+  inner.innerHTML = `
+    <div class="cold-eyebrow">Quick read · no setup needed</div>
+    <div class="wob-headline" style="font-size:27px;">${GOLF_COLD.question}</div>
+    <div class="wob-sub solo">${GOLF_COLD.situation}</div>
+    <div id="coldCourse">${coldOpenScene(null)}</div>
+    <div id="coldOpts" style="margin-top:14px;">${opts}</div>
+    <div id="coldReveal"></div>`;
+  inner.scrollTop = 0;
+}
+
+function coldChoose(i){
+  if(wObState.coldAnswered) return;
+  wObState.coldAnswered = true;
+  wobHaptic();
+  const o = GOLF_COLD.options[i];
+  const cc = document.getElementById('coldCourse');
+  if(cc) cc.innerHTML = coldOpenScene(i);
+  document.querySelectorAll('#coldOpts .cold-opt').forEach(c=>{
+    const idx = +c.getAttribute('data-i');
+    if(idx===i) c.classList.add(o.correct?'sel':'cold-wrong');
+    else if(GOLF_COLD.options[idx].correct) c.classList.add('sel');
+    else c.classList.add('dim');
+  });
+  const rv = document.getElementById('coldReveal');
+  if(rv){
+    rv.innerHTML = `
+      <div class="cold-verdict show">
+        <div class="cv-tag" style="color:${o.correct?'#4caf50':'#e07070'};">${o.correct?'✓':'✗'} ${o.correct?'Nice read':'Not quite'}</div>
+        <div class="cv-body">${o.verdict}</div>
+        <div class="cv-insight">${GOLF_COLD.insight}</div>
+      </div>
+      <button class="wob-cta wob-next" onclick="coldContinue()">Tune this to my game →</button>`;
+  }
+  const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='none';
+  setTimeout(()=>{ const r=document.getElementById('coldReveal'); if(r) r.scrollIntoView({behavior:'smooth',block:'center'}); },120);
+}
+
+function coldContinue(){
+  wObState.idx = 0; wObState.stage = 'q';
+  renderWelcomeQuestion();
+  const inner=document.getElementById('wObInner'); if(inner) inner.scrollTop=0;
+}
+
+function wobHaptic(){ try{ if(navigator.vibrate) navigator.vibrate(9); }catch(e){} }
+
+function wobTrack(activeIdx){
+  const total = WELCOME_QUESTIONS.length;
+  let dots='';
+  for(let i=0;i<total;i++){
+    dots += `<div class="wob-dot ${i<activeIdx?'done':(i===activeIdx?'now':'')}"></div>`;
+  }
+  const pct = Math.min(100, ((activeIdx+0.5)/total)*100);
+  return `<div class="wob-track" id="wobTrack">${dots}<div class="wob-ball" id="wobBall" style="left:${pct}%;"></div></div>`;
+}
+
+function moveWobBall(idx){
+  const ball=document.getElementById('wobBall'); if(!ball) return;
+  ball.classList.add('glide');
+  ball.style.left = Math.min(100, ((idx+0.5)/WELCOME_QUESTIONS.length)*100)+'%';
+}
+
+// Premium SVG hero on the first question — branding front and centre.
+function wobGolfHero(){
+  return `<div class="wob-hero"><svg viewBox="0 0 360 150" preserveAspectRatio="xMidYMid slice">
+    <defs><linearGradient id="wobSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1f12"/><stop offset="0.55" stop-color="#14301c"/><stop offset="1" stop-color="#1d4a26"/></linearGradient>
+    <linearGradient id="wobFw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d6a2d"/><stop offset="1" stop-color="#1d4a22"/></linearGradient></defs>
+    <rect width="360" height="150" fill="url(#wobSky)"/>
+    <circle cx="290" cy="34" r="17" fill="#c8a84b" opacity="0.55"/>
+    <path d="M0,96 Q120,72 220,92 T360,84 L360,150 L0,150 Z" fill="url(#wobFw)"/>
+    <ellipse cx="252" cy="103" rx="58" ry="14" fill="#3d9a3d" opacity="0.9"/>
+    <ellipse cx="118" cy="118" rx="26" ry="7" fill="#d4b896" opacity="0.85"/>
+    <line x1="266" y1="100" x2="266" y2="58" stroke="#ddd" stroke-width="1.6"/>
+    <polygon points="266,58 286,64 266,70" fill="#e05252"/>
+    <circle cx="74" cy="124" r="3.4" fill="#fff"/>
+    <path d="M74,124 Q170,40 262,98" stroke="rgba(255,255,255,.5)" stroke-width="1.4" fill="none" stroke-dasharray="5 5"/>
+  </svg><div class="wob-hero-tag"><div class="t2">Lower scores. Same swing.</div></div></div>`;
+}
+
+function renderWelcomeQuestion(){
+  const q = WELCOME_QUESTIONS[wObState.idx];
+  const inner = document.getElementById('wObInner'); if(!inner) return;
+  const step = document.getElementById('wObStep');
+  if(step) step.textContent = (wObState.idx+1)+' / '+WELCOME_QUESTIONS.length;
+  const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='block';
+  const subSm = q.subtextSm ? `<div class="wob-sub-sm">${q.subtextSm}</div>` : '';
+  const subCls = q.subtextSm ? 'wob-sub' : 'wob-sub solo';
+  const hero = wObState.idx===0 ? wobGolfHero() : '';
+  const opts = q.opts.map(o=>
+    `<button class="wob-card" data-tag="${o.tag}" onclick="selectWelcomeAnswer('${q.key}','${o.tag}')">
+      <span class="wob-emoji">${o.emoji}</span>
+      <span style="flex:1;"><span class="wob-label">${o.label}</span><span class="wob-sublabel">${o.sublabel}</span></span>
+      <span class="wob-chev">›</span><span class="wob-cardtick">✓</span>
+    </button>`).join('');
+  inner.innerHTML = `
+    ${wobTrack(wObState.idx)}
+    ${hero}
+    <div class="wob-headline">${q.headline}</div>
+    <div class="${subCls}">${q.subtext}</div>
+    ${subSm}
+    <div id="wobOpts">${opts}</div>
+    <div id="wobGreen"></div>
+    <div id="wobConfirm"></div>
+    <div id="wobNext"></div>`;
+  inner.scrollTop = 0;
+  if(wObState.answers[q.key]) renderWelcomeSelection(wObState.answers[q.key]);
+}
+
+function selectWelcomeAnswer(key, tag){
+  wObState.answers[key] = tag;
+  wobHaptic();
+  renderWelcomeSelection(tag);
+}
+
+function renderWelcomeSelection(tag){
+  const q = WELCOME_QUESTIONS[wObState.idx];
+  const opt = q.opts.find(o=>o.tag===tag);
+  const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='none';
+  document.querySelectorAll('#wobOpts .wob-card').forEach(c=>{
+    const isSel = c.getAttribute('data-tag')===tag;
+    c.classList.toggle('sel', isSel);
+    c.classList.toggle('dim', !isSel);
+  });
+  if(q.special==='green'){
+    const gw=document.getElementById('wobGreen');
+    if(gw) gw.innerHTML = `<div class="wob-course-wrap show">${wobMiniGreen(tag)}</div>`;
+  }
+  const msg = (opt && opt.confirm) || q.confirm || '';
+  const cc = document.getElementById('wobConfirm');
+  if(cc) cc.innerHTML = msg ? `<div class="wob-confirm show"><span class="ck">✓</span><span>${msg}</span></div>` : '';
+  const nx = document.getElementById('wobNext');
+  if(nx){
+    const last = wObState.idx >= WELCOME_QUESTIONS.length-1;
+    nx.innerHTML = `<button class="wob-cta wob-next" onclick="advanceWelcome()">${last?'Build my profile':'Continue'} →</button>`;
+  }
+  setTimeout(()=>{ const c=document.getElementById('wobConfirm'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+}
+
+function advanceWelcome(){
+  moveWobBall(wObState.idx+1);
+  setTimeout(()=>{
+    wObState.idx++;
+    if(wObState.idx >= WELCOME_QUESTIONS.length) completeWelcomeOnboarding();
+    else renderWelcomeQuestion();
+  },260);
+}
+
+// Mini-green delight on the format question
+function wobMiniGreen(tag){
+  const comp = tag==='comp', both = tag==='both';
+  const balls = (tag==='social' || both)
+    ? `<circle r="3.2" fill="#fff"><animate attributeName="cx" values="56;128;56" dur="2.8s" repeatCount="indefinite"/><animate attributeName="cy" values="116;78;116" dur="2.8s" repeatCount="indefinite"/></circle>
+       <circle r="3.2" fill="#c8a84b"><animate attributeName="cx" values="84;132;84" dur="3.3s" repeatCount="indefinite"/><animate attributeName="cy" values="124;80;124" dur="3.3s" repeatCount="indefinite"/></circle>`
+    : `<circle r="3.2" fill="#fff"><animate attributeName="cx" values="70;130;70" dur="2.6s" repeatCount="indefinite"/><animate attributeName="cy" values="120;79;120" dur="2.6s" repeatCount="indefinite"/></circle>`;
+  const card = (comp || both) ? `<rect x="150" y="106" width="34" height="26" rx="3" fill="rgba(255,255,255,.92)"/><line x1="155" y1="114" x2="179" y2="114" stroke="#999" stroke-width="1.4"/><line x1="155" y1="120" x2="179" y2="120" stroke="#bbb" stroke-width="1.2"/><line x1="155" y1="126" x2="172" y2="126" stroke="#bbb" stroke-width="1.2"/>` : '';
+  return `<div class="wob-course" style="max-width:300px;"><svg viewBox="0 0 200 150">
+    <rect width="200" height="150" fill="#16271a"/>
+    <ellipse cx="100" cy="84" rx="84" ry="52" fill="#2d7a2d"/>
+    <ellipse cx="100" cy="84" rx="68" ry="40" fill="#3d9a3d"/>
+    <circle cx="132" cy="76" r="4.5" fill="#0a1a0a"/>
+    <line x1="132" y1="76" x2="132" y2="44" stroke="#ddd" stroke-width="1.4"/>
+    <polygon points="132,44 148,49 132,54" fill="#e05252"/>
+    ${card}${balls}
+  </svg></div>`;
+}
+
+function completeWelcomeOnboarding(){
+  LS.set('onboarded', true);
+  try{ localStorage.setItem('gs_player_tags', JSON.stringify(wObState.answers)); }catch(e){}
+  // Adapter: feed the engines the same indices the app already personalises on
+  const levelIdx = { beginner:0, club:1, competitor:2, low:3 }[wObState.answers.player_level];
+  const weakIdx  = { tee:0, approach:1, short:2, putting:3 }[wObState.answers.frustration];
+  S.profile = { answers:{}, tags:wObState.answers, onboarded:true, isPro:false };
+  if(typeof levelIdx === 'number') S.profile.answers.handicap = levelIdx;
+  if(typeof weakIdx  === 'number') S.profile.answers.weakness = weakIdx;
+  S.leak = null;
+  provisionalLeak();
+  saveState();
+  showBuildingProfile();
+}
+
+function showBuildingProfile(){
+  wObState.stage='building';
+  const inner=document.getElementById('wObInner');
+  const skip=document.getElementById('wObSkip'); if(skip) skip.style.display='none';
+  const step=document.getElementById('wObStep'); if(step) step.textContent='';
+  if(!inner) return;
+  const keys=['player_level','frustration','play_style','sharpen_focus','progress_goal'];
+  const present=keys.filter(k=>wObState.answers[k]);
+  const rows=present.map((k,i)=>
+    `<div class="wob-build-row" id="wobRow${i}">
+      <div class="wob-build-tick">✓</div>
+      <div><div class="wob-build-k">${WOB_KEY_LABEL[k]}</div><div class="wob-build-v">${wobLabelFor(k,wObState.answers[k])}</div></div>
+    </div>`).join('');
+  inner.innerHTML = `
+    ${wobTrack(WELCOME_QUESTIONS.length)}
+    <div class="wob-headline">Building your Golfer Profile…</div>
+    <div class="wob-sub solo">You can change this anytime under Profile.</div>
+    <div id="wobRows" style="margin-top:6px;">${rows}</div>
+    <div class="wob-ready" id="wobReady" style="margin-top:18px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:#4caf50;margin-bottom:12px;">Profile ready.</div>
+      <div class="wob-diag">
+        <div class="wob-diag-eyebrow">Your edge</div>
+        <div class="wob-diag-text">${wobDiagnosis(wObState.answers)}</div>
+      </div>
+      <button class="wob-cta" onclick="showHabitCommit()">One last thing →</button>
+    </div>`;
+  inner.scrollTop=0;
+  present.forEach((k,i)=>{ setTimeout(()=>{ const r=document.getElementById('wobRow'+i); if(r) r.classList.add('in'); }, 350+i*480); });
+  setTimeout(()=>{ const rd=document.getElementById('wobReady'); if(rd) rd.classList.add('show'); }, 350+present.length*480+250);
+}
+
+// Computed "biggest lever" — a synthesis, not a read-back.
+function wobDiagnosis(a){
+  const leverByPillar = {
+    score_smart: "cutting the blow-up holes that quietly wreck your card",
+    course_iq:   "reading each hole the way the architect designed it — and refusing the trap",
+    short_game:  "turning three shots around the green into two",
+    mental:      "winning the two or three pressure holes that decide your round",
+    nineteenth:  "claiming the free shots hidden in the rules that most golfers never take"
+  };
+  const lever = leverByPillar[a.sharpen_focus] || "making the attack-or-protect call correctly under pressure";
+  const weightBit = {
+    tee:      ", weighted toward your tee-shot lines and the misses they make impossible",
+    approach: ", weighted toward approach targets and green-light calls",
+    short:    ", weighted toward your scoring zone inside 50 yards",
+    putting:  ", weighted toward pace control and the three-putt cure"
+  }[a.frustration] || "";
+  return `Your biggest lever right now is ${lever}${weightBit}. Your first week of Shot Savers will go straight at it.`;
+}
+
+const WOB_HABIT_TIMES = [
+  { emoji:'🌅', label:'Morning', sub:'Start the day sharp', tag:'morning' },
+  { emoji:'🌞', label:'Midday', sub:'A mid-day reset', tag:'midday' },
+  { emoji:'🌙', label:'Evening', sub:'Wind down with a rep', tag:'evening' }
+];
+
+function showHabitCommit(){
+  wObState.stage='habit';
+  const inner=document.getElementById('wObInner');
+  const skip=document.getElementById('wObSkip'); if(skip) skip.style.display='none';
+  if(!inner) return;
+  const opts=WOB_HABIT_TIMES.map(o=>
+    `<button class="wob-card" data-tag="${o.tag}" onclick="habitChoose('${o.tag}')">
+      <span class="wob-emoji">${o.emoji}</span>
+      <span style="flex:1;"><span class="wob-label">${o.label}</span><span class="wob-sublabel">${o.sub}</span></span>
+      <span class="wob-chev">›</span><span class="wob-cardtick">✓</span>
+    </button>`).join('');
+  inner.innerHTML = `
+    <div class="cold-eyebrow">One last thing</div>
+    <div class="wob-headline">Lock in your daily habit</div>
+    <div class="wob-sub solo">Sharpening sticks when it's one quick rep a day. When fits your round of life best?</div>
+    <div id="habitOpts">${opts}</div>
+    <div id="habitConfirm"></div>
+    <div id="habitNext"></div>`;
+  inner.scrollTop=0;
+}
+
+function habitChoose(tag){
+  wobHaptic();
+  try{
+    localStorage.setItem('gs_daily_time', tag);
+    localStorage.setItem('gs_goal_days', '30');
+    if(!localStorage.getItem('gs_commit_start')) localStorage.setItem('gs_commit_start', todayStr());
+  }catch(e){}
+  document.querySelectorAll('#habitOpts .wob-card').forEach(c=>{
+    const isSel = c.getAttribute('data-tag')===tag;
+    c.classList.toggle('sel', isSel);
+    c.classList.toggle('dim', !isSel);
+  });
+  const cc=document.getElementById('habitConfirm');
+  if(cc) cc.innerHTML = `<div class="wob-confirm show"><span class="ck">✓</span><span>Day 1 starts now. Show up daily and you'll feel the difference inside two weeks.</span></div>
+    <div style="margin-top:12px;"><span class="wob-streak-badge">🔥 Day 1 of your 30-day streak</span></div>`;
+  const nx=document.getElementById('habitNext');
+  if(nx) nx.innerHTML = `<button class="wob-cta wob-next" onclick="finishWelcome()">Start Day 1 →</button>`;
+  setTimeout(()=>{ const c=document.getElementById('habitConfirm'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+}
+
+function finishWelcome(){
+  if(wObDismissed) return;
+  wObDismissed = true;
+  const el=document.getElementById('welcomeOnboardScreen');
+  if(el) el.style.display='none';
+  setPillarColor('#c8a84b');
+  renderHome();
+  showView('home');
+}
+
+function skipWelcomeOnboarding(){
+  LS.set('onboarded', true);
+  wObDismissed = true;
+  if(!S.profile) S.profile = { answers:{}, onboarded:true, skipped:true };
+  saveState();
+  const el=document.getElementById('welcomeOnboardScreen');
+  if(el) el.style.display='none';
+  setPillarColor('#c8a84b');
+  renderHome();
+  showView('home');
+}
+
 // ================================================================
 function init(){
   try {
@@ -6208,7 +6687,8 @@ function init(){
   setTimeout(() => {
     try {
       if(!LS.get('onboarded')){
-        startOnboarding();
+        showView('home');           // home sits behind the overlay
+        showWelcomeOnboarding();
       } else {
         setPillarColor('#c8a84b');
         renderHome();
@@ -6216,8 +6696,8 @@ function init(){
       }
     } catch(e) {
       console.error('GameSharp: init routing failed', e);
-      // Fallback — go straight to onboarding
-      try { startOnboarding(); } catch(e2) { showView('home'); }
+      // Fallback — go straight to the welcome flow
+      try { showWelcomeOnboarding(); } catch(e2) { showView('home'); }
     }
   }, 400);
 }
