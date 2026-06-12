@@ -111,6 +111,11 @@ svg { display:block; }
 ============================================= */
 #view-home { background:var(--dark); padding-bottom:80px; }
 #view-home > * { flex-shrink:0; }
+#view-sharpen { background:var(--dark); padding-bottom:90px; }
+#view-sharpen > * { flex-shrink:0; }
+.sharpen-header { padding:22px 16px 4px; }
+.sharpen-title  { font-family:'Bebas Neue',sans-serif; font-size:34px; color:#fff; line-height:1; }
+.sharpen-sub    { font-size:13px; color:var(--muted); margin-top:4px; }
 .home-header {
   display:flex; align-items:center; justify-content:space-between;
   padding:16px 16px 12px;
@@ -169,7 +174,7 @@ svg { display:block; }
 
 /* ── Technique · Fix a Shot ─────────────────────────────── */
 .tech-entry-card {
-  display:flex; align-items:center; gap:13px; margin-bottom:12px;
+  display:flex; align-items:center; gap:13px; margin:12px 16px;
   background:linear-gradient(135deg,#16241a 0%,#1d3322 60%,#16241a 100%);
   border:1px solid #2d5a28; border-radius:var(--radius); padding:15px 16px; cursor:pointer;
 }
@@ -916,16 +921,7 @@ svg { display:block; }
     <button class="profile-btn" id="profile-btn">👤</button>
   </div>
 
-  <!-- HERO: Play a Hole -->
-  <div class="hole-entry-card hero" onclick="startHole()">
-    <div class="hec-badge">SIGNATURE MODE</div>
-    <div class="hec-title">PLAY A HOLE</div>
-    <div class="hec-sub">Make every decision. Live with the outcome.</div>
-    <div class="hec-meta">Shot-by-shot · Real consequences · Scorecard</div>
-    <button class="hec-btn">PLAY NOW →</button>
-  </div>
-
-  <!-- Today's Shot Saver (was Daily Challenge) -->
+  <!-- Today's Shot Saver — the daily ritual -->
   <div class="daily-card">
     <div class="dc-label">Today's Shot Saver</div>
     <div class="dc-title">ONE EDGE FOR TODAY</div>
@@ -937,34 +933,17 @@ svg { display:block; }
     <button class="daily-btn" id="daily-btn" onclick="startDaily()">GET TODAY'S EDGE →</button>
   </div>
 
-  <!-- 19th Hole Debrief -->
-  <div id="debrief-card-wrap"></div>
-
-  <!-- Pre-Round Sharpener -->
-  <div id="saturday-card-wrap"></div>
-
-  <div id="crash-card-wrap"></div>
-
-  <!-- Sharpen Your Game (pillars, lower) -->
-  <div class="home-section" id="sharpen-section">
-    <p class="section-title">Sharpen Your Game</p>
-    <div class="tech-entry-card" onclick="openTechnique()">
-      <div class="tech-entry-icon">🛠️</div>
-      <div class="tech-entry-body">
-        <div class="tech-entry-eyebrow">TECHNIQUE · FIX A SHOT</div>
-        <div class="tech-entry-title">Find the culprit</div>
-        <div class="tech-entry-sub">Your common misses — and the one cue that fixes each.</div>
-      </div>
-      <div class="tech-entry-arrow">→</div>
-    </div>
-    <div class="pillar-grid" id="pillar-grid"></div>
+  <!-- HERO: Play a Hole — the signature mode -->
+  <div class="hole-entry-card hero" onclick="startHole()">
+    <div class="hec-badge">SIGNATURE MODE</div>
+    <div class="hec-title">PLAY A HOLE</div>
+    <div class="hec-sub">Make every decision. Live with the outcome.</div>
+    <div class="hec-meta">Shot-by-shot · Real consequences · Scorecard</div>
+    <button class="hec-btn">PLAY NOW →</button>
   </div>
 
-  <!-- Pro Lens (supporting, lower) -->
-  <div class="home-section" style="padding:0">
-    <p class="section-title" style="padding:0 16px;margin-top:20px">Pro Lens</p>
-    <div class="pro-lens-scroll" id="pro-lens-scroll"></div>
-  </div>
+  <!-- One contextual strip: your leak (when known) -->
+  <div id="home-leak-wrap"></div>
 
   <div style="height:20px"></div>
 
@@ -972,10 +951,58 @@ svg { display:block; }
     <div class="nav-item active" data-nav="home" onclick="navTo('home')">
       <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
     </div>
-    <div class="nav-item" data-nav="play" onclick="navTo('play')">
-      <span class="nav-icon">⛳</span><span class="nav-label">Play</span>
-    </div>
     <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
+      <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
+    </div>
+    <div class="nav-item" data-nav="profile" onclick="showProfile()">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ============================== SHARPEN ============================== -->
+<div class="view" id="view-sharpen">
+  <div class="sharpen-header">
+    <div class="sharpen-title">SHARPEN</div>
+    <div class="sharpen-sub">Train the decisions that save shots.</div>
+  </div>
+
+  <!-- Your game: diagnose + train the leak -->
+  <div id="debrief-card-wrap"></div>
+
+  <!-- Technique: Fix a Shot -->
+  <div class="tech-entry-card" onclick="openTechnique()">
+    <div class="tech-entry-icon">🛠️</div>
+    <div class="tech-entry-body">
+      <div class="tech-entry-eyebrow">TECHNIQUE · FIX A SHOT</div>
+      <div class="tech-entry-title">Find the culprit</div>
+      <div class="tech-entry-sub">Your common misses — and the one cue that fixes each.</div>
+    </div>
+    <div class="tech-entry-arrow">→</div>
+  </div>
+
+  <!-- Pre-Round Warm-Up -->
+  <div id="saturday-card-wrap"></div>
+
+  <!-- Pillars -->
+  <div class="home-section">
+    <p class="section-title">Pillars</p>
+    <div class="pillar-grid" id="pillar-grid"></div>
+  </div>
+
+  <!-- Pro Lens -->
+  <div class="home-section" style="padding:0">
+    <p class="section-title" style="padding:0 16px;margin-top:20px">Pro Lens</p>
+    <div class="pro-lens-scroll" id="pro-lens-scroll"></div>
+  </div>
+
+  <div style="height:20px"></div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item" data-nav="home" onclick="navTo('home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item active" data-nav="sharpen" onclick="navTo('sharpen')">
       <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
     </div>
     <div class="nav-item" data-nav="profile" onclick="showProfile()">
@@ -987,7 +1014,7 @@ svg { display:block; }
 <!-- ============================== PILLAR ============================== -->
 <div class="view" id="view-pillar">
   <div class="pillar-header" id="pillar-header" data-emoji="⛳">
-    <button class="pillar-back" onclick="showView('home')">← Back</button>
+    <button class="pillar-back" onclick="renderSharpen();showView('sharpen')">← Back</button>
     <div class="ph-emoji" id="ph-emoji">⛳</div>
     <div class="ph-name"  id="ph-name">Score Smart</div>
     <div class="ph-desc"  id="ph-desc"></div>
@@ -1279,7 +1306,7 @@ svg { display:block; }
   <div class="tech-topbar">
     <button class="tech-back" id="tech-back" onclick="techBack()">‹ Back</button>
     <div class="tech-topbar-title" id="tech-topbar-title">Fix a Shot</div>
-    <button class="tech-close" onclick="showView('home')">✕</button>
+    <button class="tech-close" onclick="renderSharpen();showView('sharpen')">✕</button>
   </div>
   <div class="tech-app" id="tech-app"><!-- rendered by JS --></div>
 </div>
@@ -1820,16 +1847,8 @@ function showView(id){
 }
 
 function navTo(id){
-  if(id === 'home')    { renderHome(); showView('home'); }
-  else if(id === 'play'){ startHole(); }
-  else if(id === 'sharpen'){
-    renderHome();
-    showView('home');
-    setTimeout(() => {
-      const sec = document.getElementById('sharpen-section');
-      if(sec && sec.scrollIntoView) sec.scrollIntoView({ behavior:'smooth', block:'start' });
-    }, 120);
-  }
+  if(id === 'home')        { renderHome();    showView('home'); }
+  else if(id === 'sharpen'){ renderSharpen(); showView('sharpen'); }
   else if(id === 'profile'){ showProfile(); }
 }
 
@@ -1877,6 +1896,22 @@ function renderHome(){
     dcBtn.onclick = startDaily;
   }
 
+  // Contextual strip: train your leak (single slot — Sharpen holds the rest)
+  const leakWrap = document.getElementById('home-leak-wrap');
+  if(leakWrap){
+    leakWrap.innerHTML = S.leak ? `<div class="debrief-entry" onclick="launchLeakSession()">
+      <div class="debrief-left">
+        <div class="debrief-eyebrow">⚠ ${S.leak.provisional ? 'YOUR LIKELY LEAK' : 'YOUR DIAGNOSED LEAK'}</div>
+        <div class="debrief-title">${S.leak.icon} ${S.leak.label}</div>
+        <div class="debrief-sub">Five decisions targeting your leak</div>
+      </div>
+      <button class="debrief-btn">TRAIN →</button>
+    </div>` : '';
+  }
+}
+
+// ── Sharpen — the training library ─────────────────────
+function renderSharpen(){
   // Pillar grid
   const grid = document.getElementById('pillar-grid');
   grid.innerHTML = '';
@@ -1954,39 +1989,6 @@ function renderHome(){
     </div>`;
   }
 
-  // Crash Course card
-  const crashWrap = document.getElementById('crash-card-wrap');
-  if(crashWrap){
-    const answered = Object.keys(S.pillarStats).filter(k => (S.pillarStats[k]||{}).total >= 1);
-    if(answered.length){
-      let weakPillar = null, weakPct = 1;
-      PILLARS.forEach(p => {
-        const st = S.pillarStats[p.name];
-        if(!st || st.total < 1) return;
-        const pct = st.correct / st.total;
-        if(pct < weakPct){ weakPct = pct; weakPillar = p; }
-      });
-      if(weakPillar){
-        const pctLabel = Math.round(weakPct*100)+'%';
-        crashWrap.innerHTML = `<div class="crash-card" onclick="startCrashCourse()">
-          <div>
-            <div class="crash-badge">⚠ FOCUS AREA</div>
-            <div class="crash-pillar">${weakPillar.emoji} ${weakPillar.name}</div>
-            <div class="crash-sub">${pctLabel} accuracy — 10 targeted questions</div>
-          </div>
-          <button class="crash-btn" onclick="startCrashCourse()">FIX IT →</button>
-        </div>`;
-      } else {
-        crashWrap.innerHTML = '';
-      }
-    } else {
-      crashWrap.innerHTML = `<div class="crash-card-unlock">
-        <span class="crash-lock-icon">🎯</span>
-        <div class="crash-lock-text">Complete a pillar to unlock your Crash Course</div>
-      </div>`;
-    }
-  }
-
   // Pro Lens strip — bias toward player's strongest pillar
   const scroll = document.getElementById('pro-lens-scroll');
   scroll.innerHTML = '';
@@ -2014,6 +2016,7 @@ function renderHome(){
       <div class="pl-attr">— ${(q.pro_insight.split('—')[1]||'').trim().replace(/\.$/,'')}</div>`;
     scroll.appendChild(div);
   });
+
 }
 
 // ── Pillar Screen ──────────────────────────────────────
@@ -3366,7 +3369,7 @@ function openTechnique(){
 }
 function techBack(){
   if(techState.strokeIdx >= 0){ techRenderHome(); }
-  else { renderHome(); showView('home'); }
+  else { renderSharpen(); showView('sharpen'); }
 }
 function techSetTop(title, backLabel){
   const t = document.getElementById('tech-topbar-title'); if(t) t.textContent = title;
