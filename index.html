@@ -2576,11 +2576,11 @@ function showExplanation(q, isCorrect){
   // Show the decision visual only when this question's visual must teach a shot decision.
   const showVisual = (q.visual_must_show !== false);
   if(q._techVis && typeof techVisual === 'function'){
-    animCont.innerHTML = '<div id="dailyTechStage"></div><div class="gsw-ctrl" id="dailyTechCtrl"></div>';
+    animCont.innerHTML = '<div style="width:100%"><div id="dailyTechStage"></div><div class="gsw-ctrl" id="dailyTechCtrl"></div></div>';
     if(!(q._figKey && mountGolfSwing('dailyTechStage','dailyTechCtrl', q._figKey, isCorrect ? 'fix' : 'miss', true))){
       animCont.innerHTML = techVisual(q._techVis, isCorrect);
     }
-    animCont.style.minHeight = '160px';
+    animCont.style.minHeight = '290px';
     animLabel.style.display = '';
   } else if(showVisual && typeof renderGolfDecisionVisual === 'function'){
     animCont.innerHTML = renderGolfDecisionVisual(q, isCorrect);
@@ -3339,7 +3339,8 @@ function mountGolfSwing(stageId, ctrlId, figKey, mode, autoplay){
   if(!stage) return false;
   if(!TECH_FIGS[figKey]){ return false; }
   if(_gsw) cancelAnimationFrame(_gsw.raf);
-  stage.innerHTML=`<svg viewBox="0 0 280 220" width="100%" style="display:block;max-height:230px" xmlns="http://www.w3.org/2000/svg"></svg>`;
+  stage.style.width='100%';   // survive flex/centered parents that shrink-to-fit
+  stage.innerHTML=`<svg viewBox="0 0 280 220" width="100%" style="display:block;max-height:230px;min-height:150px" xmlns="http://www.w3.org/2000/svg"></svg>`;
   _gsw={ figKey, mode, ctrlId, svg:stage.querySelector('svg'), raf:0, scrub:null, scrubbing:false,
          data:gswFrames(figKey,mode) };
   if(ctrl){
