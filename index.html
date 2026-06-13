@@ -112,9 +112,20 @@ svg { display:block; }
    HOME
 ============================================= */
 #view-home { background:var(--dark); padding-bottom:80px; }
+.hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:center; justify-content:space-between; padding:13px 14px 0; }
+.hero-topbar .logo-wordmark { font-size:21px; text-shadow:0 2px 8px rgba(0,0,0,.65); }
+.hero-topbar-right { display:flex; align-items:center; gap:8px; }
+.hero-streak { background:rgba(0,0,0,.45); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.18); padding:5px 11px; }
+.hero-topbar .profile-btn { background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.18); }
+.dc-hook { font-size:15px; line-height:1.45; color:#fff; margin:7px 0 12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-style:italic; }
+.hec-hod { position:relative; font-size:12.5px; color:rgba(255,255,255,.75); margin:6px 0 16px; }
+.hec-hod strong { color:var(--gold); font-weight:700; }
+.one-thing { margin:12px 16px 0; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:13px 15px; }
+.ot-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); margin-bottom:5px; }
+.ot-text { font-size:14px; line-height:1.5; color:var(--text); }
 .home-hero { position:relative; margin:10px 14px 14px; aspect-ratio:1400/933; height:auto; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.14); box-shadow:0 8px 30px rgba(0,0,0,.6); background:#060e06; }
 .home-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
-.home-hero-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,14,8,.08) 0%, rgba(6,14,8,0) 30%, rgba(6,14,8,.12) 62%, rgba(6,14,8,.88) 100%); pointer-events:none; }
+.home-hero-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,10,6,.6) 0%, rgba(6,14,8,0) 26%, rgba(6,14,8,.12) 62%, rgba(6,14,8,.88) 100%); pointer-events:none; }
 .wob-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
 .wob-hero .home-hero-veil { position:absolute; inset:0; }
 .home-hero-tag { position:absolute; left:16px; bottom:12px; z-index:2; }
@@ -954,27 +965,14 @@ svg { display:block; }
 <!-- ============================== ONBOARDING ============================== -->
 <!-- ============================== HOME ============================== -->
 <div class="view" id="view-home">
-  <div class="home-header" id="home-header">
-    <div>
-      <div class="logo-wordmark"><span class="lw-w">GAME</span><span class="lw-g">SHARP</span></div>
-      <div class="home-arch-greeting" id="home-arch-greeting"></div>
-    </div>
-    <div class="streak-badge">
-      <span class="flame">🔥</span>
-      <span class="count" id="streak-count">0</span>
-      <span class="slabel">Day Streak</span>
-    </div>
-    <button class="profile-btn" id="profile-btn">👤</button>
-  </div>
-
-  <!-- Cinematic hero banner -->
+  <!-- Cinematic hero: branding lives INSIDE the panel (tennis pattern) -->
   <div class="home-hero" id="home-hero"></div>
 
-  <!-- Today's Shot Saver — the daily ritual -->
+  <!-- Today's Shot Saver — shows TODAY'S actual first decision, not a label -->
   <div class="daily-card">
     <div class="dc-label">Today's Shot Saver</div>
-    <div class="dc-title">ONE EDGE FOR TODAY</div>
-    <div class="dc-sub">3 decisions + 1 swing fix · One shot saved</div>
+    <div class="dc-title" id="dc-theme">ONE EDGE FOR TODAY</div>
+    <div class="dc-hook" id="dc-hook"></div>
     <div class="dc-streak">
       <span class="dc-streak-flame">🔥</span>
       <span class="dc-streak-text" id="dc-streak-text">Keep your streak alive</span>
@@ -982,17 +980,19 @@ svg { display:block; }
     <button class="daily-btn" id="daily-btn" onclick="startDaily()">GET TODAY'S EDGE →</button>
   </div>
 
-  <!-- HERO: Play a Hole — the signature mode -->
+  <!-- HERO: Play a Hole — names the hole of the day -->
   <div class="hole-entry-card hero" onclick="startHole()">
     <div class="hec-badge">SIGNATURE MODE</div>
     <div class="hec-title">PLAY A HOLE</div>
-    <div class="hec-sub">Make every decision. Live with the outcome.</div>
-    <div class="hec-meta">Shot-by-shot · Real consequences · Scorecard</div>
+    <div class="hec-hod" id="hec-hod">Shot-by-shot · Real consequences · Scorecard</div>
     <button class="hec-btn">PLAY NOW →</button>
   </div>
 
   <!-- One contextual strip: your leak (when known) -->
   <div id="home-leak-wrap"></div>
+
+  <!-- Free value, zero taps: today's pocket cue (tennis "one thing to remember") -->
+  <div class="one-thing" id="one-thing"></div>
 
   <div style="height:20px"></div>
 
@@ -1893,13 +1893,59 @@ function renderHome(){
     }
   }
 
-  // Streak badge
-  document.getElementById('streak-count').textContent = S.streak;
-
-  // Cinematic hero banner
+  // Cinematic hero — branding + streak + profile live inside the panel
   const heroWrap = document.getElementById('home-hero');
   if(heroWrap && !heroWrap.innerHTML){
-    heroWrap.innerHTML = golfHeroPanel() + '<div class="home-hero-tag"><div class="t1">GAME<span>SHARP</span> GOLF</div><div class="t2">See clearer. Score lower.</div></div>';
+    heroWrap.innerHTML = golfHeroPanel() + `
+      <div class="hero-topbar">
+        <div class="logo-wordmark"><span class="lw-w">GAME</span><span class="lw-g">SHARP</span></div>
+        <div class="hero-topbar-right">
+          <div class="streak-badge hero-streak"><span class="flame">🔥</span><span class="count" id="streak-count">0</span></div>
+          <button class="profile-btn" id="profile-btn" onclick="showProfile()">👤</button>
+        </div>
+      </div>
+      <div class="home-hero-tag"><div class="t2">See clearer. Score lower.</div></div>`;
+  }
+  const sc = document.getElementById('streak-count');
+  if(sc) sc.textContent = S.streak;
+
+  // Today's hook — the actual first decision, a curiosity gap, not a label
+  const themeEl = document.getElementById('dc-theme');
+  const hookEl  = document.getElementById('dc-hook');
+  if(themeEl && hookEl){
+    if(S.dailyDone && S.todayDebrief && S.todayDebrief.date === todayStr()){
+      themeEl.textContent = `✓ ${S.todayDebrief.score}/${S.todayDebrief.total} TODAY`;
+      hookEl.textContent  = S.todayDebrief.edge || '';
+    } else {
+      try{
+        const d = buildTodaysDaily();
+        themeEl.textContent = d.theme;
+        hookEl.textContent  = (d.qs[0] && d.qs[0].question) || '';
+      }catch(e){
+        themeEl.textContent = 'ONE EDGE FOR TODAY';
+        hookEl.textContent  = '';
+      }
+    }
+  }
+
+  // Hole of the day — the signature mode names today's hole
+  const hodEl = document.getElementById('hec-hod');
+  if(hodEl){
+    try{
+      const hod = ALL_HOLES[holeOfTheDayIndex()];
+      hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
+    }catch(e){}
+  }
+
+  // Pocket cue — free value with zero taps (tennis "one thing to remember")
+  const ot = document.getElementById('one-thing');
+  if(ot){
+    try{
+      const n = parseInt(todayStr().replace(/-/g,''));
+      const tipQ = QUESTIONS[(n*31+7) % QUESTIONS.length];
+      const tip = (tipQ.action_tip || '').split(/(?<=[.!?])\s/)[0];
+      ot.innerHTML = `<div class="ot-label">⛳ ONE THING TO REMEMBER</div><div class="ot-text">${tip}</div>`;
+    }catch(e){ ot.innerHTML=''; }
   }
 
   // Daily card
@@ -2208,8 +2254,7 @@ function showDailyReview(){
   showView('daily-complete');
 }
 
-function startDaily(){
-  if(S.dailyDone){ showDailyReview(); return; }
+function buildTodaysDaily(){
   // Seed from today's date: same linked hole for everyone, every day
   const seed  = todayStr().replace(/-/g,'');
   const rng   = seededRng(parseInt(seed));
@@ -2244,13 +2289,18 @@ function startDaily(){
     steps = steps[0]==='ON THE GREEN' ? ['THE READ','THE PACE','THE PRESSURE PUTT'] : ['DECISION ONE','DECISION TWO','DECISION THREE'];
   }
   if(techQ){ daily.push(techQ); steps.push('THE RANGE FIX'); }
+  return { qs: daily, theme: leak.theme, steps };
+}
 
+function startDaily(){
+  if(S.dailyDone){ showDailyReview(); return; }
+  const d = buildTodaysDaily();
   S.quiz = {
-    qs: daily, idx:0, score:0, answers:[],
+    qs: d.qs, idx:0, score:0, answers:[],
     pillar: {name:"Today's Shot Saver", color:'#c8a84b', emoji:'⛳'},
     module: 'Daily',
     mode: 'daily',
-    thread: { theme: leak.theme, steps }
+    thread: { theme: d.theme, steps: d.steps }
   };
   setPillarColor('#c8a84b');
   document.getElementById('qt-pillar').textContent = "Today's Shot Saver";
@@ -3545,7 +3595,7 @@ document.getElementById('install-btn') && (document.getElementById('install-btn'
 });
 
 // profile button
-document.getElementById('profile-btn').onclick = showProfile;
+{ const _pb = document.getElementById('profile-btn'); if(_pb) _pb.onclick = showProfile; }
 
 // ── Animation Library ──────────────────────────────────
 function renderAnimation(key, params, isCorrect){
