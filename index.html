@@ -117,21 +117,21 @@ svg { display:block; }
 .hero-topbar-right { display:flex; align-items:center; gap:8px; }
 .hero-streak { background:rgba(0,0,0,.45); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.18); padding:5px 11px; }
 .hero-topbar .profile-btn { background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.18); }
-.dc-hook { font-size:15px; line-height:1.45; color:#fff; margin:7px 0 12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-style:italic; }
-.hec-hod { position:relative; font-size:12.5px; color:rgba(255,255,255,.75); margin:6px 0 16px; }
+.dc-hook { font-size:14.5px; line-height:1.4; color:rgba(255,255,255,.92); margin:7px 0 11px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-style:italic; }
+.hec-hod { position:relative; font-size:12.5px; color:rgba(255,255,255,.72); margin:5px 0 14px; }
 .hec-hod strong { color:var(--gold); font-weight:700; }
-.one-thing { margin:12px 16px 0; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:13px 15px; }
+.one-thing { margin:4px 14px 0; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:13px 15px; }
 .ot-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); margin-bottom:5px; }
 .ot-text { font-size:14px; line-height:1.5; color:var(--text); }
-.home-hero { position:relative; margin:10px 14px 14px; aspect-ratio:1400/933; height:auto; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.14); box-shadow:0 8px 30px rgba(0,0,0,.6); background:#060e06; }
+.home-hero { position:relative; margin:0 0 14px; aspect-ratio:5/4; height:auto; border-radius:0 0 24px 24px; overflow:hidden; box-shadow:0 12px 38px rgba(0,0,0,.6); background:#060e06; }
 .home-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
-.home-hero-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,10,6,.6) 0%, rgba(6,14,8,0) 26%, rgba(6,14,8,.12) 62%, rgba(6,14,8,.88) 100%); pointer-events:none; }
+.home-hero-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,10,6,.55) 0%, rgba(6,14,8,0) 30%, rgba(6,14,8,.18) 60%, rgba(6,14,8,.9) 100%); pointer-events:none; }
 .wob-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
 .wob-hero .home-hero-veil { position:absolute; inset:0; }
-.home-hero-tag { position:absolute; left:16px; bottom:12px; z-index:2; }
+.home-hero-tag { position:absolute; left:18px; bottom:18px; z-index:2; }
 .home-hero-tag .t1 { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:3px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.7); }
 .home-hero-tag .t1 span { color:var(--gold); }
-.home-hero-tag .t2 { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.6px; color:#fff; line-height:1.05; margin-top:1px; text-shadow:0 2px 10px rgba(0,0,0,.6); }
+.home-hero-tag .t2 { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:.6px; color:#fff; line-height:1.0; margin-top:1px; text-shadow:0 3px 14px rgba(0,0,0,.75); }
 #view-home > * { flex-shrink:0; }
 #view-sharpen { background:var(--dark); padding-bottom:90px; }
 #view-sharpen > * { flex-shrink:0; }
@@ -165,22 +165,18 @@ svg { display:block; }
 
 /* Daily Challenge Card */
 .daily-card {
-  margin:12px 16px;
-  background:linear-gradient(135deg,var(--fairway) 0%,#2a5c25 100%);
-  border-radius:var(--radius); padding:20px;
-  border:1px solid #2d5a28;
+  margin:0 14px 12px;
+  background:linear-gradient(165deg,#181d19 0%,#0e110e 100%);
+  border-radius:18px; padding:16px 18px;
+  border:1px solid rgba(255,255,255,.08);
   position:relative; overflow:hidden;
 }
-.daily-card::before {
-  content:'⛳'; position:absolute; right:-10px; top:-10px;
-  font-size:84px; opacity:.12; transform:rotate(15deg);
-}
-.daily-card .dc-label { font-size:10px; font-weight:600; letter-spacing:.15em; color:rgba(255,255,255,.6); text-transform:uppercase; }
-.daily-card .dc-title { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#fff; margin:4px 0 2px; line-height:1; }
+.daily-card .dc-label { font-size:10px; font-weight:700; letter-spacing:.18em; color:var(--gold); text-transform:uppercase; }
+.daily-card .dc-title { font-family:'Bebas Neue',sans-serif; font-size:27px; color:#fff; margin:3px 0 0; line-height:1; }
 .daily-card .dc-sub   { font-size:13px; color:rgba(255,255,255,.7); margin-bottom:14px; }
-.daily-card .dc-streak { display:flex; align-items:center; gap:6px; margin-bottom:16px; }
-.daily-card .dc-streak-flame { font-size:20px; }
-.daily-card .dc-streak-text  { font-size:13px; color:rgba(255,255,255,.8); }
+.daily-card .dc-streak { display:flex; align-items:center; gap:6px; margin-bottom:14px; }
+.daily-card .dc-streak-flame { font-size:17px; }
+.daily-card .dc-streak-text  { font-size:12.5px; color:rgba(255,255,255,.7); }
 .daily-card .dc-streak-text strong { color:#fff; }
 .daily-btn {
   background:var(--gold); color:#111; border:none;
@@ -643,18 +639,18 @@ svg { display:block; }
 
 /* Hero variant — dominant Play a Hole card */
 .hole-entry-card.hero {
-  margin:16px 16px 18px;
-  padding:26px 22px 24px;
-  border:1.5px solid var(--gold);
-  box-shadow:0 0 0 1px rgba(200,168,75,.15), 0 12px 40px -8px rgba(0,0,0,.6), 0 0 60px -20px rgba(200,168,75,.4);
-  background:linear-gradient(135deg,#0a2e0a 0%,#1f5a1f 55%,#0a2e0a 100%);
+  margin:0 14px 16px;
+  padding:18px 18px 18px;
+  border:1px solid rgba(200,168,75,.55);
+  box-shadow:0 0 0 1px rgba(200,168,75,.08), 0 12px 36px -10px rgba(0,0,0,.7), 0 0 54px -22px rgba(200,168,75,.5);
+  background:linear-gradient(165deg,#1b1d14 0%,#0e110d 100%);
 }
-.hole-entry-card.hero::before { opacity:0.8; }
-.hole-entry-card.hero .hec-badge { background:var(--gold); font-size:10px; padding:4px 11px; margin-bottom:13px; }
-.hole-entry-card.hero .hec-title { font-size:46px; letter-spacing:.5px; }
-.hole-entry-card.hero .hec-sub { font-size:14.5px; color:rgba(255,255,255,.82); margin:8px 0 12px; }
+.hole-entry-card.hero::before { display:none; }
+.hole-entry-card.hero .hec-badge { background:var(--gold); font-size:9.5px; padding:4px 11px; margin-bottom:11px; }
+.hole-entry-card.hero .hec-title { font-size:40px; letter-spacing:.5px; }
+.hole-entry-card.hero .hec-sub { font-size:14px; color:rgba(255,255,255,.8); margin:7px 0 11px; }
 .hole-entry-card.hero .hec-meta { font-size:11.5px; color:rgba(255,255,255,.6); margin-bottom:18px; display:block; }
-.hole-entry-card.hero .hec-btn { width:100%; padding:15px; font-size:16px; letter-spacing:.3px; }
+.hole-entry-card.hero .hec-btn { width:100%; padding:14px; font-size:15.5px; letter-spacing:.3px; }
 
 /* Crash Course card */
 .crash-card {
@@ -860,6 +856,11 @@ svg { display:block; }
   font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
   margin-top:1px;
 }
+.dc-letter {
+  flex-shrink:0; width:30px; height:30px; border-radius:50%;
+  border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:13px; color:var(--muted); margin-top:1px;
+}
 .dc-badge.agg   { background:rgba(224,82,82,.15);   color:#e05252; border:1px solid rgba(224,82,82,.3); }
 .dc-badge.smart { background:rgba(76,175,80,.15);   color:#4caf50; border:1px solid rgba(76,175,80,.3); }
 .dc-badge.safe  { background:rgba(91,155,213,.15);  color:#5b9bd5; border:1px solid rgba(91,155,213,.3); }
@@ -970,7 +971,7 @@ svg { display:block; }
 
   <!-- Today's Shot Saver — shows TODAY'S actual first decision, not a label -->
   <div class="daily-card">
-    <div class="dc-label">Today's Shot Saver</div>
+    <div class="dc-label">Daily Challenge</div>
     <div class="dc-title" id="dc-theme">ONE EDGE FOR TODAY</div>
     <div class="dc-hook" id="dc-hook"></div>
     <div class="dc-streak">
@@ -1185,7 +1186,7 @@ svg { display:block; }
 <!-- ============================== DAILY COMPLETE ============================== -->
 <div class="view" id="view-daily-complete">
   <div style="text-align:center;margin:28px 0 4px">
-    <div class="tss-eyebrow">TODAY'S SHOT SAVER</div>
+    <div class="tss-eyebrow">DAILY CHALLENGE</div>
     <div class="dcc-score-wrap" style="margin:6px 0 2px">
       <span id="dcc-score-num" style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--gold);line-height:1">0</span><span id="dcc-score-denom" style="font-size:20px;color:var(--muted)">/3</span>
     </div>
@@ -1904,7 +1905,7 @@ function renderHome(){
           <button class="profile-btn" id="profile-btn" onclick="showProfile()">👤</button>
         </div>
       </div>
-      <div class="home-hero-tag"><div class="t2">See clearer. Score lower.</div></div>`;
+      <div class="home-hero-tag"><div class="t2">See clearer,<br>think sharper.</div></div>`;
   }
   const sc = document.getElementById('streak-count');
   if(sc) sc.textContent = S.streak;
@@ -2297,13 +2298,13 @@ function startDaily(){
   const d = buildTodaysDaily();
   S.quiz = {
     qs: d.qs, idx:0, score:0, answers:[],
-    pillar: {name:"Today's Shot Saver", color:'#c8a84b', emoji:'⛳'},
+    pillar: {name:"Daily Challenge", color:'#c8a84b', emoji:'⛳'},
     module: 'Daily',
     mode: 'daily',
     thread: { theme: d.theme, steps: d.steps }
   };
   setPillarColor('#c8a84b');
-  document.getElementById('qt-pillar').textContent = "Today's Shot Saver";
+  document.getElementById('qt-pillar').textContent = "Daily Challenge";
   document.getElementById('qt-pillar').style.color  = '#c8a84b';
   document.getElementById('quiz-prog').style.background = '#c8a84b';
   loadQuestion();
@@ -2868,7 +2869,7 @@ function deriveArchetype(){
 
 function shareDaily(){
   const d = S.todayDebrief; if(!d) return;
-  const text = `⛳ Today's Shot Saver — ${d.theme}\n${d.dots}\n${d.score}/${d.total} · 🔥 ${d.streak}-day streak\ngamesharpgolf.com`;
+  const text = `⛳ GameSharp Golf — Daily Challenge · ${d.theme}\n${d.dots}\n${d.score}/${d.total} · 🔥 ${d.streak}-day streak\ngamesharpgolf.com`;
   if(navigator.share){ navigator.share({ title:"Today's Shot Saver", text }).catch(()=>{}); }
   else { navigator.clipboard && navigator.clipboard.writeText(text).then(()=> alert('Copied to clipboard!')); }
 }
@@ -5576,6 +5577,13 @@ let HOLE = null;
 let HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
 
 function startHole(){
+  // Auto-present the hole of the day — no decision cost, just tee off
+  showView('hole');
+  beginHole(holeOfTheDayIndex());
+}
+
+// Browsing is still available, just demoted off the front door
+function browseHoles(){
   showView('hole');
   showHolePicker();
 }
@@ -5697,7 +5705,7 @@ function renderHoleNode(nodeId){
   (node.choices || []).forEach((c, i) => {
     const card = document.createElement('div');
     card.className = 'decision-card';
-    card.innerHTML = `<div class="dc-badge ${c.type}">${c.badge}</div>
+    card.innerHTML = `<div class="dc-letter">${String.fromCharCode(65+i)}</div>
       <div class="dc-body">
         <div class="dc-label">${c.label}</div>
         <div class="dc-sub">${c.sub}</div>
@@ -5833,7 +5841,7 @@ function renderScorecard(finalNode){
     <div class="sc-decisions">${decisionSummary}</div>
     <div class="sc-actions">
       <button class="btn btn-gold" onclick="nextHole()">NEXT HOLE →</button>
-      <button class="btn btn-dark" onclick="startHole()">CHOOSE A HOLE</button>
+      <button class="btn btn-dark" onclick="browseHoles()">CHOOSE A HOLE</button>
       <button class="btn btn-dark" onclick="renderHome();showView('home')">HOME</button>
     </div>`;
 }
@@ -6516,7 +6524,7 @@ function golfHeroPanel(){
 }
 
 function wobGolfHero(){
-  return `<div class="wob-hero">${golfHeroPanel()}<div class="wob-hero-tag"><div class="t2">See clearer. Score lower.</div></div></div>`;
+  return `<div class="wob-hero">${golfHeroPanel()}<div class="wob-hero-tag"><div class="t2">See clearer, think sharper.</div></div></div>`;
 }
 
 function renderWelcomeQuestion(){
