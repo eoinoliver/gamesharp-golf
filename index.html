@@ -840,8 +840,13 @@ svg { display:block; }
 .hole-map-wrap.thud { animation: mapThud .34s ease; }
 @keyframes mapThud { 0%{transform:translateY(0);} 22%{transform:translateY(3px);} 48%{transform:translateY(-1px);} 100%{transform:translateY(0);} }
 .hole-map-wrap::after {
-  content:''; position:absolute; inset:0; pointer-events:none;
-  box-shadow: inset 0 -28px 40px -20px rgba(0,0,0,.6), inset 0 0 60px -30px rgba(0,0,0,.5);
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:2;
+  background:
+    repeating-linear-gradient(74deg, rgba(255,255,255,.045) 0 13px, rgba(0,0,0,0) 13px 27px),
+    radial-gradient(120% 78% at 86% -8%, rgba(255,231,150,.20), rgba(255,231,150,0) 52%),
+    linear-gradient(180deg, rgba(190,215,170,.12) 0%, rgba(0,0,0,0) 20%),
+    radial-gradient(135% 100% at 50% 42%, rgba(0,0,0,0) 52%, rgba(0,0,0,.55) 100%);
+  box-shadow: inset 0 -26px 38px -20px rgba(0,0,0,.65);
 }
 
 /* Shot panel */
@@ -6271,9 +6276,9 @@ function animateHoleBall(node, valence, lastDec){
 
   const ballMotion = `<animateMotion dur="${fDur}s" begin="${fBegin}s" fill="freeze" calcMode="spline" keySplines="0.15 0.5 0.3 1" path="${flight}"/>`
     + (rollPath ? `<animateMotion dur="${rDur}s" begin="${rollBegin.toFixed(2)}s" fill="freeze" calcMode="spline" keySplines="0.2 0.7 0.3 1" path="${rollPath}"/>` : '');
-  const ballExtra = inWater
-    ? `<animate attributeName="opacity" values="1;1;0" keyTimes="0;0.5;1" dur="${(landAt+0.45).toFixed(2)}s" begin="${fBegin}s" fill="freeze"/>`
-    : (isOB ? `<animate attributeName="fill" values="#fff;#999" dur="0.5s" begin="${(rollBegin+0.15).toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values="1;0.3" dur="0.55s" begin="${(rollBegin+0.15).toFixed(2)}s" fill="freeze"/>` : '');
+  const ballOpA = inWater
+    ? `values="0;1;1;0" keyTimes="0;0.06;${(landAt/(landAt+0.45)).toFixed(2)};1" dur="${(landAt+0.45).toFixed(2)}s"`
+    : (isOB ? `values="0;1;1;0.3" keyTimes="0;0.06;${((rollBegin+0.1)/(rollBegin+0.6)).toFixed(2)};1" dur="${(rollBegin+0.6).toFixed(2)}s"` : `values="0;1" dur="0.06s"`);
 
   let fx='';
   if(inWater){
@@ -6293,11 +6298,25 @@ function animateHoleBall(node, valence, lastDec){
   }
   const impact = (inWater||isOB||isGreen) ? '' : `<circle cx="${Lx}" cy="${Ly}" r="2" fill="none" stroke="${col}" stroke-width="2" opacity="0"><animate attributeName="r" values="2;${(rx*0.7).toFixed(1)};${(rx*0.55).toFixed(1)}" keyTimes="0;0.7;1" dur="0.45s" begin="${fb}s" calcMode="spline" keySplines="0.2 0.7 0.3 1;0.3 0 0.6 1" fill="freeze"/><animate attributeName="opacity" values="0;0.8;0" keyTimes="0;0.35;1" dur="0.5s" begin="${fb}s" fill="freeze"/></circle>`;
 
-  const dash=(span*2.6+44).toFixed(0);
+  if(svg.querySelector && !svg.querySelector('#trGlow')){
+    svg.insertAdjacentHTML('afterbegin', `<defs>
+      <filter id="trGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="ballGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="2.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/></feMerge></filter>
+      <radialGradient id="ballRG" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#ffffff"/><stop offset="0.7" stop-color="#eef4ee"/><stop offset="1" stop-color="#c2d2c2"/></radialGradient>
+    </defs>`);
+  }
+  const dash=(span*2.7+48).toFixed(0);
+  const glowCol = valence==='good' ? '#7CFFA0' : (valence==='bad' ? '#ff6b6b' : '#ffe9a8');
   svg.insertAdjacentHTML('beforeend', `<g>
     ${disp}
-    <path d="${flight}" stroke="${col}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".4" stroke-dasharray="${dash}" stroke-dashoffset="${dash}"><animate attributeName="stroke-dashoffset" to="0" dur="${fDur}s" begin="${fBegin}s" fill="freeze"/></path>
-    <circle r="4.5" fill="#fff" stroke="${col}" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".05s" begin="${fBegin}s" fill="freeze"/>${ballMotion}${ballExtra}</circle>
+    <path d="${flight}" stroke="${glowCol}" stroke-width="3.6" fill="none" stroke-linecap="round" opacity="0.55" filter="url(#trGlow)" stroke-dasharray="${dash}" stroke-dashoffset="${dash}"><animate attributeName="stroke-dashoffset" to="0" dur="${fDur}s" begin="${fBegin}s" calcMode="spline" keySplines="0.15 0.5 0.3 1" fill="freeze"/><animate attributeName="opacity" values="0.55;0.55;0.2" keyTimes="0;0.75;1" dur="${(fDur+0.6).toFixed(2)}s" begin="${fBegin}s" fill="freeze"/></path>
+    <path d="${flight}" stroke="#ffffff" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.95" stroke-dasharray="${dash}" stroke-dashoffset="${dash}"><animate attributeName="stroke-dashoffset" to="0" dur="${fDur}s" begin="${fBegin}s" calcMode="spline" keySplines="0.15 0.5 0.3 1" fill="freeze"/><animate attributeName="opacity" values="0.95;0.95;0.35" keyTimes="0;0.78;1" dur="${(fDur+0.7).toFixed(2)}s" begin="${fBegin}s" fill="freeze"/></path>
+    <g opacity="0">
+      <animate attributeName="opacity" ${ballOpA} begin="${fBegin}s" fill="freeze"/>
+      <circle r="4" fill="${glowCol}" filter="url(#ballGlow)" opacity="0.85"><animate attributeName="r" values="4;7.5;5" keyTimes="0;0.5;1" dur="${fDur}s" begin="${fBegin}s" fill="freeze"/></circle>
+      <circle r="4" fill="url(#ballRG)" stroke="#ffffff" stroke-width="0.5"><animate attributeName="r" values="3.8;5.6;4.4" keyTimes="0;0.5;1" dur="${fDur}s" begin="${fBegin}s" fill="freeze"/></circle>
+      ${ballMotion}
+    </g>
     ${impact}${fx}</g>`);
 
   // Camera: punch in on the consequence area as the ball lands.
