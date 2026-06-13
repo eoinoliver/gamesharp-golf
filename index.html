@@ -834,9 +834,11 @@ svg { display:block; }
 }
 .hole-map-wrap svg {
   display:block; width:100%;
-  transition: transform 1s var(--ease-out-quint);
+  transition: transform .55s var(--ease-out-quint);
   transform-origin:center center; will-change:transform;
 }
+.hole-map-wrap.thud { animation: mapThud .34s ease; }
+@keyframes mapThud { 0%{transform:translateY(0);} 22%{transform:translateY(3px);} 48%{transform:translateY(-1px);} 100%{transform:translateY(0);} }
 .hole-map-wrap::after {
   content:''; position:absolute; inset:0; pointer-events:none;
   box-shadow: inset 0 -28px 40px -20px rgba(0,0,0,.6), inset 0 0 60px -30px rgba(0,0,0,.5);
@@ -6192,36 +6194,91 @@ function animateHoleBall(node, valence, lastDec){
     start = HS.ballPos || J[0];
   }
   HS.ballPos = end;
-  const midX=(start[0]+end[0])/2, midY=Math.min(start[1],end[1])-30;
-  const d=`M${start[0]},${start[1]} Q${midX},${midY} ${end[0]},${end[1]}`;
   const col = valence==='bad' ? '#e05252' : (valence==='good' ? '#4caf50' : '#c8a84b');
+  const sx=start[0], sy=start[1], Lx=end[0], Ly=end[1];
 
-  // Shot-pattern dispersion at the landing zone — sized by handicap band x aggression.
-  const band = (S.profile && S.profile.answers && typeof S.profile.answers.handicap === 'number') ? S.profile.answers.handicap : 1;
-  const bandArr = [1.6,1.2,0.9,0.65];
-  const bandF = bandArr[band] != null ? bandArr[band] : 1.2;
-  const riskF = ({agg:1.45, smart:1.0, safe:0.75, exec:0.9})[(lastDec && lastDec.type)] || 1.0;
-  const rx = Math.max(9, Math.min(42, 14 * bandF * riskF));
-  const ry = rx * 0.6;
-  const disp = `<ellipse cx="${end[0]}" cy="${end[1]}" rx="0" ry="0" fill="${col}" fill-opacity="0.13" stroke="${col}" stroke-opacity="0.7" stroke-width="1.2" stroke-dasharray="3 3">
+  // Classify the consequence so the feedback is bespoke, never decorative.
+  const isRoad = /road/.test(txt) && valence==='bad';
+  const isOB   = /out of bounds|o\.b\.|hotel|lost/.test(txt) && valence==='bad';
+  const isGreen= valence==='good';
+  const isSpin = valence==='good' && /(wedge|pitch|spin|check|backstop|stop|soft|dance|nip)/.test(txt);
+  const kind = /putt|lag|green-?read/.test(txt) ? 'putt' : (/(wedge|pitch|chip|flop|bump|lob)/.test(txt) ? 'wedge' : 'full');
+
+  // Dispersion at the landing — handicap band x aggression (wide band + aggressive = wide spread).
+  const band = (S.profile && S.profile.answers && typeof S.profile.answers.handicap==='number') ? S.profile.answers.handicap : 1;
+  const bandArr=[1.6,1.2,0.9,0.65]; const bandF = bandArr[band]!=null ? bandArr[band] : 1.2;
+  const riskF = ({agg:1.45,smart:1.0,safe:0.75,exec:0.9})[(lastDec&&lastDec.type)] || 1.0;
+  const rx = Math.max(9, Math.min(42, 14*bandF*riskF)); const ry = rx*0.6;
+
+  // Flight arc — apex height by shot kind (wedge climbs, putt rolls flat).
+  const span = Math.hypot(Lx-sx, Ly-sy) || 1;
+  const arcH = kind==='putt' ? 3 : (kind==='wedge' ? Math.min(58, span*0.5+24) : Math.min(46, span*0.3+18));
+  const apexX=(sx+Lx)/2, apexY=Math.min(sy,Ly)-arcH;
+  const flight = `M${sx},${sy} Q${apexX.toFixed(1)},${apexY.toFixed(1)} ${Lx},${Ly}`;
+  const fDur = kind==='putt' ? 0.7 : 0.85, fBegin=0.25;
+  const landAt = fBegin + fDur;
+
+  // Bounce / roll AFTER landing — physical second motion, varies by surface.
+  const dir = [(Lx-sx)/span, (Ly-sy)/span];
+  let rollPath='', rest=[Lx,Ly], rDur=0.45;
+  if(inWater){ rollPath=''; }
+  else if(isOB){   const Ox=Lx+dir[0]*42, Oy=Ly+dir[1]*42; rollPath=`M${Lx},${Ly} L${Ox.toFixed(1)},${Oy.toFixed(1)}`; rest=[Ox,Oy]; rDur=0.55; }
+  else if(isRoad){ const Rx=Lx+dir[0]*30, Ry=Ly+dir[1]*30; rollPath=`M${Lx},${Ly} Q${((Lx+Rx)/2).toFixed(1)},${(Ly-18).toFixed(1)} ${Rx.toFixed(1)},${Ry.toFixed(1)}`; rest=[Rx,Ry]; rDur=0.42; }
+  else if(inSand){ const Sx=Lx+dir[0]*3, Sy=Ly+dir[1]*3; rollPath=`M${Lx},${Ly} L${Sx.toFixed(1)},${Sy.toFixed(1)}`; rest=[Sx,Sy]; rDur=0.22; }
+  else if(isSpin){ const Bx=Lx-dir[0]*12, By=Ly-dir[1]*12; rollPath=`M${Lx},${Ly} Q${(Lx+dir[0]*6).toFixed(1)},${(Ly-7).toFixed(1)} ${Bx.toFixed(1)},${By.toFixed(1)}`; rest=[Bx,By]; rDur=0.5; }
+  else { const Fx=Lx+dir[0]*16, Fy=Ly+dir[1]*16; rollPath=`M${Lx},${Ly} Q${((Lx+Fx)/2).toFixed(1)},${(Ly-8).toFixed(1)} ${Fx.toFixed(1)},${Fy.toFixed(1)}`; rest=[Fx,Fy]; rDur=0.45; }
+  HS.ballPos = rest;
+  const rollBegin = landAt;
+  const settle = rollPath ? rollBegin + rDur : landAt + 0.4;
+  const fb = landAt.toFixed(2);
+
+  const disp = `<ellipse cx="${Lx}" cy="${Ly}" rx="0" ry="0" fill="${col}" fill-opacity="0.13" stroke="${col}" stroke-opacity="0.7" stroke-width="1.2" stroke-dasharray="3 3">
     <animate attributeName="rx" values="0;${(rx*1.18).toFixed(1)};${rx.toFixed(1)}" keyTimes="0;0.62;1" dur="0.5s" begin="0s" calcMode="spline" keySplines="0.3 0 0.2 1;0.3 0 0.6 1" fill="freeze"/>
     <animate attributeName="ry" values="0;${(ry*1.18).toFixed(1)};${ry.toFixed(1)}" keyTimes="0;0.62;1" dur="0.5s" begin="0s" calcMode="spline" keySplines="0.3 0 0.2 1;0.3 0 0.6 1" fill="freeze"/>
-    <animate attributeName="opacity" values="1;1;0.8" keyTimes="0;0.85;1" dur="1.2s" begin="0s" fill="freeze"/>
+    <animate attributeName="opacity" values="1;1;0.75" keyTimes="0;0.8;1" dur="1.3s" begin="0s" fill="freeze"/>
   </ellipse>`;
-  const impact = `<circle cx="${end[0]}" cy="${end[1]}" r="2" fill="none" stroke="${col}" stroke-width="2" opacity="0">
-    <animate attributeName="r" values="2;${(rx*0.75).toFixed(1)};${(rx*0.6).toFixed(1)}" keyTimes="0;0.7;1" dur="0.45s" begin="1.05s" calcMode="spline" keySplines="0.2 0.7 0.3 1;0.3 0 0.6 1" fill="freeze"/>
-    <animate attributeName="opacity" values="0;0.85;0" keyTimes="0;0.35;1" dur="0.5s" begin="1.05s" fill="freeze"/>
-  </circle>`;
+
+  const ballMotion = `<animateMotion dur="${fDur}s" begin="${fBegin}s" fill="freeze" calcMode="spline" keySplines="0.15 0.5 0.3 1" path="${flight}"/>`
+    + (rollPath ? `<animateMotion dur="${rDur}s" begin="${rollBegin.toFixed(2)}s" fill="freeze" calcMode="spline" keySplines="0.2 0.7 0.3 1" path="${rollPath}"/>` : '');
+  const ballExtra = inWater
+    ? `<animate attributeName="opacity" values="1;1;0" keyTimes="0;0.5;1" dur="${(landAt+0.45).toFixed(2)}s" begin="${fBegin}s" fill="freeze"/>`
+    : (isOB ? `<animate attributeName="fill" values="#fff;#999" dur="0.5s" begin="${(rollBegin+0.15).toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values="1;0.3" dur="0.55s" begin="${(rollBegin+0.15).toFixed(2)}s" fill="freeze"/>` : '');
+
   let fx='';
-  if(inWater) fx=`<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.05;.6;1" dur=".9s" begin="1.1s" fill="freeze"/><circle cx="${end[0]}" cy="${end[1]}" r="11" fill="none" stroke="#64b5f6" stroke-width="1.5"/><line x1="${end[0]}" y1="${end[1]-4}" x2="${end[0]-5}" y2="${end[1]-14}" stroke="#64b5f6" stroke-width="2" stroke-linecap="round"/><line x1="${end[0]}" y1="${end[1]-4}" x2="${end[0]+5}" y2="${end[1]-14}" stroke="#64b5f6" stroke-width="2" stroke-linecap="round"/></g>`;
-  else if(inSand) fx=`<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.05;.55;1" dur=".85s" begin="1.1s" fill="freeze"/><circle cx="${end[0]}" cy="${end[1]}" r="8" fill="#d4b896" opacity=".75"/><line x1="${end[0]}" y1="${end[1]}" x2="${end[0]-6}" y2="${end[1]-12}" stroke="#c8a060" stroke-width="2" stroke-linecap="round"/><line x1="${end[0]}" y1="${end[1]}" x2="${end[0]+6}" y2="${end[1]-12}" stroke="#c8a060" stroke-width="2" stroke-linecap="round"/></g>`;
+  if(inWater){
+    fx = `<g><circle cx="${Lx}" cy="${Ly}" r="3" fill="none" stroke="#64b5f6" stroke-width="1.6" opacity="0"><animate attributeName="r" values="3;17" dur="0.9s" begin="${fb}s" fill="freeze"/><animate attributeName="opacity" values="0.9;0" dur="0.9s" begin="${fb}s" fill="freeze"/></circle>
+      <circle cx="${Lx}" cy="${Ly}" r="3" fill="none" stroke="#8fd0ff" stroke-width="1.2" opacity="0"><animate attributeName="r" values="3;11" dur="0.7s" begin="${(landAt+0.12).toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values="0.8;0" dur="0.7s" begin="${(landAt+0.12).toFixed(2)}s" fill="freeze"/></circle>
+      <g opacity="0"><animate attributeName="opacity" values="0;1;0" keyTimes="0;0.1;1" dur="0.6s" begin="${fb}s" fill="freeze"/><line x1="${Lx}" y1="${Ly-3}" x2="${Lx-5}" y2="${Ly-14}" stroke="#8fd0ff" stroke-width="2" stroke-linecap="round"/><line x1="${Lx}" y1="${Ly-3}" x2="${Lx+5}" y2="${Ly-14}" stroke="#8fd0ff" stroke-width="2" stroke-linecap="round"/><line x1="${Lx}" y1="${Ly-3}" x2="${Lx}" y2="${Ly-17}" stroke="#bfe6ff" stroke-width="2" stroke-linecap="round"/></g></g>`;
+  } else if(inSand){
+    fx = `<g opacity="0"><animate attributeName="opacity" values="0;1;0" keyTimes="0;0.12;1" dur="0.7s" begin="${fb}s" fill="freeze"/><ellipse cx="${Lx}" cy="${Ly}" rx="11" ry="5" fill="#e3cfa3" opacity="0.8"/><line x1="${Lx}" y1="${Ly}" x2="${Lx-7}" y2="${Ly-11}" stroke="#cdae74" stroke-width="2" stroke-linecap="round"/><line x1="${Lx}" y1="${Ly}" x2="${Lx+7}" y2="${Ly-11}" stroke="#cdae74" stroke-width="2" stroke-linecap="round"/><line x1="${Lx}" y1="${Ly}" x2="${Lx}" y2="${Ly-13}" stroke="#e3cfa3" stroke-width="2" stroke-linecap="round"/></g>`;
+  } else if(isRoad){
+    fx = `<g opacity="0"><animate attributeName="opacity" values="0;1;0" keyTimes="0;0.15;1" dur="0.45s" begin="${fb}s" fill="freeze"/><line x1="${Lx}" y1="${Ly}" x2="${(Lx+dir[0]*14).toFixed(1)}" y2="${(Ly-10).toFixed(1)}" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><line x1="${Lx}" y1="${Ly}" x2="${(Lx+dir[0]*17).toFixed(1)}" y2="${Ly}" stroke="#ddd" stroke-width="1.5" stroke-linecap="round"/><line x1="${Lx}" y1="${Ly}" x2="${(Lx+dir[0]*12).toFixed(1)}" y2="${(Ly+9).toFixed(1)}" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></g>`;
+  } else if(isOB){
+    fx = `<g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.4s" begin="${(landAt+0.25).toFixed(2)}s" fill="freeze"/><text x="${Lx}" y="${(Ly-10).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="800" fill="#e05252" font-family="DM Sans,sans-serif" letter-spacing="1">O.B.</text></g>`;
+  } else if(isSpin){
+    fx = `<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.8;1" dur="1s" begin="${fb}s" fill="freeze"/><path d="M${(Lx+4).toFixed(1)},${(Ly-2).toFixed(1)} q-9,-9 -16,-3" stroke="#4caf50" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M${(Lx-12).toFixed(1)},${(Ly-5).toFixed(1)} l-3,-1 1,4" stroke="#4caf50" stroke-width="1.8" fill="none" stroke-linecap="round"/></g>`;
+  } else if(isGreen){
+    fx = `<g opacity="0"><animate attributeName="opacity" values="0;1;1" keyTimes="0;0.3;1" dur="0.6s" begin="${fb}s" fill="freeze"/><circle cx="${Lx}" cy="${Ly}" r="0" fill="none" stroke="#4caf50" stroke-width="1.6"><animate attributeName="r" values="0;12;10" keyTimes="0;0.6;1" dur="0.5s" begin="${fb}s" fill="freeze"/></circle><path d="M${(Lx-4).toFixed(1)},${Ly} l3,3 6,-7" stroke="#4caf50" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="18" stroke-dashoffset="18"><animate attributeName="stroke-dashoffset" values="18;0" dur="0.35s" begin="${(landAt+0.1).toFixed(2)}s" fill="freeze"/></path></g>`;
+  }
+  const impact = (inWater||isOB||isGreen) ? '' : `<circle cx="${Lx}" cy="${Ly}" r="2" fill="none" stroke="${col}" stroke-width="2" opacity="0"><animate attributeName="r" values="2;${(rx*0.7).toFixed(1)};${(rx*0.55).toFixed(1)}" keyTimes="0;0.7;1" dur="0.45s" begin="${fb}s" calcMode="spline" keySplines="0.2 0.7 0.3 1;0.3 0 0.6 1" fill="freeze"/><animate attributeName="opacity" values="0;0.8;0" keyTimes="0;0.35;1" dur="0.5s" begin="${fb}s" fill="freeze"/></circle>`;
+
+  const dash=(span*2.6+44).toFixed(0);
   svg.insertAdjacentHTML('beforeend', `<g>
     ${disp}
-    <path d="${d}" stroke="${col}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".4" stroke-dasharray="420" stroke-dashoffset="420"><animate attributeName="stroke-dashoffset" from="420" to="0" dur=".9s" begin=".25s" fill="freeze"/></path>
-    <circle r="4.5" fill="${col}" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".05s" begin=".25s" fill="freeze"/><animateMotion dur=".9s" begin=".25s" fill="freeze" calcMode="spline" keySplines="0.18 0.5 0.3 1" path="${d}"/></circle>
-    ${impact}
-    ${fx}</g>`);
-  return 1250;
+    <path d="${flight}" stroke="${col}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".4" stroke-dasharray="${dash}" stroke-dashoffset="${dash}"><animate attributeName="stroke-dashoffset" to="0" dur="${fDur}s" begin="${fBegin}s" fill="freeze"/></path>
+    <circle r="4.5" fill="#fff" stroke="${col}" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".05s" begin="${fBegin}s" fill="freeze"/>${ballMotion}${ballExtra}</circle>
+    ${impact}${fx}</g>`);
+
+  // Camera: punch in on the consequence area as the ball lands.
+  try{
+    svg.style.transformOrigin = `${(Lx/340*100).toFixed(1)}% ${(Ly/160*100).toFixed(1)}%`;
+    setTimeout(()=>{ try{ svg.style.transform='scale(1.5)'; }catch(e){} }, Math.max(0,(landAt-0.05)*1000));
+  }catch(e){}
+
+  // Tactile thud — bunker and road shake the frame on contact.
+  if(inSand||isRoad){ setTimeout(()=>{ wrap.classList.remove('thud'); void wrap.offsetWidth; wrap.classList.add('thud'); }, landAt*1000); }
+
+  return Math.round((rollBegin + (rollPath ? rDur*0.65 : 0.35))*1000 + 200);
 }
 
 function renderHoleMap(state){
