@@ -112,8 +112,9 @@ svg { display:block; }
    HOME
 ============================================= */
 #view-home { background:var(--dark); padding-bottom:80px; }
-.hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:center; justify-content:space-between; padding:13px 14px 0; }
-.hero-topbar .logo-wordmark { font-size:21px; text-shadow:0 2px 8px rgba(0,0,0,.65); }
+.hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:flex-start; justify-content:space-between; padding:14px 14px 0; }
+.hero-topbar .logo-wordmark { font-size:30px; line-height:1; text-shadow:0 2px 10px rgba(0,0,0,.7); }
+.hero-tagline { font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:rgba(255,255,255,.82); margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.75); }
 .hero-topbar-right { display:flex; align-items:center; gap:8px; }
 .hero-streak { background:rgba(0,0,0,.45); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.18); padding:5px 11px; }
 .hero-topbar .profile-btn { background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.18); }
@@ -1935,13 +1936,15 @@ function renderHome(){
   if(heroWrap && !heroWrap.innerHTML){
     heroWrap.innerHTML = golfHeroPanel() + `
       <div class="hero-topbar">
-        <div class="logo-wordmark"><span class="lw-w">GAME</span><span class="lw-g">SHARP</span></div>
+        <div class="hero-brand">
+          <div class="logo-wordmark"><span class="lw-w">GAME</span><span class="lw-g">SHARP</span></div>
+          <div class="hero-tagline">See clearer, think sharper.</div>
+        </div>
         <div class="hero-topbar-right">
           <div class="streak-badge hero-streak"><span class="flame">🔥</span><span class="count" id="streak-count">0</span></div>
           <button class="profile-btn" id="profile-btn" onclick="showProfile()">👤</button>
         </div>
-      </div>
-      <div class="home-hero-tag"><div class="t2">See clearer,<br>think sharper.</div></div>`;
+      </div>`;
   }
   const sc = document.getElementById('streak-count');
   if(sc) sc.textContent = S.streak;
