@@ -266,6 +266,16 @@ svg { display:block; }
   border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:15px 16px; cursor:pointer;
 }
 .tech-entry-card:active { opacity:.88; }
+.tech-entry-card.tech-hero {
+  margin:14px 16px 6px; padding:20px 18px; gap:16px;
+  background:linear-gradient(150deg,#1e2c16 0%,#12180f 55%,#0e110e 100%);
+  border:1px solid rgba(200,168,75,.30);
+  box-shadow:0 12px 32px rgba(0,0,0,.46);
+}
+.tech-hero .tech-entry-icon { font-size:28px; width:54px; height:54px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.25); }
+.tech-hero .tech-entry-title { font-size:28px; }
+.tech-hero .tech-entry-sub { font-size:12.5px; }
+.tech-hero .tech-entry-arrow { font-size:24px; }
 .tech-entry-icon { font-size:26px; flex-shrink:0; }
 .tech-entry-body { flex:1; min-width:0; }
 .tech-entry-eyebrow { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); text-transform:uppercase; margin-bottom:3px; }
@@ -328,18 +338,20 @@ svg { display:block; }
 .pillar-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .pillar-card {
   background:var(--card); border-radius:var(--radius);
-  padding:16px; border:1px solid var(--border);
+  padding:18px; border:1px solid var(--border);
   cursor:pointer; transition:transform .15s,border-color .15s;
   position:relative; overflow:hidden;
-  min-height:110px; display:flex; flex-direction:column; justify-content:space-between;
+  min-height:132px; display:flex; flex-direction:column; justify-content:space-between;
 }
 .pillar-card:active { transform:scale(.97); }
-.pillar-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--pc); }
+.pillar-card::before { content:''; position:absolute; inset:0; background:radial-gradient(125% 85% at 0% 0%, color-mix(in srgb, var(--pc) 16%, transparent) 0%, transparent 58%); pointer-events:none; }
+.pillar-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--pc); }
 .pillar-card.wide { grid-column:1/-1; }
-.pillar-card .pc-emoji { font-size:26px; }
-.pillar-card .pc-name  { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--text); margin-top:8px; line-height:1.1; }
-.pillar-card .pc-count { font-size:11px; color:var(--muted); margin-top:4px; }
-.pillar-card .pc-bar   { margin-top:8px; }
+.pillar-card > * { position:relative; z-index:1; }
+.pillar-card .pc-emoji { font-size:30px; }
+.pillar-card .pc-name  { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--text); margin-top:10px; line-height:1.05; }
+.pillar-card .pc-count { font-size:11.5px; color:var(--muted); margin-top:5px; }
+.pillar-card .pc-bar   { margin-top:10px; }
 
 /* Pro Lens Strip */
 .pro-lens-strip { margin-top:20px; }
@@ -1057,11 +1069,8 @@ svg { display:block; }
     <div class="sharpen-sub">Train the decisions that save shots.</div>
   </div>
 
-  <!-- Your game: diagnose + train the leak -->
-  <div id="debrief-card-wrap"></div>
-
-  <!-- Technique: Fix a Shot -->
-  <div class="tech-entry-card" onclick="openTechnique()">
+  <!-- 1 · Technique: Fix a Shot (hero) -->
+  <div class="tech-entry-card tech-hero" onclick="openTechnique()">
     <div class="tech-entry-icon">🛠️</div>
     <div class="tech-entry-body">
       <div class="tech-entry-eyebrow">TECHNIQUE · FIX A SHOT</div>
@@ -1071,20 +1080,23 @@ svg { display:block; }
     <div class="tech-entry-arrow">→</div>
   </div>
 
-  <!-- Pre-Round Warm-Up -->
-  <div id="saturday-card-wrap"></div>
-
-  <!-- Pillars -->
+  <!-- 2 · Pillars -->
   <div class="home-section">
-    <p class="section-title">Pillars</p>
+    <p class="section-title">Train by pillar</p>
     <div class="pillar-grid" id="pillar-grid"></div>
   </div>
 
-  <!-- Pro Lens -->
+  <!-- 5 · Pro Lens -->
   <div class="home-section" style="padding:0">
     <p class="section-title" style="padding:0 16px;margin-top:20px">Pro Lens</p>
     <div class="pro-lens-scroll" id="pro-lens-scroll"></div>
   </div>
+
+  <!-- 3 · Your game: diagnose + train the leak -->
+  <div id="debrief-card-wrap" style="margin-top:8px"></div>
+
+  <!-- 4 · Pre-Round Warm-Up -->
+  <div id="saturday-card-wrap"></div>
 
   <div style="height:20px"></div>
 
@@ -2050,9 +2062,7 @@ function renderSharpen(){
       'Mental Game':    'Build your edge',
       'The 19th Hole':  'Know the game deeper'
     };
-    const countLabel = done === 0
-      ? pillarHooks[p.name] || 'Begin here'
-      : `${done}/${qCount} completed`;
+    const countLabel = pillarHooks[p.name] || 'Begin here';
     card.innerHTML = `
       <div class="pc-emoji">${p.emoji}</div>
       <div>
