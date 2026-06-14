@@ -266,16 +266,26 @@ svg { display:block; }
   border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:15px 16px; cursor:pointer;
 }
 .tech-entry-card:active { opacity:.88; }
-.tech-entry-card.tech-hero {
-  margin:14px 16px 6px; padding:20px 18px; gap:16px;
-  background:linear-gradient(150deg,#1e2c16 0%,#12180f 55%,#0e110e 100%);
-  border:1px solid rgba(200,168,75,.30);
-  box-shadow:0 12px 32px rgba(0,0,0,.46);
+.shot-clinic-card {
+  position:relative; overflow:hidden; cursor:pointer;
+  margin:14px 16px 6px; padding:20px 18px; min-height:128px;
+  background:linear-gradient(145deg,#20301a 0%,#141b11 52%,#0d100d 100%);
+  border:1px solid rgba(200,168,75,.32); border-radius:var(--radius);
+  box-shadow:0 12px 32px rgba(0,0,0,.48);
+  transition:transform .15s, border-color .2s;
 }
-.tech-hero .tech-entry-icon { font-size:28px; width:54px; height:54px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.25); }
-.tech-hero .tech-entry-title { font-size:28px; }
-.tech-hero .tech-entry-sub { font-size:12.5px; }
-.tech-hero .tech-entry-arrow { font-size:24px; }
+.shot-clinic-card:active { transform:scale(.99); border-color:rgba(200,168,75,.5); }
+.sc-art { position:absolute; inset:0 0 0 auto; width:64%; pointer-events:none;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 40%); mask-image:linear-gradient(90deg, transparent 0%, #000 40%); }
+.sc-art svg { width:100%; height:100%; display:block; }
+.sc-body { position:relative; z-index:1; max-width:64%; }
+.sc-eyebrow { font-size:9.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+.sc-title { font-family:'Bebas Neue',sans-serif; font-size:34px; color:#fff; line-height:.92; letter-spacing:.5px; }
+.sc-sub { font-size:12.5px; color:rgba(255,255,255,.64); margin-top:7px; line-height:1.4; }
+.sc-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:13px; }
+.sc-chip { font-size:10.5px; font-weight:700; letter-spacing:.03em; color:rgba(255,255,255,.82);
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:20px; padding:4px 11px; }
+.sc-arrow { position:absolute; right:18px; bottom:18px; z-index:2; color:var(--gold); font-size:22px; line-height:1; }
 .tech-entry-icon { font-size:26px; flex-shrink:0; }
 .tech-entry-body { flex:1; min-width:0; }
 .tech-entry-eyebrow { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); text-transform:uppercase; margin-bottom:3px; }
@@ -1069,15 +1079,35 @@ svg { display:block; }
     <div class="sharpen-sub">Train the decisions that save shots.</div>
   </div>
 
-  <!-- 1 · Technique: Fix a Shot (hero) -->
-  <div class="tech-entry-card tech-hero" onclick="openTechnique()">
-    <div class="tech-entry-icon">🛠️</div>
-    <div class="tech-entry-body">
-      <div class="tech-entry-eyebrow">TECHNIQUE · FIX A SHOT</div>
-      <div class="tech-entry-title">Find the culprit</div>
-      <div class="tech-entry-sub">Your common misses — and the one cue that fixes each.</div>
+  <!-- 1 · Shot Clinic (hero) -->
+  <div class="shot-clinic-card" onclick="openTechnique()">
+    <div class="sc-art" aria-hidden="true">
+      <svg viewBox="0 0 220 150" preserveAspectRatio="xMaxYMid meet" fill="none">
+        <g stroke="#c8a84b" opacity="0.5">
+          <circle cx="172" cy="48" r="27" stroke-width="1.4"/>
+          <circle cx="172" cy="48" r="16.5" stroke-width="1.4"/>
+          <line x1="172" y1="9" x2="172" y2="87" stroke-width="1"/>
+          <line x1="133" y1="48" x2="211" y2="48" stroke-width="1"/>
+        </g>
+        <path d="M14 142 Q66 122 108 98 T170 49" stroke="#7bdc7b" stroke-width="2.6" opacity="0.85" stroke-linecap="round"/>
+        <path d="M14 142 Q92 120 142 112 T208 100" stroke="#c8a84b" stroke-width="1.6" opacity="0.32" stroke-dasharray="3 5" stroke-linecap="round"/>
+        <circle cx="14" cy="142" r="3.6" fill="#fff" opacity="0.9"/>
+        <circle cx="172" cy="48" r="4.4" fill="#7bdc7b"/>
+        <circle cx="172" cy="48" r="9" fill="#7bdc7b" opacity="0.22"/>
+      </svg>
     </div>
-    <div class="tech-entry-arrow">→</div>
+    <div class="sc-body">
+      <div class="sc-eyebrow">⛳ Diagnose your miss</div>
+      <div class="sc-title">SHOT CLINIC</div>
+      <div class="sc-sub">Find the culprit — the one cue that fixes it.</div>
+      <div class="sc-chips">
+        <span class="sc-chip">Slice</span>
+        <span class="sc-chip">Hook</span>
+        <span class="sc-chip">Thin</span>
+        <span class="sc-chip">Chunk</span>
+      </div>
+    </div>
+    <div class="sc-arrow">→</div>
   </div>
 
   <!-- 2 · Pillars -->
@@ -1408,7 +1438,7 @@ svg { display:block; }
 <div class="view" id="view-technique">
   <div class="tech-topbar">
     <button class="tech-back" id="tech-back" onclick="techBack()">‹ Back</button>
-    <div class="tech-topbar-title" id="tech-topbar-title">Fix a Shot</div>
+    <div class="tech-topbar-title" id="tech-topbar-title">Shot Clinic</div>
     <button class="tech-close" onclick="renderSharpen();showView('sharpen')">✕</button>
   </div>
   <div class="tech-app" id="tech-app"><!-- rendered by JS --></div>
@@ -3460,7 +3490,7 @@ function techApp(){ return document.getElementById('tech-app'); }
 
 function techRenderHome(){
   techState.strokeIdx = -1;
-  techSetTop('Fix a Shot', '‹ Sharpen');
+  techSetTop('Shot Clinic', '‹ Sharpen');
   const cards = GOLF_TECHNIQUE.map((g,i) =>
     `<button class="tech-stroke-card" onclick="techOpenStroke(${i})">
       <div class="tech-stroke-emoji">${g.emoji}</div>
@@ -3468,7 +3498,7 @@ function techRenderHome(){
       <div class="tech-stroke-meta">${g.faults.length} common misses</div>
     </button>`).join('');
   techApp().innerHTML = `
-    <div class="tech-eyebrow">Technique</div>
+    <div class="tech-eyebrow">Shot Clinic · Diagnose your miss</div>
     <h1 class="tech-h1">Find the culprit</h1>
     <p class="tech-intro">Pick a club. We'll show the misses you actually make — and the one cue that fixes each.</p>
     <div class="tech-grid">${cards}</div>`;
