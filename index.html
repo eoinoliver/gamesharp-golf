@@ -1154,8 +1154,7 @@ svg { display:block; }
     <div class="ph-name"  id="ph-name">Score Smart</div>
     <div class="ph-desc"  id="ph-desc"></div>
     <div class="ph-stats">
-      <div class="ph-stat"><div class="psv" id="ph-qcount">0</div><div class="psl">Questions</div></div>
-      <div class="ph-stat"><div class="psv" id="ph-done">0</div><div class="psl">Completed</div></div>
+      <div class="ph-stat"><div class="psv" id="ph-progress">0%</div><div class="psl">Progress</div></div>
       <div class="ph-stat"><div class="psv" id="ph-acc">—</div><div class="psl">Accuracy</div></div>
     </div>
   </div>
@@ -2192,9 +2191,8 @@ function openPillar(pillar){
   const done  = qs.filter(q => S.completed[q.id]).length;
   const stats = S.pillarStats[pillar.name] || {correct:0, total:0};
   const acc   = stats.total > 0 ? Math.round(stats.correct/stats.total*100)+'%' : '—';
-  document.getElementById('ph-qcount').textContent = qs.length;
-  document.getElementById('ph-done').textContent   = done;
-  document.getElementById('ph-acc').textContent    = acc;
+  document.getElementById('ph-progress').textContent = qs.length ? Math.round(done/qs.length*100)+'%' : '0%';
+  document.getElementById('ph-acc').textContent      = acc;
 
   // Modules
   const list = document.getElementById('module-list');
@@ -2204,12 +2202,13 @@ function openPillar(pillar){
     if(!modQs.length) return;
     const isLocked = i > 0 && modQs[0].tier === 'Pro' && !S.profile?.isPro;
     const modDone  = modQs.filter(q => S.completed[q.id]).length;
+    const modStatus = isLocked ? 'Pro' : (modDone === 0 ? 'Start training' : (modDone >= modQs.length ? 'Reviewed' : 'In progress'));
     const card = document.createElement('div');
     card.className = 'module-card' + (isLocked ? ' locked' : '');
     card.innerHTML = `
       <div>
         <div class="mc-name">${mod}</div>
-        <div class="mc-count">${modQs.length} questions · ${modDone} done</div>
+        <div class="mc-count">${modStatus}</div>
       </div>
       <div class="mc-right">${isLocked ? '🔒' : '▶'}</div>`;
     if(!isLocked){
@@ -3508,7 +3507,7 @@ function techRenderHome(){
       </svg>
       <div class="tech-stroke-emoji">${g.emoji}</div>
       <div class="tech-stroke-name">${g.label}</div>
-      <div class="tech-stroke-meta">${g.faults.length} common misses</div>
+      <div class="tech-stroke-meta">Common misses</div>
     </button>`).join('');
   techApp().innerHTML = `
     <div class="tech-eyebrow">Shot Clinic · Diagnose your miss</div>
