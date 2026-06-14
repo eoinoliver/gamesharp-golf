@@ -307,6 +307,9 @@ svg { display:block; }
 .tech-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .tech-stroke-card { position:relative; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius); padding:15px 14px; cursor:pointer; }
 .tech-stroke-card:active { opacity:.85; }
+.tech-stroke-card .tsc-art { position:absolute; top:0; right:0; width:64px; height:64px; z-index:0; pointer-events:none;
+  -webkit-mask-image:linear-gradient(225deg,#000 28%,transparent 76%); mask-image:linear-gradient(225deg,#000 28%,transparent 76%); }
+.tech-stroke-card > :not(.tsc-art) { position:relative; z-index:1; }
 .tech-stroke-emoji { font-size:26px; }
 .tech-stroke-name { font-family:'Bebas Neue',sans-serif; font-size:21px; color:#fff; margin-top:7px; line-height:1; }
 .tech-stroke-meta { font-size:11.5px; color:var(--muted); margin-top:4px; }
@@ -1102,9 +1105,9 @@ svg { display:block; }
       <div class="sc-sub">Find the culprit — the one cue that fixes it.</div>
       <div class="sc-chips">
         <span class="sc-chip">Slice</span>
-        <span class="sc-chip">Hook</span>
-        <span class="sc-chip">Thin</span>
         <span class="sc-chip">Chunk</span>
+        <span class="sc-chip">Thin</span>
+        <span class="sc-chip">3-putt</span>
       </div>
     </div>
     <div class="sc-arrow">→</div>
@@ -3493,6 +3496,16 @@ function techRenderHome(){
   techSetTop('Shot Clinic', '‹ Sharpen');
   const cards = GOLF_TECHNIQUE.map((g,i) =>
     `<button class="tech-stroke-card" onclick="techOpenStroke(${i})">
+      <svg class="tsc-art" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+        <g stroke="#c8a84b" opacity="0.4">
+          <circle cx="58" cy="22" r="13" stroke-width="1.2"/>
+          <circle cx="58" cy="22" r="7" stroke-width="1.2"/>
+          <line x1="58" y1="5" x2="58" y2="39" stroke-width="0.8"/>
+          <line x1="41" y1="22" x2="75" y2="22" stroke-width="0.8"/>
+        </g>
+        <path d="M6 70 Q26 56 40 44 T57 23" stroke="#7bdc7b" stroke-width="1.8" opacity="0.6" stroke-linecap="round"/>
+        <circle cx="58" cy="22" r="2.6" fill="#7bdc7b"/>
+      </svg>
       <div class="tech-stroke-emoji">${g.emoji}</div>
       <div class="tech-stroke-name">${g.label}</div>
       <div class="tech-stroke-meta">${g.faults.length} common misses</div>
