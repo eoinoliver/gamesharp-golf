@@ -252,6 +252,9 @@ svg { display:block; }
 .wob-ready.show{ animation:wobFadeUp .55s var(--ease-out-quint) both; }
 .wob-cta{ width:100%; background:#4caf50; color:#06140a; font-family:'Bebas Neue',sans-serif; font-size:19px; letter-spacing:1.5px; border:none; border-radius:13px; padding:15px; cursor:pointer; transition:transform .15s,box-shadow .25s; box-shadow:0 6px 22px rgba(76,175,80,.28); }
 .wob-cta:active{ transform:scale(.98); }
+.wob-after-row{ display:flex; gap:10px; margin-top:10px; }
+.wob-cta-ghost{ flex:1; background:rgba(255,255,255,.05); color:rgba(255,255,255,.78); font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; border:1px solid rgba(255,255,255,.14); border-radius:12px; padding:12px 10px; cursor:pointer; transition:transform .15s,background .2s; }
+.wob-cta-ghost:active{ transform:scale(.98); background:rgba(255,255,255,.09); }
 @keyframes wobGlow{ 0%{box-shadow:0 0 0 1px #4caf50,0 0 0 rgba(76,175,80,0);} 55%{box-shadow:0 0 0 1px #4caf50,0 0 26px rgba(76,175,80,.42);} 100%{box-shadow:0 0 0 1px #4caf50,0 0 22px rgba(76,175,80,.26);} }
 @keyframes wobTick{ from{transform:scale(0) rotate(-20deg);opacity:0;} to{transform:scale(1) rotate(0);opacity:1;} }
 @keyframes wobFadeUp{ from{opacity:0;transform:translateY(9px);} to{opacity:1;transform:translateY(0);} }
@@ -6669,7 +6672,11 @@ function coldChoose(i){
         <div class="cv-body">${o.verdict}</div>
         <div class="cv-insight">${GOLF_COLD.insight}</div>
       </div>
-      <button class="wob-cta wob-next" onclick="coldContinue()">Tune this to my game →</button>`;
+      <button class="wob-cta wob-next" onclick="showColdOpen()">Next read →</button>
+      <div class="wob-after-row">
+        <button class="wob-cta-ghost" onclick="skipWelcomeOnboarding()">Enter app</button>
+        <button class="wob-cta-ghost" onclick="coldContinue()">Tune to my game</button>
+      </div>`;
   }
   const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='none';
   setTimeout(()=>{ const r=document.getElementById('coldReveal'); if(r) r.scrollIntoView({behavior:'smooth',block:'center'}); },120);
