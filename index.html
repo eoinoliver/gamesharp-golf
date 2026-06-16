@@ -1156,6 +1156,10 @@ svg { display:block; }
 .pp-course-card:active { transform:scale(.99); }
 .pp-course-thumb { position:relative; aspect-ratio:16/7; overflow:hidden; }
 .pp-course-thumb svg { width:100%; height:100%; display:block; }
+.pp-course-thumb img { width:100%; height:100%; display:block; object-fit:cover; object-position:center 32%; }
+/* Photo hero: show the full designed image (title baked in), no HTML overlay */
+.pp-hero.pp-hero-photo { height:auto; overflow:visible; }
+.pp-hero-photo img { width:100%; display:block; }
 .pp-course-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.05) 40%, rgba(6,10,14,.78) 100%); }
 .pp-course-name { position:absolute; left:14px; bottom:11px; z-index:2; font-family:'Bebas Neue',sans-serif; font-size:27px; color:#fff; letter-spacing:.5px; line-height:.95; text-shadow:0 2px 10px rgba(0,0,0,.7); }
 .pp-course-meta { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; font-size:12px; color:var(--muted); }
@@ -1283,9 +1287,6 @@ svg { display:block; }
       <div class="mode-cap">⛳ <strong>2 courses:</strong> Laytown · Baltray</div>
     </div>
   </div>
-
-  <!-- One contextual strip: your leak (when known) -->
-  <div id="home-leak-wrap"></div>
 
   <!-- Free value, zero taps: today's pocket cue (tennis "one thing to remember") -->
   <div class="one-thing" id="one-thing"></div>
@@ -2319,18 +2320,7 @@ function renderHome(){
     dcBtn.onclick = startDaily;
   }
 
-  // Contextual strip: train your leak (single slot — Sharpen holds the rest)
-  const leakWrap = document.getElementById('home-leak-wrap');
-  if(leakWrap){
-    leakWrap.innerHTML = S.leak ? `<div class="debrief-entry" onclick="launchLeakSession()">
-      <div class="debrief-left">
-        <div class="debrief-eyebrow">⚠ ${S.leak.provisional ? 'YOUR LIKELY LEAK' : 'YOUR DIAGNOSED LEAK'}</div>
-        <div class="debrief-title">${S.leak.icon} ${S.leak.label}</div>
-        <div class="debrief-sub">Five decisions targeting your leak</div>
-      </div>
-      <button class="debrief-btn">TRAIN →</button>
-    </div>` : '';
-  }
+  // (Leak training lives in Sharpen — removed from Home per design.)
 }
 
 // ── Sharpen — the training library ─────────────────────
@@ -3754,6 +3744,8 @@ const PLAY_PREP_COURSES = {
     identityLine: 'Where links golfers are made.',
     minutes: 6,
     location: 'Mornington, Co. Meath',
+    heroImg: 'laytown-hero.jpg',
+    thumbPos: '50% 20%',
     intro: `A traditional Irish links on the Meath coast, opened in 1909 and barely changed since. Not long by modern numbers, but it defends par with wind, firm ground and clever greens. It produced Ryder Cup players — and it rewards the thinker, not the basher. Here's how it wants to be played.`,
     identity: [
       `Laytown & Bettystown is a traditional Irish links — firm turf, raised greens and an exposed routing running along the strand at Mornington, Co. Meath. The club was founded in 1909 and has kept its links character for over a century.`,
@@ -3848,6 +3840,8 @@ const PLAY_PREP_COURSES = {
     identityLine: 'Where the East of Ireland is won.',
     minutes: 6,
     location: 'Baltray, Co. Louth',
+    heroImg: 'baltray-hero.jpg',
+    thumbPos: '50% 72%',
     intro: `County Louth — Baltray to everyone who plays it — is a pure championship links on the mouth of the Boyne, laid out in 1892 and routed through towering dunes by Tom Simpson in 1938. Home of the East of Ireland Championship since 1941, it tested Joe Carr, Darren Clarke and a young Shane Lowry. Its greens are rated among the finest in Ireland — and they, with the shifting wind, are what defend par. Here's how it wants to be played.`,
     identity: [
       `County Louth Golf Club, known to all as Baltray, sits on the linksland at the mouth of the River Boyne. Golf has been played here since 1892; in 1938 the architect Tom Simpson, with Molly Gourlay, routed the championship links through 190 acres of towering dunes that stands today.`,
@@ -4054,17 +4048,9 @@ function ppBriefHtml(c){
     ? `<div class="pp-return-done">✓ Round logged. <span style="color:var(--gold);text-decoration:underline;cursor:pointer" onclick="startPlayPrepReturn('${c.id}')">Update how it played</span></div>`
     : `<div class="pp-return-cta"><button onclick="startPlayPrepReturn('${c.id}')">Played it? Tell us how it went →</button></div>`;
   return `
-    <div class="pp-hero">
-      ${ppHeroSvg(c.id)}
-      ${ppWindLayer()}
-      <div class="pp-hero-veil"></div>
-      <div class="pp-hero-overlay">
-        <div class="pp-hero-eyebrow">Decision Brief · ${c.location}</div>
-        <div class="pp-hero-name">${c.name.toUpperCase()}</div>
-        <div class="pp-hero-identity">${c.identityLine}</div>
-        <div class="pp-hero-time">≈ ${c.minutes} min · 3 holes · ${c.decisions.length} reads</div>
-      </div>
-    </div>
+    ${c.heroImg
+      ? `<div class="pp-hero pp-hero-photo"><img src="${c.heroImg}" alt="${c.name}"></div>`
+      : `<div class="pp-hero">${ppHeroSvg(c.id)}${ppWindLayer()}<div class="pp-hero-veil"></div><div class="pp-hero-overlay"><div class="pp-hero-eyebrow">Decision Brief · ${c.location}</div><div class="pp-hero-name">${c.name.toUpperCase()}</div><div class="pp-hero-identity">${c.identityLine}</div><div class="pp-hero-time">≈ ${c.minutes} min · 3 holes · ${c.decisions.length} reads</div></div></div>`}
     <div class="pp-section">
       <div class="pp-intro pp-reveal">${c.intro}</div>
       <div class="pp-dna-strip pp-reveal">${strip}</div>
