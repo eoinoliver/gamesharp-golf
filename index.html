@@ -1250,16 +1250,23 @@ svg { display:block; }
     <div class="mode-card" onclick="startHole()">
       <div class="mode-thumb">
         <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="phSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2c46"/><stop offset="1" stop-color="#3a5b73"/></linearGradient></defs>
+          <defs>
+            <linearGradient id="phSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#16233f"/><stop offset="0.5" stop-color="#34526f"/>
+              <stop offset="0.82" stop-color="#b9763f"/><stop offset="1" stop-color="#e2a968"/></linearGradient>
+            <radialGradient id="phSun" cx="0.3" cy="0.4" r="0.55">
+              <stop offset="0" stop-color="#ffe9bf"/><stop offset="0.4" stop-color="#ffcf8a"/><stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/></radialGradient>
+          </defs>
           <rect width="200" height="150" fill="url(#phSky)"/>
-          <ellipse cx="118" cy="60" rx="48" ry="17" fill="#3f6a44"/>
-          <ellipse cx="118" cy="58" rx="31" ry="10" fill="#4d7d50"/>
-          <path d="M68 150 L96 66 H144 L150 150 Z" fill="#3f6a44"/>
-          <path d="M86 150 L104 68 H138 L130 150 Z" fill="#4d7d50" opacity="0.85"/>
-          <line x1="118" y1="60" x2="118" y2="34" stroke="#eee" stroke-width="2"/>
-          <path d="M118 34 L133 39 L118 44 Z" fill="#d8453f"/>
-          <circle cx="108" cy="138" r="3.5" fill="#fff"/>
-          <path d="M108 138 Q150 58 118 60" fill="none" stroke="#7bdc7b" stroke-width="2" stroke-dasharray="3 4" opacity="0.75"/>
+          <circle cx="60" cy="60" r="66" fill="url(#phSun)"/>
+          <path d="M0 84 Q60 70 112 80 T200 74 V150 H0 Z" fill="#233a2b"/>
+          <ellipse cx="124" cy="92" rx="42" ry="13" fill="#3f6a44"/>
+          <ellipse cx="124" cy="90" rx="27" ry="8" fill="#54925b"/>
+          <line x1="124" y1="90" x2="124" y2="64" stroke="#fff" stroke-width="1.8"/><path d="M124 64 L139 69 L124 74 Z" fill="#d8453f"/>
+          <path d="M0 150 Q34 120 66 150 Z" fill="#16261b"/>
+          <path d="M150 150 Q178 122 200 150 Z" fill="#16261b"/>
+          <path d="M82 146 Q156 44 124 90" fill="none" stroke="#9dff9d" stroke-width="2" opacity="0.85"/>
+          <circle cx="82" cy="146" r="3" fill="#fff"/><circle cx="124" cy="90" r="3" fill="#9dff9d"/>
         </svg>
         <div class="mode-thumb-veil"></div>
         <span class="mode-tag">Signature</span>
@@ -1271,17 +1278,22 @@ svg { display:block; }
       <div class="mode-thumb">
         <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="pcSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#162746"/><stop offset="0.7" stop-color="#c98a4e"/><stop offset="1" stop-color="#e8bb72"/></linearGradient>
-            <radialGradient id="pcSun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff4d8"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+            <linearGradient id="pcSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#152544"/><stop offset="0.5" stop-color="#3a5b73"/>
+              <stop offset="0.8" stop-color="#c88a4c"/><stop offset="1" stop-color="#e8bb72"/></linearGradient>
+            <radialGradient id="pcSun" cx="0.74" cy="0.46" r="0.5"><stop offset="0" stop-color="#fff4d8"/><stop offset="0.4" stop-color="#ffd98a"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+            <linearGradient id="pcSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2a266"/><stop offset="1" stop-color="#6f8d88"/></linearGradient>
           </defs>
           <rect width="200" height="150" fill="url(#pcSky)"/>
-          <circle cx="138" cy="74" r="58" fill="url(#pcSun)"/>
-          <circle cx="138" cy="76" r="13" fill="#fff1cf"/>
-          <path d="M0 94 Q60 84 120 92 T200 88 V150 H0 Z" fill="#2b4938"/>
-          <path d="M0 114 Q70 102 200 110 V150 H0 Z" fill="#3f6a44"/>
-          <path d="M0 130 Q80 120 200 126 V150 H0 Z" fill="#4d7d50" opacity="0.9"/>
-          <line x1="60" y1="120" x2="60" y2="100" stroke="#eee" stroke-width="2"/>
-          <path d="M60 100 L74 105 L60 110 Z" fill="#d8453f"/>
+          <circle cx="150" cy="68" r="62" fill="url(#pcSun)"/>
+          <circle cx="150" cy="70" r="13" fill="#fff1cf"/>
+          <rect x="0" y="84" width="200" height="10" fill="url(#pcSea)" opacity="0.6"/>
+          <path d="M0 96 Q60 82 120 92 T200 88 V150 H0 Z" fill="#243f2d"/>
+          <path d="M0 116 Q70 102 200 110 V150 H0 Z" fill="#37603d"/>
+          <path d="M0 132 Q80 120 200 126 V150 H0 Z" fill="#487a4d" opacity="0.92"/>
+          <g fill="#13202a" opacity="0.9"><rect x="168" y="52" width="9" height="50" rx="1.5"/><rect x="166" y="46" width="13" height="7" rx="1.5"/><polygon points="166,46 179,46 172.5,38"/></g>
+          <line x1="48" y1="120" x2="48" y2="102" stroke="#eee" stroke-width="1.6"/><path d="M48 102 L60 106 L48 110 Z" fill="#d8453f"/>
+          <line x1="104" y1="108" x2="104" y2="94" stroke="#eee" stroke-width="1.3" opacity="0.85"/><path d="M104 94 L113 97 L104 100 Z" fill="#d8453f" opacity="0.85"/>
         </svg>
         <div class="mode-thumb-veil"></div>
         <span class="mode-tag blue">New</span>
