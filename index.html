@@ -1157,6 +1157,9 @@ svg { display:block; }
 .pp-course-thumb { position:relative; aspect-ratio:16/7; overflow:hidden; }
 .pp-course-thumb svg { width:100%; height:100%; display:block; }
 .pp-course-thumb img { width:100%; height:100%; display:block; object-fit:cover; object-position:center 32%; }
+/* Photo course card: show the full designed image (title baked in), no name overlay */
+.pp-course-thumb-photo { aspect-ratio:auto; height:auto; }
+.pp-course-thumb-photo img { width:100%; height:auto; }
 /* Photo hero: show the full designed image (title baked in), no HTML overlay */
 .pp-hero.pp-hero-photo { height:auto; overflow:visible; }
 .pp-hero-photo img { width:100%; display:block; }
@@ -4229,9 +4232,11 @@ function openCoursePicker(){
     const done = LS.get('playprep_returned_'+id);
     const seen = LS.get('playprep_seen_'+id);
     const status = done ? 'Reviewed ✓' : (seen ? 'Continue →' : 'Brief →');
+    const thumb = c.heroImg
+      ? `<div class="pp-course-thumb pp-course-thumb-photo"><img src="${c.heroImg}" alt="${c.name}"></div>`
+      : `<div class="pp-course-thumb">${ppHeroSvg(id)}<div class="pp-course-veil"></div><div class="pp-course-name">${c.name.toUpperCase()}</div></div>`;
     return `<div class="pp-course-card" onclick="openPlayPrep('${id}')">
-      <div class="pp-course-thumb">${ppHeroSvg(id)}<div class="pp-course-veil"></div>
-        <div class="pp-course-name">${c.name.toUpperCase()}</div></div>
+      ${thumb}
       <div class="pp-course-meta"><span>${c.location} · ≈ ${c.minutes} min</span><span class="pp-course-go">${status}</span></div>
     </div>`; }).join('');
   const app = document.getElementById('pp-app');
