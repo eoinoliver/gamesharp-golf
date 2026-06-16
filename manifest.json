@@ -1,0 +1,15 @@
+{
+  "name": "GameSharp Golf",
+  "short_name": "GameSharp",
+  "description": "See the game differently. Decision training that sharpens how golfers read every shot.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111111",
+  "theme_color": "#111111",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
