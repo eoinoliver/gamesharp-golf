@@ -133,6 +133,7 @@ svg { display:block; }
 .mode-card:active { transform:scale(.98); }
 .mode-thumb { position:relative; aspect-ratio:5/4; overflow:hidden; }
 .mode-thumb svg { width:100%; height:100%; display:block; }
+.mode-thumb img { width:100%; height:100%; display:block; object-fit:cover; object-position:center 46%; }
 .mode-thumb-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.04) 38%, rgba(6,10,14,.82) 100%); }
 .mode-tag { position:absolute; top:8px; left:8px; z-index:2; font-size:8px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#06140a; background:var(--gold); border-radius:20px; padding:3px 8px; }
 .mode-tag.blue { background:#9ed0ff; }
@@ -1249,25 +1250,7 @@ svg { display:block; }
   <div class="mode-grid">
     <div class="mode-card" onclick="startHole()">
       <div class="mode-thumb">
-        <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="phSky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#16233f"/><stop offset="0.5" stop-color="#34526f"/>
-              <stop offset="0.82" stop-color="#b9763f"/><stop offset="1" stop-color="#e2a968"/></linearGradient>
-            <radialGradient id="phSun" cx="0.3" cy="0.4" r="0.55">
-              <stop offset="0" stop-color="#ffe9bf"/><stop offset="0.4" stop-color="#ffcf8a"/><stop offset="1" stop-color="#ffcf8a" stop-opacity="0"/></radialGradient>
-          </defs>
-          <rect width="200" height="150" fill="url(#phSky)"/>
-          <circle cx="60" cy="60" r="66" fill="url(#phSun)"/>
-          <path d="M0 84 Q60 70 112 80 T200 74 V150 H0 Z" fill="#233a2b"/>
-          <ellipse cx="124" cy="92" rx="42" ry="13" fill="#3f6a44"/>
-          <ellipse cx="124" cy="90" rx="27" ry="8" fill="#54925b"/>
-          <line x1="124" y1="90" x2="124" y2="64" stroke="#fff" stroke-width="1.8"/><path d="M124 64 L139 69 L124 74 Z" fill="#d8453f"/>
-          <path d="M0 150 Q34 120 66 150 Z" fill="#16261b"/>
-          <path d="M150 150 Q178 122 200 150 Z" fill="#16261b"/>
-          <path d="M82 146 Q156 44 124 90" fill="none" stroke="#9dff9d" stroke-width="2" opacity="0.85"/>
-          <circle cx="82" cy="146" r="3" fill="#fff"/><circle cx="124" cy="90" r="3" fill="#9dff9d"/>
-        </svg>
+        <img src="play-a-hole-hero.jpg" alt="Play a Hole">
         <div class="mode-thumb-veil"></div>
         <span class="mode-tag">Signature</span>
         <div class="mode-title">PLAY A HOLE</div>
@@ -1276,25 +1259,8 @@ svg { display:block; }
     </div>
     <div class="mode-card" onclick="openCoursePicker()">
       <div class="mode-thumb">
-        <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="pcSky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#152544"/><stop offset="0.5" stop-color="#3a5b73"/>
-              <stop offset="0.8" stop-color="#c88a4c"/><stop offset="1" stop-color="#e8bb72"/></linearGradient>
-            <radialGradient id="pcSun" cx="0.74" cy="0.46" r="0.5"><stop offset="0" stop-color="#fff4d8"/><stop offset="0.4" stop-color="#ffd98a"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
-            <linearGradient id="pcSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2a266"/><stop offset="1" stop-color="#6f8d88"/></linearGradient>
-          </defs>
-          <rect width="200" height="150" fill="url(#pcSky)"/>
-          <circle cx="150" cy="68" r="62" fill="url(#pcSun)"/>
-          <circle cx="150" cy="70" r="13" fill="#fff1cf"/>
-          <rect x="0" y="84" width="200" height="10" fill="url(#pcSea)" opacity="0.6"/>
-          <path d="M0 96 Q60 82 120 92 T200 88 V150 H0 Z" fill="#243f2d"/>
-          <path d="M0 116 Q70 102 200 110 V150 H0 Z" fill="#37603d"/>
-          <path d="M0 132 Q80 120 200 126 V150 H0 Z" fill="#487a4d" opacity="0.92"/>
-          <g fill="#13202a" opacity="0.9"><rect x="168" y="52" width="9" height="50" rx="1.5"/><rect x="166" y="46" width="13" height="7" rx="1.5"/><polygon points="166,46 179,46 172.5,38"/></g>
-          <line x1="48" y1="120" x2="48" y2="102" stroke="#eee" stroke-width="1.6"/><path d="M48 102 L60 106 L48 110 Z" fill="#d8453f"/>
-          <line x1="104" y1="108" x2="104" y2="94" stroke="#eee" stroke-width="1.3" opacity="0.85"/><path d="M104 94 L113 97 L104 100 Z" fill="#d8453f" opacity="0.85"/>
-        </svg>
+        <img src="play-a-course-hero.jpg" alt="Play a Course">
+
         <div class="mode-thumb-veil"></div>
         <span class="mode-tag blue">New</span>
         <div class="mode-title">PLAY A COURSE</div>
