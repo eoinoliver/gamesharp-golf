@@ -1108,6 +1108,55 @@ svg { display:block; }
 .pp-ropt-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; transition:border-color .15s, background .15s; }
 .pp-ropt.sel .pp-ropt-dot { border-color:var(--gold); background:var(--gold); box-shadow:inset 0 0 0 3px var(--card2); }
 .pp-ropt-label { font-size:14px; color:var(--text); line-height:1.35; }
+
+/* DNA bullets */
+.pp-bullets { display:flex; flex-direction:column; gap:9px; }
+.pp-bullet { display:flex; align-items:center; gap:13px; background:var(--card); border:1px solid var(--border); border-left:3px solid #9ed0ff; border-radius:var(--radius-sm); padding:12px 14px; }
+.pp-bullet-ic { font-size:20px; flex-shrink:0; }
+.pp-bullet-label { font-size:14px; font-weight:700; color:#fff; line-height:1.15; }
+.pp-bullet-sub { font-size:12px; color:var(--muted); margin-top:1px; }
+
+/* Decision / hole cards */
+.pp-score { float:right; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; letter-spacing:.04em; color:#9ed0ff; background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.28); border-radius:20px; padding:3px 11px; }
+.pp-dq { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 16px 14px; margin-bottom:12px; }
+.pp-dq-eyebrow { font-size:9.5px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.pp-dq-hole { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+.pp-dq-holename { font-family:'Bebas Neue',sans-serif; font-size:23px; color:#fff; line-height:1; letter-spacing:.4px; }
+.pp-dq-holemeta { font-size:11.5px; color:var(--muted); }
+.pp-dq-scene { font-size:14.5px; line-height:1.5; color:rgba(255,255,255,.9); margin-bottom:14px; }
+.pp-dq-opts { display:flex; flex-direction:column; gap:9px; }
+.pp-dq-opt { display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 14px; cursor:pointer; transition:border-color .15s, background .15s, opacity .2s; }
+.pp-dq-opt:active { transform:scale(.99); }
+.pp-dq-letter { width:24px; height:24px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--muted); flex-shrink:0; }
+.pp-dq-oplabel { flex:1; font-size:14px; color:var(--text); line-height:1.35; }
+.pp-dq-mark { width:18px; flex-shrink:0; text-align:center; font-weight:800; }
+.pp-dq-opt.correct { border-color:#4caf50; background:rgba(76,175,80,.12); }
+.pp-dq-opt.correct .pp-dq-letter { border-color:#4caf50; color:#4caf50; }
+.pp-dq-opt.correct .pp-dq-mark::after { content:'✓'; color:#4caf50; }
+.pp-dq-opt.wrong { border-color:var(--wrong); background:rgba(224,82,82,.12); }
+.pp-dq-opt.wrong .pp-dq-letter { border-color:var(--wrong); color:var(--wrong); }
+.pp-dq-opt.wrong .pp-dq-mark::after { content:'✗'; color:var(--wrong); }
+.pp-dq-opt.dim { opacity:.45; }
+.pp-dq-reveal { margin-top:13px; animation:wobFadeUp .4s var(--ease-out-quint) both; }
+.pp-dq-verdict { font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; margin-bottom:9px; }
+.pp-dq-verdict.ok { color:#4caf50; }
+.pp-dq-verdict.no { color:var(--wrong); }
+.pp-dq-why { font-size:13.5px; line-height:1.55; color:rgba(255,255,255,.86); }
+.pp-dq-strat, .pp-dq-miss { font-size:13.5px; line-height:1.55; color:rgba(255,255,255,.86); margin-bottom:9px; }
+.pp-dq-slabel { display:block; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.pp-dq-strat .pp-dq-slabel { color:#4caf50; }
+.pp-dq-miss .pp-dq-slabel { color:var(--wrong); }
+.pp-dq-local { margin-top:11px; padding:10px 12px; background:rgba(200,168,75,.08); border:1px solid rgba(200,168,75,.2); border-radius:var(--radius-sm); font-size:12.5px; font-style:italic; color:rgba(255,255,255,.82); }
+
+/* Learn more (collapsed history) */
+.pp-learn { border:1px solid var(--border); border-radius:var(--radius); background:var(--card); overflow:hidden; }
+.pp-learn summary { list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:15px 16px; font-size:13px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.8); }
+.pp-learn summary::-webkit-details-marker { display:none; }
+.pp-learn-chev { color:var(--muted); transition:transform .2s; }
+.pp-learn[open] .pp-learn-chev { transform:rotate(180deg); }
+.pp-learn-body { padding:2px 16px 16px; }
+.pp-learn-body .pp-identity p { font-size:13.5px; }
+.pp-learn-body .pp-dna-card { margin-top:10px; }
 </style>
 </head>
 <body>
@@ -3616,39 +3665,65 @@ const PLAY_PREP_COURSES = {
       { theme:'Historic Moment', title:'The putt that won a Ryder Cup',
         body:`At Oak Hill in 1995, Laytown & Bettystown's Philip Walton holed the putt that clinched the Ryder Cup for Europe, beating Jay Haas in the decisive match. A links on the Meath coast had produced the man who closed out one of Europe's most famous wins.` }
     ],
-    insights: [
-      { title:'Respect the wind before the swing',
-        strategic:`Wind dictates club and shot shape on nearly every hole. Read it before you choose a target — not after you've already pulled a club.`,
-        cue:`Commit fully once you've chosen the shot.`,
-        proLens:`Experienced links players club up and swing easier — a smoother strike holds its line in wind far better than a hard one.`,
-        context:`The exposed routing leaves holes open to shifting sea breezes; the same hole can play two or three clubs different in a day.`,
-        hook:`Generations of locals learned that fighting the wind rarely works. Working with it built the shotmakers who came out of here.` },
-      { title:'Keep it under the wind',
-        strategic:`High, soft shots balloon and get punished. The lower, flighted shot is the scoring shot on a links.`,
-        cue:`Ball back, hands forward, three-quarter finish.`,
-        proLens:`Pros take one more club and choke down to flight it lower, rather than swinging hard with a lofted club.`,
-        context:`Firm turf and wind reward a penetrating flight — low enough to hold its line, soft enough to settle.`,
-        hook:`Control beats power. It's the lesson this coastline has taught for over a century.` },
-      { title:`Use the ground, don't fly it all`,
-        strategic:`Firm fairways and approaches let you land short and let the ball run. The bump-and-run is often the percentage play.`,
-        cue:`Pick a landing spot short of the target, not the flag.`,
-        proLens:`Around the greens, the putter or a low chip off tight links lies beats a lofted wedge more often than not.`,
-        context:`Raised, firm greens repel aerial attacks; the ground game is how members get the ball close.`,
-        hook:`On a true links, the smart miss runs along the ground — never long and airborne.` },
-      { title:'Favour the fat side of the green',
-        strategic:`Aim at the safe middle, not the flag. Short-siding yourself on firm, contoured greens is where big numbers begin.`,
-        cue:`Middle of the green is a good shot.`,
-        proLens:`Good players choose the side they can miss on and still get up and down, then aim away from the trouble.`,
-        context:`These greens run firm and feed misses into trouble — the long, into-the-wind approach especially should bail to the wide side.`,
-        hook:`Bogey into a stiff breeze is often a good score. Protect it.` },
-      { title:'Plan your miss off the tee',
-        strategic:`On exposed holes, decide where the safe miss is before you swing. Position beats distance into the wind.`,
-        cue:`Where is the bad shot allowed to go?`,
-        proLens:`Links players trade driver for a fairway club when wind narrows the fairway — a ball in play beats forty more yards in the rough.`,
-        context:`Wind tightens landing areas and firm ground sends offline tee shots bounding into trouble.`,
-        hook:`The shotmakers from here won by thinking one shot ahead — not by hitting it hardest.` }
+    dnaBullets: [
+      { icon:'🌬️', label:'Wind is always in play', sub:'It is never not a factor' },
+      { icon:'🔥', label:'Firm, fast turf', sub:'The ball runs on landing' },
+      { icon:'🎯', label:'Ground game wins', sub:'Run it in — don’t fly it all' },
+      { icon:'🧭', label:'Position over power', sub:'Placement beats distance' },
+      { icon:'♟️', label:'Think one shot ahead', sub:'Plan the miss before you swing' }
     ],
-    holeSpotlights: [], // V1: omitted — no verified per-hole detail
+    // Seven strategic decisions (GameSharp's own analysis of links play)
+    decisions: [
+      { scene:`150 to the flag, hard into a two-club wind. What do you hit?`,
+        options:[ {label:'My 150 club, swing harder'}, {label:'Two more clubs, smooth three-quarter swing', correct:true}, {label:'My 150 club, normal swing'} ],
+        why:`Into wind, take more club and swing easier. A smooth strike bores through; a hard one spins up and balloons.`,
+        local:`The local read: club up, swing 80%. Wind exposes a hard swing instantly.` },
+      { scene:`Crossing left-to-right breeze, pin tucked on the right. The shot?`,
+        options:[ {label:'High, let it ride to the pin'}, {label:'Lower flight, start it left, hold it against the wind', correct:true}, {label:'Aim at the pin and hope'} ],
+        why:`A low, held flight is controllable; a high ball gets shoved. Start it into the wind and let it drift back.`,
+        local:`The flat, boring flight is the scoring shot here.` },
+      { scene:`Firm, fast green, front pin, wind helping. How do you get it close?`,
+        options:[ {label:'High wedge, spin it back'}, {label:'Land it short, let it release to the pin', correct:true}, {label:'Fly it all the way and hope it stops'} ],
+        why:`Firm links greens repel high shots. Use the ground — land short of the flag and let it run.`,
+        local:`Members putt or bump from off the green far more than they pitch.` },
+      { scene:`A short par 4, under 340 yards, with trouble around the green. Tee shot?`,
+        options:[ {label:'Driver at the green'}, {label:'Position club to my favourite wedge number', correct:true}, {label:'Driver, take the trouble on'} ],
+        why:`A comfortable full wedge from the fairway beats a half-wedge from rough by the green. Position over power.`,
+        local:`The card is protected by laying back — not by hitting driver everywhere.` },
+      { scene:`Long approach, into the wind, pin tight to a bunker. Where do you aim?`,
+        options:[ {label:'At the flag'}, {label:'The fat of the green, away from the bunker', correct:true}, {label:'Just past, to be safe'} ],
+        why:`Into wind to a guarded pin, short-siding is the big-number miss. Aim at the safe middle and take two putts.`,
+        local:`Bogey into a stiff breeze is a good score. Protect it.` },
+      { scene:`Blind tee shot over a dune, the fairway bending away. How do you play it?`,
+        options:[ {label:'Aim straight and hope'}, {label:'Pick a marker on the line and commit fully', correct:true}, {label:'Bail well to the safe side'} ],
+        why:`Links golf is full of blind shots. Pick an aiming point — a marker post or a far landmark — and trust it. Guessing leaks shots.`,
+        local:`Locals know the lines; visitors should use the markers and commit.` },
+      { scene:`You've driven into thick rough, 200 to a guarded green. Decision?`,
+        options:[ {label:'Go for the green'}, {label:'Wedge back to the fairway, set up a putt for par', correct:true}, {label:'Long iron, try to advance near the green'} ],
+        why:`From heavy links rough you can't control distance or spin. Take your medicine, get to a number, make the putt. Compounding wrecks cards.`,
+        local:`One bad shot costs one shot here — only if you let it.` }
+    ],
+    // Three holes — verified facts; strategy is GameSharp's analysis
+    holes: [
+      { tag:'Signature Hole', name:'13th · Lighthouse', meta:'Par 4 · 414 yds · dogleg left',
+        scene:`A dogleg left with the green hidden from the tee. A bunker waits left, a ditch with red stakes (penalty) runs down the right, the Maiden Tower beyond. Your tee shot?`,
+        options:[ {label:'Driver, cut the corner tight up the left'}, {label:'Position club up the left-centre, short of the bunker, away from the right ditch', correct:true}, {label:'Bail right, away from the bunker'} ],
+        strategy:`Favour the left-centre with a club you can flush. You can't see the green, so the win is a flat lie and a clear number — not yards.`,
+        mistake:`Bailing right from fear of the bunker brings the red-stake ditch into play. A penalty here turns par into double.`,
+        local:`Members aim on the Maiden Tower line and trust it.` },
+      { tag:'Hardest Hole', name:'15th · Lars', meta:'Par 4 · 460 yds · Stroke Index 1',
+        scene:`The longest par 4 on the links and the hardest hole on the card. A miss right finds heavy rough and pine trees; bunkers guard both sides of the green. Your strategy?`,
+        options:[ {label:'Driver and long iron — go for it in two'}, {label:'Play it as a long par: fairway, lay to a wedge, two-putt', correct:true}, {label:'Driver, then attack a tucked pin to save par'} ],
+        strategy:`Respect Index 1. Find the fairway, advance to a comfortable wedge, take your two putts. A bogey here barely dents the card.`,
+        mistake:`Forcing a long approach to a bunkered green — the trees right and sand both sides turn a miss into a big number.`,
+        local:`The members' play is bogey-or-better by addition, not heroics.` },
+      { tag:'Most Representative Hole', name:'17th · Reservoir', meta:'Par 4 · 337 yds · carry 190 to position',
+        scene:`A short par 4 — but the tee shot must carry ~190 yards to a position, the green slopes up from front to back, and bunkers pinch both sides. The whole course in one hole. How do you play it?`,
+        options:[ {label:'Driver at the green — it’s short'}, {label:'A club that carries the 190 and leaves a full wedge up the slope', correct:true}, {label:'Lay well back to be safe'} ],
+        strategy:`Carry to the flat of the landing zone, then use the up-slope: a flighted wedge that lands short and releases to the pin. Position, then ground game — the DNA in one hole.`,
+        mistake:`Reaching for driver brings both bunkers and a half-wedge from a poor angle; laying back too far leaves an awkward long shot into the up-slope.`,
+        local:`Members take the club that finds the flat top, then trust the wedge.` }
+    ],
     oneThing: 'Control beats power.',
     returnQuestions: [
       { q:'What surprised you most?', options:[
@@ -3673,6 +3748,7 @@ const PLAY_PREP_DEFAULT = 'laytown-bettystown';
 function ppCourse(id){ return PLAY_PREP_COURSES[id] || PLAY_PREP_COURSES[PLAY_PREP_DEFAULT]; }
 
 let ppReturnState = { id:null, answers:[null,null,null] };
+let ppCurrentCourse = PLAY_PREP_DEFAULT;
 
 // Bespoke links scene — dusk fairway, sea, dune layers, tower, flag.
 function ppHeroSvg(){
@@ -3736,24 +3812,26 @@ function renderPlayPrepCard(){
 }
 
 function ppBriefHtml(c){
-  const dna = c.dna.map(d=>`
-    <div class="pp-dna-card pp-reveal">
-      <div class="pp-dna-theme">${d.theme}</div>
-      <div class="pp-dna-title">${d.title}</div>
-      <div class="pp-dna-body">${d.body}</div>
-    </div>`).join('');
-  const insights = c.insights.map((ins,i)=>`
-    <div class="pp-insight pp-reveal">
-      <div class="pp-insight-head">
-        <div class="pp-insight-num">${i+1}</div>
-        <div class="pp-insight-title">${ins.title}</div>
-      </div>
-      <div class="pp-ins-row"><div class="pp-ins-label">Strategic Insight</div><div class="pp-ins-val">${ins.strategic}</div></div>
-      <div class="pp-ins-row"><div class="pp-ins-label">Mental Cue</div><div class="pp-ins-val pp-ins-cue">${ins.cue}</div></div>
-      <div class="pp-ins-row"><div class="pp-ins-label">Pro Lens</div><div class="pp-ins-val">${ins.proLens}</div></div>
-      <div class="pp-ins-row"><div class="pp-ins-label">Course Context</div><div class="pp-ins-val">${ins.context}</div></div>
-      <div class="pp-ins-hook"><div class="pp-ins-label">Why it matters here</div><div class="pp-ins-val">${ins.hook}</div></div>
-    </div>`).join('');
+  ppQuiz = { total:c.decisions.length, scored:0, done:{} };
+  // Course DNA — short bullets
+  const bullets = c.dnaBullets.map(b=>`
+    <div class="pp-bullet pp-reveal"><div class="pp-bullet-ic">${b.icon}</div>
+      <div><div class="pp-bullet-label">${b.label}</div><div class="pp-bullet-sub">${b.sub}</div></div></div>`).join('');
+  // Seven decisions — interactive
+  const decisions = c.decisions.map((d,i)=>ppDecisionCard('d',i,{
+    eyebrow:`Decision ${i+1} of ${c.decisions.length}`, scene:d.scene, options:d.options,
+    reveal:`<div class="pp-dq-why">${d.why}</div><div class="pp-dq-local">⛳ ${d.local}</div>` })).join('');
+  // Three holes — interactive
+  const holes = c.holes.map((h,i)=>ppDecisionCard('h',i,{
+    eyebrow:h.tag, title:`${h.name}`, meta:h.meta, scene:h.scene, options:h.options,
+    reveal:`<div class="pp-dq-strat"><span class="pp-dq-slabel">Best strategy</span>${h.strategy}</div>
+            <div class="pp-dq-miss"><span class="pp-dq-slabel">Common mistake</span>${h.mistake}</div>
+            <div class="pp-dq-local">⛳ ${h.local}</div>` })).join('');
+  // Optional history — collapsed "Learn more"
+  const lore = `
+    <div class="pp-identity">${c.identity.map(p=>`<p>${p}</p>`).join('')}</div>
+    ${c.dna.map(d=>`<div class="pp-dna-card"><div class="pp-dna-theme">${d.theme}</div>
+      <div class="pp-dna-title">${d.title}</div><div class="pp-dna-body">${d.body}</div></div>`).join('')}`;
   const returned = LS.get('playprep_returned_'+c.id);
   const returnBlock = returned
     ? `<div class="pp-return-done">✓ Round logged. <span style="color:var(--gold);text-decoration:underline;cursor:pointer" onclick="startPlayPrepReturn('${c.id}')">Update how it played</span></div>`
@@ -3764,32 +3842,39 @@ function ppBriefHtml(c){
       ${ppWindLayer()}
       <div class="pp-hero-veil"></div>
       <div class="pp-hero-overlay">
-        <div class="pp-hero-eyebrow">Play Prep · ${c.location}</div>
+        <div class="pp-hero-eyebrow">Decision Brief · ${c.location}</div>
         <div class="pp-hero-name">${c.name.toUpperCase()}</div>
         <div class="pp-hero-identity">${c.identityLine}</div>
-        <div class="pp-hero-time">≈ ${c.minutes} min brief</div>
+        <div class="pp-hero-time">≈ ${c.minutes} min · ${c.decisions.length} decisions · 3 holes</div>
       </div>
     </div>
     <div class="pp-section">
-      <div class="pp-eyebrow">Course Identity</div>
-      <div class="pp-h2">What you're walking into</div>
-      <div class="pp-identity">${c.identity.map(p=>`<p>${p}</p>`).join('')}</div>
-    </div>
-    <div class="pp-section">
       <div class="pp-eyebrow">Course DNA</div>
-      <div class="pp-h2">What makes it unique</div>
-      ${dna}
+      <div class="pp-h2">How it wants to be played</div>
+      <div class="pp-bullets">${bullets}</div>
     </div>
     <div class="pp-section">
-      <div class="pp-eyebrow">The Five Core Insights</div>
-      <div class="pp-h2">How to think your way round</div>
-      ${insights}
+      <div class="pp-eyebrow">The decisions every visitor must get right</div>
+      <div class="pp-h2">Read it like a local <span class="pp-score" id="pp-score">0 / ${c.decisions.length}</span></div>
+      <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 16px">Pick your play. The course tells you straight away.</div>
+      ${decisions}
+    </div>
+    <div class="pp-section">
+      <div class="pp-eyebrow">Three holes that define the test</div>
+      <div class="pp-h2">What would you do?</div>
+      ${holes}
     </div>
     <div class="pp-onething pp-reveal">
       <div class="pp-onething-label">One thing to remember</div>
       <div class="pp-onething-text">${c.oneThing}</div>
     </div>
-    <div class="pp-section" style="padding-top:8px">
+    <div class="pp-section">
+      <details class="pp-learn">
+        <summary><span>Learn more — the story of the place</span><span class="pp-learn-chev">⌄</span></summary>
+        <div class="pp-learn-body">${lore}</div>
+      </details>
+    </div>
+    <div class="pp-section" style="padding-top:4px">
       <div class="pp-eyebrow">After the round</div>
       <div class="pp-h2">Played it? Tell us how it went</div>
       <div class="pp-card-sub" style="color:var(--muted);margin-bottom:14px">Three quick questions turn your round into a personalised five-question challenge.</div>
@@ -3798,8 +3883,63 @@ function ppBriefHtml(c){
     <div style="height:30px"></div>`;
 }
 
+// Interactive decision/hole card. scope 'd' (decision) or 'h' (hole).
+function ppDecisionCard(scope, i, o){
+  const id = scope+i;
+  const opts = o.options.map((op,oi)=>`
+    <button class="pp-dq-opt" id="ppopt-${id}-${oi}" onclick="ppAnswer('${scope}',${i},${oi})">
+      <span class="pp-dq-letter">${String.fromCharCode(65+oi)}</span>
+      <span class="pp-dq-oplabel">${op.label}</span>
+      <span class="pp-dq-mark"></span>
+    </button>`).join('');
+  return `
+    <div class="pp-dq pp-reveal" id="ppdq-${id}">
+      <div class="pp-dq-eyebrow">${o.eyebrow}</div>
+      ${o.title?`<div class="pp-dq-hole"><span class="pp-dq-holename">${o.title}</span><span class="pp-dq-holemeta">${o.meta||''}</span></div>`:''}
+      <div class="pp-dq-scene">${o.scene}</div>
+      <div class="pp-dq-opts">${opts}</div>
+      <div class="pp-dq-reveal" id="pprev-${id}" hidden>${o.reveal}</div>
+    </div>`;
+}
+
+let ppQuiz = { total:0, scored:0, done:{} };
+function ppAnswer(scope, i, oi){
+  const id = scope+i;
+  if(ppQuiz.done[id]) return;                 // lock after first answer
+  ppQuiz.done[id] = true;
+  const c = ppCourse(ppCurrentCourse);
+  const list = scope==='d' ? c.decisions : c.holes;
+  const opts = list[i].options;
+  const correctIdx = opts.findIndex(x=>x.correct);
+  const chosen = opts[oi];
+  // mark buttons
+  opts.forEach((op,k)=>{
+    const btn = document.getElementById(`ppopt-${id}-${k}`);
+    if(!btn) return;
+    if(k===correctIdx) btn.classList.add('correct');
+    else if(k===oi) btn.classList.add('wrong');
+    else btn.classList.add('dim');
+    btn.disabled = true;
+  });
+  const rev = document.getElementById(`pprev-${id}`);
+  if(rev){
+    const tag = chosen.correct
+      ? `<div class="pp-dq-verdict ok">✓ That's the play</div>`
+      : `<div class="pp-dq-verdict no">✗ The course punishes that</div>`;
+    rev.innerHTML = tag + rev.innerHTML;
+    rev.hidden = false;
+  }
+  if(scope==='d'){
+    if(chosen.correct) ppQuiz.scored++;
+    const sc = document.getElementById('pp-score');
+    if(sc) sc.textContent = `${ppQuiz.scored} / ${ppQuiz.total}`;
+  }
+  wobHaptic();
+}
+
 function openPlayPrep(id){
   const c = ppCourse(id);
+  ppCurrentCourse = c.id;
   LS.set('playprep_seen_'+c.id, true);
   const app = document.getElementById('pp-app');
   if(app) app.innerHTML = ppBriefHtml(c);
