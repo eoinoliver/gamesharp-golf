@@ -2192,10 +2192,19 @@ function todayStr(){
 }
 
 // ── Navigation ─────────────────────────────────────────
+const PP_TAB_VIEWS = ['home','sharpen','profile'];
+const viewScroll = {};
 function showView(id){
+  // Remember scroll position of the tab we're leaving
+  const cur = document.querySelector('.view.active');
+  if(cur){ const cid = cur.id.replace('view-',''); if(PP_TAB_VIEWS.includes(cid)) viewScroll[cid] = cur.scrollTop; }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const el = document.getElementById('view-'+id);
-  if(el){ el.classList.add('active'); el.scrollTop = 0; }
+  if(el){
+    el.classList.add('active');
+    // Preserve scroll for the main tabs; sub-flows always start at top.
+    el.scrollTop = PP_TAB_VIEWS.includes(id) ? (viewScroll[id] || 0) : 0;
+  }
   S.view = id;
   // sync bottom nav
   document.querySelectorAll('.nav-item').forEach(n => {
@@ -3229,12 +3238,18 @@ function shareResult(score, total, mode){
 
 // ── Profile Screen ─────────────────────────────────────
 function showProfile(){
+  const totalAnswered = Object.keys(S.completed).length;
   const arch = deriveArchetype();
-  document.getElementById('pa-icon').textContent = arch.icon;
-  document.getElementById('pa-name').textContent = arch.name;
+  // Don't crown an archetype before they've played — welcome them instead.
+  if(totalAnswered === 0){
+    document.getElementById('pa-icon').textContent = '🎯';
+    document.getElementById('pa-name').textContent = 'Find Your Game';
+  } else {
+    document.getElementById('pa-icon').textContent = arch.icon;
+    document.getElementById('pa-name').textContent = arch.name;
+  }
 
   // Stats
-  const totalAnswered = Object.keys(S.completed).length;
   const totalCorrect  = Object.values(S.completed).filter(v => v === 'correct').length;
   const acc = totalAnswered > 0 ? Math.round(totalCorrect/totalAnswered*100)+'%' : '—';
   document.getElementById('psr-answered').textContent = totalAnswered;
@@ -3274,12 +3289,12 @@ function showProfile(){
   });
   const strengthLine = document.getElementById('strength-line');
   if(!strengthWrap.children.length){
-    strengthWrap.innerHTML = '<div class="tag">Play more rounds to reveal your edge</div>';
+    strengthWrap.innerHTML = '<div class="tag">Answer a few questions — your strengths show up here</div>';
     if(strengthLine) strengthLine.textContent = '';
   } else {
     if(strengthLine) strengthLine.textContent = 'Build every session from your strongest area — confidence compounds.';
   }
-  if(!leakWrap.children.length) leakWrap.innerHTML = '<div class="tag">No gaps identified yet</div>';
+  if(!leakWrap.children.length) leakWrap.innerHTML = '<div class="tag">Your gaps appear here as you play</div>';
 
   // Crash Course card on profile
   const ccWrap = document.getElementById('crash-course-profile-wrap');
