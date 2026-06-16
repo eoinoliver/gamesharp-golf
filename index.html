@@ -1148,6 +1148,16 @@ svg { display:block; }
 .pp-wv-replay { position:absolute; right:10px; bottom:10px; background:rgba(0,0,0,.45); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); color:#fff; border:1px solid rgba(255,255,255,.22); border-radius:20px; padding:5px 12px; font-size:11px; font-weight:700; cursor:pointer; }
 .pp-wv-replay:active { transform:scale(.96); }
 
+/* Course picker */
+.pp-course-card { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; cursor:pointer; margin-bottom:13px; background:var(--card); transition:transform .15s, border-color .2s; }
+.pp-course-card:active { transform:scale(.99); }
+.pp-course-thumb { position:relative; aspect-ratio:16/7; overflow:hidden; }
+.pp-course-thumb svg { width:100%; height:100%; display:block; }
+.pp-course-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.05) 40%, rgba(6,10,14,.78) 100%); }
+.pp-course-name { position:absolute; left:14px; bottom:11px; z-index:2; font-family:'Bebas Neue',sans-serif; font-size:27px; color:#fff; letter-spacing:.5px; line-height:.95; text-shadow:0 2px 10px rgba(0,0,0,.7); }
+.pp-course-meta { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; font-size:12px; color:var(--muted); }
+.pp-course-go { color:var(--gold); font-weight:700; }
+
 /* Decision / hole cards */
 .pp-score { float:right; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; letter-spacing:.04em; color:#9ed0ff; background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.28); border-radius:20px; padding:3px 11px; }
 .pp-dq { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 16px 14px; margin-bottom:12px; }
@@ -1247,7 +1257,7 @@ svg { display:block; }
       </div>
       <div class="mode-cap" id="hec-hod">Shot-by-shot · scorecard</div>
     </div>
-    <div class="mode-card" onclick="openPlayPrep('laytown-bettystown')">
+    <div class="mode-card" onclick="openCoursePicker()">
       <div class="mode-thumb">
         <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -1267,7 +1277,7 @@ svg { display:block; }
         <span class="mode-tag blue">New</span>
         <div class="mode-title">PLAY A COURSE</div>
       </div>
-      <div class="mode-cap">⛳ <strong>Featured:</strong> Laytown & Bettystown</div>
+      <div class="mode-cap">⛳ <strong>2 courses:</strong> Laytown · Baltray</div>
     </div>
   </div>
 
@@ -1366,9 +1376,9 @@ svg { display:block; }
 <!-- ============================== PLAY PREP ============================== -->
 <div class="view" id="view-playprep">
   <div class="pp-topbar">
-    <button class="pp-back" onclick="renderSharpen();showView('sharpen')">‹ Sharpen</button>
-    <div class="pp-topbar-title">PLAY PREP</div>
-    <button class="pp-close" onclick="renderSharpen();showView('sharpen')">✕</button>
+    <button class="pp-back" onclick="ppBack()">‹ Back</button>
+    <div class="pp-topbar-title">PLAY A COURSE</div>
+    <button class="pp-close" onclick="renderHome();showView('home')">✕</button>
   </div>
   <div id="pp-app"><!-- rendered by JS --></div>
 </div>
@@ -3801,6 +3811,99 @@ const PLAY_PREP_COURSES = {
         { label:'Around the greens', leakTag:'Short-sided' },
         { label:'On the greens', leakTag:'Three-putt' } ] }
     ]
+  },
+
+  'county-louth': {
+    id: 'county-louth',
+    name: 'County Louth',
+    identityLine: 'Where the East of Ireland is won.',
+    minutes: 6,
+    location: 'Baltray, Co. Louth',
+    intro: `County Louth — Baltray to everyone who plays it — is a pure championship links on the mouth of the Boyne, laid out in 1892 and routed through towering dunes by Tom Simpson in 1938. Home of the East of Ireland Championship since 1941, it tested Joe Carr, Darren Clarke and a young Shane Lowry. Its greens are rated among the finest in Ireland — and they, with the shifting wind, are what defend par. Here's how it wants to be played.`,
+    identity: [
+      `County Louth Golf Club, known to all as Baltray, sits on the linksland at the mouth of the River Boyne. Golf has been played here since 1892; in 1938 the architect Tom Simpson, with Molly Gourlay, routed the championship links through 190 acres of towering dunes that stands today.`,
+      `It's regarded as one of the purest, fairest tests of links golf anywhere — a par 72 stretched beyond 7,000 yards, with holes running in every direction so the wind is rarely the same two holes together. Its greens are widely rated among the very best in Ireland.`,
+      `Baltray defends with subtlety, not length: world-class greens, clever angles and an ever-shifting breeze. You score here by positioning for the green, respecting the dunes, and putting these surfaces with real care.`
+    ],
+    dna: [
+      { theme:'Founding Story', title:'Laid out in 1892, perfected by Simpson',
+        body:`Golf began at Baltray in 1892, with Tom Gilroy — the same pioneer behind the golf at nearby Laytown — elected the club's first captain. In 1938 the architect Tom Simpson, working with Molly Gourlay, reshaped the links through the great dunes into the championship test played today.` },
+      { theme:'Local Champions', title:'Home of the East of Ireland',
+        body:`Baltray has hosted the East of Ireland Amateur Championship since 1941. The legendary Joe Carr won it twelve times; his son Roddy added another and Darren Clarke won here in 1989. The club also produced Curtis Cup pioneer Clarrie Tiernan and British Amateur champion Philomena Garvey.` },
+      { theme:'Defining Characteristic', title:'The greens decide it',
+        body:`Baltray's greens are rated among the finest in all of Ireland — fast, subtle, and the true defense of the course. Length rarely beats you here; the putting surfaces do.` },
+      { theme:'Historic Moment', title:'Lowry wins as an amateur',
+        body:`In 2009 the Irish Open came to Baltray and a 22-year-old amateur named Shane Lowry won it, beating Robert Rock in a playoff before turning professional days later. A links on the Boyne had crowned a future Open champion.` }
+    ],
+    dnaBullets: [
+      { icon:'🟢', word:'Greens',   sub:'Among Ireland’s best' },
+      { icon:'🏔️', word:'Dunes',    sub:'Towering sandhills' },
+      { icon:'🌬️', word:'Wind',     sub:'Shifts every hole' },
+      { icon:'🧭', word:'Position', sub:'Angle beats distance' },
+      { icon:'🎯', word:'Precision',sub:'No weak holes' }
+    ],
+    // Five LOCAL-KNOWLEDGE traps — each anchored to a VERIFIED Baltray feature.
+    decisions: [
+      { scene:`The 1st tee. You're loose, expecting a gentle handshake to open. At Baltray, the opener is a hard par 4.`,
+        options:[ {label:`Driver, full send — get the round going`}, {label:`A club you can flush to find the fairway, settle in`, correct:true}, {label:`Smash one and figure it out`} ],
+        why:`Baltray opens with one of its hardest par 4s, not an easy one. Coming out swinging cold is how visitors start with a double. The member's play is a controlled tee shot, a fairway, and a steady par or bogey to settle the nerves.`,
+        local:`Respect the 1st. It's a brute, not a warm-up.` },
+      { scene:`A flat-looking putt from 20 feet. It reads dead straight to your eye, so you set up to ram it in.`,
+        options:[ {label:`Straight and firm`}, {label:`Trust there's more pace and borrow than it shows`, correct:true}, {label:`Straight, but die it at the hole`} ],
+        why:`Baltray's greens are among the best — and most subtle — in Ireland. Putts hold more break and need more care than they look. Visitors leave the first one short and miss the read; the greens are where the course quietly takes its shots back.`,
+        local:`These greens are the whole defense. Read them twice.` },
+      { scene:`You've set the wind off the 2nd tee and you're playing every shot off it. Four holes later you're confused by your numbers.`,
+        options:[ {label:`Keep playing the same wind I felt early`}, {label:`Re-read the wind on every tee — the holes turn constantly`, correct:true}, {label:`Ignore the wind, just swing`} ],
+        why:`Simpson routed Baltray in two loops with holes running in every direction — the wind is rarely from the same place two holes together. Visitors lock in one wind and get caught out; the member checks it fresh on each tee.`,
+        local:`The wind never sits still here. Re-read it every hole.` },
+      { scene:`The par-5 3rd. Your shot is blind, over a knoll to a small green you can't see. You feel like taking it on.`,
+        options:[ {label:`Fire over the knoll at the hidden green`}, {label:`Lay to a number and pitch to the small green with a clear yardage`, correct:true}, {label:`Aim well right to be safe`} ],
+        why:`The 3rd plays blind over a knoll to one of the smallest targets out there. Gunning a long shot at a green you can't see is how a five becomes a seven. Position to a yardage you trust, then commit to the pitch.`,
+        local:`Don't fire blind at a small green. Play to your number.` },
+      { scene:`Your drive trickled into the base of one of Baltray's big sandhills. The green's 180 out and you fancy the hero shot.`,
+        options:[ {label:`Go for it — take on the dune`}, {label:`Wedge out sideways to the fairway, then attack with a club in hand`, correct:true}, {label:`Long iron, try to advance up and over`} ],
+        why:`The towering dunes don't allow a clean strike — you can't control distance or flight from their base. Visitors compound one mistake into three. Take the medicine, get to the fairway, and make your number count.`,
+        local:`The sandhills win the hero shot every time. Chip out.` }
+    ],
+    holes: [
+      { tag:'Signature Hole', name:'14th · The Short Par 4', meta:'Par 4 · 332 yds · drivable green',
+        scene:`A short par 4 of just 332 yards. The green sits there, drivable, daring you — and it's exactly where visitors walk off with a six. Your tee shot?`,
+        options:[ {label:`Driver at the green — it's right there`}, {label:`Position club to a full wedge, then attack from the fairway`, correct:true}, {label:`Driver, bail to the safe side`} ],
+        strategy:`The drivable green is the trap. A wedge from the fairway is a birdie look; scrambling from a missed drive is a bogey fight. Take the club that leaves your favourite number and let the wedge do the work.`,
+        mistake:`Going for it. The short par 4 tempts everyone — and it's precisely where good rounds leak a double.`,
+        local:`The members lay back and wedge it. Six comes from the driver.` },
+      { tag:'Hardest Hole', name:'11th · Seven Bunkers', meta:'Par 4 · 470 yds · the hardest on the card',
+        scene:`A 470-yard par 4 guarded by seven bunkers — more than any hole at Baltray, and the toughest on the course. Your strategy?`,
+        options:[ {label:`Driver and go, try to get home in two`}, {label:`Find the gap off the tee, advance, accept a hard-won par or bogey`, correct:true}, {label:`Bomb driver and take the bunkers on`} ],
+        strategy:`Seven bunkers mean position beats power. Thread the tee shot through the sand, move it down the fairway, and treat a bogey here as a good score — it barely dents your card.`,
+        mistake:`Forcing a long second over the bunkering — the sand is placed to swallow exactly the greedy line.`,
+        local:`Par here wins the hole against most of the field. Take it.` },
+      { tag:'Most Representative Hole', name:'6th · Valley of Dunes', meta:'Par 5 · through the sandhills to a hidden green',
+        scene:`A par 5 that runs through a valley of dunes to a green tucked behind two hills. Towering sandhills, a blind approach — this is Baltray in one hole. How do you play it?`,
+        options:[ {label:`Take it all on, fire at the hidden green`}, {label:`Work it down the valley, lay to a number, pitch to a clear yardage`, correct:true}, {label:`Bail wide of the dunes`} ],
+        strategy:`You can't see the green, so position is everything. Move it down the valley floor, leave a yardage you trust, and commit to the blind pitch on the right line. The dunes punish the guess.`,
+        mistake:`Firing blind at a green you've never seen — a caught sandhill turns five into seven.`,
+        local:`Play to the marker and the number, not the flag you can't see.` }
+    ],
+    holeSpotlights: [],
+    oneThing: 'The green starts at the tee.',
+    returnQuestions: [
+      { q:'What surprised you most?', options:[
+        { label:'How subtle and fast the greens were' },
+        { label:'How big the dunes felt' },
+        { label:'How the wind shifted every hole' },
+        { label:'How the short holes bit back' } ] },
+      { q:'Which read proved true?', options:[
+        { label:'The greens are the real defense' },
+        { label:'Position for the angle, not distance' },
+        { label:'Re-read the wind on every tee' },
+        { label:'Respect the short par 4' } ] },
+      { q:'Where did you lose the most shots?', options:[
+        { label:'Off the tee', leakTag:'Penalty' },
+        { label:'Approach / angles in', leakTag:'Double bogey' },
+        { label:'Around the greens', leakTag:'Short-sided' },
+        { label:'On the greens', leakTag:'Three-putt' } ] }
+    ]
   }
 };
 const PLAY_PREP_DEFAULT = 'laytown-bettystown';
@@ -4063,12 +4166,43 @@ function ppAnswer(scope, i, oi){
 function openPlayPrep(id){
   const c = ppCourse(id);
   ppCurrentCourse = c.id;
+  ppNavState = 'brief';
   LS.set('playprep_seen_'+c.id, true);
   const app = document.getElementById('pp-app');
   if(app) app.innerHTML = ppBriefHtml(c);
   showView('playprep');
   const v = document.getElementById('view-playprep'); if(v) v.scrollTop = 0;
   ppObserveReveals();
+}
+
+// Course picker — entry from the Home "Play a Course" tile
+let ppNavState = 'picker';
+function ppBack(){
+  if(ppNavState === 'brief' && Object.keys(PLAY_PREP_COURSES).length > 1){ openCoursePicker(); }
+  else { renderHome(); showView('home'); }
+}
+function openCoursePicker(){
+  ppNavState = 'picker';
+  const cards = Object.keys(PLAY_PREP_COURSES).map(id=>{
+    const c = PLAY_PREP_COURSES[id];
+    const done = LS.get('playprep_returned_'+id);
+    const seen = LS.get('playprep_seen_'+id);
+    const status = done ? 'Reviewed ✓' : (seen ? 'Continue →' : 'Brief →');
+    return `<div class="pp-course-card" onclick="openPlayPrep('${id}')">
+      <div class="pp-course-thumb">${ppHeroSvg()}<div class="pp-course-veil"></div>
+        <div class="pp-course-name">${c.name.toUpperCase()}</div></div>
+      <div class="pp-course-meta"><span>${c.location} · ≈ ${c.minutes} min</span><span class="pp-course-go">${status}</span></div>
+    </div>`; }).join('');
+  const app = document.getElementById('pp-app');
+  if(app) app.innerHTML = `
+    <div class="pp-section" style="padding-top:18px">
+      <div class="pp-eyebrow">Play a Course</div>
+      <div class="pp-h2">Choose your course</div>
+      <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 16px">A short decision brief before you tee off — three holes, five local reads.</div>
+      ${cards}
+    </div><div style="height:30px"></div>`;
+  showView('playprep');
+  const v = document.getElementById('view-playprep'); if(v) v.scrollTop = 0;
 }
 
 function ppObserveReveals(){
