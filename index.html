@@ -370,23 +370,23 @@ svg { display:block; }
 .section-title { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
 
 /* Pillar Grid */
-.pillar-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.pillar-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
 .pillar-card {
-  background:var(--card); border-radius:var(--radius);
-  padding:18px; border:1px solid var(--border);
-  cursor:pointer; transition:transform .15s,border-color .15s;
-  position:relative; overflow:hidden;
-  min-height:132px; display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden; border-radius:var(--radius);
+  border:1px solid var(--border); cursor:pointer; background:#0d0d0d;
+  min-height:160px; box-shadow:0 10px 26px rgba(0,0,0,.46);
+  transition:transform .15s, border-color .2s;
 }
 .pillar-card:active { transform:scale(.97); }
-.pillar-card::before { content:''; position:absolute; inset:0; background:radial-gradient(125% 85% at 0% 0%, color-mix(in srgb, var(--pc) 16%, transparent) 0%, transparent 58%); pointer-events:none; }
-.pillar-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--pc); }
-.pillar-card.wide { grid-column:1/-1; }
-.pillar-card > * { position:relative; z-index:1; }
-.pillar-card .pc-emoji { font-size:30px; }
-.pillar-card .pc-name  { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--text); margin-top:10px; line-height:1.05; }
-.pillar-card .pc-count { font-size:11.5px; color:var(--muted); margin-top:5px; }
-.pillar-card .pc-bar   { margin-top:10px; }
+.pillar-card.wide { grid-column:1/-1; min-height:150px; }
+.pc-scene { position:absolute; inset:0; }
+.pc-scene svg { width:100%; height:100%; display:block; }
+.pc-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,8,10,.04) 28%, rgba(6,8,10,.5) 60%, rgba(5,7,9,.93) 100%); }
+.pillar-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--pc); z-index:3; }
+.pc-body { position:absolute; left:13px; right:13px; bottom:13px; z-index:2; }
+.pc-name  { font-family:'Bebas Neue',sans-serif; font-size:23px; color:#fff; line-height:1; letter-spacing:.4px; text-shadow:0 2px 8px rgba(0,0,0,.65); }
+.pc-count { font-size:11.5px; color:rgba(255,255,255,.8); margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.7); }
+.pc-bar   { margin-top:9px; }
 
 /* Pro Lens Strip */
 .pro-lens-strip { margin-top:20px; }
@@ -2327,6 +2327,65 @@ function renderHome(){
 }
 
 // ── Sharpen — the training library ─────────────────────
+// Cinematic per-pillar scene art (unique gradient ids so 5 can coexist).
+function pillarSceneSvg(p){
+  const wide = p.id === '19th-hole';
+  const vb = wide ? '0 0 360 150' : '0 0 200 150';
+  const scenes = {
+    'score-smart': `
+      <defs>
+        <linearGradient id="psA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2236"/><stop offset="0.68" stop-color="#7a5a2e"/><stop offset="1" stop-color="#caa84c"/></linearGradient>
+        <radialGradient id="psAg" cx="0.7" cy="0.5" r="0.55"><stop offset="0" stop-color="#ffe9b0"/><stop offset="1" stop-color="#ffe9b0" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="200" height="150" fill="url(#psA)"/>
+      <circle cx="142" cy="74" r="72" fill="url(#psAg)"/>
+      <path d="M0 90 Q70 78 130 88 T200 84 V150 H0 Z" fill="#2b4233"/>
+      <path d="M0 110 Q80 96 200 106 V150 H0 Z" fill="#3c5d3f"/>
+      <path d="M0 130 Q90 118 200 124 V150 H0 Z" fill="#4a7150" opacity="0.9"/>
+      <line x1="150" y1="112" x2="150" y2="84" stroke="#fff" stroke-width="1.6"/><path d="M150 84 L164 88 L150 92 Z" fill="#d8453f"/>`,
+    'course-iq': `
+      <defs><linearGradient id="psB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13241a"/><stop offset="1" stop-color="#213d28"/></linearGradient></defs>
+      <rect width="200" height="150" fill="url(#psB)"/>
+      <path d="M28 152 C40 110 62 96 102 92 C142 88 150 70 150 42" fill="none" stroke="#3f6a44" stroke-width="36" stroke-linecap="round"/>
+      <path d="M28 152 C40 110 62 96 102 92 C142 88 150 70 150 42" fill="none" stroke="#508a55" stroke-width="20" stroke-linecap="round" opacity="0.8"/>
+      <ellipse cx="120" cy="96" rx="13" ry="7" fill="#d8c79a"/>
+      <ellipse cx="150" cy="40" rx="19" ry="9" fill="#5b975f"/>
+      <line x1="150" y1="40" x2="150" y2="22" stroke="#fff" stroke-width="1.5"/><path d="M150 22 L162 26 L150 30 Z" fill="#d8453f"/>
+      <path d="M42 140 C62 110 92 104 120 96" fill="none" stroke="#bfe6c2" stroke-width="1.5" stroke-dasharray="2 4" opacity="0.7"/>`,
+    'short-game': `
+      <defs><linearGradient id="psC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2b2a"/><stop offset="1" stop-color="#1d4a45"/></linearGradient></defs>
+      <rect width="200" height="150" fill="url(#psC)"/>
+      <ellipse cx="132" cy="92" rx="74" ry="30" fill="#2f6a5f"/>
+      <ellipse cx="132" cy="90" rx="48" ry="18" fill="#3c8a7a"/>
+      <line x1="130" y1="90" x2="130" y2="62" stroke="#fff" stroke-width="1.6"/><path d="M130 62 L144 66 L130 70 Z" fill="#d8453f"/>
+      <path d="M26 142 Q82 50 130 90" fill="none" stroke="#7fe9da" stroke-width="1.8" stroke-dasharray="2 4" opacity="0.85"/>
+      <circle cx="26" cy="142" r="3" fill="#fff"/>`,
+    'mental-game': `
+      <defs>
+        <linearGradient id="psD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#13233f"/><stop offset="0.6" stop-color="#3a5f86"/><stop offset="1" stop-color="#8fb6d6"/></linearGradient>
+        <radialGradient id="psDg" cx="0.5" cy="0.48" r="0.5"><stop offset="0" stop-color="#dbecff"/><stop offset="1" stop-color="#dbecff" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="200" height="150" fill="url(#psD)"/>
+      <circle cx="100" cy="68" r="60" fill="url(#psDg)"/>
+      <circle cx="100" cy="70" r="30" fill="none" stroke="#cfe4f7" stroke-width="1.2" opacity="0.4"/>
+      <circle cx="100" cy="70" r="18" fill="none" stroke="#cfe4f7" stroke-width="1.2" opacity="0.55"/>
+      <path d="M0 106 Q100 98 200 106 V150 H0 Z" fill="#2a4360"/>
+      <line x1="100" y1="102" x2="100" y2="72" stroke="#fff" stroke-width="1.6"/><path d="M100 72 L114 76 L100 80 Z" fill="#d8453f"/>`,
+    '19th-hole': `
+      <defs>
+        <linearGradient id="psE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1c10"/><stop offset="0.6" stop-color="#a05a1e"/><stop offset="1" stop-color="#ff9112"/></linearGradient>
+        <radialGradient id="psEg" cx="0.8" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffd9a0"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="360" height="150" fill="url(#psE)"/>
+      <circle cx="292" cy="78" r="86" fill="url(#psEg)"/>
+      <path d="M0 102 Q120 90 240 98 T360 94 V150 H0 Z" fill="#3a2a16"/>
+      <path d="M0 122 Q120 110 360 116 V150 H0 Z" fill="#4d6a3f" opacity="0.85"/>
+      <g fill="#160f08"><rect x="40" y="72" width="66" height="42"/><polygon points="36,72 110,72 73,50"/></g>
+      <g fill="#ffd27a"><rect x="52" y="84" width="11" height="13"/><rect x="69" y="84" width="11" height="13"/><rect x="86" y="84" width="11" height="13"/></g>`
+  };
+  return `<svg viewBox="${vb}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${scenes[p.id] || scenes['score-smart']}</svg>`;
+}
+
 function renderSharpen(){
   // Pillar grid
   const grid = document.getElementById('pillar-grid');
@@ -2352,8 +2411,9 @@ function renderSharpen(){
     };
     const countLabel = pillarHooks[p.name] || 'Begin here';
     card.innerHTML = `
-      <div class="pc-emoji">${p.emoji}</div>
-      <div>
+      <div class="pc-scene">${pillarSceneSvg(p)}</div>
+      <div class="pc-veil"></div>
+      <div class="pc-body">
         <div class="pc-name">${p.name}</div>
         <div class="pc-count">${countLabel}</div>
         <div class="pc-bar progress-bar">
