@@ -122,6 +122,20 @@ svg { display:block; }
 .dc-hook { font-size:14.5px; line-height:1.4; color:rgba(255,255,255,.92); margin:7px 0 11px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-style:italic; }
 .hec-hod { position:relative; font-size:12.5px; color:rgba(255,255,255,.72); margin:5px 0 14px; }
 .hec-hod strong { color:var(--gold); font-weight:700; }
+
+/* Signature Modes — two-up thumbnails (Play a Hole | Play a Course) */
+.mode-heading { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); padding:0 16px; margin:10px 0 10px; }
+.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; padding:0 16px; }
+.mode-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; cursor:pointer; transition:transform .15s, border-color .2s; }
+.mode-card:active { transform:scale(.98); }
+.mode-thumb { position:relative; aspect-ratio:5/4; overflow:hidden; }
+.mode-thumb svg { width:100%; height:100%; display:block; }
+.mode-thumb-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.04) 38%, rgba(6,10,14,.82) 100%); }
+.mode-tag { position:absolute; top:8px; left:8px; z-index:2; font-size:8px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#06140a; background:var(--gold); border-radius:20px; padding:3px 8px; }
+.mode-tag.blue { background:#9ed0ff; }
+.mode-title { position:absolute; left:10px; right:10px; bottom:9px; z-index:2; font-family:'Bebas Neue',sans-serif; font-size:21px; color:#fff; letter-spacing:.4px; line-height:.92; text-shadow:0 2px 8px rgba(0,0,0,.65); }
+.mode-cap { padding:9px 11px 11px; font-size:11px; color:var(--muted); line-height:1.32; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:33px; }
+.mode-cap strong { color:var(--gold); font-weight:700; }
 .one-thing { margin:4px 14px 0; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:13px 15px; }
 .ot-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); margin-bottom:5px; }
 .ot-text { font-size:14px; line-height:1.5; color:var(--text); }
@@ -1210,12 +1224,51 @@ svg { display:block; }
     <button class="daily-btn" id="daily-btn" onclick="startDaily()">GET TODAY'S EDGE →</button>
   </div>
 
-  <!-- HERO: Play a Hole — names the hole of the day -->
-  <div class="hole-entry-card hero" onclick="startHole()">
-    <div class="hec-badge">SIGNATURE MODE</div>
-    <div class="hec-title">PLAY A HOLE</div>
-    <div class="hec-hod" id="hec-hod">Shot-by-shot · Real consequences · Scorecard</div>
-    <button class="hec-btn">PLAY NOW →</button>
+  <!-- Signature Modes: Play a Hole | Play a Course (two thumbnails) -->
+  <p class="mode-heading">Signature Modes</p>
+  <div class="mode-grid">
+    <div class="mode-card" onclick="startHole()">
+      <div class="mode-thumb">
+        <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="phSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2c46"/><stop offset="1" stop-color="#3a5b73"/></linearGradient></defs>
+          <rect width="200" height="150" fill="url(#phSky)"/>
+          <ellipse cx="118" cy="60" rx="48" ry="17" fill="#3f6a44"/>
+          <ellipse cx="118" cy="58" rx="31" ry="10" fill="#4d7d50"/>
+          <path d="M68 150 L96 66 H144 L150 150 Z" fill="#3f6a44"/>
+          <path d="M86 150 L104 68 H138 L130 150 Z" fill="#4d7d50" opacity="0.85"/>
+          <line x1="118" y1="60" x2="118" y2="34" stroke="#eee" stroke-width="2"/>
+          <path d="M118 34 L133 39 L118 44 Z" fill="#d8453f"/>
+          <circle cx="108" cy="138" r="3.5" fill="#fff"/>
+          <path d="M108 138 Q150 58 118 60" fill="none" stroke="#7bdc7b" stroke-width="2" stroke-dasharray="3 4" opacity="0.75"/>
+        </svg>
+        <div class="mode-thumb-veil"></div>
+        <span class="mode-tag">Signature</span>
+        <div class="mode-title">PLAY A HOLE</div>
+      </div>
+      <div class="mode-cap" id="hec-hod">Shot-by-shot · scorecard</div>
+    </div>
+    <div class="mode-card" onclick="openPlayPrep('laytown-bettystown')">
+      <div class="mode-thumb">
+        <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pcSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#162746"/><stop offset="0.7" stop-color="#c98a4e"/><stop offset="1" stop-color="#e8bb72"/></linearGradient>
+            <radialGradient id="pcSun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff4d8"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="200" height="150" fill="url(#pcSky)"/>
+          <circle cx="138" cy="74" r="58" fill="url(#pcSun)"/>
+          <circle cx="138" cy="76" r="13" fill="#fff1cf"/>
+          <path d="M0 94 Q60 84 120 92 T200 88 V150 H0 Z" fill="#2b4938"/>
+          <path d="M0 114 Q70 102 200 110 V150 H0 Z" fill="#3f6a44"/>
+          <path d="M0 130 Q80 120 200 126 V150 H0 Z" fill="#4d7d50" opacity="0.9"/>
+          <line x1="60" y1="120" x2="60" y2="100" stroke="#eee" stroke-width="2"/>
+          <path d="M60 100 L74 105 L60 110 Z" fill="#d8453f"/>
+        </svg>
+        <div class="mode-thumb-veil"></div>
+        <span class="mode-tag blue">New</span>
+        <div class="mode-title">PLAY A COURSE</div>
+      </div>
+      <div class="mode-cap">⛳ <strong>Featured:</strong> Laytown & Bettystown</div>
+    </div>
   </div>
 
   <!-- One contextual strip: your leak (when known) -->
@@ -1291,9 +1344,6 @@ svg { display:block; }
 
   <!-- 3 · Your game: diagnose + train the leak -->
   <div id="debrief-card-wrap" style="margin-top:8px"></div>
-
-  <!-- Play Prep -->
-  <div id="playprep-card-wrap"></div>
 
   <!-- 4 · Pre-Round Warm-Up -->
   <div id="saturday-card-wrap"></div>
@@ -2289,9 +2339,6 @@ function renderSharpen(){
   });
 
   // Saturday Card
-  // Play Prep card
-  renderPlayPrepCard();
-
   const satWrap = document.getElementById('saturday-card-wrap');
   if(satWrap){
     const done = S.lastSaturday === weekNumber();
