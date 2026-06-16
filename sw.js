@@ -1,6 +1,6 @@
 // GameSharp Golf — service worker
 // Makes the app open offline once visited (critical: golf courses have poor signal).
-const CACHE = 'gamesharp-golf-v3';
+const CACHE = 'gamesharp-golf-v4';
 const SHELL = ['./', './index.html', './manifest.json', './icon.svg', './laytown-hero.jpg', './baltray-hero.jpg', './play-a-hole-hero.jpg', './play-a-course-hero.jpg'];
 
 self.addEventListener('install', (e) => {
@@ -29,9 +29,13 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('./index.html', copy));
-          return res;
+          // Only cache a genuinely good page — never store a 404/error as the shell.
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put('./index.html', copy));
+            return res;
+          }
+          return caches.match('./index.html').then((cached) => cached || res);
         })
         .catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
     );
