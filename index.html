@@ -1017,6 +1017,97 @@ svg { display:block; }
 .ib-text strong { color:var(--gold); }
 .ib-btn  { background:var(--gold); color:#111; border-radius:var(--radius-sm); padding:8px 16px; font-weight:700; font-size:13px; white-space:nowrap; border:none; cursor:pointer; }
 .ib-close { color:var(--muted); font-size:20px; cursor:pointer; flex-shrink:0; background:none; border:none; }
+
+/* ════════════════ PLAY PREP ════════════════ */
+.playprep-card { position:relative; overflow:hidden; cursor:pointer; margin:14px 16px 12px; padding:0;
+  border-radius:var(--radius); border:1px solid rgba(120,170,210,.28);
+  box-shadow:0 14px 34px rgba(0,0,0,.5); transition:transform .15s, border-color .2s; }
+.playprep-card:active { transform:scale(.99); }
+.pp-card-art { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.pp-card-inner { position:relative; z-index:1; padding:18px; min-height:118px; display:flex; flex-direction:column; justify-content:flex-end;
+  background:linear-gradient(180deg, rgba(10,16,24,.05) 0%, rgba(8,12,18,.55) 55%, rgba(6,10,14,.9) 100%); }
+.pp-card-eyebrow { font-size:9.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#9ed0ff; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.pp-card-title { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#fff; line-height:.92; letter-spacing:.5px; }
+.pp-card-sub { font-size:12px; color:rgba(255,255,255,.74); margin-top:6px; line-height:1.4; }
+.pp-card-feat { font-size:11px; color:var(--gold); font-weight:700; margin-top:8px; letter-spacing:.02em; }
+.pp-card-arrow { position:absolute; right:16px; bottom:16px; z-index:2; color:#9ed0ff; font-size:22px; }
+.pp-card-badge { position:absolute; top:14px; right:14px; z-index:2; font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+  color:#06140a; background:var(--gold); border-radius:20px; padding:4px 10px; }
+
+#view-playprep { background:var(--dark); padding-bottom:40px; }
+#view-playprep > * { flex-shrink:0; }
+.pp-topbar { display:flex; align-items:center; justify-content:space-between; padding:max(12px,env(safe-area-inset-top)) 16px 10px;
+  border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(10,12,14,.82); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); z-index:10; }
+.pp-back, .pp-close { background:none; border:none; color:var(--muted); font-size:14px; font-weight:600; cursor:pointer; padding:4px; }
+.pp-close { font-size:18px; }
+.pp-topbar-title { font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#9ed0ff; }
+
+/* Hero */
+.pp-hero { position:relative; width:100%; height:340px; overflow:hidden; }
+.pp-hero-svg { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.pp-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.pp-wind { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.pp-wind span { position:absolute; height:2px; border-radius:2px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  opacity:0; animation:ppWind linear infinite; }
+@keyframes ppWind { 0%{ transform:translateX(-30%); opacity:0; } 12%{ opacity:.7; } 80%{ opacity:.5; } 100%{ transform:translateX(130%); opacity:0; } }
+.pp-hero-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,12,20,.12) 0%, rgba(6,12,20,0) 38%, rgba(6,10,16,.55) 72%, rgba(5,9,14,.96) 100%); }
+.pp-hero-overlay { position:absolute; left:18px; right:18px; bottom:20px; z-index:2; }
+.pp-hero-eyebrow { font-size:10px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9ed0ff; margin-bottom:7px; text-shadow:0 1px 6px rgba(0,0,0,.8); }
+.pp-hero-name { font-family:'Bebas Neue',sans-serif; font-size:40px; line-height:.92; color:#fff; letter-spacing:.5px; text-shadow:0 3px 16px rgba(0,0,0,.7); }
+.pp-hero-identity { font-family:'DM Sans',sans-serif; font-size:15px; font-style:italic; color:rgba(255,255,255,.9); margin-top:8px; text-shadow:0 2px 10px rgba(0,0,0,.7); }
+.pp-hero-time { display:inline-block; margin-top:12px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#fff;
+  background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); border-radius:20px; padding:5px 12px; }
+
+/* Sections */
+.pp-section { padding:24px 18px 4px; }
+.pp-eyebrow { font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.pp-h2 { font-family:'Bebas Neue',sans-serif; font-size:27px; color:#fff; line-height:1; margin-bottom:14px; letter-spacing:.4px; }
+.pp-identity p { font-size:14.5px; line-height:1.62; color:rgba(255,255,255,.82); margin-bottom:13px; }
+.pp-identity p strong { color:#fff; font-weight:700; }
+
+/* Scroll reveal */
+.pp-reveal { opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease-out-quint), transform .6s var(--ease-out-quint); }
+.pp-reveal.in { opacity:1; transform:none; }
+
+/* Course DNA */
+.pp-dna-card { background:linear-gradient(160deg,#141a22 0%,#0d1117 100%); border:1px solid rgba(120,170,210,.16); border-radius:var(--radius); padding:16px 17px; margin-bottom:11px; }
+.pp-dna-theme { font-size:9.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#9ed0ff; margin-bottom:6px; }
+.pp-dna-title { font-family:'Bebas Neue',sans-serif; font-size:21px; color:#fff; line-height:1.02; margin-bottom:7px; }
+.pp-dna-body { font-size:13.5px; line-height:1.58; color:rgba(255,255,255,.76); }
+
+/* Insights */
+.pp-insight { position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 17px 16px; margin-bottom:12px; overflow:hidden; }
+.pp-insight::before { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; background:var(--gold); }
+.pp-insight-head { display:flex; align-items:flex-start; gap:11px; margin-bottom:12px; }
+.pp-insight-num { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--gold); line-height:.9; flex-shrink:0; width:26px; }
+.pp-insight-title { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; line-height:1.02; }
+.pp-ins-row { margin-bottom:10px; }
+.pp-ins-label { font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.pp-ins-val { font-size:13.5px; line-height:1.5; color:rgba(255,255,255,.86); }
+.pp-ins-cue { color:#fff; font-weight:600; }
+.pp-ins-hook { margin-top:12px; padding:11px 13px; background:rgba(200,168,75,.08); border:1px solid rgba(200,168,75,.2); border-radius:var(--radius-sm); }
+.pp-ins-hook .pp-ins-label { color:var(--gold); }
+.pp-ins-hook .pp-ins-val { font-style:italic; color:rgba(255,255,255,.84); }
+
+/* One Thing */
+.pp-onething { margin:26px 16px; padding:32px 22px; text-align:center; border-radius:var(--radius);
+  background:linear-gradient(150deg,#1c2740 0%,#0e1320 60%,#0b0f18 100%); border:1px solid rgba(158,208,255,.22); }
+.pp-onething-label { font-size:10px; font-weight:800; letter-spacing:.2em; text-transform:uppercase; color:#9ed0ff; margin-bottom:14px; }
+.pp-onething-text { font-family:'Bebas Neue',sans-serif; font-size:42px; line-height:.98; color:#fff; letter-spacing:.5px; }
+
+/* Return loop */
+.pp-return-cta { margin:8px 16px 0; }
+.pp-return-cta button, .pp-cta { width:100%; background:var(--gold); color:#06140a; font-family:'Bebas Neue',sans-serif; font-size:19px; letter-spacing:1px; border:none; border-radius:13px; padding:15px; cursor:pointer; box-shadow:0 8px 24px rgba(200,168,75,.26); transition:transform .15s; }
+.pp-return-cta button:active, .pp-cta:active { transform:scale(.98); }
+.pp-return-done { margin:8px 16px 0; text-align:center; font-size:13px; color:var(--muted); padding:14px; border:1px dashed var(--border); border-radius:var(--radius); }
+.pp-rq { margin-bottom:22px; }
+.pp-rq-q { font-family:'Bebas Neue',sans-serif; font-size:23px; color:#fff; line-height:1.05; margin-bottom:13px; letter-spacing:.3px; }
+.pp-ropt { display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 15px; margin-bottom:9px; cursor:pointer; transition:border-color .15s, background .15s; }
+.pp-ropt:active { transform:scale(.99); }
+.pp-ropt.sel { border-color:var(--gold); background:rgba(200,168,75,.1); }
+.pp-ropt-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; transition:border-color .15s, background .15s; }
+.pp-ropt.sel .pp-ropt-dot { border-color:var(--gold); background:var(--gold); box-shadow:inset 0 0 0 3px var(--card2); }
+.pp-ropt-label { font-size:14px; color:var(--text); line-height:1.35; }
 </style>
 </head>
 <body>
@@ -1134,6 +1225,9 @@ svg { display:block; }
   <!-- 3 · Your game: diagnose + train the leak -->
   <div id="debrief-card-wrap" style="margin-top:8px"></div>
 
+  <!-- Play Prep -->
+  <div id="playprep-card-wrap"></div>
+
   <!-- 4 · Pre-Round Warm-Up -->
   <div id="saturday-card-wrap"></div>
 
@@ -1150,6 +1244,16 @@ svg { display:block; }
       <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
     </div>
   </nav>
+</div>
+
+<!-- ============================== PLAY PREP ============================== -->
+<div class="view" id="view-playprep">
+  <div class="pp-topbar">
+    <button class="pp-back" onclick="renderSharpen();showView('sharpen')">‹ Sharpen</button>
+    <div class="pp-topbar-title">PLAY PREP</div>
+    <button class="pp-close" onclick="renderSharpen();showView('sharpen')">✕</button>
+  </div>
+  <div id="pp-app"><!-- rendered by JS --></div>
 </div>
 
 <!-- ============================== PILLAR ============================== -->
@@ -2118,6 +2222,9 @@ function renderSharpen(){
   });
 
   // Saturday Card
+  // Play Prep card
+  renderPlayPrepCard();
+
   const satWrap = document.getElementById('saturday-card-wrap');
   if(satWrap){
     const done = S.lastSaturday === weekNumber();
@@ -3480,6 +3587,306 @@ function mountGolfSwing(stageId, ctrlId, figKey, mode, autoplay){
   }
   if(autoplay) gswPlay(); else gswRender(0);
   return true;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  PLAY PREP — reusable course-brief engine (data-driven)
+//  Trust rule: history is verified-sourced; strategy is GameSharp's
+//  own decision analysis. No fabricated facts, quotes or hole detail.
+// ════════════════════════════════════════════════════════════════
+const PLAY_PREP_COURSES = {
+  'laytown-bettystown': {
+    id: 'laytown-bettystown',
+    name: 'Laytown & Bettystown',
+    identityLine: 'Where links golfers are made.',
+    minutes: 7,
+    location: 'Mornington, Co. Meath',
+    identity: [
+      `Laytown & Bettystown is a traditional Irish links — firm turf, raised greens and an exposed routing running along the strand at Mornington, Co. Meath. The club was founded in 1909 and has kept its links character for over a century.`,
+      `Links golf here rewards control, not power. The player who flights the ball low, uses the firm ground and respects the wind will beat the one who simply hits it far. This is a thinker's course.`,
+      `Scores unravel when visitors fire at flags through the breeze and short-side themselves on fast, contoured greens. Respect the wind before the swing, favour the fat of the green, and accept that into a stiff breeze, bogey is often a good score.`
+    ],
+    dna: [
+      { theme:'Founding Story', title:'From four holes in the dunes',
+        body:`In the late 1880s, Tom Gilroy — a retired Scottish banker and Royal Dublin member — cut four private holes into the dunes near Mornington, by the old lighthouses at the Maiden Tower. In 1909 a band of golfing pioneers formally founded the club "to finish off Mr Gilroy's work." Nine holes became eighteen by 1917.` },
+      { theme:'Local Champions', title:'A links that made Ryder Cup players',
+        body:`Two Ryder Cup players learned the game on this links, both coached by long-serving club professional Bobby Browne. Des Smyth — the club's most famous son — played the 1979 and 1981 Ryder Cups. Philip Walton went on to a Ryder Cup of his own.` },
+      { theme:'Defining Characteristic', title:'The wind teaches control',
+        body:`An exposed coastal routing means the wind is always part of the conversation. Generations of golfers here grew up learning to control ball flight rather than overpower it — the very trait that produces shotmakers.` },
+      { theme:'Historic Moment', title:'The putt that won a Ryder Cup',
+        body:`At Oak Hill in 1995, Laytown & Bettystown's Philip Walton holed the putt that clinched the Ryder Cup for Europe, beating Jay Haas in the decisive match. A links on the Meath coast had produced the man who closed out one of Europe's most famous wins.` }
+    ],
+    insights: [
+      { title:'Respect the wind before the swing',
+        strategic:`Wind dictates club and shot shape on nearly every hole. Read it before you choose a target — not after you've already pulled a club.`,
+        cue:`Commit fully once you've chosen the shot.`,
+        proLens:`Experienced links players club up and swing easier — a smoother strike holds its line in wind far better than a hard one.`,
+        context:`The exposed routing leaves holes open to shifting sea breezes; the same hole can play two or three clubs different in a day.`,
+        hook:`Generations of locals learned that fighting the wind rarely works. Working with it built the shotmakers who came out of here.` },
+      { title:'Keep it under the wind',
+        strategic:`High, soft shots balloon and get punished. The lower, flighted shot is the scoring shot on a links.`,
+        cue:`Ball back, hands forward, three-quarter finish.`,
+        proLens:`Pros take one more club and choke down to flight it lower, rather than swinging hard with a lofted club.`,
+        context:`Firm turf and wind reward a penetrating flight — low enough to hold its line, soft enough to settle.`,
+        hook:`Control beats power. It's the lesson this coastline has taught for over a century.` },
+      { title:`Use the ground, don't fly it all`,
+        strategic:`Firm fairways and approaches let you land short and let the ball run. The bump-and-run is often the percentage play.`,
+        cue:`Pick a landing spot short of the target, not the flag.`,
+        proLens:`Around the greens, the putter or a low chip off tight links lies beats a lofted wedge more often than not.`,
+        context:`Raised, firm greens repel aerial attacks; the ground game is how members get the ball close.`,
+        hook:`On a true links, the smart miss runs along the ground — never long and airborne.` },
+      { title:'Favour the fat side of the green',
+        strategic:`Aim at the safe middle, not the flag. Short-siding yourself on firm, contoured greens is where big numbers begin.`,
+        cue:`Middle of the green is a good shot.`,
+        proLens:`Good players choose the side they can miss on and still get up and down, then aim away from the trouble.`,
+        context:`These greens run firm and feed misses into trouble — the long, into-the-wind approach especially should bail to the wide side.`,
+        hook:`Bogey into a stiff breeze is often a good score. Protect it.` },
+      { title:'Plan your miss off the tee',
+        strategic:`On exposed holes, decide where the safe miss is before you swing. Position beats distance into the wind.`,
+        cue:`Where is the bad shot allowed to go?`,
+        proLens:`Links players trade driver for a fairway club when wind narrows the fairway — a ball in play beats forty more yards in the rough.`,
+        context:`Wind tightens landing areas and firm ground sends offline tee shots bounding into trouble.`,
+        hook:`The shotmakers from here won by thinking one shot ahead — not by hitting it hardest.` }
+    ],
+    holeSpotlights: [], // V1: omitted — no verified per-hole detail
+    oneThing: 'Control beats power.',
+    returnQuestions: [
+      { q:'What surprised you most?', options:[
+        { label:'How much the wind changed every club' },
+        { label:'How firm and fast the greens ran' },
+        { label:'How much the ground game helped' },
+        { label:'How punishing a short-side miss was' } ] },
+      { q:'Which insight proved true?', options:[
+        { label:'Respect the wind before the swing' },
+        { label:'Keep it under the wind' },
+        { label:'Use the ground, don’t fly it all' },
+        { label:'Favour the fat side of the green' } ] },
+      { q:'Where did you lose the most shots?', options:[
+        { label:'Off the tee', leakTag:'Penalty' },
+        { label:'Approach / into the wind', leakTag:'Double bogey' },
+        { label:'Around the greens', leakTag:'Short-sided' },
+        { label:'On the greens', leakTag:'Three-putt' } ] }
+    ]
+  }
+};
+const PLAY_PREP_DEFAULT = 'laytown-bettystown';
+function ppCourse(id){ return PLAY_PREP_COURSES[id] || PLAY_PREP_COURSES[PLAY_PREP_DEFAULT]; }
+
+let ppReturnState = { id:null, answers:[null,null,null] };
+
+// Bespoke links scene — dusk fairway, sea, dune layers, tower, flag.
+function ppHeroSvg(){
+  return `<svg class="pp-hero-svg" viewBox="0 0 375 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ppSky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#162746"/><stop offset="0.5" stop-color="#3a5b73"/>
+        <stop offset="0.8" stop-color="#c98a4e"/><stop offset="1" stop-color="#e8bb72"/></linearGradient>
+      <radialGradient id="ppSun" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#fff4d8"/><stop offset="0.4" stop-color="#ffd98a"/>
+        <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+      <linearGradient id="ppSea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#d2a266"/><stop offset="1" stop-color="#728d88"/></linearGradient>
+    </defs>
+    <rect width="375" height="340" fill="url(#ppSky)"/>
+    <circle cx="250" cy="178" r="125" fill="url(#ppSun)"/>
+    <circle cx="250" cy="180" r="25" fill="#fff1cf"/>
+    <rect x="0" y="194" width="375" height="22" fill="url(#ppSea)" opacity="0.65"/>
+    <path d="M0 214 Q90 196 180 210 T375 204 V340 H0 Z" fill="#2b4938"/>
+    <path d="M0 246 Q120 224 240 244 T375 240 V340 H0 Z" fill="#3f6a44"/>
+    <path d="M0 262 Q140 246 260 264 T375 262 V340 H0 Z" fill="#4d7d50" opacity="0.9"/>
+    <path d="M0 294 Q110 272 220 290 T375 286 V340 H0 Z" fill="#324f2e"/>
+    <g fill="#152029" opacity="0.92">
+      <rect x="322" y="118" width="14" height="90" rx="2"/>
+      <rect x="320" y="110" width="18" height="10" rx="2"/>
+      <polygon points="320,110 338,110 329,98"/></g>
+    <g><line x1="118" y1="302" x2="118" y2="260" stroke="#eee" stroke-width="2"/>
+      <path d="M118 260 L139 266 L118 272 Z" fill="#d8453f"/></g>
+  </svg>`;
+}
+function ppWindLayer(){
+  const streaks = [
+    {top:64,w:90,dur:7,delay:0},{top:96,w:130,dur:9,delay:1.5},{top:130,w:70,dur:6,delay:3},
+    {top:150,w:110,dur:8,delay:.6},{top:176,w:150,dur:10,delay:2.2}
+  ];
+  return `<div class="pp-wind">${streaks.map(s=>
+    `<span style="top:${s.top}px;width:${s.w}px;animation-duration:${s.dur}s;animation-delay:${s.delay}s"></span>`).join('')}</div>`;
+}
+
+function renderPlayPrepCard(){
+  const wrap = document.getElementById('playprep-card-wrap');
+  if(!wrap) return;
+  const c = ppCourse();
+  const seen = LS.get('playprep_seen_'+c.id);
+  const returned = LS.get('playprep_returned_'+c.id);
+  let badge, title, sub;
+  if(returned){ badge='Round logged'; title='TELL US HOW IT PLAYED'; sub='Revisit your brief, or start your next challenge.'; }
+  else if(seen){ badge='In brief'; title='REVIEW YOUR BRIEF'; sub='Played it? Tell us how it went.'; }
+  else { badge='New'; title='PLAY PREP'; sub='Brief yourself before an unfamiliar course.'; }
+  wrap.innerHTML = `<div class="playprep-card" onclick="openPlayPrep('${c.id}')">
+    <div class="pp-card-art">${ppHeroSvg()}</div>
+    <div class="pp-card-badge">${badge}</div>
+    <div class="pp-card-inner">
+      <div class="pp-card-eyebrow">⛳ Play Prep</div>
+      <div class="pp-card-title">${title}</div>
+      <div class="pp-card-sub">${sub}</div>
+      <div class="pp-card-feat">Featuring: ${c.name}</div>
+    </div>
+    <div class="pp-card-arrow">→</div>
+  </div>`;
+}
+
+function ppBriefHtml(c){
+  const dna = c.dna.map(d=>`
+    <div class="pp-dna-card pp-reveal">
+      <div class="pp-dna-theme">${d.theme}</div>
+      <div class="pp-dna-title">${d.title}</div>
+      <div class="pp-dna-body">${d.body}</div>
+    </div>`).join('');
+  const insights = c.insights.map((ins,i)=>`
+    <div class="pp-insight pp-reveal">
+      <div class="pp-insight-head">
+        <div class="pp-insight-num">${i+1}</div>
+        <div class="pp-insight-title">${ins.title}</div>
+      </div>
+      <div class="pp-ins-row"><div class="pp-ins-label">Strategic Insight</div><div class="pp-ins-val">${ins.strategic}</div></div>
+      <div class="pp-ins-row"><div class="pp-ins-label">Mental Cue</div><div class="pp-ins-val pp-ins-cue">${ins.cue}</div></div>
+      <div class="pp-ins-row"><div class="pp-ins-label">Pro Lens</div><div class="pp-ins-val">${ins.proLens}</div></div>
+      <div class="pp-ins-row"><div class="pp-ins-label">Course Context</div><div class="pp-ins-val">${ins.context}</div></div>
+      <div class="pp-ins-hook"><div class="pp-ins-label">Why it matters here</div><div class="pp-ins-val">${ins.hook}</div></div>
+    </div>`).join('');
+  const returned = LS.get('playprep_returned_'+c.id);
+  const returnBlock = returned
+    ? `<div class="pp-return-done">✓ Round logged. <span style="color:var(--gold);text-decoration:underline;cursor:pointer" onclick="startPlayPrepReturn('${c.id}')">Update how it played</span></div>`
+    : `<div class="pp-return-cta"><button onclick="startPlayPrepReturn('${c.id}')">Played it? Tell us how it went →</button></div>`;
+  return `
+    <div class="pp-hero">
+      ${ppHeroSvg()}
+      ${ppWindLayer()}
+      <div class="pp-hero-veil"></div>
+      <div class="pp-hero-overlay">
+        <div class="pp-hero-eyebrow">Play Prep · ${c.location}</div>
+        <div class="pp-hero-name">${c.name.toUpperCase()}</div>
+        <div class="pp-hero-identity">${c.identityLine}</div>
+        <div class="pp-hero-time">≈ ${c.minutes} min brief</div>
+      </div>
+    </div>
+    <div class="pp-section">
+      <div class="pp-eyebrow">Course Identity</div>
+      <div class="pp-h2">What you're walking into</div>
+      <div class="pp-identity">${c.identity.map(p=>`<p>${p}</p>`).join('')}</div>
+    </div>
+    <div class="pp-section">
+      <div class="pp-eyebrow">Course DNA</div>
+      <div class="pp-h2">What makes it unique</div>
+      ${dna}
+    </div>
+    <div class="pp-section">
+      <div class="pp-eyebrow">The Five Core Insights</div>
+      <div class="pp-h2">How to think your way round</div>
+      ${insights}
+    </div>
+    <div class="pp-onething pp-reveal">
+      <div class="pp-onething-label">One thing to remember</div>
+      <div class="pp-onething-text">${c.oneThing}</div>
+    </div>
+    <div class="pp-section" style="padding-top:8px">
+      <div class="pp-eyebrow">After the round</div>
+      <div class="pp-h2">Played it? Tell us how it went</div>
+      <div class="pp-card-sub" style="color:var(--muted);margin-bottom:14px">Three quick questions turn your round into a personalised five-question challenge.</div>
+      ${returnBlock}
+    </div>
+    <div style="height:30px"></div>`;
+}
+
+function openPlayPrep(id){
+  const c = ppCourse(id);
+  LS.set('playprep_seen_'+c.id, true);
+  const app = document.getElementById('pp-app');
+  if(app) app.innerHTML = ppBriefHtml(c);
+  showView('playprep');
+  const v = document.getElementById('view-playprep'); if(v) v.scrollTop = 0;
+  ppObserveReveals();
+}
+
+function ppObserveReveals(){
+  const els = document.querySelectorAll('#view-playprep .pp-reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+  els.forEach(e=>io.observe(e));
+}
+
+function startPlayPrepReturn(id){
+  const c = ppCourse(id);
+  ppReturnState = { id, answers:[null,null,null] };
+  const prev = LS.get('playprep_return_answers_'+id);
+  if(Array.isArray(prev)) ppReturnState.answers = prev.slice(0,3);
+  ppRenderReturn();
+}
+
+function ppRenderReturn(){
+  const c = ppCourse(ppReturnState.id);
+  const qs = c.returnQuestions.map((rq,qi)=>`
+    <div class="pp-rq">
+      <div class="pp-rq-q">${qi+1}. ${rq.q}</div>
+      ${rq.options.map((o,oi)=>`
+        <div class="pp-ropt ${ppReturnState.answers[qi]===oi?'sel':''}" onclick="ppPickReturn(${qi},${oi})">
+          <div class="pp-ropt-dot"></div><div class="pp-ropt-label">${o.label}</div>
+        </div>`).join('')}
+    </div>`).join('');
+  const ready = ppReturnState.answers.every(a=>a!==null);
+  const app = document.getElementById('pp-app');
+  app.innerHTML = `
+    <div class="pp-section" style="padding-top:18px">
+      <div class="pp-eyebrow">${c.name} · After the round</div>
+      <div class="pp-h2">How did it play?</div>
+      ${qs}
+      <div class="pp-return-cta">
+        <button id="pp-return-submit" ${ready?'':'disabled style="opacity:.45"'} onclick="submitPlayPrepReturn('${c.id}')">Get my next challenge →</button>
+      </div>
+      <div style="text-align:center;margin-top:14px">
+        <button class="pp-back" onclick="openPlayPrep('${c.id}')">‹ Back to brief</button>
+      </div>
+    </div>
+    <div style="height:30px"></div>`;
+  const v = document.getElementById('view-playprep'); if(v) v.scrollTop = 0;
+}
+
+function ppPickReturn(qi, oi){
+  ppReturnState.answers[qi] = oi;
+  ppRenderReturn();
+}
+
+function ppPillarFor(leakTag){
+  const map = { 'Penalty':'Course IQ', 'Double bogey':'Score Smart', 'Short-sided':'Short Game', 'Three-putt':'Short Game' };
+  return PILLARS.find(p=>p.name===map[leakTag]) || PILLARS[0];
+}
+
+function submitPlayPrepReturn(id){
+  const c = ppCourse(id);
+  if(!ppReturnState.answers.every(a=>a!==null)) return;
+  LS.set('playprep_return_answers_'+id, ppReturnState.answers);
+  LS.set('playprep_returned_'+id, true);
+  // Q3 (index 2) drives the targeted challenge
+  const q3 = c.returnQuestions[2];
+  const leakTag = (q3.options[ppReturnState.answers[2]] || {}).leakTag || 'Double bogey';
+  launchPlayPrepChallenge(leakTag);
+}
+
+function launchPlayPrepChallenge(leakTag){
+  const pillar = ppPillarFor(leakTag);
+  let pool = QUESTIONS.filter(q => q.primary_score_leak === leakTag);
+  if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
+  if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => !pool.includes(q)));
+  const qs = preferUnseen(bandPrefer(shuffle(pool))).slice(0,5);
+  S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Play Prep Challenge', mode:'crash' };
+  setPillarColor(pillar.color);
+  document.getElementById('qt-pillar').textContent = 'Play Prep · ' + leakTag;
+  document.getElementById('qt-pillar').style.color = pillar.color;
+  document.getElementById('quiz-prog').style.background = pillar.color;
+  loadQuestion();
+  showView('quiz');
 }
 
 let techState = { strokeIdx:-1, faultIdx:0, answered:false };
