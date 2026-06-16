@@ -181,7 +181,7 @@ svg { display:block; }
 .streak-badge .count { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--gold); line-height:1; }
 .streak-badge .slabel { font-size:11px; color:var(--muted); font-weight:500; }
 .profile-btn {
-  width:38px; height:38px; border-radius:50%;
+  width:44px; height:44px; border-radius:50%;
   background:var(--card2); border:1px solid var(--border);
   display:flex; align-items:center; justify-content:center;
   font-size:18px; cursor:pointer;
@@ -1475,7 +1475,6 @@ svg { display:block; }
 <!-- ============================== PROFILE ============================== -->
 <div class="view" id="view-profile">
   <div class="profile-hero">
-    <button class="profile-back" onclick="showView('home')">← Back</button>
     <div class="profile-arch-row">
       <div class="profile-arch-icon" id="pa-icon">🏆</div>
       <div>
@@ -1505,6 +1504,18 @@ svg { display:block; }
     </div>
     <div id="crash-course-profile-wrap" style="margin-top:20px"></div>
   </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item" data-nav="home" onclick="navTo('home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
+      <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
+    </div>
+    <div class="nav-item" data-nav="profile" onclick="showProfile()">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+    </div>
+  </nav>
 </div>
 
 <!-- ============================== DAILY COMPLETE ============================== -->
@@ -3916,7 +3927,33 @@ let ppReturnState = { id:null, answers:[null,null,null] };
 let ppCurrentCourse = PLAY_PREP_DEFAULT;
 
 // Bespoke links scene — dusk fairway, sea, dune layers, tower, flag.
-function ppHeroSvg(){
+function ppHeroSvg(variant){
+  // Baltray (County Louth): towering dunes + distant Mourne mountains, no tower.
+  if(variant === 'county-louth'){
+    return `<svg class="pp-hero-svg" viewBox="0 0 375 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#16243f"/><stop offset="0.5" stop-color="#46637a"/>
+          <stop offset="0.82" stop-color="#caa15e"/><stop offset="1" stop-color="#e6c179"/></linearGradient>
+        <radialGradient id="bSun" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#fff4da"/><stop offset="0.45" stop-color="#ffdf99"/>
+          <stop offset="1" stop-color="#ffdf99" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="375" height="340" fill="url(#bSky)"/>
+      <circle cx="140" cy="172" r="120" fill="url(#bSun)"/>
+      <circle cx="140" cy="174" r="24" fill="#fff1cf"/>
+      <!-- distant Mourne mountains -->
+      <path d="M0 196 L70 168 L120 188 L190 158 L250 186 L320 166 L375 190 V210 H0 Z" fill="#3c4f63" opacity="0.6"/>
+      <!-- big rolling dunes -->
+      <path d="M0 212 Q70 178 150 206 T300 198 T375 206 V340 H0 Z" fill="#28432f"/>
+      <path d="M0 250 Q90 212 200 246 T375 240 V340 H0 Z" fill="#3a6340"/>
+      <path d="M0 276 Q120 244 250 274 T375 270 V340 H0 Z" fill="#4a7a4d" opacity="0.92"/>
+      <path d="M0 304 Q100 280 210 300 T375 298 V340 H0 Z" fill="#2e4a2c"/>
+      <g><line x1="96" y1="300" x2="96" y2="258" stroke="#eee" stroke-width="2"/>
+        <path d="M96 258 L117 264 L96 270 Z" fill="#d8453f"/></g>
+    </svg>`;
+  }
+  // Laytown & Bettystown (default): links with the Maiden Tower / lighthouse.
   return `<svg class="pp-hero-svg" viewBox="0 0 375 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="ppSky" x1="0" y1="0" x2="0" y2="1">
@@ -4003,7 +4040,7 @@ function ppBriefHtml(c){
     : `<div class="pp-return-cta"><button onclick="startPlayPrepReturn('${c.id}')">Played it? Tell us how it went →</button></div>`;
   return `
     <div class="pp-hero">
-      ${ppHeroSvg()}
+      ${ppHeroSvg(c.id)}
       ${ppWindLayer()}
       <div class="pp-hero-veil"></div>
       <div class="pp-hero-overlay">
@@ -4192,7 +4229,7 @@ function openCoursePicker(){
     const seen = LS.get('playprep_seen_'+id);
     const status = done ? 'Reviewed ✓' : (seen ? 'Continue →' : 'Brief →');
     return `<div class="pp-course-card" onclick="openPlayPrep('${id}')">
-      <div class="pp-course-thumb">${ppHeroSvg()}<div class="pp-course-veil"></div>
+      <div class="pp-course-thumb">${ppHeroSvg(id)}<div class="pp-course-veil"></div>
         <div class="pp-course-name">${c.name.toUpperCase()}</div></div>
       <div class="pp-course-meta"><span>${c.location} · ≈ ${c.minutes} min</span><span class="pp-course-go">${status}</span></div>
     </div>`; }).join('');
