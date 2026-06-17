@@ -2423,11 +2423,9 @@ function renderHome(){
   const hodEl = document.getElementById('hec-hod');
   if(hodEl){
     try{
-      const seed = parseInt(todayStr().replace(/-/g,''));
-      const total = ALL_HOLES.length + (typeof BROADCAST!=='undefined' ? BROADCAST.length : 0);
-      const pick = seed % total;
-      if(typeof BROADCAST!=='undefined' && pick >= ALL_HOLES.length){
-        hodEl.innerHTML = `📺 <strong>Today:</strong> Decision Broadcast · ${BROADCAST[pick-ALL_HOLES.length].title}`;
+      const bi = (typeof todaysBroadcastIndex==='function') ? todaysBroadcastIndex() : -1;
+      if(bi >= 0){
+        hodEl.innerHTML = `📺 <strong>Today:</strong> Decision Broadcast · ${BROADCAST[bi].title}`;
       } else {
         const hod = ALL_HOLES[holeOfTheDayIndex()];
         hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
@@ -6867,11 +6865,59 @@ const BROADCAST = [
     answer:1,
     rule:"The safe tee club can't reach the trouble on your BEST strike — not your average. Price the flush, not the typical.",
     tour:"Elite players club off their best strike. A club that can reach the trouble was never a safety play."
+  },
+  {
+    id:'bc_back_number', title:'The Back Number', par:4, yards:150, stage:'green',
+    situation:"150 to the flag. A bunker guards the front; everything long is safe. Your 8-iron flies 150 on a flush strike, your 7-iron 157. What do you hit?",
+    pin:{x:202,y:60},
+    greenHazards:[{type:'bunker', x:200, y:100}],
+    options:[
+      { label:'Stock 8-iron at the flag', sub:'Your number — on a perfect strike', kind:'trap', lx:202, ly:96, mx:200, my:101, result:"Caught it a fraction heavy and it's in the front bunker. Half of all 150-yard approaches finish short.", tick:'Short · bunker' },
+      { label:'Hard 8-iron', sub:'Force the carry', kind:'trap', lx:204, ly:92, mx:200, my:101, result:"Trying to add yards adds dispersion. A slight mishit is still short, in the sand.", tick:'Short · bunker' },
+      { label:'Smooth 7-iron to centre-back', sub:'Covers the front on any strike', kind:'smart', lx:206, ly:52, result:"Pin-high to the back-middle. Even a slightly heavy 7 clears the bunker. Two putts, no stress.", tick:'Pin high' },
+      { label:'Choke-down 6-iron', sub:'Way more than enough', kind:'weak', lx:210, ly:36, result:"Safe, but you've flown to the back third and brought the back edge into play for no reason.", tick:'Long' }
+    ],
+    answer:2,
+    rule:"Club for your average strike, not your flush. When short is the only danger, take the back number — a slightly heavy shot still finds the green.",
+    tour:"Shot Scope: 20-handicaps leave half their 150-yard approaches short. Better players club to cover the front."
+  },
+  {
+    id:'bc_long_par3', title:'The Long Par 3', par:3, yards:205, stage:'green',
+    situation:"Par 3, 205. Water sits short-right of the green, a bunker guards the left, and the pin is cut back-right. You get a shot here in the comp. Where do you aim?",
+    pin:{x:238,y:50},
+    greenHazards:[{type:'water', x:262, y:104}, {type:'bunker', x:150, y:74}],
+    options:[
+      { label:'Hybrid at the pin', sub:'Back-right flag', kind:'trap', lx:238, ly:62, mx:262, my:102, result:"A small push from 205 and it's wet. The hardest pin on the hole just cost you a penalty.", tick:'Water +1' },
+      { label:'Aim left half, take the water out', sub:'Whole pattern misses the water', kind:'smart', lx:188, ly:58, result:"Left-centre. Worst case is the bunker or a long putt — the water never enters it. A four wins holes here.", tick:'Dry' },
+      { label:'Lay up short of the water', sub:'Too timid from a one-shotter', kind:'weak', lx:205, ly:128, result:"You've turned a par 3 into a pitch-and-putt for bogey from a hole you got a shot on.", tick:'Short' },
+      { label:'Cut a long iron at the flag', sub:'Hero shot', kind:'trap', lx:240, ly:64, mx:264, my:103, result:"Shaping a long iron at a water-guarded pin is a tour-only shot. The miss is the worst one.", tick:'Water +1' }
+    ],
+    answer:1,
+    rule:"On long par 3s the target is the safe miss, not the flag. From 200+, even good players miss most greens — a four beats the field.",
+    tour:"Shot Scope par-3 data: 5-handicaps hit just 39% from 150-200. The pros aim away from the water."
+  },
+  {
+    id:'bc_downhill_lag', title:'The Downhill Lag', par:4, yards:0, stage:'putt',
+    situation:"38 feet, downhill, above the hole, and slick. Your opponent is in for par. Make it for birdie — but run it 5 feet by and the comebacker is treacherous. What's your speed?",
+    options:[
+      { label:'Firm — take the break out', sub:'Charge it in', kind:'trap', roll:1.55, result:"Blows 6 feet past. Now you've a downhill 6-footer just to halve — a real 3-putt risk.", tick:'3-putt risk' },
+      { label:'Aim high, accept 4 feet past', sub:'Standard lag', kind:'trap', roll:1.28, result:"Still 4 feet by on a slick downhill — only a coin-flip comebacker. A stressful putt from nothing.", tick:'4 ft left' },
+      { label:'Die it at the front edge', sub:'Let it topple in', kind:'smart', roll:0.96, result:"Trickles to a stop a foot away. The make chance was always low; the tap-in protects par.", tick:'Tap-in' },
+      { label:'Lag to the flat below the hole', sub:'Bail sideways', kind:'weak', roll:0.78, result:"Safe, but you've left a longer par putt than you needed and given up any birdie look.", tick:'Long par putt' }
+    ],
+    answer:2,
+    rule:"Above the hole, speed sets the score. Downhill, the correct miss is short — die it at the edge so a miss leaves a tap-in, not a 3-putt.",
+    tour:"Shot Scope: a 5-handicap three-putts every 16.7 holes — most start with downhill pace, not a bad read."
   }
 ];
 let bcState = { idx:0, answered:false };
 
 function bcStageSvg(item, chosen){
+  if(item.stage==='green') return bcGreenSvg(item, chosen);
+  if(item.stage==='putt')  return bcPuttSvg(item, chosen);
+  return bcTeeSvg(item, chosen);
+}
+function bcTeeSvg(item, chosen){
   const w=340, h=170, teeX=30, teeY=h-26, greenX=302, greenY=38;
   const obLeft = item.hazard==='ob-left';
   const bunkerRight = item.hazard==='bunker-right';
@@ -6920,13 +6966,78 @@ function bcStageSvg(item, chosen){
   return s + `</svg>`;
 }
 
+// Approach / par-3 stage: a green in the upper-centre with hazards around it.
+function bcGreenSvg(item, chosen){
+  const w=340, h=170, youX=170, youY=h-14, gX=205, gY=58;
+  let s = `<svg viewBox="0 0 ${w} ${h}" width="100%" style="border-radius:12px;max-height:200px" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${w}" height="${h}" fill="#23451c" rx="12"/>
+    <path d="M${youX} ${youY} C150 110 170 90 ${gX} ${gY}" stroke="#3f6a3a" stroke-width="46" fill="none" stroke-linecap="round" opacity="0.55"/>`;
+  (item.greenHazards||[]).forEach(hz=>{
+    if(hz.type==='water'){
+      s += `<ellipse cx="${hz.x}" cy="${hz.y}" rx="34" ry="20" fill="#1f5f86"/><ellipse cx="${hz.x}" cy="${hz.y}" rx="34" ry="20" fill="#bcdcef" opacity="0.12"/>
+        <text x="${hz.x}" y="${hz.y+3}" text-anchor="middle" font-size="7" fill="#cfe6f5" font-family="DM Sans">WATER</text>`;
+    } else {
+      s += `<ellipse cx="${hz.x}" cy="${hz.y}" rx="24" ry="12" fill="#d9c08a"/><text x="${hz.x}" y="${hz.y+3}" text-anchor="middle" font-size="6.5" fill="#7a5e28" font-family="DM Sans">BUNKER</text>`;
+    }
+  });
+  // green + pin
+  s += `<ellipse cx="${gX}" cy="${gY}" rx="56" ry="34" fill="#2f6a2a"/><ellipse cx="${gX}" cy="${gY}" rx="44" ry="26" fill="#3d8b3d" opacity="0.85"/><ellipse cx="${gX}" cy="${gY}" rx="30" ry="17" fill="#4caf50" opacity="0.5"/>`;
+  const pin=item.pin||{x:gX,y:gY};
+  s += `<line x1="${pin.x}" y1="${pin.y}" x2="${pin.x}" y2="${pin.y-18}" stroke="#fff" stroke-width="1.3"/><polygon points="${pin.x},${pin.y-18} ${pin.x+11},${pin.y-14} ${pin.x},${pin.y-10}" fill="#e05252"/><circle cx="${pin.x}" cy="${pin.y}" r="2" fill="#fff"/>`;
+  // you marker
+  s += `<circle cx="${youX}" cy="${youY}" r="4" fill="#c8a84b"/><text x="${youX}" y="${youY-8}" text-anchor="middle" font-size="7" fill="rgba(200,168,75,.8)" font-family="DM Sans">YOU</text>`;
+  if(chosen){
+    const o=item.options[chosen.i], trap=o.kind==='trap';
+    const col = trap ? '#e05252' : (o.kind==='weak' ? '#c8a84b' : '#7bdc7b');
+    const lx=o.lx, ly=o.ly, midX=(youX+lx)/2, apexY=Math.min(youY,ly)-50;
+    s += `<ellipse cx="${lx}" cy="${ly}" rx="26" ry="14" fill="${col}" opacity="0.16" stroke="${col}" stroke-width="1" stroke-dasharray="3 3"/>
+      <circle r="4.5" fill="#fff"><animateMotion id="bcBall" dur="1.1s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.5 1" path="M${youX} ${youY} Q${midX} ${apexY} ${lx} ${ly}"/></circle>`;
+    if(trap){
+      const mx=o.mx, my=o.my, mMidX=(youX+mx)/2, mApexY=Math.min(youY,my)-46;
+      s += `<circle r="4" fill="#ff7a6e" opacity="0"><set attributeName="opacity" to="1" begin="bcBall.end" fill="freeze"/><animateMotion id="bcMiss" dur="0.9s" begin="bcBall.end" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.5 1" path="M${youX} ${youY} Q${mMidX} ${mApexY} ${mx} ${my}"/></circle>
+        <circle cx="${mx}" cy="${my}" r="3" fill="#ff5252" opacity="0"><animate attributeName="opacity" from="0" to="0.9" begin="bcMiss.end" dur="0.3s" fill="freeze"/><animate attributeName="r" from="3" to="16" begin="bcMiss.end" dur="0.5s" fill="freeze"/></circle>`;
+    }
+    s += `<g opacity="0"><set attributeName="opacity" to="1" begin="bcBall.end+${trap?0.6:0.1}s" fill="freeze"/><rect x="${lx-28}" y="${ly-34}" width="56" height="17" rx="8" fill="rgba(0,0,0,.6)"/><text x="${lx}" y="${ly-22}" text-anchor="middle" font-size="9" font-weight="700" font-family="DM Sans" fill="${col}">${o.tick}</text></g>`;
+  }
+  return s + `</svg>`;
+}
+
+// Putting stage: green surface, hole + flag, ball rolls based on pace.
+function bcPuttSvg(item, chosen){
+  const w=340, h=170, ballX=170, ballY=h-20, holeX=170, holeY=46;
+  let s = `<svg viewBox="0 0 ${w} ${h}" width="100%" style="border-radius:12px;max-height:200px" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${w}" height="${h}" fill="#3d7a36" rx="12"/><rect width="${w}" height="${h}" fill="#4caf50" opacity="0.18" rx="12"/>
+    <ellipse cx="${holeX}" cy="${holeY+6}" rx="120" ry="64" fill="#2f6a2a" opacity="0.4"/>
+    <!-- downhill arrow -->
+    <line x1="${holeX+92}" y1="40" x2="${holeX+92}" y2="86" stroke="#cfe6f5" stroke-width="2" opacity="0.6"/><polygon points="${holeX+92},90 ${holeX+87},80 ${holeX+97},80" fill="#cfe6f5" opacity="0.6"/>
+    <text x="${holeX+92}" y="34" text-anchor="middle" font-size="7.5" fill="#cfe6f5" font-family="DM Sans" opacity="0.8">downhill</text>
+    <!-- hole + flag -->
+    <ellipse cx="${holeX}" cy="${holeY}" rx="6" ry="4" fill="#111"/>
+    <line x1="${holeX}" y1="${holeY}" x2="${holeX}" y2="${holeY-22}" stroke="#fff" stroke-width="1.4"/><polygon points="${holeX},${holeY-22} ${holeX+12},${holeY-18} ${holeX},${holeY-14}" fill="#e05252"/>
+    <text x="${ballX}" y="${ballY+12}" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.6)" font-family="DM Sans">38 ft · downhill</text>`;
+  if(chosen){
+    const o=item.options[chosen.i], roll=o.roll, trap=o.kind==='trap' && roll>1.05;
+    // stop position: roll>1 passes hole (above), <1 short (below)
+    const stopY = roll>=1 ? holeY - (roll-1)*70 : holeY + (1-roll)*70;
+    const made = Math.abs(roll-1) < 0.06;
+    const col = trap ? '#e05252' : (o.kind==='weak' ? '#c8a84b' : '#7bdc7b');
+    const path = made
+      ? `M${ballX} ${ballY} C${ballX-22} 120 ${ballX-14} 70 ${holeX} ${holeY}`
+      : `M${ballX} ${ballY} C${ballX-22} 120 ${ballX-12} 78 ${holeX+ (roll>=1? -2: 4)} ${stopY}`;
+    s += `<path d="${path}" stroke="${col}" stroke-width="1.6" fill="none" stroke-dasharray="3 4" opacity="0.7"/>
+      <circle r="4.5" fill="#fff"><animateMotion id="bcBall" dur="1.5s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.2 0 0.4 1" path="${path}"/></circle>`;
+    s += `<g opacity="0"><set attributeName="opacity" to="1" begin="bcBall.end" fill="freeze"/><rect x="${holeX+ (roll>=1?6:6)}" y="${stopY-8}" width="64" height="17" rx="8" fill="rgba(0,0,0,.6)"/><text x="${holeX+38}" y="${stopY+4}" text-anchor="middle" font-size="9" font-weight="700" font-family="DM Sans" fill="${col}">${o.tick}</text></g>`;
+  }
+  return s + `</svg>`;
+}
+
 function openBroadcast(idx){
   bcState = { idx, answered:false };
   const item = BROADCAST[idx];
   showView('broadcast');
   const stage = document.getElementById('bc-stage'); if(stage) stage.innerHTML = bcStageSvg(item, null);
   document.getElementById('bc-title').textContent = item.title;
-  document.getElementById('bc-meta').textContent = `Par ${item.par} · ${item.yards} yds · Decision Broadcast`;
+  document.getElementById('bc-meta').textContent = (item.yards ? `Par ${item.par} · ${item.yards} yds` : 'On the green') + ' · Decision Broadcast';
   document.getElementById('bc-situation').textContent = item.situation;
   const opts = document.getElementById('bc-opts');
   opts.innerHTML = item.options.map((o,i)=>`
@@ -6960,12 +7071,15 @@ function bcChoose(i){
   setTimeout(()=>{ try{ rev.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} }, 1400);
 }
 
-function startHole(){
-  // Front door rotates: most days a hole, some days an elite Decision Broadcast.
+// Front door rotation: every 3rd day is an elite Decision Broadcast, else a hole.
+function todaysBroadcastIndex(){
+  if(typeof BROADCAST==='undefined' || !BROADCAST.length) return -1;
   const seed = parseInt(todayStr().replace(/-/g,''));
-  const total = ALL_HOLES.length + BROADCAST.length;
-  const pick = seed % total;
-  if(pick >= ALL_HOLES.length){ openBroadcast(pick - ALL_HOLES.length); return; }
+  return (seed % 3 === 0) ? (Math.floor(seed/3) % BROADCAST.length) : -1;
+}
+function startHole(){
+  const bi = todaysBroadcastIndex();
+  if(bi >= 0){ openBroadcast(bi); return; }
   showView('hole');
   beginHole(holeOfTheDayIndex());
 }
