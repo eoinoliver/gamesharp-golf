@@ -1199,6 +1199,37 @@ svg { display:block; }
 .adv-entry-chip { font-size:10.5px; font-weight:700; color:rgba(255,255,255,.82); background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.22); border-radius:20px; padding:4px 11px; }
 .adv-entry-arrow { position:absolute; right:16px; bottom:16px; color:#9ed0ff; font-size:22px; }
 
+/* ════════ DECISION BROADCAST ════════ */
+#view-broadcast { background:var(--dark); padding-bottom:40px; }
+#view-broadcast > * { flex-shrink:0; }
+.bc-head { padding:16px 16px 6px; }
+.bc-eyebrow { font-size:9.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#9ed0ff; margin-bottom:5px; }
+.bc-title { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#fff; line-height:.95; letter-spacing:.5px; }
+.bc-meta { font-size:11.5px; color:var(--muted); margin-top:4px; }
+.bc-stage { margin:6px 16px 0; }
+.bc-stage svg { display:block; width:100%; box-shadow:0 10px 28px rgba(0,0,0,.45); }
+.bc-situation { padding:14px 16px 4px; font-size:14.5px; line-height:1.5; color:rgba(255,255,255,.9); }
+.bc-opts { padding:8px 16px 0; display:flex; flex-direction:column; gap:9px; }
+.bc-opt { display:flex; align-items:center; gap:12px; text-align:left; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 14px; cursor:pointer; transition:border-color .15s, background .15s, opacity .2s; }
+.bc-opt:active { transform:scale(.99); }
+.bc-opt-letter { width:24px; height:24px; border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--muted); flex-shrink:0; }
+.bc-opt-body { flex:1; display:flex; flex-direction:column; }
+.bc-opt-label { font-size:14px; color:var(--text); line-height:1.3; }
+.bc-opt-sub { font-size:11.5px; color:var(--muted); margin-top:2px; }
+.bc-opt.correct { border-color:#4caf50; background:rgba(76,175,80,.12); } .bc-opt.correct .bc-opt-letter { border-color:#4caf50; color:#4caf50; }
+.bc-opt.wrong { border-color:var(--wrong); background:rgba(224,82,82,.12); } .bc-opt.wrong .bc-opt-letter { border-color:var(--wrong); color:var(--wrong); }
+.bc-opt.meh { border-color:var(--gold); background:rgba(200,168,75,.1); }
+.bc-opt.dim { opacity:.45; }
+.bc-reveal { margin:16px 16px 0; padding:16px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); animation:wobFadeUp .4s var(--ease-out-quint) both; }
+.bc-verdict { font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; margin-bottom:9px; }
+.bc-verdict.ok { color:#4caf50; } .bc-verdict.no { color:var(--wrong); } .bc-verdict.meh { color:var(--gold); }
+.bc-result { font-size:14px; line-height:1.55; color:rgba(255,255,255,.88); margin-bottom:13px; }
+.bc-rule { padding:12px 14px; background:rgba(158,208,255,.08); border:1px solid rgba(158,208,255,.22); border-radius:var(--radius-sm); font-size:13.5px; line-height:1.5; color:#fff; }
+.bc-rule-l { display:block; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#9ed0ff; margin-bottom:4px; }
+.bc-tour { margin-top:11px; font-size:12.5px; font-style:italic; color:rgba(255,255,255,.8); }
+.bc-next { width:100%; margin-top:15px; background:var(--gold); color:#06140a; font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; border:none; border-radius:13px; padding:14px; cursor:pointer; }
+.bc-next:active { transform:scale(.98); }
+
 /* Home "Today's Decision" card (peppered, all users) */
 .home-decision { margin:4px 16px 0; padding:16px; cursor:pointer; border-radius:var(--radius);
   background:linear-gradient(150deg,#1a2336 0%,#11151e 60%,#0d0f14 100%);
@@ -1435,6 +1466,25 @@ svg { display:block; }
     <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 4px">Commit first — then see what tour and scratch players actually do, and why. Every number is sourced.</div>
   </div>
   <div id="adv-app"><!-- rendered by JS --></div>
+</div>
+
+<!-- ============================== DECISION BROADCAST ============================== -->
+<div class="view" id="view-broadcast">
+  <div class="pp-topbar">
+    <button class="pp-back" onclick="renderHome();showView('home')">‹ Home</button>
+    <div class="pp-topbar-title">DECISION BROADCAST</div>
+    <button class="pp-close" onclick="renderHome();showView('home')">✕</button>
+  </div>
+  <div class="bc-head">
+    <div class="bc-eyebrow">⚡ Decision Broadcast</div>
+    <div class="bc-title" id="bc-title"></div>
+    <div class="bc-meta" id="bc-meta"></div>
+  </div>
+  <div class="bc-stage" id="bc-stage"></div>
+  <div class="bc-situation" id="bc-situation"></div>
+  <div class="bc-opts" id="bc-opts"></div>
+  <div class="bc-reveal" id="bc-reveal" hidden></div>
+  <div style="height:28px"></div>
 </div>
 
 <!-- ============================== PILLAR ============================== -->
@@ -2373,8 +2423,15 @@ function renderHome(){
   const hodEl = document.getElementById('hec-hod');
   if(hodEl){
     try{
-      const hod = ALL_HOLES[holeOfTheDayIndex()];
-      hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
+      const seed = parseInt(todayStr().replace(/-/g,''));
+      const total = ALL_HOLES.length + (typeof BROADCAST!=='undefined' ? BROADCAST.length : 0);
+      const pick = seed % total;
+      if(typeof BROADCAST!=='undefined' && pick >= ALL_HOLES.length){
+        hodEl.innerHTML = `📺 <strong>Today:</strong> Decision Broadcast · ${BROADCAST[pick-ALL_HOLES.length].title}`;
+      } else {
+        const hod = ALL_HOLES[holeOfTheDayIndex()];
+        hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
+      }
     }catch(e){}
   }
 
@@ -6771,8 +6828,144 @@ let HOLE = null;
 // ── Hole game state ───────────────────────────────────────────────
 let HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
 
+// ════════════ DECISION BROADCAST (elite Play-a-Hole moments) ════════════
+// Commit first; then a broadcast plays the ball flight, the map reacts, the bad
+// miss is priced on the scoreboard, and one practical rule lands.
+const BROADCAST = [
+  {
+    id:'bc_ob_left', title:'The Penalty Hole', par:4, yards:405,
+    hazard:'ob-left',
+    situation:"Par 4, 405. Out of bounds runs the whole left side. Right rough is thick but playable. Your driver pattern is a 25-yard fade window. Where do you aim?",
+    options:[
+      { label:'Aim centre fairway', sub:'Looks safe — but the pattern bleeds left', kind:'trap', land:152, spread:42,
+        result:"A normal fade drifts into the OB. Stroke and distance — re-tee.", tick:'OB +2' },
+      { label:'Aim left edge, fade it back', sub:'Tightest line to the green', kind:'trap', land:130, spread:42,
+        result:"The fade window starts in the OB. Worst miss, worst result.", tick:'OB +2' },
+      { label:'Aim at the right rough, let the pattern work', sub:'Whole window avoids OB', kind:'smart', land:236, spread:38,
+        result:"Right rough or fairway — every ball in the pattern is playable. Bogey at worst.", tick:'In play' },
+      { label:'Iron, lay back to 210', sub:'Safe but a long way in', kind:'weak', land:150, spread:24,
+        result:"Safe, but you've left 210 in and made the hole longer for no real gain.", tick:'Long approach' }
+    ],
+    answer:2,
+    rule:"On penalty holes, build the target backwards from the worst miss. The fairway isn't the target — the no-OB pattern is.",
+    tour:"Tour players don't aim at the fairway here. They aim so the entire shot pattern misses the score-killer."
+  },
+  {
+    id:'bc_fw_bunker', title:'The Fairway Bunker', par:4, yards:390,
+    hazard:'bunker-right',
+    situation:"Par 4, 390. A fairway bunker begins at 245 carry. Your driver totals 260 on a good strike; your 3-wood totals 238. What do you hit?",
+    options:[
+      { label:'Driver, aim away from the bunker', sub:'Best strike still reaches it', kind:'trap', land:248, spread:30,
+        result:"Flushed it — and the best strike runs into the bunker. A fairway bunker costs the average player about half a shot.", tick:'+0.5' },
+      { label:'3-wood that cannot reach the bunker', sub:'Stops short on any strike', kind:'smart', land:212, spread:28,
+        result:"Stops five yards short of the sand. A clean look from the fairway — exactly the point.", tick:'In play' },
+      { label:'Hybrid to 190', sub:'Safe, but a lot left in', kind:'weak', land:150, spread:22,
+        result:"Well short and safe, but you've added a club to the approach for no extra safety.", tick:'Long approach' },
+      { label:'Driver only if the wind helps', sub:'Hope is not a plan', kind:'trap', land:250, spread:34,
+        result:"You can't price a shot on hope. On a still day the best strike is in the sand.", tick:'+0.5' }
+    ],
+    answer:1,
+    rule:"The safe tee club can't reach the trouble on your BEST strike — not your average. Price the flush, not the typical.",
+    tour:"Elite players club off their best strike. A club that can reach the trouble was never a safety play."
+  }
+];
+let bcState = { idx:0, answered:false };
+
+function bcStageSvg(item, chosen){
+  const w=340, h=170, teeX=30, teeY=h-26, greenX=302, greenY=38;
+  const obLeft = item.hazard==='ob-left';
+  const bunkerRight = item.hazard==='bunker-right';
+  // base fairway
+  let s = `<svg viewBox="0 0 ${w} ${h}" width="100%" style="border-radius:12px;max-height:200px" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="bcGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+    <rect width="${w}" height="${h}" fill="#23451c" rx="12"/>
+    <path d="M${teeX} ${teeY} C120 ${h-30} 180 110 ${greenX} ${greenY}" stroke="#3f6a3a" stroke-width="60" fill="none" stroke-linecap="round"/>
+    <path d="M${teeX} ${teeY} C120 ${h-30} 180 110 ${greenX} ${greenY}" stroke="#4f8a48" stroke-width="34" fill="none" stroke-linecap="round" opacity="0.7"/>`;
+  if(obLeft){
+    s += `<polygon points="0,0 150,0 96,${h} 0,${h}" fill="#b03030" opacity="0.22"/>
+      <line x1="118" y1="6" x2="80" y2="${h-6}" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5 5" opacity="0.8"/>
+      <text x="40" y="86" fill="#ff9b9b" font-size="11" font-family="Bebas Neue,sans-serif" letter-spacing="1" transform="rotate(-74 40 86)">OUT OF BOUNDS</text>`;
+  }
+  if(bunkerRight){
+    s += `<ellipse cx="214" cy="78" rx="26" ry="14" fill="#d9c08a"/><ellipse cx="214" cy="78" rx="26" ry="14" fill="#000" opacity="0.06"/>
+      <text x="214" y="81" text-anchor="middle" font-size="7" fill="#7a5e28" font-family="DM Sans">BUNKER · 245</text>`;
+  }
+  // green + flag + tee
+  s += `<ellipse cx="${greenX}" cy="${greenY}" rx="22" ry="14" fill="#2f6a2a"/><ellipse cx="${greenX}" cy="${greenY}" rx="14" ry="9" fill="#4caf50" opacity="0.7"/>
+    <line x1="${greenX}" y1="${greenY}" x2="${greenX}" y2="${greenY-16}" stroke="#fff" stroke-width="1.3"/><polygon points="${greenX},${greenY-16} ${greenX+11},${greenY-12} ${greenX},${greenY-8}" fill="#e05252"/>
+    <rect x="${teeX-10}" y="${teeY-7}" width="20" height="13" rx="3" fill="#6aaa5a"/><text x="${teeX}" y="${teeY+3}" text-anchor="middle" font-size="7" fill="#fff" font-family="DM Sans" font-weight="600">TEE</text>`;
+  // overlay the chosen play
+  if(chosen){
+    const o=item.options[chosen.i];
+    const landX=o.land, landY = h-26 - (landX-teeX)*0.42; // rough perspective up the corridor
+    const trap = o.kind==='trap';
+    const safeColor = trap ? '#e05252' : (o.kind==='weak' ? '#c8a84b' : '#7bdc7b');
+    // dispersion cone
+    s += `<ellipse cx="${landX}" cy="${landY}" rx="${o.spread}" ry="${Math.max(10,o.spread*0.42)}" fill="${safeColor}" opacity="0.16" stroke="${safeColor}" stroke-width="1" stroke-dasharray="3 3"/>`;
+    // primary ball flight
+    const midX=(teeX+landX)/2, apexY=Math.min(teeY,landY)-46;
+    s += `<circle r="4.5" fill="#fff"><animateMotion id="bcBall" dur="1.1s" begin="indefinite" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.5 1" path="M${teeX} ${teeY} Q${midX} ${apexY} ${landX} ${landY}"/></circle>`;
+    // priced bad-miss ball (into the hazard) for traps
+    if(trap){
+      const hzX = obLeft ? Math.max(70, landX-o.spread+6) : 214, hzY = obLeft ? landY+6 : 78;
+      const mMidX=(teeX+hzX)/2, mApexY=Math.min(teeY,hzY)-40;
+      s += `<circle r="4" fill="#ff7a6e" opacity="0"><set attributeName="opacity" to="1" begin="bcBall.end" fill="freeze"/><animateMotion id="bcMiss" dur="0.9s" begin="bcBall.end" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.3 0 0.5 1" path="M${teeX} ${teeY} Q${mMidX} ${mApexY} ${hzX} ${hzY}"/></circle>
+        <circle cx="${hzX}" cy="${hzY}" r="3" fill="${obLeft?'#ff5252':'#d9c08a'}" opacity="0"><animate attributeName="opacity" from="0" to="0.9" begin="bcMiss.end" dur="0.3s" fill="freeze"/><animate attributeName="r" from="3" to="14" begin="bcMiss.end" dur="0.5s" fill="freeze"/></circle>`;
+    }
+    // scoreboard tick chip
+    s += `<g opacity="0"><set attributeName="opacity" to="1" begin="bcBall.end+${trap?0.6:0.1}s" fill="freeze"/>
+      <rect x="${landX-26}" y="${landY-34}" width="52" height="17" rx="8" fill="rgba(0,0,0,.6)"/>
+      <text x="${landX}" y="${landY-22}" text-anchor="middle" font-size="9" font-weight="700" font-family="DM Sans" fill="${safeColor}">${o.tick}</text></g>`;
+  }
+  return s + `</svg>`;
+}
+
+function openBroadcast(idx){
+  bcState = { idx, answered:false };
+  const item = BROADCAST[idx];
+  showView('broadcast');
+  const stage = document.getElementById('bc-stage'); if(stage) stage.innerHTML = bcStageSvg(item, null);
+  document.getElementById('bc-title').textContent = item.title;
+  document.getElementById('bc-meta').textContent = `Par ${item.par} · ${item.yards} yds · Decision Broadcast`;
+  document.getElementById('bc-situation').textContent = item.situation;
+  const opts = document.getElementById('bc-opts');
+  opts.innerHTML = item.options.map((o,i)=>`
+    <button class="bc-opt" id="bc-opt-${i}" onclick="bcChoose(${i})">
+      <span class="bc-opt-letter">${String.fromCharCode(65+i)}</span>
+      <span class="bc-opt-body"><span class="bc-opt-label">${o.label}</span><span class="bc-opt-sub">${o.sub}</span></span>
+    </button>`).join('');
+  document.getElementById('bc-reveal').hidden = true;
+  document.getElementById('bc-reveal').innerHTML = '';
+  const v=document.getElementById('view-broadcast'); if(v) v.scrollTop=0;
+}
+
+function bcChoose(i){
+  if(bcState.answered) return; bcState.answered = true;
+  const item = BROADCAST[bcState.idx], o = item.options[i];
+  document.getElementById('bc-stage').innerHTML = bcStageSvg(item, {i});
+  // trigger ball flight
+  requestAnimationFrame(()=>{ const b=document.getElementById('bcBall'); if(b && b.beginElement){ try{ b.beginElement(); }catch(e){} } });
+  item.options.forEach((op,k)=>{ const b=document.getElementById('bc-opt-'+k); if(!b) return;
+    if(k===item.answer) b.classList.add('correct'); else if(k===i) b.classList.add(o.kind==='trap'?'wrong':'meh'); else b.classList.add('dim'); b.disabled=true; });
+  const correct = i===item.answer;
+  const rev = document.getElementById('bc-reveal');
+  rev.innerHTML = `
+    <div class="bc-verdict ${o.kind==='trap'?'no':(correct?'ok':'meh')}">${o.kind==='trap'?'✗ The course punishes that':(correct?"✓ That's the elite play":'↔ Safe, but it leaves a lot in')}</div>
+    <div class="bc-result">${o.result}</div>
+    <div class="bc-rule"><span class="bc-rule-l">The rule</span>${item.rule}</div>
+    <div class="bc-tour">⛳ ${item.tour}</div>
+    <button class="bc-next" onclick="renderHome();showView('home')">Done →</button>`;
+  rev.hidden = false;
+  if(typeof wobHaptic==='function') wobHaptic();
+  setTimeout(()=>{ try{ rev.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} }, 1400);
+}
+
 function startHole(){
-  // Auto-present the hole of the day — no decision cost, just tee off
+  // Front door rotates: most days a hole, some days an elite Decision Broadcast.
+  const seed = parseInt(todayStr().replace(/-/g,''));
+  const total = ALL_HOLES.length + BROADCAST.length;
+  const pick = seed % total;
+  if(pick >= ALL_HOLES.length){ openBroadcast(pick - ALL_HOLES.length); return; }
   showView('hole');
   beginHole(holeOfTheDayIndex());
 }
