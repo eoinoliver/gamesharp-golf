@@ -1199,6 +1199,17 @@ svg { display:block; }
 .adv-entry-chip { font-size:10.5px; font-weight:700; color:rgba(255,255,255,.82); background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.22); border-radius:20px; padding:4px 11px; }
 .adv-entry-arrow { position:absolute; right:16px; bottom:16px; color:#9ed0ff; font-size:22px; }
 
+/* Home "Today's Decision" card (peppered, all users) */
+.home-decision { margin:4px 16px 0; padding:16px; cursor:pointer; border-radius:var(--radius);
+  background:linear-gradient(150deg,#1a2336 0%,#11151e 60%,#0d0f14 100%);
+  border:1px solid rgba(158,208,255,.26); box-shadow:0 10px 26px rgba(0,0,0,.4);
+  transition:transform .15s, border-color .2s; }
+.home-decision:active { transform:scale(.99); }
+.hd-eyebrow { font-size:9.5px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:#9ed0ff; margin-bottom:8px; }
+.hd-prompt { font-size:14px; line-height:1.5; color:rgba(255,255,255,.9); margin-bottom:10px; }
+.hd-q { font-family:'Bebas Neue',sans-serif; font-size:21px; color:#fff; letter-spacing:.4px; line-height:1.05; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.hd-arrow { color:#9ed0ff; font-size:20px; flex-shrink:0; }
+
 /* Decision / hole cards */
 .pp-score { float:right; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; letter-spacing:.04em; color:#9ed0ff; background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.28); border-radius:20px; padding:3px 11px; }
 .pp-dq { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 16px 14px; margin-bottom:12px; }
@@ -1299,6 +1310,9 @@ svg { display:block; }
     </div>
   </div>
 
+  <!-- Today's Decision — peppered commit→reveal, for everyone -->
+  <div id="home-decision-wrap"></div>
+
   <!-- Free value, zero taps: today's pocket cue (tennis "one thing to remember") -->
   <div class="one-thing" id="one-thing"></div>
 
@@ -1357,9 +1371,9 @@ svg { display:block; }
 
   <!-- Advanced -->
   <div class="adv-entry-card" onclick="openAdvanced()">
-    <div class="adv-entry-eyebrow">♟ Advanced · elite decisions</div>
+    <div class="adv-entry-eyebrow">♟ Decisions · think like a pro</div>
     <div class="adv-entry-title">WHAT WOULD YOU DO?</div>
-    <div class="adv-entry-sub">For players past the basics. Commit, then see what tour and scratch players actually do — every number sourced.</div>
+    <div class="adv-entry-sub">Commit first — then see what tour and scratch players actually do, and why. Every number sourced.</div>
     <div class="adv-entry-chips">
       <span class="adv-entry-chip">Tour Decisions</span>
       <span class="adv-entry-chip">Guess the Number</span>
@@ -2265,6 +2279,7 @@ function setPillarColor(color){
 
 // ── Home Screen ────────────────────────────────────────
 function renderHome(){
+  renderHomeDecision();
   // Archetype greeting — subtle identity signal in header
   const greetEl = document.getElementById('home-arch-greeting');
   if(greetEl){
@@ -2429,16 +2444,36 @@ let advState = { done:{}, scored:0, total:0 };
 function advFmtLabel(f){ return {TOUR_DECISION:'Tour Decision', GUESS_THE_NUMBER:'Guess the Number', GOLF_PUZZLE:'Golf Puzzle'}[f]||f; }
 function advPrettyKey(k){ return k.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase()).trim(); }
 function advRow(lbl,val,cls){ return `<div class="adv-rev-row ${cls||''}"><div class="pp-dq-slabel">${lbl}</div><div class="adv-val">${val}</div></div>`; }
-function openAdvanced(){
+// Date-seeded "decision of the day" index — same for everyone each day.
+function advDailyIndex(){
+  const d=new Date(); const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
+  return ((doy % ADV_ITEMS.length)+ADV_ITEMS.length)%ADV_ITEMS.length;
+}
+function openAdvanced(focusIdx){
   advState = { done:{}, scored:0, total:ADV_ITEMS.filter(x=>x.format==='GUESS_THE_NUMBER').length };
   const app=document.getElementById('adv-app');
   if(app) app.innerHTML = ADV_ITEMS.map((it,i)=>advCardHtml(it,i)).join('') + `<div style="height:30px"></div>`;
   showView('advanced');
   const v=document.getElementById('view-advanced'); if(v) v.scrollTop=0;
   const els=document.querySelectorAll('#view-advanced .pp-reveal');
-  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
-  const io=new IntersectionObserver((ents)=>{ents.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });},{threshold:0.08, rootMargin:'0px 0px -6% 0px'});
-  els.forEach(e=>io.observe(e));
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver((ents)=>{ents.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });},{threshold:0.08, rootMargin:'0px 0px -6% 0px'});
+    els.forEach(e=>io.observe(e));
+  } else { els.forEach(e=>e.classList.add('in')); }
+  if(typeof focusIdx==='number' && v){
+    const card=document.getElementById('adv-card-'+focusIdx);
+    if(card){ requestAnimationFrame(()=>{ v.scrollTop = card.getBoundingClientRect().top - v.getBoundingClientRect().top + v.scrollTop - 8; card.classList.add('in'); }); }
+  }
+}
+function renderHomeDecision(){
+  const wrap=document.getElementById('home-decision-wrap');
+  if(!wrap || typeof ADV_ITEMS==='undefined') return;
+  const i=advDailyIndex(), it=ADV_ITEMS[i];
+  wrap.innerHTML = `<div class="home-decision" onclick="openAdvanced(${i})">
+    <div class="hd-eyebrow">⛳ Today's Decision · ${advFmtLabel(it.format)}</div>
+    <div class="hd-prompt">${it.prompt}</div>
+    <div class="hd-q">${it.question}<span class="hd-arrow">→</span></div>
+  </div>`;
 }
 function advCardHtml(it,i){
   const opts=it.options.map(o=>`<button class="pp-dq-opt" id="adv-opt-${i}-${o.id}" onclick="advAnswer(${i},'${o.id}')"><span class="pp-dq-letter">${o.id}</span><span class="pp-dq-oplabel">${o.label}</span><span class="pp-dq-mark"></span></button>`).join('');
