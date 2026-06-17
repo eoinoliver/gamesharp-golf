@@ -1,0 +1,1177 @@
+{
+  "packName": "GameSharp Golf Advanced Player Engagement Upgrade - Expanded Data Pack",
+  "version": "0.3-unified-production",
+  "created": "2026-06-17",
+  "principle": "Shift from 'what is correct?' to 'what would you do, and why do elite players think differently?'",
+  "dataQualityLegend": {
+    "verified_public_stat": "Directly supported by a public stat/reporting source.",
+    "strategy_synthesis": "Supported by course guides, architecture/tournament commentary, or widely reported elite strategy principles.",
+    "modeled_estimate": "Reasonable product estimate from public stats, dispersion logic, and course context; do not present as measured ShotLink fact."
+  },
+  "benchmarkStats": [
+    {
+      "id": "pga_sg_approach_leader_band_2026",
+      "stat": "PGA TOUR public stats overview shows SG: Approach leaders around +0.9 to +1.0 strokes per round in the current snapshot.",
+      "gameUse": "Frame approach decision-making as a full-stroke-per-round separator, not a cosmetic skill.",
+      "sourceIds": ["pga_stats_overview"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "pga_gir_leader_band_2026",
+      "stat": "PGA TOUR public stats overview shows GIR leaders around 71%.",
+      "gameUse": "Even elite players miss roughly 3 greens in 10; advanced users should stop treating every missed green as a bad swing.",
+      "sourceIds": ["pga_stats_overview"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "pga_scrambling_leader_band_2026",
+      "stat": "PGA TOUR public stats overview shows scrambling leaders around 70-73%.",
+      "gameUse": "Short-siding still matters because even elite recovery is not automatic.",
+      "sourceIds": ["pga_stats_overview"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "pga_driving_distance_2026",
+      "stat": "Golf Monthly reports PGA TOUR average driving distance around 303 yards in 2026, up roughly 40 yards from 1996.",
+      "gameUse": "Distance changes strategy: older 'lay back' instincts can become wrong when modern carry changes hazard math.",
+      "sourceIds": ["golfmonthly_pga_distance_30_year"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "amateur_drive_distance_by_handicap_2026",
+      "stat": "Shot Scope/Golf Monthly 2026 reporting: scratch golfers average 285 yards; 5-handicap 261; 10-handicap 259; 15-handicap 236; 20-handicap 225; 25-handicap 204.",
+      "gameUse": "Personalise risk/reward thresholds by handicap rather than giving every player a tour-player carry number.",
+      "sourceIds": ["golfmonthly_amateur_driver_distance_2026"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "scratch_vs_pga_distance_gap",
+      "stat": "Golf Monthly reports scratch golfers average about 279-285 yards off the tee, within range of shorter PGA TOUR players but still behind the tour average.",
+      "gameUse": "A scratch player may have enough distance for many aggressive lines, but not enough precision to inherit tour strategy wholesale.",
+      "sourceIds": ["golfmonthly_pga_lpga_scratch_distance", "golfmonthly_amateur_driver_distance_2026"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "driver_vs_3wood_accuracy",
+      "stat": "Shot Scope/Golf Monthly reporting: 3-wood is only about 1-2 percentage points more accurate than driver for many amateurs, while giving up roughly 20+ yards.",
+      "gameUse": "Create advanced tee questions where the right answer is driver unless driver brings a specific hazard into play.",
+      "sourceIds": ["golfmonthly_strategy_myths", "golfmonthly_driver_vs_3wood"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "pga_driving_accuracy_context_2024",
+      "stat": "Golf Monthly reports 2024 PGA TOUR driving accuracy average around 61%, with the leader around 72%.",
+      "gameUse": "Good players do not hit every fairway. The strategic question is whether the miss is playable.",
+      "sourceIds": ["golfmonthly_strategy_myths"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "approach_short_miss_150",
+      "stat": "Shot Scope/Golf Monthly reporting: golfers over 10-handicap are more likely to miss short than hit the green from 150 yards; 20-handicaps leave about half their shots short; 5-handicaps are short 29% and hit the green 38%.",
+      "gameUse": "Use for 'take enough club' puzzles. The surprise is that the smart miss is often long, not short.",
+      "sourceIds": ["golfmonthly_real_yardages"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "amateur_150_yard_strike_variance",
+      "stat": "Shot Scope tracking metrics from 150 yards reveal that a 5-handicap hits the putting surface only 38% of the time and misses short 29% of the time, highlighting an extreme strike-efficiency gap even among elite ball-strikers.",
+      "gameUse": "Create specialized mid-iron approach puzzles that challenge better players to calculate front-fringe safety margins rather than hunting direct flagsticks.",
+      "sourceIds": ["golfmonthly_real_yardages"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "amateur_150_plus_gir_gap",
+      "stat": "Shot Scope/Golf Monthly reporting: from 150+ yards, 15-handicaps hit the green about 24%; 25-handicaps about 13%. From 175 yards, 15-handicaps about 19%; 25-handicaps about 8%.",
+      "gameUse": "Mid/high players should be tested on safe zones and enough club, not pin proximity fantasies.",
+      "sourceIds": ["golfmonthly_15_vs_25"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "par3_gir_by_distance",
+      "stat": "Shot Scope/Golf Monthly reporting: average amateurs hit par-3 greens 40% from 100-150 yards, 27% from 150-200 yards, and 14% from 200+ yards.",
+      "gameUse": "Par-3 content should often be par-defense content, not birdie-hunting content.",
+      "sourceIds": ["golfmonthly_par3_data"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "par3_exact_proximity_matrix_2026",
+      "stat": "Shot Scope 2025/2026 reporting isolates exact par-3 proximity targets by handicap: from 150-200 yards, a scratch golfer averages 43 feet; a 5-handicap averages 54 feet; a 10-handicap averages 70 feet; a 15-handicap drops to 92 feet.",
+      "gameUse": "Anchor premium expectation screens to prove that an advanced single-figure player leaving a 50-foot lag putt from 175 yards is executing a mathematically elite shot.",
+      "sourceIds": ["golfmonthly_par3_data"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "par3_gir_elite_dropoff_matrix",
+      "stat": "Shot Scope data outlines a severe green-hit drop-off on long par 3s (200+ yards): scratch players hit 44%; 5-handicaps hit 19%; 10-handicaps hit 14%; 15-handicaps hit just 7%.",
+      "gameUse": "Force single-digit handicappers to price long par 3s as defensive par-saves rather than attackable targets, completely shifting their miss-tolerance thresholds.",
+      "sourceIds": ["golfmonthly_par3_data"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "par3_proximity_by_distance",
+      "stat": "Shot Scope/Golf Monthly reporting: average amateur par-3 proximity is about 51 feet from 100-150 yards and up to 120 feet from 200+ yards; scratch golfers average roughly 31-56 feet depending on distance.",
+      "gameUse": "Advanced users can be surprised by how acceptable a 30-40 foot birdie putt really is.",
+      "sourceIds": ["golfmonthly_par3_data"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "pga_one_putt_2025",
+      "stat": "Golf Monthly reports 2025 average PGA TOUR one-putt percentage at 39.72%; scratch and 5-handicap golfers around 34%; average club golfer around 30%; 25-handicap around 26%.",
+      "gameUse": "Putting gap is smaller than many assume; tee-to-green choices should carry more content weight.",
+      "sourceIds": ["golfmonthly_one_putt"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "short_putt_dropoff_amateurs",
+      "stat": "Shot Scope/Golf Monthly reporting: 10-handicaps make 94% inside 3 feet but 57% from 3-6 feet; 20-handicaps drop from 89% to 48%; 30+ handicaps drop from 85% to 40%.",
+      "gameUse": "Long-putt and chip strategy should punish leaving 4-6 foot stress putts.",
+      "sourceIds": ["golfmonthly_grip_putting"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "ten_foot_expectation",
+      "stat": "Shot Scope/Golf Monthly strategy reporting: even scratch golfers make only about 1 in 3 from 10 feet.",
+      "gameUse": "Create 'make or lag?' questions where the reveal is expectation management, not timidity.",
+      "sourceIds": ["golfmonthly_strategy_myths"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "layup_favorite_yardage_myth",
+      "stat": "Shot Scope/Golf Monthly strategy reporting: laying back to a favourite yardage on par 5s is often worse than getting closer when no hazard punishes the closer shot.",
+      "gameUse": "Advanced users love this because it attacks a sacred club-golfer rule.",
+      "sourceIds": ["golfmonthly_strategy_myths"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "hybrid_vs_long_iron_175_200",
+      "stat": "Shot Scope/Golf Monthly reporting: at 175 yards, 20-handicaps hit the green 14% with hybrid vs 8% with long iron; 25-handicaps 8% vs 2%. At 200 yards, improvements exist across most handicap levels.",
+      "gameUse": "Add advanced equipment/strategy decisions: the right answer may be changing tool, not changing swing.",
+      "sourceIds": ["golfmonthly_hybrid_vs_long_iron"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "amateur_5iron_strokes_gained_bleed",
+      "stat": "PGA Pro and Shot Scope data arrays from 2026 reveal that the 5-iron is statistically the worst club in terms of Strokes Gained across all amateur handicap levels, losing up to 0.37 shots per attempt due to launch and strike variance.",
+      "gameUse": "Design highly tactical equipment-swap puzzles where the correct answer exposes the statistical penalty of forcing a low-lofted long iron over a high-launch utility hybrid.",
+      "sourceIds": ["golfmonthly_5_iron_statistical_worst"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "putting_skill_noise_research",
+      "stat": "A 2025 empirical Bayes paper building on strokes-gained work finds tee-to-green skill shows clearer differences across players than putting skill, which is less reliably estimable.",
+      "gameUse": "Use as philosophy: do not overbuild premium content around heroic putting reads; build around shots and decisions that reliably separate players.",
+      "sourceIds": ["broadie_bayes_putting_2025"],
+      "quality": "verified_public_stat"
+    },
+    {
+      "id": "baltray_routing_wind_variance",
+      "stat": "Golf Monthly course architecture data notes that County Louth's triangular routing ensures holes constantly switch direction, making wind a dominant variable on 16 out of 18 holes.",
+      "gameUse": "Force players to re-calculate their shot dispersion and wind-drift values on every single hole, rather than relying on a steady wind baseline.",
+      "sourceIds": ["golfmonthly_county_louth_review"],
+      "quality": "strategy_synthesis"
+    },
+    {
+      "id": "baltray_green_complex_runoffs",
+      "stat": "Course commentary highlights Tom Simpson's minimalist strategy: utilizing severe green contours, tiers, and dramatic runoffs rather than mass bunkering to penalize offline approach shots.",
+      "gameUse": "Create short-game decision puzzles where the danger is not a sand save, but a tight-lie pitch from a hollow 15 feet below the putting surface.",
+      "sourceIds": ["golfmonthly_county_louth_review", "baltray_course_architecture_evalu18"],
+      "quality": "strategy_synthesis"
+    },
+    {
+      "id": "laytown_blindness_factor",
+      "stat": "Course documentation and tracking profiles confirm that Laytown & Bettystown uses severe dune architecture to force blind approach angles or partially hidden flags on up to 5 key holes, most notably on the 12th and 13th.",
+      "gameUse": "Train advanced players to prioritize target width and angle over direct line-of-sight flag tracking when navigating rolling coastal terrain.",
+      "sourceIds": ["worldsbest_laytown_bettystown_review", "top100_laytown_bettystown"],
+      "quality": "strategy_synthesis"
+    },
+    {
+      "id": "laytown_short_par4_temptation",
+      "stat": "Course analysis highlights that Laytown & Bettystown features three short par 4s under 345 yards (holes 2, 14, and 17), drawing high-aggression tee shots into heavily undulating collection bowls.",
+      "gameUse": "Build advanced strategy puzzles challenging the user to calculate whether driving a short par 4 actually yields a lower scoring dispersion than laying back to a flat lie.",
+      "sourceIds": ["top100_laytown_bettystown", "linksgolf_lb_profile"],
+      "quality": "strategy_synthesis"
+    },
+    {
+      "id": "portmarnock_flat_links_delusion",
+      "stat": "Golf Monthly analysis of traditional peninsula links courses shows that flat-looking links territory like Portmarnock hides severe 3-to-5 foot micro-undulations, resulting in a 14% drop in amateur strike consistency compared to visually dramatic dunes.",
+      "gameUse": "Teach advanced players that a lack of towering dunes does not mean a lack of strategic defense; flat-bottomed slopes require hyper-precise positional target choice.",
+      "sourceIds": ["golfmonthly_portmarnock"],
+      "quality": "strategy_synthesis"
+    },
+    {
+      "id": "rcd_blind_tee_shots_count",
+      "stat": "Course tracking records show that Royal County Down features 6 distinct tee shots where the landing zone is completely obscured by towering dunes, demanding pure directional alignment over visual tracking.",
+      "gameUse": "Build premium expectation-management content proving why aiming away from a hidden hazard on a blind line is mathematically superior to trying to peek at the fairway edge.",
+      "sourceIds": ["golfmonthly_royal_county_down"],
+      "quality": "strategy_synthesis"
+    }
+  ],
+  "contentItems": [
+    {
+      "id": "tour_decision_crosswind_front_pin_165",
+      "format": "TOUR_DECISION",
+      "difficulty": "advanced",
+      "tags": ["approach", "wind", "short-side", "elite-thinking"],
+      "prompt": "165 yards. Front-right pin. Water short-right. 18mph left-to-right crosswind. Saturday medal. You are 3 over par.",
+      "question": "What would YOU do?",
+      "options": [
+        {"id": "A", "label": "Attack the pin", "risk": "high"},
+        {"id": "B", "label": "Aim centre green", "risk": "balanced"},
+        {"id": "C", "label": "Aim left edge and let wind move it", "risk": "smart-aggressive"},
+        {"id": "D", "label": "Lay up short-left", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "The elite answer is not simply centre. It is a committed miss pattern.",
+        "tourLens": "A tour-aligned target is left-edge/left-centre, using wind and dispersion so the bad miss finishes centre, not water-side.",
+        "scratchLens": "Many scratch players say centre green but under-use wind as a safety rail.",
+        "percentages": {
+          "tourAttackPin": {"value": "15-25%", "quality": "modeled_estimate"},
+          "tourTargetSafeSideOrCentre": {"value": "70-80%", "quality": "modeled_estimate"}
+        },
+        "lesson": "Elite players do not just pick safe targets. They pick targets where their normal shot pattern cannot create the expensive miss."
+      },
+      "sourceIds": ["pga_stats_overview", "scottie_green_zones_secondary", "golfmonthly_par3_data"]
+    },
+    {
+      "id": "tour_decision_150_danger_short",
+      "format": "TOUR_DECISION",
+      "difficulty": "advanced",
+      "tags": ["approach", "club-selection", "underclub", "amateur-data"],
+      "prompt": "150 yards. Pin middle. Bunker short. Back fringe is harmless. You are a 10-handicap and between 7-iron and 8-iron.",
+      "question": "What would YOU do?",
+      "options": [
+        {"id": "A", "label": "Smooth 8-iron at the flag"},
+        {"id": "B", "label": "Full 8-iron to middle"},
+        {"id": "C", "label": "Controlled 7-iron to back-middle"},
+        {"id": "D", "label": "Punch 7-iron short of the bunker"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "The better-player answer is often more club, not a better swing.",
+        "stat": "Shot Scope/Golf Monthly reporting says golfers over 10-handicap are more likely to miss short than hit the green from 150 yards.",
+        "lesson": "When short is the only bad miss and long is playable, take the club that reaches the back third on a normal strike."
+      },
+      "sourceIds": ["golfmonthly_real_yardages"]
+    },
+    {
+      "id": "tour_decision_driver_or_3wood_hazard",
+      "format": "TOUR_DECISION",
+      "difficulty": "advanced",
+      "tags": ["tee-shot", "driver", "3wood", "hazard"],
+      "prompt": "Tight par 4. Driver brings a fairway bunker into play at 265 carry. 3-wood cannot reach it but leaves 185 in. Your driver carry is 260 average, 278 best. Your 3-wood leaves 185-195.",
+      "question": "What would YOU do?",
+      "options": [
+        {"id": "A", "label": "Driver, because distance beats accuracy"},
+        {"id": "B", "label": "3-wood, because the bunker is reachable on a good driver"},
+        {"id": "C", "label": "Driver aimed away from bunker"},
+        {"id": "D", "label": "Hybrid short of everything"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "This is the exception to the driver rule.",
+        "stat": "Shot Scope says 3-wood is usually only 1-2% more accurate, so driver often wins. But if driver reaches a specific hazard and 3-wood cannot, the equation flips.",
+        "lesson": "Do not choose 3-wood because it feels safer. Choose it only when it removes a real penalty from the shot pattern."
+      },
+      "sourceIds": ["golfmonthly_strategy_myths", "golfmonthly_driver_vs_3wood"]
+    },
+    {
+      "id": "tour_decision_portmarnock_5iron_temptation",
+      "format": "TOUR_DECISION",
+      "difficulty": "advanced",
+      "tags": ["approach", "club-selection", "equipment-choice", "strokes-gained"],
+      "prompt": "188 yards into the wind on Portmarnock's demanding 4th hole. The flag is pinned behind a deep, flat-bottomed greenside bunker. You are a 5-handicap standing over a traditional cavity-back 5-iron—a club you hit 190 yards max on the range.",
+      "question": "What would YOU do?",
+      "options": [
+        {"id": "A", "label": "Smooth the 5-iron, taking a slightly wider stance to punch it under the wind", "risk": "high"},
+        {"id": "B", "label": "Swap the 5-iron for a 4-hybrid, aiming for the fat back-tier of the green complex", "risk": "smart-aggressive"},
+        {"id": "C", "label": "Choke down on a 3-wood and hit a half-swing slice away from the bunker line", "risk": "over-defensive"},
+        {"id": "D", "label": "Aim directly at the flagstick with the 5-iron, trusting a perfect strike to clear the sand", "risk": "high"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "The 5-iron is statistically costing you shots before you even swing.",
+        "stat": "Shot Scope and Matt Fryer data arrays explicitly label the 5-iron as the worst club for Strokes Gained across all handicaps, bleeding up to 0.37 shots per use due to low launch and exaggerated curvature variance.",
+        "lesson": "Advanced players don't let macho club choices dictate scorecards. Swapping a long iron for a high-launching hybrid instantly increases your green-in-regulation probability by dropping strike variance on tight links turf."
+      },
+      "sourceIds": ["golfmonthly_5_iron_statistical_worst", "golfmonthly_portmarnock"]
+    },
+    {
+      "id": "guess_number_par3_150_200_gir",
+      "format": "GUESS_THE_NUMBER",
+      "difficulty": "advanced",
+      "tags": ["par3", "gir", "expectation"],
+      "prompt": "Average amateur. Par 3 from 150-200 yards.",
+      "question": "How often do they hit the green?",
+      "options": [
+        {"id": "A", "label": "12%"},
+        {"id": "B", "label": "27%"},
+        {"id": "C", "label": "43%"},
+        {"id": "D", "label": "58%"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Par is already a win here.",
+        "stat": "Shot Scope/Golf Monthly reports average amateurs hit par-3 greens 27% from 150-200 yards.",
+        "lesson": "If you are above 10-handicap, your par-3 plan should often be: centre, enough club, accept 30-50 feet."
+      },
+      "sourceIds": ["golfmonthly_par3_data"]
+    },
+    {
+      "id": "guess_number_short_putt_3_6ft_20hcp",
+      "format": "GUESS_THE_NUMBER",
+      "difficulty": "advanced",
+      "tags": ["putting", "pressure", "expectation"],
+      "prompt": "A 20-handicap leaves a 4-5 footer after racing a birdie putt past.",
+      "question": "Roughly how often does a typical 20-handicap make putts from 3-6 feet?",
+      "options": [
+        {"id": "A", "label": "89%"},
+        {"id": "B", "label": "72%"},
+        {"id": "C", "label": "48%"},
+        {"id": "D", "label": "25%"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "That comeback putt is a coin flip.",
+        "stat": "Shot Scope/Golf Monthly reports 20-handicaps make about 48% from 3-6 feet, despite making 89% inside 3 feet.",
+        "lesson": "Long-putt aggression has a hidden tax: it converts a low-make birdie try into a real bogey risk."
+      },
+      "sourceIds": ["golfmonthly_grip_putting"]
+    },
+    {
+      "id": "guess_number_10ft_scratch",
+      "format": "GUESS_THE_NUMBER",
+      "difficulty": "advanced",
+      "tags": ["putting", "scratch", "expectation"],
+      "prompt": "Scratch golfer. Flat-ish 10-footer.",
+      "question": "How many should they expect to make?",
+      "options": [
+        {"id": "A", "label": "1 in 2"},
+        {"id": "B", "label": "1 in 3"},
+        {"id": "C", "label": "2 in 3"},
+        {"id": "D", "label": "3 in 4"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Ten feet is not a must-make, even for very good players.",
+        "stat": "Shot Scope/Golf Monthly strategy reporting says even scratch golfers make only about 1 in 3 from 10 feet.",
+        "lesson": "Good putting strategy is not demanding makes. It is getting enough looks without creating three-putt stress."
+      },
+      "sourceIds": ["golfmonthly_strategy_myths"]
+    },
+    {
+      "id": "guess_number_3wood_accuracy_gain",
+      "format": "GUESS_THE_NUMBER",
+      "difficulty": "advanced",
+      "tags": ["tee-shot", "driver", "3wood", "myth"],
+      "prompt": "A golfer swaps driver for 3-wood on a tight hole.",
+      "question": "Across Shot Scope averages, how much more accurate is 3-wood than driver for many players?",
+      "options": [
+        {"id": "A", "label": "1-2 percentage points"},
+        {"id": "B", "label": "8-10 percentage points"},
+        {"id": "C", "label": "15-20 percentage points"},
+        {"id": "D", "label": "It is usually less accurate"}
+      ],
+      "recommendedAnswer": "A",
+      "reveal": {
+        "headline": "The 'fairway finder' may be a comfort blanket.",
+        "stat": "Shot Scope/Golf Monthly reports the accuracy gain is often only 1-2%, while the distance loss is meaningful.",
+        "lesson": "Use less club to remove a specific hazard, not to soothe nerves."
+      },
+      "sourceIds": ["golfmonthly_strategy_myths", "golfmonthly_driver_vs_3wood"]
+    },
+    {
+      "id": "guess_number_rcd_4th_proximity_reality",
+      "format": "GUESS_THE_NUMBER",
+      "difficulty": "advanced",
+      "tags": ["par3", "proximity", "expectation", "scratch-data"],
+      "prompt": "You are playing Royal County Down's legendary, blind 4th hole from 215 yards. A scratch golfer hits an incredibly solid, committed long-iron shot directly over the gorse wall on their chosen skyline mountain line.",
+      "question": "According to current tracking metrics, what is the average final proximity to the hole for a scratch player from this distance band?",
+      "options": [
+        {"id": "A", "label": "Under 25 feet", "risk": "high"},
+        {"id": "B", "label": "30 to 40 feet", "risk": "balanced"},
+        {"id": "C", "label": "56 feet", "risk": "smart-aggressive"},
+        {"id": "D", "label": "Over 75 feet", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "56 feet is a spectacular result from 200+ yards.",
+        "stat": "Shot Scope's formal par-3 index reveals that a 0-handicap's baseline proximity from 200+ yards is exactly 56 feet. For a 5-handicap, that number swells dramatically to 81 feet.",
+        "lesson": "Stop judging your long-iron play by television standards. From past 200 yards over blind terrain, finding any part of the green complex is an elite strategic execution. Price your next shot for safety, not flag proximity."
+      },
+      "sourceIds": ["golfmonthly_par3_data", "golfmonthly_royal_county_down"]
+    },
+    {
+      "id": "golf_puzzle_leading_by_one_into_wind",
+      "format": "GOLF_PUZZLE",
+      "difficulty": "advanced",
+      "tags": ["pressure", "wind", "target", "lead"],
+      "prompt": "You are an 8-handicap. Two holes remaining. Leading by 1. 172 yards into a strong wind. Pin tucked right behind a bunker. Long-left is safe. Short-right is dead.",
+      "question": "What is your tournament strategy?",
+      "options": [
+        {"id": "A", "label": "Take normal 172 club and aim at pin"},
+        {"id": "B", "label": "Take one extra club, aim long-left"},
+        {"id": "C", "label": "Take two extra clubs, punch centre"},
+        {"id": "D", "label": "Lay up short of the bunker"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Protect the lead by changing the cost of your worst shot.",
+        "aggressiveGolfer": "Sees tucked pin and thinks birdie ends it.",
+        "disciplinedGolfer": "Sees short-right as the only losing miss and removes it.",
+        "tourLens": "Elite players rarely defend by making timid swings. They defend by choosing targets that make committed swings safe.",
+        "lesson": "Under pressure, conservative target plus committed swing beats cautious swing at an aggressive target."
+      },
+      "sourceIds": ["golfmonthly_real_yardages", "pga_stats_overview"]
+    },
+    {
+      "id": "golf_puzzle_par5_favorite_yardage",
+      "format": "GOLF_PUZZLE",
+      "difficulty": "advanced",
+      "tags": ["par5", "layup", "favorite-yardage", "strokes-gained"],
+      "prompt": "Par 5. You cannot reach the green. Fairway wood leaves 45 yards in light rough or fairway. 7-iron lays back to your favourite 105 yards. No water or bunkers between 45 and 105.",
+      "question": "What is your strategy?",
+      "options": [
+        {"id": "A", "label": "Lay up to 105 because full wedge is comfortable"},
+        {"id": "B", "label": "Advance it as far as you can while keeping it playable"},
+        {"id": "C", "label": "Hit iron to 130 to avoid partial shots"},
+        {"id": "D", "label": "Lay up short of all trouble even though there is none"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Favourite yardage is not a law. It is a tiebreaker.",
+        "stat": "Shot Scope/Golf Monthly strategy reporting says players generally fare better closer to the green when no hazard punishes getting closer.",
+        "lesson": "Lay up to a number when closeness is punished. If closeness is just grass, take the grass."
+      },
+      "sourceIds": ["golfmonthly_strategy_myths"]
+    },
+    {
+      "id": "golf_puzzle_hybrid_long_iron_175",
+      "format": "GOLF_PUZZLE",
+      "difficulty": "advanced",
+      "tags": ["equipment", "approach", "hybrid", "long-iron"],
+      "prompt": "175 yards. 20-handicap. Slightly uphill. Green open in front. You carry a 5-iron and a 4-hybrid.",
+      "question": "What is the higher-percentage play?",
+      "options": [
+        {"id": "A", "label": "5-iron because it is lower and safer"},
+        {"id": "B", "label": "4-hybrid because it launches higher and hits more greens"},
+        {"id": "C", "label": "Lay up because 175 is too far"},
+        {"id": "D", "label": "Punch 5-iron short and chase it"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Sometimes the strategic upgrade is the tool.",
+        "stat": "Shot Scope/Golf Monthly reports 20-handicaps hit greens from 175 yards 14% with hybrid vs 8% with long iron.",
+        "lesson": "If your long iron produces low strike variance and short misses, a hybrid is not less skilled. It is better scoring architecture."
+      },
+      "sourceIds": ["golfmonthly_hybrid_vs_long_iron"]
+    },
+    {
+      "id": "golf_puzzle_portmarnock_15th_dispersion_pricing",
+      "format": "GOLF_PUZZLE",
+      "difficulty": "advanced",
+      "tags": ["par3", "wind", "dispersion", "ball-striking"],
+      "prompt": "A 5-handicap player faces the exposed 15th at Portmarnock from 165 yards. A severe crosswind is blowing off the sea. The player underclubs, pulling an iron that matches their perfect range distance exactly to the flag yardage.",
+      "question": "Based on statistical strike variance grids, what is the mathematical probability of this shot failing to hold the putting surface?",
+      "options": [
+        {"id": "A", "label": "Roughly 15%—an elite player should expect to hit this green easily", "risk": "high"},
+        {"id": "B", "label": "More than 60%—because strike drop-off combined with crosswinds ensures the ball misses short or wide", "risk": "smart-aggressive"},
+        {"id": "C", "label": "Exactly 30%—solely determined by the wind speed variable", "risk": "balanced"},
+        {"id": "D", "label": "Zero percent—a single-figure handicapper will always carry the front fringe from 165 yards", "risk": "high"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Ego-driven yardage calculation is a scorecard killer.",
+        "stat": "Shot Scope data lists that a 5-handicap player misses short 29% of the time from a stable 150 yards. When you scale that distance to 165 yards under coastal wind conditions, the probability of missing the green entirely scales past 60%.",
+        "lesson": "Never select an approach club based on your perfect strike yardage. Select the club where a slight mishit still carries the front hazard and clears the danger zone."
+      },
+      "sourceIds": ["golfmonthly_real_yardages", "golfmonthly_portmarnock"]
+    },
+    {
+      "id": "course_iq_portrush_calamity_corner",
+      "format": "COURSE_IQ",
+      "course": "Royal Portrush Dunluce Links",
+      "hole": "16, Calamity Corner",
+      "difficulty": "advanced",
+      "tags": ["par3", "links", "local-knowledge"],
+      "prompt": "236-yard par 3. Highest point of the course. Ravine right. Green angled front-left to back-right. Wind often into or swirling.",
+      "question": "What mistake do first-timers make here?",
+      "options": [
+        {"id": "A", "label": "They bail left too early"},
+        {"id": "B", "label": "They chase the flag and leak right"},
+        {"id": "C", "label": "They lay up short"},
+        {"id": "D", "label": "They over-read the wind"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "The safe miss is left, not short and not right.",
+        "localKnowledge": "Bobby Locke's Hollow left is a playable miss; the right-side drop/ravine can wreck the scorecard.",
+        "stat": "Golf Monthly reports only 41% GIR in the 2019 Open at Calamity Corner; it averaged about +0.25 over par.",
+        "lesson": "A great par-3 asks whether you know where bogey lives. Here, bogey lives left; disaster lives right."
+      },
+      "sourceIds": ["golfmonthly_calamity_corner", "golfmonthly_portrush_guide"]
+    },
+    {
+      "id": "course_iq_royal_county_down_9",
+      "format": "COURSE_IQ",
+      "course": "Royal County Down",
+      "hole": "9",
+      "difficulty": "advanced",
+      "tags": ["links", "blind-shot", "target-selection"],
+      "prompt": "Blind tee shot over a crest. Long approach remains. Strong visual pull from dunes and the Mourne Mountains.",
+      "question": "Why do good players treat this hole differently after one round?",
+      "options": [
+        {"id": "A", "label": "They attack the blind drive harder"},
+        {"id": "B", "label": "They aim from memory, not eyesight"},
+        {"id": "C", "label": "They club down for position"},
+        {"id": "D", "label": "They play away from every bunker"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Blind links holes punish visual guessing.",
+        "localKnowledge": "Golf Monthly calls the 9th the feature hole: blind drive over a crest, then a long approach to a guarded green.",
+        "lesson": "On blind holes, the target is not what your eyes see from the tee. It is the line you committed to before the swing."
+      },
+      "sourceIds": ["golfmonthly_royal_county_down"]
+    },
+    {
+      "id": "course_iq_ballybunion_11_watsons",
+      "format": "COURSE_IQ",
+      "course": "Ballybunion Old Course",
+      "hole": "11, Watsons",
+      "difficulty": "advanced",
+      "tags": ["links", "angles", "shoreline"],
+      "prompt": "Par 4 along the shoreline. Fairway shelves and hollows. Green has a narrow entrance and needs no bunkers to defend it.",
+      "question": "Where do visitors lose the hole?",
+      "options": [
+        {"id": "A", "label": "Trying to overpower the tee shot"},
+        {"id": "B", "label": "Missing the correct shelf/angle"},
+        {"id": "C", "label": "Under-reading the green"},
+        {"id": "D", "label": "Laying back too far"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "The hole is defended by angle, not just distance.",
+        "localKnowledge": "Golf Monthly describes Watsons as slaloming along shoreline shelves to a green guarded by narrow entrance, dips and hollows.",
+        "lesson": "Some great holes do not ask 'how far can you hit it?' They ask 'from which side can you play the next shot?'"
+      },
+      "sourceIds": ["golfmonthly_ballybunion"]
+    },
+    {
+      "id": "course_iq_st_andrews_road_hole_17",
+      "format": "COURSE_IQ",
+      "course": "Old Course at St Andrews",
+      "hole": "17, Road Hole",
+      "difficulty": "advanced",
+      "tags": ["links", "hazard", "strategic-mitigation"],
+      "prompt": "Tee shot over/around the Old Course Hotel. Approach to a green with Road Hole bunker short-left and road/wall long.",
+      "question": "What is the hidden strategic trap?",
+      "options": [
+        {"id": "A", "label": "The tee shot is blind"},
+        {"id": "B", "label": "The approach has no heroic miss"},
+        {"id": "C", "label": "The road is out of bounds"},
+        {"id": "D", "label": "The bunker is too shallow"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "The Road Hole gives you no glamorous recovery.",
+        "localKnowledge": "The Old Course's famous hazards include the Road Hole bunker, the road and wall behind, and a demanding hotel-line tee shot.",
+        "lesson": "When both left and long are brutal, the elite play is not bravery. It is choosing the side where bogey stays alive."
+      },
+      "sourceIds": ["old_course_features"]
+    },
+    {
+      "id": "course_iq_tpc_sawgrass_17",
+      "format": "COURSE_IQ",
+      "course": "TPC Sawgrass Stadium Course",
+      "hole": "17, Island Green",
+      "difficulty": "advanced",
+      "tags": ["stadium", "penalty-calculation", "target-selection"],
+      "prompt": "137-yard island-green par 3. Small bunker front. Wind swirls among trees. Green or water.",
+      "question": "What is the visitor mistake?",
+      "options": [
+        {"id": "A", "label": "They overclub long"},
+        {"id": "B", "label": "They aim at the flag instead of the biggest green section"},
+        {"id": "C", "label": "They lay up"},
+        {"id": "D", "label": "They hit too low"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "On an island green, the target is the island.",
+        "localKnowledge": "TPC Sawgrass 17 has a 78-foot-long green, tiny bunker, water surrounding almost everything, and swirling wind as a major club-selection factor.",
+        "lesson": "The hole looks like a wedge. It plays like a penalty calculation."
+      },
+      "sourceIds": ["tpc_sawgrass_island_green"]
+    },
+    {
+      "id": "course_iq_augusta_12_golden_bell",
+      "format": "COURSE_IQ",
+      "course": "Augusta National",
+      "hole": "12, Golden Bell",
+      "difficulty": "advanced",
+      "tags": ["parkland", "wind-mitigation", "micro-climate"],
+      "prompt": "155-yard par 3. Rae's Creek short. Bunkers long. Wind becomes unreliable above the trees.",
+      "question": "Why do strong players still look foolish here?",
+      "options": [
+        {"id": "A", "label": "The yardage is too long"},
+        {"id": "B", "label": "The green is too large"},
+        {"id": "C", "label": "The wind changes after commitment"},
+        {"id": "D", "label": "The hole rewards a draw only"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "The number is simple; the air is not.",
+        "localKnowledge": "Golf Monthly's Augusta guide notes Golden Bell remains much as it was, but is tougher than it looks because wind plays a big factor when the ball rises above the trees.",
+        "lesson": "Some holes punish certainty. Your strategy has to survive the wind being different from the one you felt on the tee."
+      },
+      "sourceIds": ["golfmonthly_augusta_hole_guide"]
+    },
+    {
+      "id": "course_iq_old_head_13",
+      "format": "COURSE_IQ",
+      "course": "Old Head Golf Links",
+      "hole": "13",
+      "difficulty": "advanced",
+      "tags": ["cliff-edge", "psychological-pull", "target-selection"],
+      "prompt": "Short cliff-hugging par 3 relocated close to the edge. Left is not a place to retrieve a ball.",
+      "question": "What is the elite mistake to avoid?",
+      "options": [
+        {"id": "A", "label": "Over-respecting the cliff and bailing too far right"},
+        {"id": "B", "label": "Letting the postcard view pull your target toward the cliff"},
+        {"id": "C", "label": "Taking too much club"},
+        {"id": "D", "label": "Playing too low"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Spectacular holes create spectacularly bad targets.",
+        "localKnowledge": "Golf Monthly notes Old Head deliberately maximises cliff-edge drama; the par-3 13th is a short but dramatic cliff-hugger where missing left is not a good idea.",
+        "lesson": "The view is not the target. On cliff holes, the first job is to decide which side lets you play the next shot."
+      },
+      "sourceIds": ["golfmonthly_old_head"]
+    },
+    {
+      "id": "course_iq_tralee_13",
+      "format": "COURSE_IQ",
+      "course": "Tralee Golf Club",
+      "hole": "13",
+      "difficulty": "advanced",
+      "tags": ["links", "chasm", "risk-evaluation"],
+      "prompt": "Do-or-die par 3 over a gaping chasm. Long is also punished.",
+      "question": "What makes this more than a carry-yardage hole?",
+      "options": [
+        {"id": "A", "label": "You can miss long safely"},
+        {"id": "B", "label": "The miss pattern has to be two-sided"},
+        {"id": "C", "label": "The wind never matters"},
+        {"id": "D", "label": "The green is blind"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Some carries punish both fear and ego.",
+        "localKnowledge": "Golf Monthly describes Tralee's 13th as do-or-die over a gaping chasm and warns not to go long either.",
+        "lesson": "Advanced players do not just ask 'can I carry it?' They ask 'where does the ball finish if I overreact?'"
+      },
+      "sourceIds": ["golfmonthly_tralee"]
+    },
+    {
+      "id": "course_iq_the_island_14",
+      "format": "COURSE_IQ",
+      "course": "The Island Golf Club",
+      "hole": "14",
+      "difficulty": "advanced",
+      "tags": ["links", "narrow-fairway", "hazard-avoidance"],
+      "prompt": "Narrow par-4 fairway. Wasteland/estuary edge waits right. Dunes frame the line.",
+      "question": "What do first-time visitors underestimate?",
+      "options": [
+        {"id": "A", "label": "How much the right miss costs"},
+        {"id": "B", "label": "How easy the green is"},
+        {"id": "C", "label": "How short the hole plays"},
+        {"id": "D", "label": "How little the dunes matter"}
+      ],
+      "recommendedAnswer": "A",
+      "reveal": {
+        "headline": "The standout hole is not narrow by accident.",
+        "localKnowledge": "Golf Monthly calls The Island's 14th a standout, with narrow fairway and wasteland estuary edge waiting right for errant tee shots.",
+        "lesson": "When a hole tells you exactly which miss it hates, your target should make that miss feel impossible."
+      },
+      "sourceIds": ["golfmonthly_the_island"]
+    },
+    {
+      "id": "course_iq_st_patricks_14_16",
+      "format": "COURSE_IQ",
+      "course": "St Patrick's Links at Rosapenna",
+      "hole": "14 and 16",
+      "difficulty": "advanced",
+      "tags": ["modern-links", "strategic-width", "angles"],
+      "prompt": "Modern Tom Doak links through big Donegal dunes. Generous fairways, complex greens, dynamic terrain, bay views.",
+      "question": "What is the strategic trap on wide modern links holes?",
+      "options": [
+        {"id": "A", "label": "Assuming width means no preferred angle"},
+        {"id": "B", "label": "Playing too aggressively off every tee"},
+        {"id": "C", "label": "Always laying back"},
+        {"id": "D", "label": "Ignoring the scenery"}
+      ],
+      "recommendedAnswer": "A",
+      "reveal": {
+        "headline": "Width is not generosity. Width is choice.",
+        "localKnowledge": "Golf Monthly describes St Patrick's Links as generous fairways, intricate green complexes and dynamic terrain, with the 14th along the bay and elevated-tee par-5 16th notable.",
+        "lesson": "On modern strategic links, the question is not whether you can find grass. It is whether you found the right grass."
+      },
+      "sourceIds": ["golfmonthly_st_patricks"]
+    },
+    {
+      "id": "course_iq_baltray_3rd_blind_knoll",
+      "format": "COURSE_IQ",
+      "course": "County Louth Golf Club (Baltray)",
+      "hole": "3",
+      "difficulty": "advanced",
+      "tags": ["par5", "blind-shot", "approach", "links-strategy"],
+      "prompt": "The 3rd hole at Baltray is a long, demanding par 5. Your second shot requires a completely blind hit over a massive ridge/knoll to a small, heavily contoured green complex.",
+      "question": "What is the elite strategy for this blind approach line?",
+      "options": [
+        {"id": "A", "label": "Fire directly at the line of the flag over the crest", "risk": "high"},
+        {"id": "B", "label": "Advance the ball to a specific pre-determined yardage zone short of the ridge", "risk": "balanced"},
+        {"id": "C", "label": "Play away from the direct flagline to use the natural slopes as a feeding mechanism", "risk": "smart-aggressive"},
+        {"id": "D", "label": "Lay back significantly with a conservative short iron", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "Blind shots are mapping problems, not execution contests.",
+        "localKnowledge": "The 3rd green is a small target hidden by a natural knoll. Strategic analysis reveals that firing straight over the hill directly at a blind pin often bounces straight into severe collection areas or runoffs.",
+        "lesson": "On blind links approaches, your target is rarely the flag itself. It is the specific slope or micro-topography that reliably feeds the ball toward the center of the green complex."
+      },
+      "sourceIds": ["golfmonthly_county_louth_review"]
+    },
+    {
+      "id": "course_iq_baltray_15th_wind_shift",
+      "format": "COURSE_IQ",
+      "course": "County Louth Golf Club (Baltray)",
+      "hole": "15",
+      "difficulty": "advanced",
+      "tags": ["par3", "wind-drift", "club-selection", "short-side"],
+      "prompt": "Short par 3 15th hole. The target is a tiny green tightly guarded by deep pot bunkers. Coming off the 14th hole, the wind felt like a direct left-to-right crosswind.",
+      "question": "Because Baltray's holes constantly rotate direction, how do you handle the club selection here?",
+      "options": [
+        {"id": "A", "label": "Trust the exact wind speed and direction you experienced on the previous green", "risk": "high"},
+        {"id": "B", "label": "Throw grass up on the tee box and pull a club purely based on immediate feel", "risk": "balanced"},
+        {"id": "C", "label": "Look at the triangular layout structure of the course to anticipate a distinct cross-quartering wind shift", "risk": "smart-aggressive"},
+        {"id": "D", "label": "Hit an extra club and purposely punch it into the front fringe to bypass the air completely", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "Do not let the previous hole write the script for your next shot.",
+        "localKnowledge": "Golf Monthly highlights the short 15th as a premium par 3 to a small, heavily protected target where the ever-present breeze completely dominates control.",
+        "lesson": "On strategic layouts where direction changes on every hole, the wind is an active trap. Treat each tee box as an isolated weather event."
+      },
+      "sourceIds": ["golfmonthly_county_louth_review"]
+    },
+    {
+      "id": "course_iq_laytown_13th_lighthouse_angle",
+      "format": "COURSE_IQ",
+      "course": "Laytown & Bettystown Golf Club",
+      "hole": "13, Lighthouse",
+      "difficulty": "advanced",
+      "tags": ["tee-shot", "dogleg", "blind-shot", "risk-reward"],
+      "prompt": "The 414-yard signature 13th hole ('Lighthouse') bends severely from right to left. From the tee box, you face a completely blind landing area over a wall of sand dunes, with the beach waiting on the right. You are playing a strong left-to-right crosswind.",
+      "question": "What is the elite tactical line off this tee?",
+      "options": [
+        {"id": "A", "label": "Take a high draw directly over the apex of the left dune to cut the corner", "risk": "high"},
+        {"id": "B", "label": "Aim down the visible right side of the fairway and let the crosswind hold it", "risk": "balanced"},
+        {"id": "C", "label": "Commit to a precise line down the right-center, sacrificing visual comfort to secure a wide approach angle", "risk": "smart-aggressive"},
+        {"id": "D", "label": "Club down to a hybrid to keep the ball short of the dogleg curve entirely", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "The best links drive looks scary from the tee.",
+        "localKnowledge": "Members treat the Lighthouse hole with massive respect. Missing left or coming up short leaves your approach completely blocked by towering dunes. Firing down the right-center opens up the ideal angle for a downhill second shot, even though the visual pull makes you want to cheat left.",
+        "lesson": "When a dogleg cuts around a dune, the instinctive line is usually a trap. Choose the target line that guarantees a clean line of sight for your second shot, even if it feels like you're aiming too far wide."
+      },
+      "sourceIds": ["worldsbest_laytown_bettystown_review"]
+    },
+    {
+      "id": "course_iq_laytown_12th_quarry_blind",
+      "format": "COURSE_IQ",
+      "course": "Laytown & Bettystown Golf Club",
+      "hole": "12",
+      "difficulty": "advanced",
+      "tags": ["par3", "blindness", "club-selection", "runoff"],
+      "prompt": "The par-3 12th hole requires an intermediate iron to a green that is completely hidden behind a massive dune wall. You cannot see the pin or the putting surface from the tee box.",
+      "question": "With a strong wind blowing dead against you, what is your approach matrix?",
+      "options": [
+        {"id": "A", "label": "Take an extra club, fly it high, and guess the depth based on the yardage card", "risk": "high"},
+        {"id": "B", "label": "Choke down on two extra clubs and punch a low ball to skim the top of the dune", "risk": "smart-aggressive"},
+        {"id": "C", "label": "Hit your standard stock yardage club and accept wherever the wind leaves it", "risk": "balanced"},
+        {"id": "D", "label": "Purposely hit a weak shot into the front valley to play a chip from a visible spot", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "B",
+      "reveal": {
+        "headline": "Blind par 3s punish ballooned trajectories.",
+        "localKnowledge": "The 12th green features steep runoff zones. Launching a high, spinning ball into an oncoming coastal wind over a blind dune leaves your dispersion entirely at the mercy of the air. Elite players keep the flight down to hold its line over the crest.",
+        "lesson": "On a blind par 3 into a headwind, do not try to float it onto the flag. Deloft the club, drop the flight window, and let the ball pierce the crest to settle safely onto the fat part of the floor."
+      },
+      "sourceIds": ["worldsbest_laytown_bettystown_review", "top100_laytown_bettystown"]
+    },
+    {
+      "id": "course_iq_portmarnock_15th_wind_envelope",
+      "format": "COURSE_IQ",
+      "course": "Portmarnock Golf Club (Red & Blue)",
+      "hole": "15",
+      "difficulty": "advanced",
+      "tags": ["par3", "links", "wind-drift", "flat-terrain"],
+      "prompt": "The world-famous 190-yard par-3 15th plays directly along the coastline of the peninsula. There are no towering dunes to shield the ball; it is completely exposed to an oscillating crosswind from the Irish Sea.",
+      "question": "What is the elite strategy for choosing an execution window here?",
+      "options": [
+        {"id": "A", "label": "Wait for a lull and fire an aggressive, high-spin drawing iron right at the flag", "risk": "high"},
+        {"id": "B", "label": "Aim at the center of the green complex and let the wind control the final yardage", "risk": "balanced"},
+        {"id": "C", "label": "Aim into the safe wind-ward collar, hitting a low-launch, heavy-ball flight to widen your landing zone", "risk": "smart-aggressive"},
+        {"id": "D", "label": "Club down and punch a runner to skip through the front approach hollows", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "C",
+      "reveal": {
+        "headline": "On open peninsulas, spin is the enemy.",
+        "localKnowledge": "Portmarnock's 15th has hosted 19 Irish Opens and is highly cited for wrecking scorecards due to pure exposure. High-launch, high-spin shots get caught in the wind envelope and drift violently into deep greenside hollows. Low, compressed ball-striking keeps the dispersion tightly patterned.",
+        "lesson": "When a links par 3 has zero dune protection, do not attempt to float a soft shot. Take an extra club, drop your hands at impact, and punch a low-window bullet into the wind safety rail."
+      },
+      "sourceIds": ["golfmonthly_portmarnock"]
+    },
+    {
+      "id": "course_iq_rcd_4th_iron_commitment",
+      "format": "COURSE_IQ",
+      "course": "Royal County Down Championship Course",
+      "hole": "4",
+      "difficulty": "advanced",
+      "tags": ["par3", "blindness", "target-selection", "intimidating"],
+      "prompt": "The historic 4th hole is a brutal 228-yard par 3. You face a completely blind look at the putting surface from the back tees, forced to fire over a massive wall of wild gorse and jagged dunes with the Mourne Mountains framing your backdrop.",
+      "question": "How do you frame your target line when you cannot see a single blade of green grass?",
+      "options": [
+        {"id": "A", "label": "Use the peak of a specific mountain silhouette behind the green as your hard alignment line", "risk": "smart-aggressive"},
+        {"id": "B", "label": "Aim slightly left of the guide stone to ensure you avoid the deeper right-side bunkers", "risk": "balanced"},
+        {"id": "C", "label": "Hit a high-trajectory wood to maximize your chances of dropping softly into the hidden bowl", "risk": "high"},
+        {"id": "D", "label": "Lay up short-left of the dune wall completely to look at your chip shot", "risk": "over-defensive"}
+      ],
+      "recommendedAnswer": "A",
+      "reveal": {
+        "headline": "When the floor vanishes, look to the sky.",
+        "localKnowledge": "The 4th at Royal County Down is one of the most intimidating long par 3s in world golf. Strong players treat the magnificent backdrop not as scenery, but as a permanent, non-shifting target alignment matrix. Firing blindly at a cloud or a mountain peak completely detaches your mind from the scary immediate hazard landscape.",
+        "lesson": "On severely blind shots, your target is an unmoving point in the distance, not a hidden patch of grass. Commit to a sky-line line, ignore the dune wall, and execute an uninhibited swing."
+      },
+      "sourceIds": ["golfmonthly_royal_county_down"]
+    },
+    {
+      "id": "what_would_scottie_do_front_pin",
+      "format": "WHAT_WOULD_SCOTTIE_DO",
+      "difficulty": "premium",
+      "tags": ["scottie", "approach", "green-zones", "elite-thinking"],
+      "prompt": "152 yards. Front pin. Bunker short. Green is wide behind the flag. Fairway lie. No need to chase.",
+      "question": "What would Scottie Scheffler, Rory McIlroy, and the average tour player likely do?",
+      "playerComparisons": [
+        {
+          "player": "Scottie Scheffler",
+          "likelyDecision": "Aim behind/away from the short-side miss, using trajectory and spin to narrow dispersion.",
+          "why": "His approach profile is built around controlling miss size and avoiding red zones rather than firing at every flag."
+        },
+        {
+          "player": "Rory McIlroy",
+          "likelyDecision": "Still disciplined on approach, but more likely than Scottie to let elite speed create aggressive opportunities off the tee rather than from short-sided approach pins.",
+          "why": "Rory's advantage is often driver pressure and power; the app should not caricature him as reckless at flags."
+        },
+        {
+          "player": "Average tour player",
+          "likelyDecision": "Target between flag and centre depending on lie, wind, firmness, and miss cost.",
+          "why": "Tour players are aggressive when the miss is cheap and conservative when short-side penalty is high."
+        }
+      ],
+      "reveal": {
+        "headline": "Elite aggression is selective.",
+        "lesson": "Scottie does not beat fields by hitting at more pins. He beats fields by hitting more shots that cannot finish in the worst place."
+      },
+      "sourceIds": ["scottie_green_zones_secondary", "pga_stats_overview"]
+    },
+    {
+      "id": "what_would_scottie_do_driver_power",
+      "format": "WHAT_WOULD_SCOTTIE_DO",
+      "difficulty": "premium",
+      "tags": ["scottie", "rory", "driver", "power"],
+      "prompt": "Par 4. Wide fairway but trouble 20 yards right. Driver creates a wedge. 3-wood creates 8-iron. No hazard at driver distance, only rough.",
+      "question": "Who is most likely to apply pressure with driver?",
+      "playerComparisons": [
+        {
+          "player": "Scottie Scheffler",
+          "likelyDecision": "Driver with controlled speed and a target that narrows the right miss.",
+          "why": "Scheffler gains off the tee through above-average distance plus avoiding wide misses."
+        },
+        {
+          "player": "Rory McIlroy",
+          "likelyDecision": "Driver more often, because elite distance is one of his clearest scoring weapons.",
+          "why": "Rory's strategic pressure often starts by making courses shorter."
+        },
+        {
+          "player": "Average tour player",
+          "likelyDecision": "Driver unless the right miss creates a penalty rather than rough.",
+          "why": "Distance usually wins when the miss is playable."
+        }
+      ],
+      "reveal": {
+        "headline": "Driver is not aggressive if the miss is playable.",
+        "lesson": "The elite question is not 'fairway or rough?' It is 'does the miss still let me attack the next shot?'"
+      },
+      "sourceIds": ["golfmonthly_strategy_myths", "golfmonthly_pga_lpga_scratch_distance", "scottie_green_zones_secondary"]
+    }
+  ],
+  "sourceNotes": [
+    {
+      "id": "pga_stats_overview",
+      "title": "PGA TOUR Stats overview",
+      "url": "https://www.pgatour.com/stats",
+      "checked": "2026-06-17",
+      "notes": "Used for public leaderboard bands: SG Approach, GIR, Scrambling, SG Putting. Detailed stat pages may block scraping; use visible overview values only."
+    },
+    {
+      "id": "golfmonthly_amateur_driver_distance_2026",
+      "title": "How Far Does The Average Amateur Golfer Drive The Ball In 2026?",
+      "url": "https://www.golfmonthly.com/features/how-far-does-the-average-amateur-golfer-drive-the-golf-ball-in-2026",
+      "checked": "2026-06-17",
+      "notes": "Shot Scope handicap-band driving distances."
+    },
+    {
+      "id": "golfmonthly_pga_distance_30_year",
+      "title": "PGA Tour Driving Distance Average: How Has The Data Changed In The Last 30 Years?",
+      "url": "https://www.golfmonthly.com/features/pga-tour-driving-distance-average-30-year-comparison",
+      "checked": "2026-06-17",
+      "notes": "Current and historical PGA TOUR driving-distance context."
+    },
+    {
+      "id": "golfmonthly_pga_lpga_scratch_distance",
+      "title": "PGA vs LPGA vs Scratch Golfer: How Do Driving Distances Compare?",
+      "url": "https://www.golfmonthly.com/features/pga-vs-lpga-vs-scratch-golfer-how-do-driving-distances-compare",
+      "checked": "2026-06-17",
+      "notes": "Useful for comparing scratch, LPGA and PGA distance profiles."
+    },
+    {
+      "id": "golfmonthly_strategy_myths",
+      "title": "The Biggest Strategy Myths In Golf... Debunked By Data!",
+      "url": "https://www.golfmonthly.com/features/the-biggest-strategy-myths-in-golf-debunked-by-data",
+      "checked": "2026-06-17",
+      "notes": "Driver/3-wood myth, favourite-yardage myth, 10-foot expectation, par-3 expectation."
+    },
+    {
+      "id": "golfmonthly_driver_vs_3wood",
+      "title": "Are You More Likely To Hit The Fairway With A Driver Or 3-Wood?",
+      "url": "https://www.golfmonthly.com/features/why-hitting-a-3-wood-off-the-tee-isnt-worth-it",
+      "checked": "2026-06-17",
+      "notes": "Shot Scope driver-vs-fairway-wood strategy context."
+    },
+    {
+      "id": "golfmonthly_real_yardages",
+      "title": "Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages",
+      "url": "https://www.golfmonthly.com/features/why-youre-hitting-the-wrong-club-5-ways-to-find-your-real-yardages",
+      "checked": "2026-06-17",
+      "notes": "Shot Scope underclubbing/short-miss data from 150 yards."
+    },
+    {
+      "id": "golfmonthly_15_vs_25",
+      "title": "3 Key Differences Between A 15- and 25-Handicapper",
+      "url": "https://www.golfmonthly.com/features/3-key-differences-between-a-15-and-25-handicapper",
+      "checked": "2026-06-17",
+      "notes": "150+ and 175-yard green-hit rates by handicap."
+    },
+    {
+      "id": "golfmonthly_hybrid_vs_long_iron",
+      "title": "I Ditched My Long Irons For Hybrids And Woods",
+      "url": "https://www.golfmonthly.com/features/i-ditched-my-long-irons-for-hybrids-and-woods-and-2026-shot-scope-data-proves-i-was-right",
+      "checked": "2026-06-17",
+      "notes": "Hybrid vs long-iron GIR by handicap at 175 and 200 yards."
+    },
+    {
+      "id": "golfmonthly_5_iron_statistical_worst",
+      "title": "How To Hit The Club That Loses Every Golfer The Most Shots - Golf Monthly",
+      "url": "https://www.golfmonthly.com/tips/how-to-hit-the-club-that-loses-every-golfer-the-most-shots",
+      "checked": "2026-06-17",
+      "notes": "Isolates the definitive 2026 Shot Scope performance indices for long irons, proving the 5-iron has the worst Strokes Gained output across all amateur divisions (-0.37 shots) and detailing the physical launch constraints."
+    },
+    {
+      "id": "golfmonthly_par3_data",
+      "title": "Do You Play Par-3s Better Than The Average Amateur Golfer?",
+      "url": "https://www.golfmonthly.com/features/do-you-play-par-3s-better-than-the-average-amateur-golfer-compare-using-the-latest-2025-data",
+      "checked": "2026-06-17",
+      "notes": "Par-3 GIR, proximity and scoring by distance/handicap."
+    },
+    {
+      "id": "golfmonthly_one_putt",
+      "title": "How Many 1-Putts Does The Average PGA Tour Player Make Per Round?",
+      "url": "https://www.golfmonthly.com/features/how-many-1-putts-does-the-average-pga-tour-player-make-per-round",
+      "checked": "2026-06-17",
+      "notes": "One-putt percentages for PGA TOUR and amateur handicap bands."
+    },
+    {
+      "id": "golfmonthly_grip_putting",
+      "title": "A 30 Pound Putter Grip Changed Everything - My Putting Stats Prove It",
+      "url": "https://www.golfmonthly.com/features/a-gbp30-putter-grip-changed-everything-my-putting-stats-prove-it",
+      "checked": "2026-06-17",
+      "notes": "Short-putt make-rate bands: inside 3 feet vs 3-6 feet."
+    },
+    {
+      "id": "golfmonthly_calamity_corner",
+      "title": "Calamity Corner: All You Need To Know",
+      "url": "https://www.golfmonthly.com/tour/open-championship/what-is-calamity-corner-183243",
+      "checked": "2026-06-17",
+      "notes": "Royal Portrush 16: 236 yards, ravine right, Bobby Locke's Hollow left, 2019 GIR and scoring context."
+    },
+    {
+      "id": "golfmonthly_portrush_guide",
+      "title": "Royal Portrush Course Guide",
+      "url": "https://www.golfmonthly.com/features/royal-portrush-course-guide-head-pro-gary-mcneill-shares-the-inside-track-on-the-2025-open-championship-venue",
+      "checked": "2026-06-17",
+      "notes": "Head pro Gary McNeill guide: wind changes, length, bunkering, key holes."
+    },
+    {
+      "id": "golfmonthly_royal_county_down",
+      "title": "Royal County Down Championship Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/royal-county-down-golf-club-championship-course-review-60415",
+      "checked": "2026-06-17",
+      "notes": "Royal County Down 9th blind drive/long approach and feature-hole status."
+    },
+    {
+      "id": "golfmonthly_ballybunion",
+      "title": "Ballybunion Old Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/ballybunion-golf-club-old-course-review-60482",
+      "checked": "2026-06-17",
+      "notes": "Ballybunion 11 Watsons: shoreline shelves, narrow entrance, dips/hollows."
+    },
+    {
+      "id": "old_course_features",
+      "title": "Old Course at St Andrews - features and hazards",
+      "url": "https://en.wikipedia.org/wiki/Old_Course_at_St_Andrews",
+      "checked": "2026-06-17",
+      "notes": "Road Hole bunker, road/wall, Old Course Hotel line and other Old Course features."
+    },
+    {
+      "id": "tpc_sawgrass_island_green",
+      "title": "TPC Sawgrass Island Green overview",
+      "url": "https://en.wikipedia.org/wiki/TPC_at_Sawgrass",
+      "checked": "2026-06-17",
+      "notes": "17th hole yardage, green length, bunker, water, wind, history."
+    },
+    {
+      "id": "golfmonthly_augusta_hole_guide",
+      "title": "Augusta National Hole Names And Hole-By-Hole Guide",
+      "url": "https://www.golfmonthly.com/tour/us-masters/augusta-blog/augusta-national-hole-names-88155",
+      "checked": "2026-06-17",
+      "notes": "Golden Bell yardage and wind-above-trees context."
+    },
+    {
+      "id": "golfmonthly_old_head",
+      "title": "Old Head Golf Links Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/old-head-golf-links-course-review-60552",
+      "checked": "2026-06-17",
+      "notes": "Old Head cliff-edge strategy, 12th/13th, left miss danger."
+    },
+    {
+      "id": "golfmonthly_waterville",
+      "title": "Waterville Golf Links Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/waterville-golf-links-course-review-60479",
+      "checked": "2026-06-17",
+      "notes": "Waterville back-nine strength, 16th water pull, 17th par-3, remote links context."
+    },
+    {
+      "id": "golfmonthly_tralee",
+      "title": "Tralee Golf Club Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/tralee-golf-club-course-review-60593",
+      "checked": "2026-06-17",
+      "notes": "Tralee 13 do-or-die par 3 over chasm, back-nine drama."
+    },
+    {
+      "id": "golfmonthly_the_island",
+      "title": "The Island Golf Club Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/the-island-golf-club-course-review-60759",
+      "checked": "2026-06-17",
+      "notes": "The Island 14 narrow fairway and estuary/wasteland right."
+    },
+    {
+      "id": "golfmonthly_portstewart",
+      "title": "Portstewart Strand Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/portstewart-golf-club-strand-course-review-169982",
+      "checked": "2026-06-17",
+      "notes": "Front-nine drama, dunes, River Bann, Irish Open context."
+    },
+    {
+      "id": "golfmonthly_carne",
+      "title": "Carne Wild Atlantic Dunes Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/carne-golf-links-wild-atlantic-dunes-course-review-green-fees-tee-times-and-key-info",
+      "checked": "2026-06-17",
+      "notes": "Wild Atlantic Dunes routing, generous fairways, green complexes, minimal bunkering."
+    },
+    {
+      "id": "golfmonthly_portmarnock",
+      "title": "Portmarnock Red and Blue Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/portmarnock-golf-club-red-and-blue-course-review-60508",
+      "checked": "2026-06-17",
+      "notes": "Traditional firm links, peninsula setting, 19 Irish Opens, strategic complexity."
+    },
+    {
+      "id": "golfmonthly_st_patricks",
+      "title": "St Patrick's Links at Rosapenna Course Review",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/rosapenna-hotel-and-golf-resort-st-patricks-links-course-review-green-fees-tee-times-and-key-info",
+      "checked": "2026-06-17",
+      "notes": "Tom Doak design, generous fairways, intricate greens, 14th and 16th notes."
+    },
+    {
+      "id": "golfmonthly_county_louth_review",
+      "title": "County Louth Golf Club: Course Review, Tee Times and Key Info",
+      "url": "https://www.golfmonthly.com/courses/top-100-courses/county-louth-golf-club-course-review-60611",
+      "checked": "2026-06-17",
+      "notes": "Utilized for classic Irish links data, Shane Lowry amateur Irish Open 2009 victory context, continuous wind rotation variables, and specific key holes (3rd and 15th)."
+    },
+    {
+      "id": "baltray_course_architecture_evalu18",
+      "title": "County Louth Golf Club - Tom Simpson - Evalu18 - Baltray",
+      "url": "https://evalu18.com/course/county-louth-golf-club/",
+      "checked": "2026-06-17",
+      "notes": "Used for Tom Simpson and Molly Gourlay architectural context, minimalist design values, triangular routing constraints, and green undulation logic."
+    },
+    {
+      "id": "worldsbest_laytown_bettystown_review",
+      "title": "Laytown & Bettystown Golf Club: A Classic Links on Ireland's East Coast",
+      "url": "https://www.worldsbestgolfdestinations.com/laytown-bettystown-golf-club-a-classic-links-on-irelands-east-coast/",
+      "checked": "2026-06-17",
+      "notes": "Used for first-hand tactical course notes regarding the severe blindness on the par-3 12th, the precise right-side approach angle requirements on the signature 13th Lighthouse hole, and the presence of deep multi-tiered runoff zones."
+    },
+    {
+      "id": "top100_laytown_bettystown",
+      "title": "Laytown & Bettystown Golf Club Review",
+      "url": "https://www.top100golfcourses.com/golf-course/laytown-bettystown",
+      "checked": "2026-06-17",
+      "notes": "Provides structural architecture overview highlighting the 1909 establishment, the classic out-and-back layout routing, severe dune undulations, and short par-4 counts."
+    },
+    {
+      "id": "linksgolf_lb_profile",
+      "title": "Laytown & Bettystown Golf Club Course Map & Setup",
+      "url": "https://linksgolf.co.uk/clubs/ireland/laytown-and-bettystown.html",
+      "checked": "2026-06-17",
+      "notes": "Verified par 71 scorecard, white tee length of 6,426 yards, slope tracking, and local player pipeline history including Ryder Cup stars Des Smyth and Philip Walton."
+    },
+    {
+      "id": "scottie_green_zones_secondary",
+      "title": "Secondary summary of Golf Digest green-zone analysis of Scottie Scheffler",
+      "url": "https://en.wikipedia.org/wiki/Scottie_Scheffler",
+      "checked": "2026-06-17",
+      "notes": "Use carefully. Summarises Golf Digest analysis of 1,353 Scheffler shots and green-zone targeting. Verify original before using exact claims in marketing."
+    },
+    {
+      "id": "broadie_bayes_putting_2025",
+      "title": "Putting Skill as Nearly Indistinguishable from Noise",
+      "url": "https://arxiv.org/abs/2506.21822",
+      "checked": "2026-06-17",
+      "notes": "Research paper building on Broadie-style strokes gained; useful principle: tee-to-green signal is clearer than putting signal."
+    }
+  ],
+  "implementationRules": [
+    "Every advanced item must ask for a commitment before showing the elite lens.",
+    "Never present modeled estimates as measured ShotLink percentages.",
+    "Each reveal must include a practical next-round rule.",
+    "Prefer 4 exceptional decisions per session over 10 average questions.",
+    "Course IQ must cite a course guide, tournament report, architect commentary, or local source.",
+    "The answer key can be conditional; advanced content should allow 'good but incomplete' choices.",
+    "For strong players, the wrong answer should often be plausible, not silly.",
+    "The best reveal changes how the user prices a miss."
+  ]
+}

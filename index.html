@@ -1169,6 +1169,36 @@ svg { display:block; }
 .pp-course-meta { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; font-size:12px; color:var(--muted); }
 .pp-course-go { color:var(--gold); font-weight:700; }
 
+/* ════════ ADVANCED MODE ════════ */
+#view-advanced { background:var(--dark); padding-bottom:40px; }
+#view-advanced > * { flex-shrink:0; }
+#adv-app { padding:6px 16px 0; }
+.adv-prompt { font-size:14.5px; line-height:1.5; color:rgba(255,255,255,.9); margin-bottom:10px; }
+.adv-question { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; letter-spacing:.4px; line-height:1.05; margin-bottom:13px; }
+.adv-verdict-mid { font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; color:#9ed0ff; margin-bottom:9px; }
+.adv-headline { font-family:'Bebas Neue',sans-serif; font-size:20px; color:#fff; line-height:1.05; letter-spacing:.3px; margin-bottom:11px; }
+.adv-rev-row { margin-bottom:10px; }
+.adv-rev-row .adv-val { font-size:13.5px; line-height:1.5; color:rgba(255,255,255,.84); }
+.adv-rev-row.stat { padding:10px 12px; background:rgba(158,208,255,.08); border:1px solid rgba(158,208,255,.2); border-radius:var(--radius-sm); }
+.adv-rev-row.stat .pp-dq-slabel { color:#9ed0ff; }
+.adv-est { color:var(--muted); font-style:italic; font-weight:400; }
+.adv-lesson { margin-top:12px; padding:12px 14px; background:rgba(200,168,75,.1); border:1px solid rgba(200,168,75,.26); border-radius:var(--radius-sm); font-size:13.5px; line-height:1.5; color:#fff; }
+.adv-lesson-l { display:block; font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+.adv-src { margin-top:11px; font-size:10.5px; color:var(--muted); font-style:italic; }
+
+/* Advanced entry card (Sharpen) */
+.adv-entry-card { position:relative; overflow:hidden; cursor:pointer; margin:14px 16px 6px; padding:18px;
+  background:linear-gradient(150deg,#1b2336 0%,#12161f 55%,#0d0f14 100%);
+  border:1px solid rgba(158,208,255,.28); border-radius:var(--radius); box-shadow:0 12px 32px rgba(0,0,0,.46);
+  transition:transform .15s, border-color .2s; }
+.adv-entry-card:active { transform:scale(.99); }
+.adv-entry-eyebrow { font-size:9.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#9ed0ff; margin-bottom:6px; }
+.adv-entry-title { font-family:'Bebas Neue',sans-serif; font-size:30px; color:#fff; line-height:.92; letter-spacing:.5px; }
+.adv-entry-sub { font-size:12.5px; color:rgba(255,255,255,.64); margin-top:7px; line-height:1.4; max-width:80%; }
+.adv-entry-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.adv-entry-chip { font-size:10.5px; font-weight:700; color:rgba(255,255,255,.82); background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.22); border-radius:20px; padding:4px 11px; }
+.adv-entry-arrow { position:absolute; right:16px; bottom:16px; color:#9ed0ff; font-size:22px; }
+
 /* Decision / hole cards */
 .pp-score { float:right; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; letter-spacing:.04em; color:#9ed0ff; background:rgba(158,208,255,.1); border:1px solid rgba(158,208,255,.28); border-radius:20px; padding:3px 11px; }
 .pp-dq { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 16px 14px; margin-bottom:12px; }
@@ -1325,6 +1355,19 @@ svg { display:block; }
     <div class="sc-arrow">→</div>
   </div>
 
+  <!-- Advanced -->
+  <div class="adv-entry-card" onclick="openAdvanced()">
+    <div class="adv-entry-eyebrow">♟ Advanced · elite decisions</div>
+    <div class="adv-entry-title">WHAT WOULD YOU DO?</div>
+    <div class="adv-entry-sub">For players past the basics. Commit, then see what tour and scratch players actually do — every number sourced.</div>
+    <div class="adv-entry-chips">
+      <span class="adv-entry-chip">Tour Decisions</span>
+      <span class="adv-entry-chip">Guess the Number</span>
+      <span class="adv-entry-chip">Golf Puzzles</span>
+    </div>
+    <div class="adv-entry-arrow">→</div>
+  </div>
+
   <!-- 2 · Pillars -->
   <div class="home-section">
     <p class="section-title">Train by pillar</p>
@@ -1366,6 +1409,21 @@ svg { display:block; }
     <button class="pp-close" onclick="renderHome();showView('home')">✕</button>
   </div>
   <div id="pp-app"><!-- rendered by JS --></div>
+</div>
+
+<!-- ============================== ADVANCED ============================== -->
+<div class="view" id="view-advanced">
+  <div class="pp-topbar">
+    <button class="pp-back" onclick="renderSharpen();showView('sharpen')">‹ Sharpen</button>
+    <div class="pp-topbar-title">ADVANCED</div>
+    <button class="pp-close" onclick="renderSharpen();showView('sharpen')">✕</button>
+  </div>
+  <div class="pp-section" style="padding-top:18px;padding-bottom:2px">
+    <div class="pp-eyebrow">For players who know the basics</div>
+    <div class="pp-h2">What would you do?</div>
+    <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 4px">Commit first — then see what tour and scratch players actually do, and why. Every number is sourced.</div>
+  </div>
+  <div id="adv-app"><!-- rendered by JS --></div>
 </div>
 
 <!-- ============================== PILLAR ============================== -->
@@ -2363,6 +2421,61 @@ function pillarSceneSvg(p){
   };
   return `<svg viewBox="${vb}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${scenes[p.id] || scenes['score-smart']}</svg>`;
 }
+
+// ===== ADVANCED MODE (verified data pack v0.3) =====
+const ADV_ITEMS = [{"format": "TOUR_DECISION", "prompt": "165 yards. Front-right pin. Water short-right. 18mph left-to-right crosswind. Saturday medal. You are 3 over par.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Attack the pin"}, {"id": "B", "label": "Aim centre green"}, {"id": "C", "label": "Aim left edge and let wind move it"}, {"id": "D", "label": "Lay up short-left"}], "answer": "C", "reveal": {"headline": "The elite answer is not simply centre. It is a committed miss pattern.", "tourLens": "A tour-aligned target is left-edge/left-centre, using wind and dispersion so the bad miss finishes centre, not water-side.", "scratchLens": "Many scratch players say centre green but under-use wind as a safety rail.", "percentages": {"tourAttackPin": {"value": "15-25%", "quality": "modeled_estimate"}, "tourTargetSafeSideOrCentre": {"value": "70-80%", "quality": "modeled_estimate"}}, "lesson": "Elite players do not just pick safe targets. They pick targets where their normal shot pattern cannot create the expensive miss."}, "src": ["PGA TOUR Stats overview", "Secondary summary of Golf Digest green-zone analysis of Scottie Scheffler", "Do You Play Par-3s Better Than The Average Amateur Golfer?"]}, {"format": "TOUR_DECISION", "prompt": "150 yards. Pin middle. Bunker short. Back fringe is harmless. You are a 10-handicap and between 7-iron and 8-iron.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Smooth 8-iron at the flag"}, {"id": "B", "label": "Full 8-iron to middle"}, {"id": "C", "label": "Controlled 7-iron to back-middle"}, {"id": "D", "label": "Punch 7-iron short of the bunker"}], "answer": "C", "reveal": {"headline": "The better-player answer is often more club, not a better swing.", "stat": "Shot Scope/Golf Monthly reporting says golfers over 10-handicap are more likely to miss short than hit the green from 150 yards.", "lesson": "When short is the only bad miss and long is playable, take the club that reaches the back third on a normal strike."}, "src": ["Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages"]}, {"format": "TOUR_DECISION", "prompt": "Tight par 4. Driver brings a fairway bunker into play at 265 carry. 3-wood cannot reach it but leaves 185 in. Your driver carry is 260 average, 278 best. Your 3-wood leaves 185-195.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Driver, because distance beats accuracy"}, {"id": "B", "label": "3-wood, because the bunker is reachable on a good driver"}, {"id": "C", "label": "Driver aimed away from bunker"}, {"id": "D", "label": "Hybrid short of everything"}], "answer": "B", "reveal": {"headline": "This is the exception to the driver rule.", "stat": "Shot Scope says 3-wood is usually only 1-2% more accurate, so driver often wins. But if driver reaches a specific hazard and 3-wood cannot, the equation flips.", "lesson": "Do not choose 3-wood because it feels safer. Choose it only when it removes a real penalty from the shot pattern."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!", "Are You More Likely To Hit The Fairway With A Driver Or 3-Wood?"]}, {"format": "TOUR_DECISION", "prompt": "188 yards into the wind on Portmarnock's demanding 4th hole. The flag is pinned behind a deep, flat-bottomed greenside bunker. You are a 5-handicap standing over a traditional cavity-back 5-iron—a club you hit 190 yards max on the range.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Smooth the 5-iron, taking a slightly wider stance to punch it under the wind"}, {"id": "B", "label": "Swap the 5-iron for a 4-hybrid, aiming for the fat back-tier of the green complex"}, {"id": "C", "label": "Choke down on a 3-wood and hit a half-swing slice away from the bunker line"}, {"id": "D", "label": "Aim directly at the flagstick with the 5-iron, trusting a perfect strike to clear the sand"}], "answer": "B", "reveal": {"headline": "The 5-iron is statistically costing you shots before you even swing.", "stat": "Shot Scope and Matt Fryer data arrays explicitly label the 5-iron as the worst club for Strokes Gained across all handicaps, bleeding up to 0.37 shots per use due to low launch and exaggerated curvature variance.", "lesson": "Advanced players don't let macho club choices dictate scorecards. Swapping a long iron for a high-launching hybrid instantly increases your green-in-regulation probability by dropping strike variance on tight links turf."}, "src": ["How To Hit The Club That Loses Every Golfer The Most Shots - Golf Monthly", "Portmarnock Red and Blue Course Review"]}, {"format": "GUESS_THE_NUMBER", "prompt": "Average amateur. Par 3 from 150-200 yards.", "question": "How often do they hit the green?", "options": [{"id": "A", "label": "12%"}, {"id": "B", "label": "27%"}, {"id": "C", "label": "43%"}, {"id": "D", "label": "58%"}], "answer": "B", "reveal": {"headline": "Par is already a win here.", "stat": "Shot Scope/Golf Monthly reports average amateurs hit par-3 greens 27% from 150-200 yards.", "lesson": "If you are above 10-handicap, your par-3 plan should often be: centre, enough club, accept 30-50 feet."}, "src": ["Do You Play Par-3s Better Than The Average Amateur Golfer?"]}, {"format": "GUESS_THE_NUMBER", "prompt": "A 20-handicap leaves a 4-5 footer after racing a birdie putt past.", "question": "Roughly how often does a typical 20-handicap make putts from 3-6 feet?", "options": [{"id": "A", "label": "89%"}, {"id": "B", "label": "72%"}, {"id": "C", "label": "48%"}, {"id": "D", "label": "25%"}], "answer": "C", "reveal": {"headline": "That comeback putt is a coin flip.", "stat": "Shot Scope/Golf Monthly reports 20-handicaps make about 48% from 3-6 feet, despite making 89% inside 3 feet.", "lesson": "Long-putt aggression has a hidden tax: it converts a low-make birdie try into a real bogey risk."}, "src": ["A 30 Pound Putter Grip Changed Everything - My Putting Stats Prove It"]}, {"format": "GUESS_THE_NUMBER", "prompt": "Scratch golfer. Flat-ish 10-footer.", "question": "How many should they expect to make?", "options": [{"id": "A", "label": "1 in 2"}, {"id": "B", "label": "1 in 3"}, {"id": "C", "label": "2 in 3"}, {"id": "D", "label": "3 in 4"}], "answer": "B", "reveal": {"headline": "Ten feet is not a must-make, even for very good players.", "stat": "Shot Scope/Golf Monthly strategy reporting says even scratch golfers make only about 1 in 3 from 10 feet.", "lesson": "Good putting strategy is not demanding makes. It is getting enough looks without creating three-putt stress."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!"]}, {"format": "GUESS_THE_NUMBER", "prompt": "A golfer swaps driver for 3-wood on a tight hole.", "question": "Across Shot Scope averages, how much more accurate is 3-wood than driver for many players?", "options": [{"id": "A", "label": "1-2 percentage points"}, {"id": "B", "label": "8-10 percentage points"}, {"id": "C", "label": "15-20 percentage points"}, {"id": "D", "label": "It is usually less accurate"}], "answer": "A", "reveal": {"headline": "The 'fairway finder' may be a comfort blanket.", "stat": "Shot Scope/Golf Monthly reports the accuracy gain is often only 1-2%, while the distance loss is meaningful.", "lesson": "Use less club to remove a specific hazard, not to soothe nerves."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!", "Are You More Likely To Hit The Fairway With A Driver Or 3-Wood?"]}, {"format": "GUESS_THE_NUMBER", "prompt": "You are playing Royal County Down's legendary, blind 4th hole from 215 yards. A scratch golfer hits an incredibly solid, committed long-iron shot directly over the gorse wall on their chosen skyline mountain line.", "question": "According to current tracking metrics, what is the average final proximity to the hole for a scratch player from this distance band?", "options": [{"id": "A", "label": "Under 25 feet"}, {"id": "B", "label": "30 to 40 feet"}, {"id": "C", "label": "56 feet"}, {"id": "D", "label": "Over 75 feet"}], "answer": "C", "reveal": {"headline": "56 feet is a spectacular result from 200+ yards.", "stat": "Shot Scope's formal par-3 index reveals that a 0-handicap's baseline proximity from 200+ yards is exactly 56 feet. For a 5-handicap, that number swells dramatically to 81 feet.", "lesson": "Stop judging your long-iron play by television standards. From past 200 yards over blind terrain, finding any part of the green complex is an elite strategic execution. Price your next shot for safety, not flag proximity."}, "src": ["Do You Play Par-3s Better Than The Average Amateur Golfer?", "Royal County Down Championship Course Review"]}, {"format": "GOLF_PUZZLE", "prompt": "You are an 8-handicap. Two holes remaining. Leading by 1. 172 yards into a strong wind. Pin tucked right behind a bunker. Long-left is safe. Short-right is dead.", "question": "What is your tournament strategy?", "options": [{"id": "A", "label": "Take normal 172 club and aim at pin"}, {"id": "B", "label": "Take one extra club, aim long-left"}, {"id": "C", "label": "Take two extra clubs, punch centre"}, {"id": "D", "label": "Lay up short of the bunker"}], "answer": "B", "reveal": {"headline": "Protect the lead by changing the cost of your worst shot.", "aggressiveGolfer": "Sees tucked pin and thinks birdie ends it.", "disciplinedGolfer": "Sees short-right as the only losing miss and removes it.", "tourLens": "Elite players rarely defend by making timid swings. They defend by choosing targets that make committed swings safe.", "lesson": "Under pressure, conservative target plus committed swing beats cautious swing at an aggressive target."}, "src": ["Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "PGA TOUR Stats overview"]}, {"format": "GOLF_PUZZLE", "prompt": "Par 5. You cannot reach the green. Fairway wood leaves 45 yards in light rough or fairway. 7-iron lays back to your favourite 105 yards. No water or bunkers between 45 and 105.", "question": "What is your strategy?", "options": [{"id": "A", "label": "Lay up to 105 because full wedge is comfortable"}, {"id": "B", "label": "Advance it as far as you can while keeping it playable"}, {"id": "C", "label": "Hit iron to 130 to avoid partial shots"}, {"id": "D", "label": "Lay up short of all trouble even though there is none"}], "answer": "B", "reveal": {"headline": "Favourite yardage is not a law. It is a tiebreaker.", "stat": "Shot Scope/Golf Monthly strategy reporting says players generally fare better closer to the green when no hazard punishes getting closer.", "lesson": "Lay up to a number when closeness is punished. If closeness is just grass, take the grass."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!"]}, {"format": "GOLF_PUZZLE", "prompt": "175 yards. 20-handicap. Slightly uphill. Green open in front. You carry a 5-iron and a 4-hybrid.", "question": "What is the higher-percentage play?", "options": [{"id": "A", "label": "5-iron because it is lower and safer"}, {"id": "B", "label": "4-hybrid because it launches higher and hits more greens"}, {"id": "C", "label": "Lay up because 175 is too far"}, {"id": "D", "label": "Punch 5-iron short and chase it"}], "answer": "B", "reveal": {"headline": "Sometimes the strategic upgrade is the tool.", "stat": "Shot Scope/Golf Monthly reports 20-handicaps hit greens from 175 yards 14% with hybrid vs 8% with long iron.", "lesson": "If your long iron produces low strike variance and short misses, a hybrid is not less skilled. It is better scoring architecture."}, "src": ["I Ditched My Long Irons For Hybrids And Woods"]}, {"format": "GOLF_PUZZLE", "prompt": "A 5-handicap player faces the exposed 15th at Portmarnock from 165 yards. A severe crosswind is blowing off the sea. The player underclubs, pulling an iron that matches their perfect range distance exactly to the flag yardage.", "question": "Based on statistical strike variance grids, what is the mathematical probability of this shot failing to hold the putting surface?", "options": [{"id": "A", "label": "Roughly 15%—an elite player should expect to hit this green easily"}, {"id": "B", "label": "More than 60%—because strike drop-off combined with crosswinds ensures the ball misses short or wide"}, {"id": "C", "label": "Exactly 30%—solely determined by the wind speed variable"}, {"id": "D", "label": "Zero percent—a single-figure handicapper will always carry the front fringe from 165 yards"}], "answer": "B", "reveal": {"headline": "Ego-driven yardage calculation is a scorecard killer.", "stat": "Shot Scope data lists that a 5-handicap player misses short 29% of the time from a stable 150 yards. When you scale that distance to 165 yards under coastal wind conditions, the probability of missing the green entirely scales past 60%.", "lesson": "Never select an approach club based on your perfect strike yardage. Select the club where a slight mishit still carries the front hazard and clears the danger zone."}, "src": ["Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "Portmarnock Red and Blue Course Review"]}];
+
+let advState = { done:{}, scored:0, total:0 };
+function advFmtLabel(f){ return {TOUR_DECISION:'Tour Decision', GUESS_THE_NUMBER:'Guess the Number', GOLF_PUZZLE:'Golf Puzzle'}[f]||f; }
+function advPrettyKey(k){ return k.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase()).trim(); }
+function advRow(lbl,val,cls){ return `<div class="adv-rev-row ${cls||''}"><div class="pp-dq-slabel">${lbl}</div><div class="adv-val">${val}</div></div>`; }
+function openAdvanced(){
+  advState = { done:{}, scored:0, total:ADV_ITEMS.filter(x=>x.format==='GUESS_THE_NUMBER').length };
+  const app=document.getElementById('adv-app');
+  if(app) app.innerHTML = ADV_ITEMS.map((it,i)=>advCardHtml(it,i)).join('') + `<div style="height:30px"></div>`;
+  showView('advanced');
+  const v=document.getElementById('view-advanced'); if(v) v.scrollTop=0;
+  const els=document.querySelectorAll('#view-advanced .pp-reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+  const io=new IntersectionObserver((ents)=>{ents.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });},{threshold:0.08, rootMargin:'0px 0px -6% 0px'});
+  els.forEach(e=>io.observe(e));
+}
+function advCardHtml(it,i){
+  const opts=it.options.map(o=>`<button class="pp-dq-opt" id="adv-opt-${i}-${o.id}" onclick="advAnswer(${i},'${o.id}')"><span class="pp-dq-letter">${o.id}</span><span class="pp-dq-oplabel">${o.label}</span><span class="pp-dq-mark"></span></button>`).join('');
+  return `<div class="pp-dq pp-reveal" id="adv-card-${i}">
+    <div class="pp-dq-eyebrow">${advFmtLabel(it.format)} · ${i+1} of ${ADV_ITEMS.length}</div>
+    <div class="adv-prompt">${it.prompt}</div>
+    <div class="adv-question">${it.question}</div>
+    <div class="pp-dq-opts">${opts}</div>
+    <div class="pp-dq-reveal" id="adv-rev-${i}" hidden></div>
+  </div>`;
+}
+function advAnswer(i,oid){
+  if(advState.done[i]) return; advState.done[i]=true;
+  const it=ADV_ITEMS[i], ans=it.answer, r=it.reveal;
+  it.options.forEach(o=>{ const b=document.getElementById(`adv-opt-${i}-${o.id}`); if(!b)return;
+    if(o.id===ans) b.classList.add('correct'); else if(o.id===oid) b.classList.add('wrong'); else b.classList.add('dim'); b.disabled=true; });
+  const correct = oid===ans;
+  const rows=[];
+  if(it.format==='GUESS_THE_NUMBER'){
+    rows.push(correct?`<div class="pp-dq-verdict ok">✓ Spot on</div>`:`<div class="pp-dq-verdict no">✗ Reality check</div>`);
+  } else {
+    rows.push(correct?`<div class="pp-dq-verdict ok">✓ That's the elite read</div>`:`<div class="adv-verdict-mid">↔ Defensible — here's the elite lens</div>`);
+  }
+  if(r.headline) rows.push(`<div class="adv-headline">${r.headline}</div>`);
+  if(r.stat) rows.push(advRow('The stat', r.stat, 'stat'));
+  if(r.tourLens) rows.push(advRow('Tour lens', r.tourLens));
+  if(r.scratchLens) rows.push(advRow('Scratch lens', r.scratchLens));
+  if(r.aggressiveGolfer) rows.push(advRow('The aggressive golfer', r.aggressiveGolfer));
+  if(r.disciplinedGolfer) rows.push(advRow('The disciplined golfer', r.disciplinedGolfer));
+  if(r.percentages){ const ps=Object.entries(r.percentages).map(([k,v])=>`${advPrettyKey(k)}: <strong>${v.value}</strong>${v.quality==='modeled_estimate'?' <span class="adv-est">(estimated)</span>':''}`).join(' · '); rows.push(advRow('The numbers', ps)); }
+  if(r.lesson) rows.push(`<div class="adv-lesson"><span class="adv-lesson-l">Take it to the course</span>${r.lesson}</div>`);
+  if(it.src && it.src.length) rows.push(`<div class="adv-src">Source: ${it.src.filter(Boolean).join('; ')}</div>`);
+  const rev=document.getElementById(`adv-rev-${i}`); if(rev){ rev.innerHTML=rows.join(''); rev.hidden=false; }
+  if(it.format==='GUESS_THE_NUMBER' && correct) advState.scored++;
+  if(typeof wobHaptic==='function') wobHaptic();
+}
+
 
 function renderSharpen(){
   // Pillar grid
@@ -3813,6 +3926,10 @@ const PLAY_PREP_COURSES = {
     // Five LOCAL-KNOWLEDGE traps — each anchored to a VERIFIED course feature.
     // The visitor's instinct is the trap; the reveal is the member's read.
     decisions: [
+      { scene:`The par-3 12th — an intermediate iron to a green hidden behind a dune wall, into a strong headwind. You can't see the pin from the tee. Your play?`,
+        options:[ {label:`Extra club, fly it high, guess the depth`}, {label:`Choke down two clubs and punch it low over the dune`, correct:true}, {label:`Stock club, accept where the wind leaves it`}, {label:`Bail into the front valley and chip from there`} ],
+        why:`Into an oncoming coastal wind, a high spinning ball over a blind dune leaves your dispersion at the mercy of the air — and the 12th's steep runoffs punish that. Deloft the club, drop the flight, and let it pierce the crest to settle on the fat of the green.`,
+        local:`Blind par 3 into wind — flight it down, don't float it.` },
       { scene:`The par-5 4th. Your second is blind to a hidden green with a marker disc behind it. You line up dead at the disc.`,
         options:[ {label:'Aim straight at the disc'}, {label:'Aim a touch right of the disc', correct:true}, {label:'Aim left, away from the right-side bunkers'} ],
         why:`The ground here falls right-to-left. Aim at the disc and the slope trickles you off the left edge. The member aims right of the disc and lets the land feed it back — you'd never read it from the fairway.`,
