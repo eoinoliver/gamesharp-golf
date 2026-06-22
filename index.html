@@ -7597,6 +7597,115 @@ const ALL_HOLES = [
     finish_double:{ final:true, score:5, label:'DOUBLE', emoji:'😬', color:'#e05252' },
   }
 }
+,
+// ── Camera hole 7 — Famous: Augusta National 13th "Azalea" (reachable par 5) ──
+{
+  par:5, name:'Azalea — 13th', badge:'📡 Next-Shot Camera', yardage:545,
+  course:'Augusta National · The Masters', location:'Amen Corner', famous:true, mapType:'camera',
+  cam:{ mapId:'augusta13', anchors:{ tee:[78,427] },
+    zones:{ tee:[0,0,1000,470], drive:[260,242,480,226], second:[500,137,480,226], approach:[615,30,470,221], greenside:[705,53,330,155], putt:[745,71,250,118], drop:[430,150,470,221] } },
+  nodes:{
+    tee:{ shot:1, situation:"Augusta's 13th, 'Azalea' — a dogleg left bending around Rae's Creek, the most famous risk-reward hole in golf. Hug the corner with a draw and the green is reachable in two; bail right and it's a three-shot hole. The creek runs down the whole left side and again across the front of the green.", mapState:'tee',
+      broadcast:"Tee · 545 yds · Dogleg left · Rae's Creek down the left, azaleas everywhere",
+      choices:[
+        { badge:'AGG', label:'Draw it around the corner', sub:'Flirt the creek, set up a go.', next:'tee_draw', type:'agg' },
+        { badge:'SMART', label:'Safe out to the right', sub:'Dry, but a three-shot hole.', next:'tee_safe', type:'smart' },
+      ] },
+    tee_draw:{ shot:1, outcome:true, result:'🔥 Drew It Around the Corner',
+      consequence:"A gorgeous draw that hugged Rae's Creek and chased down the fairway — 215 to the green, the creek the only thing between you and an eagle putt. Decision time.",
+      pro:"'You only earn the go at 13 by taking on the corner off the tee. The draw that flirts the creek is the shot that unlocks the eagle.'",
+      mapState:'drive', ballTo:[520,345], broadcast:"Fairway · 215 yds · Green light · Rae's Creek guards the front", next:'second' },
+    tee_safe:{ shot:1, outcome:true, result:'✅ Safe to the Right',
+      consequence:"Bailed right, away from the creek — dry, but 250 out and blocked by the corner. A three-shot hole now, and there's no shame in it.",
+      pro:"'Laying back off the 13th tee takes the eagle off the table but also the disaster. A safe par-or-birdie is a fine play here.'",
+      mapState:'drive', ballTo:[505,360], broadcast:"Fairway · 250 yds · Three-shot hole · Lay up smart", next:'layup' },
+    second:{ shot:2, situation:"215 over Rae's Creek to a severely sloping green, bunkers behind. Eagle's on if it carries — the creek if you flinch.", mapState:'second',
+      broadcast:"Second · 215 yds · Over Rae's Creek · Eagle look if it carries",
+      choices:[
+        { badge:'AGG', label:'Go for it — over the creek', sub:'Eagle on, the creek if you flinch.', next:'second_go', type:'agg' },
+        { badge:'EXEC', label:'Lay up to a full wedge', sub:'~90 in, no risk.', next:'second_lay', type:'exec' },
+      ] },
+    second_go:{ shot:2, outcome:true, result:'✅ Cleared the Creek',
+      consequence:"Flushed a long iron that carried Rae's Creek and settled on the green, 30 feet below the back-right flag. An eagle putt at the 13th — the shot you'll tell the grandkids about.",
+      pro:"'When you've earned the go with the tee shot, the percentages flip — a flushed long iron clears Rae's Creek and the eagle is real. Earn it first, then attack.'",
+      mapState:'approach', ballTo:[880,124], broadcast:"On the green · 30 ft · For eagle · Two-putt birdie", next:'putt_eagle' },
+    second_lay:{ shot:2, outcome:true, result:'🎯 Laid Up Smart',
+      consequence:"Laid up to 90 yards, short of the creek, perfect angle. A full wedge over the water to a green begging for birdie.",
+      pro:"'The lay-up at 13 isn't a retreat — it's a 90-yard wedge for birdie with zero chance of the creek. The smart play is loud here too.'",
+      mapState:'second', ballTo:[700,288], broadcast:"Fairway · 90 yds · Full wedge · Birdie alive, no risk", next:'wedge_in' },
+    layup:{ shot:2, situation:"250 out, laying up around the corner. Pick your wedge number for the third over Rae's Creek.", mapState:'second',
+      broadcast:"Layup · 250 yds · Three-shot hole · Pick your wedge number",
+      choices:[
+        { badge:'EXEC', label:'Lay to 90 — full wedge', sub:'Your number, over the creek next.', next:'layup_90', type:'exec' },
+        { badge:'SAFE', label:'Lay to 120 — short and safe', sub:'In-between, but dry.', next:'layup_120', type:'safe' },
+      ] },
+    layup_90:{ shot:2, outcome:true, result:'✅ Perfect Layup',
+      consequence:"90 yards, dead flat, short of the creek. A full wedge over Rae's Creek to a receptive green — exactly the number you wanted.",
+      pro:"'Laying up TO a number, not just away from the creek, is the skill. 90 flat beats 120 awkward over water every time.'",
+      mapState:'second', ballTo:[700,288], broadcast:"Fairway · 90 yds · Full wedge · Receptive green", next:'wedge_in' },
+    layup_120:{ shot:2, outcome:true, result:'🛡️ The Cautious Layup',
+      consequence:"Safe to 120 — but it's an in-between number and you still must carry Rae's Creek. The extra caution bought an awkward third.",
+      pro:"'Over-laying-up has a hidden cost: the half-wedge from 120 over the creek is harder than the full one from 90. Caution isn't always safe.'",
+      mapState:'second', ballTo:[660,300], broadcast:"Fairway · 120 yds · In-between · Still over the creek", next:'wedge_in' },
+    wedge_in:{ shot:3, situation:"A wedge over Rae's Creek to a front pin perched just beyond the water. Attack the flag, or take the safe centre?", mapState:'approach',
+      broadcast:"Wedge · Over Rae's Creek · Front pin · Birdie hunt",
+      choices:[
+        { badge:'AGG', label:'Attack the front flag', sub:'Flirt the creek for a tap-in.', next:'wedge_attack', type:'agg' },
+        { badge:'SMART', label:'Safe centre, two-putt birdie look', sub:'Carry comfortably, putt up.', next:'wedge_safe', type:'smart' },
+      ] },
+    wedge_attack:{ shot:3, outcome:true, penalty:1, result:'💧 Greedy at the Flag',
+      consequence:"Tried to nip it tight to the front flag and came up a fraction short — it splashed into Rae's Creek at the front. Drop, and you're playing your fifth.",
+      pro:"'A front pin over the creek is the great seducer at 13. The centre is two paces past the danger; the flag is one pace short of a penalty.'",
+      mapState:'greenside', ballTo:[840,180], broadcast:"Drop zone · Penalty · Playing your 5th · Came up short", next:'drop_zone' },
+    wedge_safe:{ shot:3, outcome:true, result:'✅ Safe Over the Creek',
+      consequence:"Carried it comfortably to the centre, 16 feet past the flag. Dry, on the green, a two-putt birdie or a real look at it.",
+      pro:"'Centre of the green from a wedge clears the creek with margin and leaves an uphill putt. That's how birdies stack up without blow-ups.'",
+      mapState:'approach', ballTo:[884,126], broadcast:"On the green · 16 ft · Uphill · For birdie", next:'putt_bird' },
+    drop_zone:{ shot:4, situation:"From the drop, another wedge back over Rae's Creek to that front flag. Bogey is still very gettable — over the same water that just got you.", mapState:'drop',
+      broadcast:"Drop zone · Over Rae's Creek again · For bogey",
+      choices:[
+        { badge:'SMART', label:'To the centre — find the green', sub:'Take the creek out for good.', next:'drop_center', type:'smart' },
+        { badge:'AGG', label:'At the flag — chase the bogey', sub:'Front pin, same danger.', next:'drop_pin', type:'agg' },
+      ] },
+    drop_center:{ shot:4, outcome:true, result:'✅ Found the Green',
+      consequence:"Calm wedge to the heart, 20 feet. Dry at last, a putt to save bogey — exactly the discipline the 13th demands.",
+      pro:"'After the creek, the only mistake is a second ball wet. The centre saves the round, every time.'",
+      mapState:'approach', ballTo:[870,128], broadcast:"On the green · 20 ft · Two-putt double · Bogey if it drops", next:'putt_long' },
+    drop_pin:{ shot:4, outcome:true, result:'🌀 Back at the Flag',
+      consequence:"Took on the front flag again and held it — 9 feet. Dry, a real putt for bogey. Bold, after Rae's Creek already bit once.",
+      pro:"'Going back at the flag from the drop is nerve, not maths — but a held wedge to 9 feet earns the bogey putt.'",
+      mapState:'greenside', ballTo:[858,150], broadcast:"On the green · 9 ft · For bogey · Bold", next:'putt_short' },
+    putt_eagle:{ shot:3, situation:"30 feet for eagle at the 13th — down the slope, breaking hard. A two-putt birdie is a certainty if you respect it.", mapState:'putt',
+      broadcast:"Putt · 30 ft · For eagle · Severe slope",
+      choices:[
+        { badge:'EAGLE', label:'Pour it in — eagle at Azalea', sub:'The roar of the corner.', next:'finish_eagle', type:'agg' },
+        { badge:'BIRDIE', label:'Lag it close — tap-in birdie', sub:'Bank the four.', next:'finish_birdie', type:'smart' },
+      ] },
+    putt_bird:{ shot:4, situation:"16 feet for birdie, uphill — a stress-free two-putt par in your pocket.", mapState:'putt',
+      broadcast:"Putt · 16 ft · Uphill · For birdie",
+      choices:[
+        { badge:'BIRDIE', label:'Roll it in for birdie', sub:'Be firm, uphill.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Two-putt par', sub:'Bank the five.', next:'finish_par', type:'smart' },
+      ] },
+    putt_long:{ shot:5, situation:"20 feet to save bogey after the drop.", mapState:'putt',
+      broadcast:"Putt · 20 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Roll it in for bogey', sub:'Steal one back.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 7.', next:'finish_double', type:'smart' },
+      ] },
+    putt_short:{ shot:5, situation:"9 feet to save bogey after going back at the flag.", mapState:'putt',
+      broadcast:"Putt · 9 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Knock it in for bogey', sub:'Reward the nerve.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Miss, tap in double', sub:'Amen Corner exacts its price.', next:'finish_double', type:'safe' },
+      ] },
+    finish_eagle: { final:true, score:3, label:'EAGLE',  emoji:'🦅', color:'#2bc46b' },
+    finish_birdie:{ final:true, score:4, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:5, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:6, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+    finish_double:{ final:true, score:7, label:'DOUBLE', emoji:'😬', color:'#e05252' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -8918,12 +9027,40 @@ function buildPebble7CamSVG(){
     <text x="500" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">PEBBLE BEACH · 7TH</text>
   </svg>`;
 }
+// FAMOUS — Augusta National 13th "Azalea": reachable par 5, Rae's Creek down the
+// left and across the green's front, two bunkers behind, azaleas at the corner.
+function buildAugusta13CamSVG(){
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#27451c"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.5"/>
+    <path d="M70,432 Q300,420 462,360 Q604,318 722,268 Q804,224 860,150" stroke="#3f6f33" stroke-width="60" fill="none" stroke-linecap="round"/>
+    <path d="M70,432 Q300,420 462,360 Q604,318 722,268 Q804,224 860,150" stroke="#508f43" stroke-width="36" fill="none" stroke-linecap="round" opacity="0.65"/>
+    <path d="M0,470 L0,300 Q160,322 300,300 Q360,290 360,360 L360,470 Z" fill="#1f5e8f"/>
+    <path d="M0,470 L0,300 Q160,322 300,300 Q360,290 360,360 L360,470 Z" fill="#2a78b0" opacity="0.4"/>
+    <path d="M740,250 Q800,206 906,212 Q938,216 940,250 Q916,286 832,284 Q772,282 740,250 Z" fill="#1f5e8f"/>
+    <path d="M740,250 Q800,206 906,212 Q938,216 940,250 Q916,286 832,284 Q772,282 740,250 Z" fill="#2a78b0" opacity="0.4"/>
+    <text x="828" y="252" text-anchor="middle" font-size="10" fill="#bfe6ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1" opacity="0.8">RAE'S CREEK</text>
+    <g opacity="0.85"><circle cx="250" cy="250" r="6" fill="#e86ba8"/><circle cx="270" cy="262" r="5" fill="#f48fbf"/><circle cx="236" cy="266" r="5" fill="#e86ba8"/><circle cx="300" cy="252" r="5" fill="#f48fbf"/></g>
+    <ellipse cx="836" cy="86" rx="26" ry="14" fill="#e3cd9a"/><ellipse cx="906" cy="92" rx="22" ry="13" fill="#e3cd9a"/>
+    <ellipse cx="868" cy="132" rx="64" ry="42" fill="#2f6b2a"/>
+    <ellipse cx="868" cy="132" rx="50" ry="31" fill="#46a23f"/>
+    <ellipse cx="868" cy="132" rx="50" ry="31" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
+    ${camGreenEngine(868,132,1,1)}
+    <circle cx="852" cy="152" r="2.6" fill="#0c2208"/>
+    <line x1="852" y1="152" x2="852" y2="124" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="852,124 870,130 852,136" fill="#e05252"/>
+    <path d="M828,164 Q846,154 868,156" stroke="#e05252" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0.8"/>
+    <rect x="50" y="424" width="46" height="24" rx="5" fill="#69a85a"/>
+    <text x="430" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">AZALEA · 13TH</text>
+  </svg>`;
+}
 CAM_MAPS.reachable_risk  = buildReachableRiskSVG;
 CAM_MAPS.sunday_pin      = buildSundayPinSVG;
 CAM_MAPS.reachable_giant = buildReachableGiantSVG;
 CAM_MAPS.sawgrass17      = buildSawgrass17CamSVG;
 CAM_MAPS.augusta12       = buildAugusta12CamSVG;
 CAM_MAPS.pebble7         = buildPebble7CamSVG;
+CAM_MAPS.augusta13       = buildAugusta13CamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
