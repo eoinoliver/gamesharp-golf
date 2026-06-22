@@ -7344,6 +7344,77 @@ const ALL_HOLES = [
     finish_bogey: { final:true, score:6, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
   }
 }
+,
+// ── Camera hole 4 — Famous: TPC Sawgrass 17th (island green) ──
+{
+  par:3, name:'The Island Green — 17th', badge:'📡 Next-Shot Camera', yardage:137,
+  course:'TPC Sawgrass · THE PLAYERS', location:'Ponte Vedra Beach, FL', famous:true, mapType:'camera',
+  cam:{ mapId:'sawgrass17', anchors:{ tee:[95,406] },
+    zones:{ tee:[0,0,1000,470], approach:[485,69,470,221], greenside:[555,112,330,155], putt:[615,136,250,118], drop:[405,89,470,221] } },
+  nodes:{
+    tee:{ shot:1, situation:"The most famous par 3 in golf — about 137 yards to a Pete Dye island green with no bail-out anywhere. Today's flag is the Sunday pin: front-right, a few paces from the water and the lone bunker. The wind is swirling off the lake.", mapState:'tee',
+      broadcast:"Tee · 137 yds · Pete Dye island green · Wind off the water is everything",
+      choices:[
+        { badge:'AGG', label:'Fire at the Sunday pin', sub:'Front-right, flirting the water.', next:'tee_pin', type:'agg' },
+        { badge:'SMART', label:'Centre of the green', sub:'The whole island to land on.', next:'tee_center', type:'smart' },
+        { badge:'SAFE', label:'Back of the green', sub:'Long is dry — short is wet.', next:'tee_back', type:'safe' },
+      ] },
+    tee_pin:{ shot:1, outcome:true, penalty:1, result:'💧 At the Sunday Pin',
+      consequence:"A gust off the water knocked it down — it pitched on the front edge and spun back into the lake. The 17th claims another. You'll drop and play your third.",
+      pro:"'The Sunday pin at 17 is the most seductive target in golf, and the percentage play is almost never at it. Here, the centre of the green is the brave shot.'",
+      mapState:'greenside', ballTo:[720,256], broadcast:"Drop zone · Penalty · Playing your 3rd · The wind took it", next:'drop_zone' },
+    tee_center:{ shot:1, outcome:true, result:'✅ The Brave Centre',
+      consequence:"Smart and fully committed — middle of the green, 25 feet from the Sunday flag. You did the hardest thing on 17: you ignored the pin. Two putts for par, a birdie look if you fancy it.",
+      pro:"'On an island green the centre IS the aggressive play — it takes the only real danger, the water, completely out of the hole.'",
+      mapState:'approach', ballTo:[720,176], broadcast:"On the green · 25 ft · Two-putt par · Birdie a bonus", next:'putt_25' },
+    tee_back:{ shot:1, outcome:true, result:'🛡️ Safely Long',
+      consequence:"Flew it to the back third, 30 feet long. Dry and safe — but now a slippery downhill two-putt back toward the water.",
+      pro:"'Long is the sane miss at 17 — the water is short, and there's just enough green behind the flag. The price is a downhill putt toward the lake.'",
+      mapState:'approach', ballTo:[720,134], broadcast:"On the green · 30 ft · Downhill, toward the water · For par", next:'putt_30b' },
+    drop_zone:{ shot:2, situation:"From the drop zone, about 75 yards back across the water to that same Sunday pin. Par is gone — but a smart wedge saves bogey. It's the very shot that just beat you.", mapState:'drop',
+      broadcast:"Drop zone · 75 yds · Across the water · For bogey",
+      choices:[
+        { badge:'SMART', label:'To the centre — just find the island', sub:'Take the water out again.', next:'drop_center', type:'smart' },
+        { badge:'AGG', label:'At the pin — chase the bogey', sub:'Same flag, same risk.', next:'drop_pin', type:'agg' },
+      ] },
+    drop_center:{ shot:2, outcome:true, result:'✅ Found the Island',
+      consequence:"Calm wedge to the middle, 22 feet. Dry, on the green, and a putt left to save bogey — exactly the discipline the hole demands.",
+      pro:"'After a penalty, the only real mistake is a second one. The centre of the green stops the bleeding every time.'",
+      mapState:'approach', ballTo:[726,174], broadcast:"On the green · 22 ft · Two-putt double · Bogey if it drops", next:'putt_long' },
+    drop_pin:{ shot:2, outcome:true, result:'🌀 Back at the Flag',
+      consequence:"Took it on again and pulled it off — 10 feet, pin-high. Dry, with a real putt to save bogey. Gutsy, given what just happened.",
+      pro:"'Going back at the pin from the drop is brave, not smart — but when the wedge is your strength, a 10-footer for bogey can be worth the nerve.'",
+      mapState:'greenside', ballTo:[748,202], broadcast:"On the green · 10 ft · For bogey · Gutsy", next:'putt_short' },
+    putt_25:{ shot:2, situation:"25 feet for birdie on the island green — a gentle right-to-left read.", mapState:'putt',
+      broadcast:"Putt · 25 ft · For birdie",
+      choices:[
+        { badge:'BIRDIE', label:'Pour it in — birdie at 17', sub:'A roar moment.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Lag to a tap-in par', sub:'Take the dry par.', next:'finish_par', type:'smart' },
+      ] },
+    putt_30b:{ shot:2, situation:"30 feet, downhill, breaking toward the water. Pace is everything — charge it and it can trickle off the front and in.", mapState:'putt',
+      broadcast:"Putt · 30 ft · Downhill, toward the water · For par",
+      choices:[
+        { badge:'PAR', label:'Lag it dead — two-putt par', sub:'Protect the dry par.', next:'finish_par', type:'smart' },
+        { badge:'RISK', label:'Take a run — downhill, toward the water', sub:'Miss and it can run off.', next:'finish_bogey', type:'agg' },
+      ] },
+    putt_long:{ shot:3, situation:"22 feet to save bogey after the drop.", mapState:'putt',
+      broadcast:"Putt · 22 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Roll it in for bogey', sub:'Steal one back.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 5.', next:'finish_double', type:'smart' },
+      ] },
+    putt_short:{ shot:3, situation:"10 feet to save bogey after going back at the flag.", mapState:'putt',
+      broadcast:"Putt · 10 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Knock it in for bogey', sub:'Reward the nerve.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Miss, tap in for double', sub:'It happens here.', next:'finish_double', type:'safe' },
+      ] },
+    finish_birdie:{ final:true, score:2, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:3, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:4, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+    finish_double:{ final:true, score:5, label:'DOUBLE', emoji:'😬', color:'#e05252' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -7649,7 +7720,7 @@ function showHolePicker(){
     <button class="hpc-btn famous" onclick="beginHole(${hodIdx})">TEE OFF NOW →</button>`;
   cards.appendChild(hodCard);
 
-  const famous    = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.famous);
+  const famous    = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.famous && h.mapType!=='camera');
   const broadcast = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.mapType==='camera');
   const practice  = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>!h.famous && h.mapType!=='camera');
 
@@ -7665,12 +7736,13 @@ function showHolePicker(){
       div.style.borderColor = '#5b9bd5';
       div.innerHTML = `
         <div class="hpc-famous-tag" style="background:#5b9bd5;color:#06121f">📡 Next-Shot Camera</div>
+        ${h.course ? `<div class="hpc-course">⭐ ${h.course}</div>` : ''}
         <div class="hpc-hole-name">${h.name}</div>
         <div class="hpc-desc">The camera follows every shot — tracer, lie read, and the next decision. Play it like a broadcast.</div>
         <div class="hpc-pills">
           <span class="hpc-pill">Par ${h.par}</span>
           <span class="hpc-pill">${h.yardage} yards</span>
-          <span class="hpc-pill">Live camera</span>
+          ${h.location ? `<span class="hpc-pill">${h.location}</span>` : '<span class="hpc-pill">Live camera</span>'}
         </div>
         <button class="hpc-btn famous" style="background:#5b9bd5;color:#06121f" onclick="beginHole(${i})">PLAY THIS HOLE →</button>`;
       cards.appendChild(div);
@@ -8585,9 +8657,35 @@ function buildReachableGiantSVG(){
     <rect x="50" y="418" width="48" height="26" rx="5" fill="#69a85a"/>
   </svg>`;
 }
+// FAMOUS — TPC Sawgrass 17th: tee on land lower-left, near-circular island green,
+// lone pot bunker front-right, drop zone to the left, water everywhere else.
+function buildSawgrass17CamSVG(){
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#1f5e8f"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.12"/>
+    <path d="M120,118 q20,-7 40,0 M300,86 q24,-8 46,0 M470,300 q22,-7 44,0 M840,360 q22,-7 44,0 M900,150 q20,-7 40,0" stroke="#bfe6ff" stroke-width="1.4" fill="none" opacity="0.4"/>
+    <path d="M0,470 L0,356 Q92,346 172,378 Q214,398 204,470 Z" fill="#27451c"/>
+    <rect x="60" y="396" width="46" height="24" rx="5" fill="#69a85a"/>
+    <path d="M204,414 Q430,330 600,236" stroke="#7a6a52" stroke-width="7" fill="none" opacity="0.85"/>
+    <path d="M204,414 Q430,330 600,236" stroke="#9b8a6e" stroke-width="3" fill="none" opacity="0.55"/>
+    <ellipse cx="720" cy="180" rx="86" ry="66" fill="#2f6b2a"/>
+    <ellipse cx="720" cy="180" rx="70" ry="52" fill="#46a23f"/>
+    <ellipse cx="720" cy="180" rx="70" ry="52" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
+    <ellipse cx="784" cy="226" rx="22" ry="14" fill="#e3cd9a"/><ellipse cx="784" cy="226" rx="22" ry="14" fill="none" stroke="#c9ae72" stroke-width="1"/>
+    <ellipse cx="556" cy="214" rx="30" ry="18" fill="#3f7a36"/><ellipse cx="556" cy="214" rx="30" ry="18" fill="#4d9243" opacity="0.5"/>
+    <text x="556" y="246" text-anchor="middle" font-size="8" fill="#8fce86" font-family="DM Sans,sans-serif" opacity="0.8">drop zone</text>
+    ${camGreenEngine(720,180,1,1)}
+    <circle cx="748" cy="210" r="2.6" fill="#0c2208"/>
+    <line x1="748" y1="210" x2="748" y2="182" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="748,182 766,188 748,194" fill="#e05252"/>
+    <path d="M724,224 Q742,212 764,214" stroke="#e05252" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0.8"/>
+    <text x="500" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.55)" font-family="DM Sans,sans-serif" letter-spacing="2">SAWGRASS · 17TH</text>
+  </svg>`;
+}
 CAM_MAPS.reachable_risk  = buildReachableRiskSVG;
 CAM_MAPS.sunday_pin      = buildSundayPinSVG;
 CAM_MAPS.reachable_giant = buildReachableGiantSVG;
+CAM_MAPS.sawgrass17      = buildSawgrass17CamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
