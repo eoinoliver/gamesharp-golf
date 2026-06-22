@@ -7026,7 +7026,7 @@ const ALL_HOLES = [
       ]
     },
     approach_152_attack: {
-      shot:2, outcome:true, result:'💧 Going at the Tucked Pin',
+      shot:2, outcome:true, penalty:1, result:'💧 Going at the Tucked Pin',
       consequence:"Caught it a fraction heavy. The ball pitched a yard short and slid back into the water. Penalty drop — you're playing your fourth.",
       pro:"'A front pin over water gives no margin for the heavy one. The fat side was free real estate; the flag charged a penalty.'",
       mapState:'greenside', ballTo:[806,176], broadcast:"Drop zone · Penalty · Playing your 4th · Pitching back over water",
@@ -7049,7 +7049,7 @@ const ALL_HOLES = [
       ]
     },
     approach_195_go: {
-      shot:2, outcome:true, result:'⚠️ Taking on the Carry',
+      shot:2, outcome:true, result:'🏖️ Taking on the Carry',
       consequence:"Cleared the water — but the long iron ran through the green into the back bunker. Dry, yet short-sided to a front pin.",
       pro:"'195 over water with a long iron is a brave ask. You dodged the splash and bought a slippery up-and-down instead.'",
       mapState:'greenside', ballTo:[918,150], broadcast:"Greenside bunker · 18 yds · Short-sided · Downhill to a front pin",
@@ -7072,7 +7072,7 @@ const ALL_HOLES = [
       ]
     },
     wedge_72_spin: {
-      shot:3, outcome:true, result:'⚠️ The Spinner',
+      shot:3, outcome:true, result:'🌀 The Spinner',
       consequence:"Nipped it clean and it zipped back — a touch too much. Eight feet, but below a slick front-pin slope.",
       pro:"'Spin is a scalpel, not a hammer. When it bites just right it’s filthy; over-bite and you’ve left yourself a downhill slider.'",
       mapState:'greenside', ballTo:[846,142], broadcast:"On the green · 8 ft · Downhill, fast · Slippery par putt",
@@ -7080,9 +7080,9 @@ const ALL_HOLES = [
     },
     wedge_72_safe: {
       shot:3, outcome:true, result:'✅ Centre and Release',
-      consequence:"Landed middle, one hop and stop, 14 feet pin-high. A stress-free birdie putt from the safe side.",
+      consequence:"Landed middle, one hop and stop, 14 feet pin-high. A stress-free par putt from the safe side.",
       pro:"'The unspectacular wedge — middle of the green, putt uphill — is the one that quietly stacks pars and birdies.'",
-      mapState:'approach', ballTo:[884,118], broadcast:"On the green · 14 ft · Uphill, straight · Birdie putt",
+      mapState:'approach', ballTo:[884,118], broadcast:"On the green · 14 ft · Uphill, straight · Par putt",
       next:'putt_14'
     },
     bunker_up: {
@@ -7095,7 +7095,7 @@ const ALL_HOLES = [
       ]
     },
     bunker_flop: {
-      shot:3, outcome:true, result:'⚠️ The Hero Splash',
+      shot:3, outcome:true, result:'😅 The Hero Splash',
       consequence:"Caught it thin off the downslope — skipped across to 15 feet. On the green, but you flirted with disaster.",
       pro:"'Short-sided from a downhill bunker lie, the high flop is the lowest-percentage shot in golf. Survival was the win.'",
       mapState:'greenside', ballTo:[848,138], broadcast:"On the green · 15 ft · Saved it · Long par putt",
@@ -7117,11 +7117,11 @@ const ALL_HOLES = [
       ]
     },
     putt_14: {
-      shot:4, situation:"14 feet for birdie — straight uphill. The aggressive line is right there.",
-      mapState:'putt', broadcast:"Putt · 14 ft · Uphill, straight · For birdie",
+      shot:4, situation:"14 feet for par — straight uphill, nothing to fear long. Roll it in, or two-putt?",
+      mapState:'putt', broadcast:"Putt · 14 ft · Uphill, straight · For par",
       choices:[
-        { badge:'BIRDIE',label:'Make it — firm, straight uphill', sub:'Nothing to fear long.', next:'finish_birdie', type:'agg' },
-        { badge:'PAR',   label:'Two-putt safely', sub:'Bank the par.', next:'finish_par', type:'smart' },
+        { badge:'PAR',  label:'Make it — firm, straight uphill', sub:'Save the par.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY',label:'Two-putt — bank the bogey', sub:'No three-putt.', next:'finish_bogey', type:'smart' },
       ]
     },
     putt_8: {
@@ -7168,7 +7168,7 @@ const ALL_HOLES = [
         { badge:'SMART', label:'Centre of the green', sub:'Fat target, two-putt par.', next:'tee_center', type:'smart' },
         { badge:'SAFE', label:'Bail right — dry land', sub:'Short-right, chip on.', next:'tee_bail', type:'safe' },
       ] },
-    tee_pin:{ shot:1, outcome:true, result:'💧 At the Sunday Pin',
+    tee_pin:{ shot:1, outcome:true, penalty:1, result:'💧 At the Sunday Pin',
       consequence:"Flushed the number — but the wind off the right nudged it, it pitched on the bank and trickled back into the water. Penalty.",
       pro:"'A tucked pin over water on a par 3 is the classic ego trap. The miss isn’t a putt, it’s a penalty — the centre was free.'",
       mapState:'greenside', ballTo:[700,200], broadcast:"Drop zone · Penalty · Pitching your 3rd · Short-sided", next:'finish_double' },
@@ -7177,18 +7177,18 @@ const ALL_HOLES = [
       pro:"'On an island green the centre is the aggressive play — it takes the only real danger, the water, completely out of the hole.'",
       mapState:'approach', ballTo:[768,150], broadcast:"On the green · 22 ft · Two-putt par · Birdie a bonus", next:'putt_22' },
     tee_bail:{ shot:1, outcome:true, result:'🛡️ Bailing to Dry Land',
-      consequence:"Safe and dry short-right — but now a delicate chip over a bunker to a tight pin. You traded the water for a fiddly up-and-down.",
+      consequence:"Safe on the short-right apron — but now a delicate chip across the green to a pin perched over the water. You traded the splash for a fiddly up-and-down.",
       pro:"'Bailing out is fine insurance, but know the premium: a short-sided chip is its own kind of hard. Respect both misses.'",
-      mapState:'greenside', ballTo:[820,182], broadcast:"Short-right · 15 yds · Chip over a bunker · Dry but fiddly", next:'chip_15' },
-    chip_15:{ shot:2, situation:"15-yard chip over a bunker to the tight Sunday pin. Flop it close, or bump to the fat and take two putts?", mapState:'greenside',
-      broadcast:"Chip · 15 yds · Over the bunker · Tight Sunday pin",
+      mapState:'greenside', ballTo:[842,196], broadcast:"Short-right apron · 15 yds · Chip to a pin over water · Dry but fiddly", next:'chip_15' },
+    chip_15:{ shot:2, situation:"15-yard chip from the apron to the tight Sunday pin, the water lurking just beyond. Flop it close, or bump to the fat and take two putts?", mapState:'greenside',
+      broadcast:"Chip · 15 yds · Pin over the water · Tight Sunday pin",
       choices:[
         { badge:'AGG', label:'Flop it close to the pin', sub:'High risk over sand.', next:'chip_flop', type:'agg' },
         { badge:'SMART', label:'Bump to the fat, two-putt', sub:'Safe, take bogey.', next:'chip_safe', type:'smart' },
       ] },
-    chip_flop:{ shot:2, outcome:true, result:'⚠️ Flopping at the Pin',
+    chip_flop:{ shot:2, outcome:true, result:'😅 Flopping at the Pin',
       consequence:"Brave — caught it a touch heavy, 12 feet short. On the green, par putt alive but no gimme.",
-      pro:"'The short-sided flop over sand is a low-percentage shot. Pulling it to 12 feet was a small win, not a failure.'",
+      pro:"'The short-sided flop to a pin over water is a low-percentage shot. Pulling it to 12 feet was a small win, not a failure.'",
       mapState:'greenside', ballTo:[714,166], broadcast:"On the green · 12 ft · For par · Slick", next:'putt_12' },
     chip_safe:{ shot:2, outcome:true, result:'✅ Bumped to the Fat',
       consequence:"Bumped safely to 18 feet, no drama. A two-putt bogey — exactly the right call from a bad spot.",
@@ -7245,7 +7245,7 @@ const ALL_HOLES = [
         { badge:'AGG', label:'Go for it — 3-wood over the water', sub:'Eagle on, water if you don’t.', next:'second_go', type:'agg' },
         { badge:'EXEC', label:'Lay up to a full wedge', sub:'~90 in, no risk.', next:'second_lay', type:'exec' },
       ] },
-    second_go:{ shot:2, outcome:true, result:'⚠️ Over the Water, Just',
+    second_go:{ shot:2, outcome:true, result:'🏖️ Over the Water, Just',
       consequence:"Carried the water by a whisker — but the 3-wood leaked right into the greenside bunker. Dry, and a simple splash leaves a birdie look.",
       pro:"'A long second over water is a true green light only when the carry is genuinely yours. You bought a bunker shot for a birdie chance — fair trade.'",
       mapState:'greenside', ballTo:[936,142], broadcast:"Greenside bunker · 20 yds · Birdie splash · Dry, short-sided", next:'bunker_up' },
@@ -7273,7 +7273,7 @@ const ALL_HOLES = [
         { badge:'AGG', label:'Attack the flag', sub:'Spin it close.', next:'wedge_90_attack', type:'agg' },
         { badge:'SMART', label:'Centre, two-putt birdie look', sub:'Safe and sound.', next:'wedge_90_safe', type:'smart' },
       ] },
-    wedge_90_attack:{ shot:3, outcome:true, result:'⚠️ At the Flag',
+    wedge_90_attack:{ shot:3, outcome:true, result:'✅ At the Flag',
       consequence:"Nipped it close — nine feet, but a slick downhill look at birdie.",
       pro:"'Attacking from 90 is fine when you’re dry; the only cost of a small miss here is a putt, not a penalty.'",
       mapState:'greenside', ballTo:[862,130], broadcast:"On the green · 9 ft · Downhill · For birdie", next:'putt_9' },
@@ -7281,10 +7281,20 @@ const ALL_HOLES = [
       consequence:"Pured to the middle, 14 feet pin-high. Two putts for a stress-free birdie chance, par guaranteed.",
       pro:"'Centre of the green from a full wedge is how you make par a floor and birdie a frequent bonus.'",
       mapState:'approach', ballTo:[888,116], broadcast:"On the green · 14 ft · Uphill · For birdie", next:'putt_14' },
-    wedge_130:{ shot:3, outcome:true, result:'⚠️ The Awkward Third',
-      consequence:"A three-quarter shot from 130 caught the front of the green — 30 feet, a long two-putt for par.",
-      pro:"'The in-between yardage you created off the tee shows up now as a 30-footer. Distance control starts two shots earlier.'",
-      mapState:'approach', ballTo:[876,128], broadcast:"On the green · 30 ft · Long two-putt · For par", next:'putt_30' },
+    wedge_130:{ shot:3, situation:"An in-between 130 over the water — a three-quarter swing. Chase the flag, or bleed it to the safe centre?", mapState:'approach',
+      broadcast:"Wedge · 130 yds · In-between · Over water",
+      choices:[
+        { badge:'AGG',  label:'Chase the flag', sub:'Force the three-quarter shot.', next:'wedge_130_go', type:'agg' },
+        { badge:'SMART',label:'Bleed it to the centre', sub:'Safe two-putt par.', next:'wedge_130_safe', type:'smart' },
+      ] },
+    wedge_130_go:{ shot:3, outcome:true, result:'😕 Forced the In-Betweener',
+      consequence:"Tried to force the awkward three-quarter shot at the flag — pushed it, 16 feet right. On the green, but the in-between number bit.",
+      pro:"'The half-wedge you created off the tee is one of the hardest shots in golf. Forcing it at a flag rarely ends close.'",
+      mapState:'greenside', ballTo:[898,128], broadcast:"On the green · 16 ft · For birdie · Awkward leave", next:'putt_16' },
+    wedge_130_safe:{ shot:3, outcome:true, result:'✅ Bled It to the Centre',
+      consequence:"Took the smart medicine — middle of the green, 30 feet. A simple two-putt par from the in-between number.",
+      pro:"'When the number is awkward, the centre of the green is the answer. A two-putt par you control beats a hero miss.'",
+      mapState:'approach', ballTo:[884,124], broadcast:"On the green · 30 ft · Two-putt par", next:'putt_30' },
     bunker_up:{ shot:3, situation:"Greenside bunker, 20 yards, after carrying the water. Splash it tight for birdie, or play safe?", mapState:'greenside',
       broadcast:"Bunker · 20 yds · Greenside · Birdie if you’re close",
       choices:[
@@ -7639,8 +7649,33 @@ function showHolePicker(){
     <button class="hpc-btn famous" onclick="beginHole(${hodIdx})">TEE OFF NOW →</button>`;
   cards.appendChild(hodCard);
 
-  const famous   = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.famous);
-  const practice = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>!h.famous);
+  const famous    = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.famous);
+  const broadcast = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.mapType==='camera');
+  const practice  = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>!h.famous && h.mapType!=='camera');
+
+  // Broadcast (Next-Shot Camera) holes — the cinematic, camera-driven decisions
+  if(broadcast.length){
+    const bLabel = document.createElement('div');
+    bLabel.className = 'hp-section famous';
+    bLabel.textContent = '📡 Broadcast Holes';
+    cards.appendChild(bLabel);
+    broadcast.forEach(({h,i}) => {
+      const div = document.createElement('div');
+      div.className = 'hp-card famous';
+      div.style.borderColor = '#5b9bd5';
+      div.innerHTML = `
+        <div class="hpc-famous-tag" style="background:#5b9bd5;color:#06121f">📡 Next-Shot Camera</div>
+        <div class="hpc-hole-name">${h.name}</div>
+        <div class="hpc-desc">The camera follows every shot — tracer, lie read, and the next decision. Play it like a broadcast.</div>
+        <div class="hpc-pills">
+          <span class="hpc-pill">Par ${h.par}</span>
+          <span class="hpc-pill">${h.yardage} yards</span>
+          <span class="hpc-pill">Live camera</span>
+        </div>
+        <button class="hpc-btn famous" style="background:#5b9bd5;color:#06121f" onclick="beginHole(${i})">PLAY THIS HOLE →</button>`;
+      cards.appendChild(div);
+    });
+  }
 
   // Famous holes section
   const famLabel = document.createElement('div');
@@ -7793,6 +7828,7 @@ function buildShotLesson(node, valence, lastDec){
 
 function showHoleOutcome(node){
   if(HOLE && HOLE.mapType === 'camera'){ HS._suppressCam = true; updateCamBroadcast(node); }
+  if(node.penalty){ HS.shotCount += node.penalty; }  // count the dropped stroke(s) live
   const oc = document.getElementById('outcome-card');
   document.getElementById('shot-panel').style.display = 'none';
   oc.style.display = 'none';           // hidden until the ball lands — the shot is the event
@@ -7874,6 +7910,9 @@ function advanceHole(){
 function finishHole(finalNode){
   document.getElementById('shot-panel').style.display = 'none';
   document.getElementById('outcome-card').style.display = 'none';
+  // Reconcile the live shot counter with the real score (penalty + implied putts
+  // on paths that route straight to the result) so the header matches the scorecard.
+  if(typeof finalNode.score === 'number'){ HS.shotCount = finalNode.score; setShots(finalNode.score, true); }
   const overlay = document.getElementById('scorecard-overlay');
   overlay.style.display = '';
   renderScorecard(finalNode);
@@ -8446,9 +8485,9 @@ function camGreenEngine(cx, cy, dirX, dirY){
     ${a(cx+33,cy-20,-22*dirX,20*dirY)}${a(cx+43,cy-4,-22*dirX,18*dirY)}${a(cx+19,cy-24,-20*dirX,16*dirY)}
     <text x="${cx+40}" y="${cy-28}" text-anchor="middle" font-size="8" fill="#9fe6a0" font-family="DM Sans,sans-serif">slope</text>
     <ellipse cx="${cx+30}" cy="${cy-2}" rx="22" ry="14" fill="none" stroke="#bfeec0" stroke-width="1" stroke-dasharray="3 3" opacity="0.75"/>
-    <text x="${cx+30}" y="${cy}" text-anchor="middle" font-size="7.5" fill="#bfeec0" font-family="DM Sans,sans-serif" opacity="0.8">SAFE</text>
+    <text x="${cx+34}" y="${cy+26}" text-anchor="middle" font-size="7.5" fill="#bfeec0" font-family="DM Sans,sans-serif" opacity="0.8">SAFE</text>
     <circle cx="${cx+16}" cy="${cy}" r="7" fill="none" stroke="#c8a84b" stroke-width="1.4"/><circle cx="${cx+16}" cy="${cy}" r="2" fill="#c8a84b"/>
-    <text x="${cx+16}" y="${cy-14}" text-anchor="middle" font-size="7" fill="#e6d29a" font-family="DM Sans,sans-serif" opacity="0.85">IDEAL</text>
+    <text x="${cx+12}" y="${cy-15}" text-anchor="middle" font-size="7" fill="#e6d29a" font-family="DM Sans,sans-serif" opacity="0.85">IDEAL</text>
   </g>`;
 }
 function buildReachableRiskSVG(){
@@ -8497,8 +8536,6 @@ function buildReachableRiskSVG(){
     <polygon points="838,112 856,118 838,124" fill="#e05252"/>
     <!-- tee box -->
     <rect x="46" y="396" width="48" height="26" rx="5" fill="#69a85a"/>
-    <text x="70" y="413" text-anchor="middle" font-size="12" fill="#fff" font-family="DM Sans,sans-serif" font-weight="700">TEE</text>
-    <text x="500" y="446" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif">420 yds · Par 4</text>
   </svg>`;
 }
 // PAR 3 — island green, Sunday pin tucked front-left over water
@@ -8510,6 +8547,9 @@ function buildSundayPinSVG(){
     <path d="M560,250 Q598,150 745,150 Q852,154 866,242 Q842,302 745,302 Q600,302 560,250 Z" fill="#2a78b0" opacity="0.45"/>
     <path d="M612,256 q16,-7 32,0 M636,272 q18,-7 34,0" stroke="#bfe6ff" stroke-width="1.4" fill="none" opacity="0.5"/>
     <text x="628" y="252" text-anchor="middle" font-size="12" fill="#bfe6ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1" opacity="0.8">WATER</text>
+    <path d="M788,150 Q840,148 864,182 Q874,208 846,216 Q810,216 798,186 Q789,166 788,150 Z" fill="#3f7a36"/>
+    <path d="M788,150 Q840,148 864,182 Q874,208 846,216 Q810,216 798,186 Q789,166 788,150 Z" fill="#4d9243" opacity="0.55"/>
+    <text x="836" y="234" text-anchor="middle" font-size="8" fill="#8fce86" font-family="DM Sans,sans-serif" opacity="0.75">apron</text>
     <ellipse cx="745" cy="150" rx="60" ry="40" fill="#2f6b2a"/>
     <ellipse cx="745" cy="150" rx="48" ry="30" fill="#46a23f"/>
     <ellipse cx="745" cy="150" rx="48" ry="30" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
@@ -8520,8 +8560,6 @@ function buildSundayPinSVG(){
     <polygon points="712,148 730,154 712,160" fill="#e05252"/>
     <path d="M690,180 Q708,168 728,168" stroke="#e05252" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0.8"/>
     <rect x="60" y="396" width="48" height="26" rx="5" fill="#69a85a"/>
-    <text x="84" y="413" text-anchor="middle" font-size="12" fill="#fff" font-family="DM Sans,sans-serif" font-weight="700">TEE</text>
-    <text x="320" y="330" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif">165 yds · Par 3</text>
   </svg>`;
 }
 // PAR 5 — reachable in two; cross-water guards the green for the bold second
@@ -8532,7 +8570,7 @@ function buildReachableGiantSVG(){
     <path d="M70,430 Q300,422 480,360 Q640,310 760,250 Q832,196 884,122" stroke="#3f6f33" stroke-width="60" fill="none" stroke-linecap="round"/>
     <path d="M70,430 Q300,422 480,360 Q640,310 760,250 Q832,196 884,122" stroke="#508f43" stroke-width="36" fill="none" stroke-linecap="round" opacity="0.65"/>
     <ellipse cx="600" cy="372" rx="28" ry="15" fill="#e3cd9a"/>
-    <text x="600" y="402" text-anchor="middle" font-size="10" fill="#cdbf8f" font-family="DM Sans,sans-serif" opacity="0.65">layup zone</text>
+    <text x="600" y="346" text-anchor="middle" font-size="10" fill="#cdbf8f" font-family="DM Sans,sans-serif" opacity="0.65">layup zone</text>
     <path d="M742,250 Q802,206 868,212 Q902,216 906,250 Q882,286 814,284 Q760,282 742,250 Z" fill="#1f5e8f"/>
     <path d="M742,250 Q802,206 868,212 Q902,216 906,250 Q882,286 814,284 Q760,282 742,250 Z" fill="#2a78b0" opacity="0.45"/>
     <text x="818" y="252" text-anchor="middle" font-size="11" fill="#bfe6ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1" opacity="0.8">WATER</text>
@@ -8545,8 +8583,6 @@ function buildReachableGiantSVG(){
     <line x1="860" y1="130" x2="860" y2="104" stroke="#f4f4f4" stroke-width="1.6"/>
     <polygon points="860,104 878,110 860,116" fill="#e05252"/>
     <rect x="50" y="418" width="48" height="26" rx="5" fill="#69a85a"/>
-    <text x="74" y="435" text-anchor="middle" font-size="12" fill="#fff" font-family="DM Sans,sans-serif" font-weight="700">TEE</text>
-    <text x="360" y="250" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif">545 yds · Par 5</text>
   </svg>`;
 }
 CAM_MAPS.reachable_risk  = buildReachableRiskSVG;
