@@ -7415,6 +7415,97 @@ const ALL_HOLES = [
     finish_double:{ final:true, score:5, label:'DOUBLE', emoji:'😬', color:'#e05252' },
   }
 }
+,
+// ── Camera hole 5 — Famous: Augusta National 12th "Golden Bell" (Amen Corner) ──
+{
+  par:3, name:'Golden Bell — 12th', badge:'📡 Next-Shot Camera', yardage:155,
+  course:'Augusta National · The Masters', location:'Amen Corner', famous:true, mapType:'camera',
+  cam:{ mapId:'augusta12', anchors:{ tee:[180,408] },
+    zones:{ tee:[0,0,1000,470], approach:[405,85,470,221], greenside:[495,117,330,155], putt:[555,131,250,118], drop:[285,139,470,221] } },
+  nodes:{
+    tee:{ shot:1, situation:"Augusta's 12th — the soul of Amen Corner. 155 yards over Rae's Creek to a green barely a few paces deep. The Sunday pin sits back-right, tight to the bunker, over the tongue of the creek. And the wind here swirls — it has fooled the very best.", mapState:'tee',
+      broadcast:"Tee · 155 yds · Over Rae's Creek · Amen Corner — the wind swirls and lies",
+      choices:[
+        { badge:'AGG', label:'At the Sunday flag — back-right', sub:'The shallowest, meanest corner.', next:'tee_flag', type:'agg' },
+        { badge:'SMART', label:'Left-centre — the widest part', sub:'Ignore the pin. Trust the heart.', next:'tee_center', type:'smart' },
+        { badge:'SAFE', label:'Favour long — over the creek', sub:'A back bunker beats the water.', next:'tee_long', type:'safe' },
+      ] },
+    tee_flag:{ shot:1, outcome:true, penalty:1, result:'💧 Chasing the Sunday Flag',
+      consequence:"The wind died as you swung — the ball came up a yard short and tumbled down the bank into Rae's Creek. The 12th has broken greater players than this. Drop, and play your third.",
+      pro:"'At the 12th the wind lies to you. The back-right flag is a trophy you take only when the wind is certain — and it never is. The centre is the play.'",
+      mapState:'greenside', ballTo:[690,250], broadcast:"Drop zone · Penalty · Playing your 3rd · The wind died", next:'drop_zone' },
+    tee_center:{ shot:1, outcome:true, result:'✅ The Heart of the Green',
+      consequence:"Committed to the wide left-centre and ignored the flag — pin-high, 20 feet left of the Sunday pin. Bone dry, two putts for par. The smartest shot on the hole.",
+      pro:"'Every Masters is littered with players who aimed at the 12th flag. The wise ones aim at the middle and let the wind do what it wants.'",
+      mapState:'approach', ballTo:[560,196], broadcast:"On the green · 20 ft · Two-putt par · The smart play", next:'putt_20' },
+    tee_long:{ shot:1, outcome:true, result:'🛡️ Bailed Long',
+      consequence:"Flew it safely over the creek to the back fringe by the bunkers — dry, but now a delicate downhill chip back toward the water on a green running away from you.",
+      pro:"'Long is the sane miss at 12 — the creek is short, the bunkers are back. The price is a slippery downhill chip to a shallow green.'",
+      mapState:'approach', ballTo:[640,150], broadcast:"Back fringe · 15 yds · Downhill chip toward the water · Dry", next:'chip_back' },
+    drop_zone:{ shot:2, situation:"From the drop, about 80 yards back over Rae's Creek to that back-right flag. Par is gone, but a calm wedge saves bogey — over the very creek that just got you.", mapState:'drop',
+      broadcast:"Drop zone · 80 yds · Over Rae's Creek · For bogey",
+      choices:[
+        { badge:'SMART', label:'To the centre — find the green', sub:'Take the creek out again.', next:'drop_center', type:'smart' },
+        { badge:'AGG', label:'At the flag — chase the bogey', sub:'Back-right, same danger.', next:'drop_pin', type:'agg' },
+      ] },
+    drop_center:{ shot:2, outcome:true, result:'✅ Found the Green',
+      consequence:"Calm wedge to the heart, 22 feet. Dry, on the green, a putt to save bogey — exactly the discipline 12 demands.",
+      pro:"'After Rae's Creek, the only sin is a second ball wet. The centre saves the round.'",
+      mapState:'approach', ballTo:[600,194], broadcast:"On the green · 22 ft · Two-putt double · Bogey if it drops", next:'putt_long' },
+    drop_pin:{ shot:2, outcome:true, result:'🌀 Back at the Flag',
+      consequence:"Took on the back-right flag again and held it — 11 feet. Dry, a real putt for bogey. Bold, after what just happened.",
+      pro:"'Going back at the 12th flag from the drop is nerve, not wisdom — but a held wedge to 11 feet earns the bogey putt.'",
+      mapState:'greenside', ballTo:[690,184], broadcast:"On the green · 11 ft · For bogey · Bold", next:'putt_short' },
+    chip_back:{ shot:2, situation:"A downhill chip from the back fringe to a shallow green falling toward Rae's Creek. Nip it close, or play safe and protect against running it through?", mapState:'greenside',
+      broadcast:"Chip · 15 yds · Downhill · Green falls toward the water",
+      choices:[
+        { badge:'AGG', label:'Nip it close to the flag', sub:'Touchy, toward the water.', next:'chip_tight', type:'agg' },
+        { badge:'SMART', label:'Land it safe, two putts', sub:'Never chip it through.', next:'chip_safe', type:'smart' },
+      ] },
+    chip_tight:{ shot:2, outcome:true, result:'✅ Nipped It Close',
+      consequence:"Feathered it down the slope to 6 feet — beautifully judged on the fastest chip on the course. A real putt to save par.",
+      pro:"'The downhill chip at 12 is all touch — land it on the fringe and let gravity carry it. The instant you hit it hard, it's gone.'",
+      mapState:'greenside', ballTo:[668,192], broadcast:"On the green · 6 ft · For par · Lovely touch", next:'putt_6' },
+    chip_safe:{ shot:2, outcome:true, result:'✅ Played It Safe',
+      consequence:"Cosied it on to 16 feet, well below the hole — no chance of running it through into the creek. A sensible two-putt bogey, or a putt for par.",
+      pro:"'On a green that sheds toward water, the safe chip that stays below the hole is the smart miss. Bogey here is a fine score.'",
+      mapState:'greenside', ballTo:[650,196], broadcast:"On the green · 16 ft · Below the hole · For par", next:'putt_16' },
+    putt_20:{ shot:2, situation:"20 feet for birdie on the shallow 12th green — slick, with a subtle fall toward the creek.", mapState:'putt',
+      broadcast:"Putt · 20 ft · For birdie",
+      choices:[
+        { badge:'BIRDIE', label:'Roll it in — a birdie at Amen Corner', sub:'A roar down the corner.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Lag to a tap-in par', sub:'Take the priceless par.', next:'finish_par', type:'smart' },
+      ] },
+    putt_6:{ shot:3, situation:"6 feet to save par after the lovely chip.", mapState:'putt',
+      broadcast:"Putt · 6 ft · For par",
+      choices:[
+        { badge:'PAR', label:'Knock it in for par', sub:'Reward the touch.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY', label:'Miss, tap in bogey', sub:'It happens here.', next:'finish_bogey', type:'safe' },
+      ] },
+    putt_16:{ shot:3, situation:"16 feet, below the hole, for par.", mapState:'putt',
+      broadcast:"Putt · 16 ft · Uphill · For par",
+      choices:[
+        { badge:'PAR', label:'Roll it in for par', sub:'Uphill, be firm.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY', label:'Two-putt for bogey', sub:'Bank the dry bogey.', next:'finish_bogey', type:'smart' },
+      ] },
+    putt_long:{ shot:3, situation:"22 feet to save bogey after the drop.", mapState:'putt',
+      broadcast:"Putt · 22 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Roll it in for bogey', sub:'Steal one back.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 5.', next:'finish_double', type:'smart' },
+      ] },
+    putt_short:{ shot:3, situation:"11 feet to save bogey after going back at the flag.", mapState:'putt',
+      broadcast:"Putt · 11 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Knock it in for bogey', sub:'Reward the nerve.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Miss, tap in double', sub:'Amen Corner exacts its price.', next:'finish_double', type:'safe' },
+      ] },
+    finish_birdie:{ final:true, score:2, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:3, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:4, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+    finish_double:{ final:true, score:5, label:'DOUBLE', emoji:'😬', color:'#e05252' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -8682,10 +8773,38 @@ function buildSawgrass17CamSVG(){
     <text x="500" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.55)" font-family="DM Sans,sans-serif" letter-spacing="2">SAWGRASS · 17TH</text>
   </svg>`;
 }
+// FAMOUS — Augusta National 12th: shallow wide green above Rae's Creek, lone front
+// bunker, two back bunkers, back-right Sunday pin, drop zone front-left.
+function buildAugusta12CamSVG(){
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#27451c"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.5"/>
+    <path d="M0,256 L1000,256 L1000,320 L0,320 Z" fill="#1f5e8f"/>
+    <path d="M0,256 L1000,256 L1000,320 L0,320 Z" fill="#2a78b0" opacity="0.4"/>
+    <path d="M640,256 Q700,232 760,250 L760,256 Z" fill="#1f5e8f"/>
+    <path d="M120,278 q22,-7 44,0 M430,300 q22,-7 44,0 M800,284 q22,-7 44,0" stroke="#bfe6ff" stroke-width="1.4" fill="none" opacity="0.45"/>
+    <text x="190" y="296" text-anchor="middle" font-size="11" fill="#bfe6ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1" opacity="0.8">RAE'S CREEK</text>
+    <ellipse cx="512" cy="150" rx="30" ry="15" fill="#e3cd9a"/><ellipse cx="668" cy="148" rx="26" ry="14" fill="#e3cd9a"/>
+    <ellipse cx="600" cy="192" rx="162" ry="38" fill="#2f6b2a"/>
+    <ellipse cx="600" cy="192" rx="148" ry="28" fill="#46a23f"/>
+    <ellipse cx="600" cy="192" rx="148" ry="28" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
+    <ellipse cx="548" cy="240" rx="34" ry="14" fill="#e3cd9a"/><ellipse cx="548" cy="240" rx="34" ry="14" fill="none" stroke="#c9ae72" stroke-width="1"/>
+    <ellipse cx="300" cy="360" rx="30" ry="17" fill="#3f7a36"/><ellipse cx="300" cy="360" rx="30" ry="17" fill="#4d9243" opacity="0.5"/>
+    <text x="300" y="390" text-anchor="middle" font-size="8" fill="#8fce86" font-family="DM Sans,sans-serif" opacity="0.8">drop zone</text>
+    ${camGreenEngine(600,192,1,1)}
+    <circle cx="700" cy="178" r="2.6" fill="#0c2208"/>
+    <line x1="700" y1="178" x2="700" y2="150" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="700,150 718,156 700,162" fill="#e05252"/>
+    <path d="M676,190 Q694,180 716,182" stroke="#e05252" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0.8"/>
+    <rect x="158" y="406" width="46" height="24" rx="5" fill="#69a85a"/>
+    <text x="500" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">AMEN CORNER · 12TH</text>
+  </svg>`;
+}
 CAM_MAPS.reachable_risk  = buildReachableRiskSVG;
 CAM_MAPS.sunday_pin      = buildSundayPinSVG;
 CAM_MAPS.reachable_giant = buildReachableGiantSVG;
 CAM_MAPS.sawgrass17      = buildSawgrass17CamSVG;
+CAM_MAPS.augusta12       = buildAugusta12CamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
