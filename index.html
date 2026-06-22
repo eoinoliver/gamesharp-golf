@@ -7506,6 +7506,97 @@ const ALL_HOLES = [
     finish_double:{ final:true, score:5, label:'DOUBLE', emoji:'😬', color:'#e05252' },
   }
 }
+,
+// ── Camera hole 6 — Famous: Pebble Beach 7th (cliff-top par 3 over the Pacific) ──
+{
+  par:3, name:'The 7th — Over the Pacific', badge:'📡 Next-Shot Camera', yardage:106,
+  course:'Pebble Beach · U.S. Open', location:'Carmel Bay, CA', famous:true, mapType:'camera',
+  cam:{ mapId:'pebble7', anchors:{ tee:[190,408] },
+    zones:{ tee:[0,0,1000,470], approach:[445,90,470,221], greenside:[515,122,330,155], putt:[575,141,250,118], drop:[355,120,470,221] } },
+  nodes:{
+    tee:{ shot:1, situation:"Pebble's 7th — a tiny green jutting into Carmel Bay, barely 106 yards but ringed by bunkers with the Pacific waiting long. In a calm it's a flick; in a gale it has been played with a 6-iron. Today the wind is up, off the ocean and into your face.", mapState:'tee',
+      broadcast:"Tee · 106 yds · Smallest green in golf · The Pacific long, wind decides everything",
+      choices:[
+        { badge:'AGG', label:'Big club at the flag', sub:'Over-club the gale and fire.', next:'tee_full', type:'agg' },
+        { badge:'SMART', label:'Punch it low to the centre', sub:'Knife it under the wind.', next:'tee_punch', type:'smart' },
+        { badge:'SAFE', label:'Smooth club, accept a bunker', sub:'Short and dry beats the sea.', next:'tee_front', type:'safe' },
+      ] },
+    tee_full:{ shot:1, outcome:true, penalty:1, result:'💧 Over the Edge',
+      consequence:"You over-clubbed for the gale — and the wind lulled at the worst moment. The ball flew the tiny green and splashed into the Pacific. Drop, and play your third.",
+      pro:"'At the 7th the wind giveth and taketh away. Over-club for a gust that doesn't come and the ocean is right there. Trajectory beats brute force here.'",
+      mapState:'greenside', ballTo:[770,150], broadcast:"Drop zone · Penalty · Playing your 3rd · Lost to the sea", next:'drop_zone' },
+    tee_punch:{ shot:1, outcome:true, result:'✅ Knifed It Low',
+      consequence:"A low, boring punch that slid under the wind and skipped to the heart of the green, 15 feet. The shot the 7th demands when the ocean breeze is up.",
+      pro:"'The flighted-down shot is the whole game on a windy par 3 — less spin, less drift, less for the wind to grab. Low and committed wins here.'",
+      mapState:'approach', ballTo:[680,198], broadcast:"On the green · 15 ft · Two-putt par · Birdie a bonus", next:'putt_15' },
+    tee_front:{ shot:1, outcome:true, result:'🏖️ Short, In the Bunker',
+      consequence:"Played the percentages — a smooth club that came up just short into the front bunker. Dry, no ocean, and a routine sand shot to save par.",
+      pro:"'When the only big miss is the sea, short into a bunker is a smart miss, not a bad one. You can get up and down from sand; you can't from the Pacific.'",
+      mapState:'greenside', ballTo:[660,250], broadcast:"Front bunker · 12 yds · Dry · Up-and-down for par", next:'bunker_shot' },
+    drop_zone:{ shot:2, situation:"From the drop on the mainland side, a short wedge back to the tiny green — the ocean still long. A calm, low one saves bogey.", mapState:'drop',
+      broadcast:"Drop zone · 60 yds · Tiny target, ocean long · For bogey",
+      choices:[
+        { badge:'SMART', label:'Low one to the centre', sub:'Just find the green.', next:'drop_center', type:'smart' },
+        { badge:'AGG', label:'At the flag — chase the bogey', sub:'Same sea, same risk.', next:'drop_pin', type:'agg' },
+      ] },
+    drop_center:{ shot:2, outcome:true, result:'✅ Found the Green',
+      consequence:"Flighted a calm wedge to the middle, 18 feet. Dry, on the green, a putt to save bogey — discipline after the disaster.",
+      pro:"'After the ocean, the only goal is dry. The centre of even the smallest green saves the round.'",
+      mapState:'approach', ballTo:[684,196], broadcast:"On the green · 18 ft · Two-putt double · Bogey if it drops", next:'putt_long' },
+    drop_pin:{ shot:2, outcome:true, result:'🌀 Back at the Flag',
+      consequence:"Took it on again and stuffed it — 9 feet. Dry, a real putt for bogey. Brave, with the sea still glinting beyond.",
+      pro:"'Going back at the flag from the drop is nerve, not maths — but a stuffed wedge to 9 feet earns the bogey putt.'",
+      mapState:'greenside', ballTo:[688,204], broadcast:"On the green · 9 ft · For bogey · Brave", next:'putt_short' },
+    bunker_shot:{ shot:2, situation:"A front-bunker shot to the tiny green, the Pacific glinting beyond. Splash it tight for par, or play safe and protect against sailing it over?", mapState:'greenside',
+      broadcast:"Bunker · 12 yds · Tiny green · Ocean beyond",
+      choices:[
+        { badge:'AGG', label:'Splash it tight', sub:'Go get the par.', next:'bunker_tight', type:'agg' },
+        { badge:'SMART', label:'Safe splash, take two putts', sub:'Never sail it over.', next:'bunker_safe', type:'smart' },
+      ] },
+    bunker_tight:{ shot:2, outcome:true, result:'✅ Nipped the Splash',
+      consequence:"A crisp splash that checked to 7 feet, pin-high. A real putt to save par from the sand.",
+      pro:"'On a tiny green over the ocean, a controlled bunker shot is gold. Commit to the sand and let the bounce land it soft.'",
+      mapState:'greenside', ballTo:[686,202], broadcast:"On the green · 7 ft · For par · Crisp", next:'putt_7' },
+    bunker_safe:{ shot:2, outcome:true, result:'✅ Safe Splash',
+      consequence:"Out to 16 feet, well below the hole — never any danger of sailing it into the sea. A sensible two-putt bogey, or a putt for par.",
+      pro:"'Below the hole on a green that falls to the ocean is the only place to be. Bogey here is a perfectly good number.'",
+      mapState:'greenside', ballTo:[672,206], broadcast:"On the green · 16 ft · Below the hole · For par", next:'putt_16' },
+    putt_15:{ shot:2, situation:"15 feet for birdie on the smallest green in golf — quick, falling toward the sea.", mapState:'putt',
+      broadcast:"Putt · 15 ft · For birdie",
+      choices:[
+        { badge:'BIRDIE', label:'Roll it in — birdie at the 7th', sub:'A roar over Carmel Bay.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Lag to a tap-in par', sub:'Take the postcard par.', next:'finish_par', type:'smart' },
+      ] },
+    putt_7:{ shot:3, situation:"7 feet to save par after the bunker splash.", mapState:'putt',
+      broadcast:"Putt · 7 ft · For par",
+      choices:[
+        { badge:'PAR', label:'Knock it in for par', sub:'Reward the splash.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY', label:'Miss, tap in bogey', sub:'It happens by the sea.', next:'finish_bogey', type:'safe' },
+      ] },
+    putt_16:{ shot:3, situation:"16 feet, below the hole, for par.", mapState:'putt',
+      broadcast:"Putt · 16 ft · Uphill · For par",
+      choices:[
+        { badge:'PAR', label:'Roll it in for par', sub:'Uphill, be firm.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY', label:'Two-putt for bogey', sub:'Bank the dry bogey.', next:'finish_bogey', type:'smart' },
+      ] },
+    putt_long:{ shot:3, situation:"18 feet to save bogey after the drop.", mapState:'putt',
+      broadcast:"Putt · 18 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Roll it in for bogey', sub:'Steal one back.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 5.', next:'finish_double', type:'smart' },
+      ] },
+    putt_short:{ shot:3, situation:"9 feet to save bogey after going back at the flag.", mapState:'putt',
+      broadcast:"Putt · 9 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Knock it in for bogey', sub:'Reward the nerve.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Miss, tap in double', sub:'The sea exacts its price.', next:'finish_double', type:'safe' },
+      ] },
+    finish_birdie:{ final:true, score:2, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:3, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:4, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+    finish_double:{ final:true, score:5, label:'DOUBLE', emoji:'😬', color:'#e05252' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -8800,11 +8891,39 @@ function buildAugusta12CamSVG(){
     <text x="500" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">AMEN CORNER · 12TH</text>
   </svg>`;
 }
+// FAMOUS — Pebble Beach 7th: a tiny green on a promontory in Carmel Bay, ringed by
+// bunkers, the Pacific long and right; tee on the mainland lower-left, drop zone inland.
+function buildPebble7CamSVG(){
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#1f5e8f"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.12"/>
+    <path d="M120,90 q22,-7 44,0 M340,70 q24,-8 46,0 M820,110 q22,-7 44,0 M900,300 q22,-7 44,0" stroke="#bfe6ff" stroke-width="1.4" fill="none" opacity="0.4"/>
+    <path d="M0,470 L0,300 Q120,300 240,330 Q380,360 520,332 Q636,308 700,256 Q760,300 800,302 L820,470 Z" fill="#27451c"/>
+    <path d="M700,256 Q636,308 520,332 Q380,360 240,330 Q120,300 0,300" stroke="#cdb98f" stroke-width="2" fill="none" opacity="0.35"/>
+    <text x="300" y="150" text-anchor="middle" font-size="12" fill="#bfe6ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1" opacity="0.7">CARMEL BAY</text>
+    <ellipse cx="660" cy="256" rx="24" ry="12" fill="#e3cd9a"/>
+    <ellipse cx="606" cy="210" rx="16" ry="12" fill="#e3cd9a"/>
+    <ellipse cx="752" cy="212" rx="16" ry="12" fill="#e3cd9a"/>
+    <ellipse cx="690" cy="146" rx="20" ry="11" fill="#e3cd9a"/>
+    <ellipse cx="680" cy="200" rx="62" ry="46" fill="#2f6b2a"/>
+    <ellipse cx="680" cy="200" rx="48" ry="34" fill="#46a23f"/>
+    <ellipse cx="680" cy="200" rx="48" ry="34" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
+    <ellipse cx="470" cy="320" rx="28" ry="16" fill="#3f7a36"/><ellipse cx="470" cy="320" rx="28" ry="16" fill="#4d9243" opacity="0.5"/>
+    <text x="470" y="348" text-anchor="middle" font-size="8" fill="#8fce86" font-family="DM Sans,sans-serif" opacity="0.8">drop zone</text>
+    ${camGreenEngine(680,200,1,1)}
+    <circle cx="688" cy="206" r="2.6" fill="#0c2208"/>
+    <line x1="688" y1="206" x2="688" y2="178" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="688,178 706,184 688,190" fill="#e05252"/>
+    <rect x="150" y="400" width="46" height="24" rx="5" fill="#69a85a"/>
+    <text x="500" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">PEBBLE BEACH · 7TH</text>
+  </svg>`;
+}
 CAM_MAPS.reachable_risk  = buildReachableRiskSVG;
 CAM_MAPS.sunday_pin      = buildSundayPinSVG;
 CAM_MAPS.reachable_giant = buildReachableGiantSVG;
 CAM_MAPS.sawgrass17      = buildSawgrass17CamSVG;
 CAM_MAPS.augusta12       = buildAugusta12CamSVG;
+CAM_MAPS.pebble7         = buildPebble7CamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
