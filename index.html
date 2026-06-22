@@ -364,6 +364,23 @@ svg { display:block; }
 .tech-cue-feel { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; line-height:1; margin-bottom:6px; }
 .tech-cue-drill { font-size:13px; line-height:1.5; color:rgba(255,255,255,.78); }
 .tech-cta { width:100%; background:var(--gold); color:#111; border:none; border-radius:var(--radius-sm); padding:14px; font-size:15px; font-weight:700; cursor:pointer; }
+/* On-course application cue — the "what to do next round" half of a fix */
+.tech-course { background:linear-gradient(135deg,#0e2438 0%,#143553 100%); border:1px solid #2d567f; border-radius:var(--radius-sm); padding:13px 15px; margin-bottom:16px; }
+.tech-course-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#7fbef0; margin-bottom:5px; }
+.tech-course-body { font-size:13px; line-height:1.5; color:rgba(255,255,255,.85); }
+/* "What was your miss today?" personal picker */
+.tech-miss-list { display:flex; flex-direction:column; gap:9px; margin-bottom:22px; }
+.tech-miss { display:flex; align-items:center; gap:13px; text-align:left; width:100%; background:var(--card2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 15px; cursor:pointer; transition:border-color .15s, transform .1s; }
+.tech-miss:active { transform:scale(.985); }
+.tech-miss:hover { border-color:var(--gold); }
+.tech-miss-icon { font-size:21px; line-height:1; flex:0 0 auto; }
+.tech-miss-body { display:flex; flex-direction:column; flex:1; min-width:0; }
+.tech-miss-label { font-size:14.5px; font-weight:700; color:#fff; }
+.tech-miss-sub { font-size:11.5px; color:var(--muted); margin-top:2px; }
+.tech-miss-chev { color:var(--muted); font-size:20px; flex:0 0 auto; }
+.tech-or { text-align:center; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 14px; position:relative; }
+.tech-or::before, .tech-or::after { content:''; position:absolute; top:50%; width:26%; height:1px; background:var(--border); }
+.tech-or::before { left:0; } .tech-or::after { right:0; }
 .gsw-ctrl { display:flex; align-items:center; gap:8px; padding:8px 10px; border-top:1px solid var(--border); }
 .gsw-btn  { background:var(--card2); border:1px solid var(--border); color:var(--muted); border-radius:20px; padding:5px 11px; font-size:10.5px; font-weight:700; letter-spacing:.06em; cursor:pointer; }
 .gsw-btn.on { border-color:var(--gold); color:var(--gold); }
@@ -653,6 +670,16 @@ svg { display:block; }
 .dcc-streak-num   { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--gold); line-height:1; }
 .dcc-streak-label { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
 .dcc-streak-inline { display:inline-flex; align-items:baseline; gap:7px; }
+.dcc-endstate { flex:none; align-self:stretch; margin:16px 16px 4px; padding:14px 16px; border-radius:16px; border:1px solid rgba(255,255,255,.1);
+  background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.015)); position:relative; overflow:hidden;
+  animation:dccBadgePop .55s cubic-bezier(.2,.9,.25,1.05) both; }
+.dcc-endstate::after { content:''; position:absolute; inset:0; background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.14) 50%,transparent 70%);
+  transform:translateX(-120%); animation:dccShine 1.1s ease .35s 1 both; }
+.dcc-es-icon { font-size:30px; line-height:1; }
+.dcc-es-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.03em; margin-top:4px; }
+.dcc-es-sub { font-size:13px; color:var(--muted); line-height:1.45; margin-top:5px; }
+@keyframes dccBadgePop { from{opacity:0; transform:scale(.9) translateY(8px);} to{opacity:1; transform:none;} }
+@keyframes dccShine { to{ transform:translateX(120%); } }
 .dcc-actions { width:100%; max-width:340px; display:flex; flex-direction:column; gap:10px; margin:0 auto; }
 
 /* Today's Shot Saver completion blocks */
@@ -1629,6 +1656,8 @@ svg { display:block; }
     <div class="dcc-streak-inline"><span class="dcc-streak-num" id="dcc-streak-num">1</span> <span class="dcc-streak-label">day streak 🔥</span></div>
     <div id="dcc-mulligan" style="display:none;margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#4caf50">🛡 MULLIGAN — your streak survived a missed day (1 per month)</div>
   </div>
+
+  <div id="dcc-endstate" class="dcc-endstate" style="display:none"></div>
 
   <div class="tss-blocks">
     <div class="tss-block tss-edge">
@@ -2867,6 +2896,8 @@ function showDailyReview(){
   setTxt('tss-saved-body', d.saved);
   setTxt('tss-try-body', d.tryNext);
   setTxt('tss-tomorrow-body', d.tomorrow);
+  if(d.endState) renderDailyEndState(d.endState);
+  else { const es=document.getElementById('dcc-endstate'); if(es) es.style.display='none'; }
   const shareBtn = document.getElementById('dcc-share-btn');
   if(shareBtn) shareBtn.onclick = shareDaily;
   showView('daily-complete');
@@ -3373,6 +3404,65 @@ function buildDailyDebrief(qs){
   return { edge, saved, tryNext, tomorrow };
 }
 
+// Variable, EARNED end-state badge. Every state reflects something the player
+// actually did this session — never a fabricated reward. When more than one
+// celebratory state is genuinely earned, a date seed picks among them so the
+// reveal stays unpredictable (the antidote to "I've seen this screen before").
+function dailyEndState(score, total, qs, streak){
+  const answers = (S.quiz && S.quiz.answers) || [];
+  // Highest-stakes question in today's set (penalty/double = card-wreckers).
+  const stakeRank = { 'Penalty':3, 'Double bogey':3, 'Three-putt':2, 'Short-sided':2, 'Failed recovery':2 };
+  let hardest = null, hardestRank = -1;
+  qs.forEach(q => { const r = stakeRank[q.primary_score_leak] || 1; if(r > hardestRank){ hardestRank = r; hardest = q; } });
+  const hardestAns = hardest && answers.find(a => a.qid === hardest.id);
+  const clutchSave = hardest && hardestRank >= 3 && hardestAns && hardestAns.isCorrect;
+  const comeback = answers.length >= 3 && !answers[0].isCorrect && answers[answers.length-1].isCorrect && score >= 2;
+  const landmark = [3,5,7,10,14,21,30,50,75,100,150,200,365].includes(streak);
+  const need = Math.ceil(total * 0.67);
+  const leakWord = (hardest && {'Penalty':'penalty stroke','Double bogey':'blow-up hole','Three-putt':'three-putt','Short-sided':'short-side','Failed recovery':'forced recovery'}[hardest.primary_score_leak]) || 'big number';
+
+  const elig = [];
+  if(score === total && total > 0)
+    elig.push({ icon:'🏆', title:'FLAWLESS CARD', color:'var(--gold)',
+      sub:`${total} for ${total}. Not one leak — that's a round-winning mindset, not a lucky day.` });
+  if(landmark)
+    elig.push({ icon:'🔥', title:`${streak}-DAY STREAK`, color:'#ff8f00',
+      sub:`This isn't a phase anymore — it's how you read the course now. Don't break the chain.` });
+  if(clutchSave)
+    elig.push({ icon:'🛡️', title:'SHOT SAVED', color:'#4caf50',
+      sub:`You read the danger hole right — that's the ${leakWord} that never made it onto your card.` });
+  if(comeback)
+    elig.push({ icon:'↩️', title:'THE BOUNCE-BACK', color:'#5b9bd5',
+      sub:`Dropped the opener, closed it out. That's exactly how good players stop a card from sliding.` });
+
+  // Mutually exclusive fallbacks by score band — only used when nothing above fired.
+  let chosen;
+  if(elig.length){
+    // Seeded pick among genuinely-earned celebratory states → varied, never false.
+    const seed = parseInt(todayStr().replace(/-/g,'')) || 0;
+    chosen = elig[seed % elig.length];
+  } else if(score >= need && score < total){
+    chosen = { icon:'🧠', title:'COURSE MANAGER', color:'var(--gold)',
+      sub:`${score}/${total}, and the ones you missed were the close calls. Steady reads beat hero swings over 18.` };
+  } else if(score > 0){
+    chosen = { icon:'📈', title:'EDGE BANKED', color:'#26a69a',
+      sub:`${score}/${total} — but you just saw exactly where the strokes leak. That's the rep that changes your scores.` };
+  } else {
+    chosen = { icon:'🌱', title:'FRESH CARD TOMORROW', color:'#7cb37c',
+      sub:`Tough set — but every miss you just walked through is one you'll spot coming on the course.` };
+  }
+  return chosen;
+}
+
+function renderDailyEndState(es){
+  const el = document.getElementById('dcc-endstate');
+  if(!el || !es) return;
+  el.innerHTML = `<div class="dcc-es-icon">${es.icon}</div>
+    <div class="dcc-es-title" style="color:${es.color}">${es.title}</div>
+    <div class="dcc-es-sub">${es.sub}</div>`;
+  el.style.display = '';
+}
+
 function finishQuiz(){
   const { score, qs, mode, pillar } = S.quiz;
   const total = qs.length;
@@ -3414,11 +3504,13 @@ function finishQuiz(){
     if(dccDenomEl) dccDenomEl.textContent = '/' + total;
     // Build the four-block debrief and persist it for same-day review
     const deb = buildDailyDebrief(qs);
+    const endState = dailyEndState(score, total, qs, S.streak);
+    renderDailyEndState(endState);
     S.todayDebrief = {
       date: today, score, total,
       theme: (S.quiz.thread && S.quiz.thread.theme) || '',
       dots: (S.quiz.answers||[]).map(a => a.isCorrect ? '🟢' : '🔴').join(''),
-      streak: S.streak,
+      streak: S.streak, endState,
       edge: deb.edge, saved: deb.saved, tryNext: deb.tryNext, tomorrow: deb.tomorrow
     };
     LS.set('todayDebrief', S.todayDebrief);
@@ -3782,6 +3874,39 @@ const GOLF_TECHNIQUE = [
       why:'Three-putts from range are almost always speed, not line. Obsessing over the exact line costs you feel for distance. Aim to leave every long putt inside a 3-foot circle and the three-putts disappear.',
       cue:{ feel:'Putt to a 3-foot circle', drill:'On long putts take a few looks at the hole — not the ball — to feel distance, then roll it to stop inside a 3-foot radius. Lag for tap-ins.' },
       vis:{ mode:'putt', shape:'long' } } ] }
+];
+
+// On-course application: the range cue tells you what to FEEL; this tells you
+// what to DO with it on the next hole. A fix is a diagnosis plus a next-shot cue.
+// Keyed [strokeIdx][faultIdx]; rendered in the reveal when present.
+const TECH_COURSE = {
+  0:{ 0:'Tee up on the RIGHT side of the box and aim down the left edge — give your fade the whole fairway instead of fighting it.',
+      2:'When OB or trouble guards the left, club down to a 3-wood or hybrid off the tee — take the dead-left miss out of play entirely.' },
+  1:{ 0:'Club up one and swing smoother — a soft strike beats a thinned full-out. Pick a spot just ahead of the ball and hit the turf there.',
+      1:'On fluffy or soft lies, play the ball a touch back and finish with your weight forward — favour the thin miss; thin still gets there.' },
+  2:{ 2:'When the lie is clean and there is green to land on, putt-stroke chip it — there is far less to chunk. Save the high wedge for forced carries.' },
+  3:{ 0:'Default to a most-lofted putt or bump-and-run whenever the lie allows — keep the leading edge out of the equation around the green.',
+      1:'Choke down, narrow your stance, and rehearse brushing the grass before you step in — let the bounce work, do not stab at it.' },
+  4:{ 1:'Pick a spot two inches behind the ball and accelerate THROUGH it — commit to a fuller swing than feels necessary and splash sand onto the green.' },
+  5:{ 0:'On approach putts, pick a target a hole-length PAST the cup — most short putts die before they ever had a chance.',
+      1:'Forget the perfect line on long putts — roll it into a 3-foot circle around the hole. Speed kills three-putts far more than reads.' }
+};
+(function(){ for(const s in TECH_COURSE){ for(const f in TECH_COURSE[s]){
+  if(GOLF_TECHNIQUE[s] && GOLF_TECHNIQUE[s].faults[f]) GOLF_TECHNIQUE[s].faults[f].course = TECH_COURSE[s][f];
+}}})();
+
+// "What was your miss today?" — the personal front door to the clinic.
+// Each entry is a real miss a golfer recognises, routed to its diagnosis.
+const TECH_MISSES = [
+  { icon:'🌀', label:'Sliced it off the tee',      sub:'Started okay, peeled right',   s:0, f:0 },
+  { icon:'↩️', label:'Snap-hook / pull left',       sub:'Dived low and left',          s:0, f:2 },
+  { icon:'🔪', label:'Thinned an iron',             sub:'Low screamer over the green',  s:1, f:0 },
+  { icon:'⛳', label:'Fat iron, came up short',     sub:'Hit the ground first',         s:1, f:1 },
+  { icon:'🪓', label:'Chunked a wedge',             sub:'Heavy, came up well short',    s:2, f:2 },
+  { icon:'🥄', label:'Chunked a chip',              sub:'Dug in behind the ball',       s:3, f:0 },
+  { icon:'⚡', label:'Bladed a chip across',         sub:'Skulled it over the green',    s:3, f:1 },
+  { icon:'🏖️', label:'Left it in the bunker',       sub:'Too much sand, came up short', s:4, f:1 },
+  { icon:'🎯', label:'Three-putted from range',     sub:'Lag putt left too much',       s:5, f:1 }
 ];
 
 
@@ -4664,14 +4789,27 @@ function techRenderHome(){
       <div class="tech-stroke-name">${g.label}</div>
       <div class="tech-stroke-meta">Common misses</div>
     </button>`).join('');
+  const missCards = TECH_MISSES.map((m,i) =>
+    `<button class="tech-miss" onclick="techOpenMiss(${i})">
+      <span class="tech-miss-icon">${m.icon}</span>
+      <span class="tech-miss-body"><span class="tech-miss-label">${m.label}</span><span class="tech-miss-sub">${m.sub}</span></span>
+      <span class="tech-miss-chev">›</span>
+    </button>`).join('');
   techApp().innerHTML = `
     <div class="tech-eyebrow">Shot Clinic · Diagnose your miss</div>
-    <h1 class="tech-h1">Find the culprit</h1>
-    <p class="tech-intro">Pick a club. We'll show the misses you actually make — and the one cue that fixes each.</p>
+    <h1 class="tech-h1">What was your miss today?</h1>
+    <p class="tech-intro">Tap the shot that cost you. We'll find the culprit, give you the one cue that fixes it — and what to do with it on your next round.</p>
+    <div class="tech-miss-list">${missCards}</div>
+    <div class="tech-or">or browse by club</div>
     <div class="tech-grid">${cards}</div>`;
   techApp().parentElement.scrollTop = 0;
 }
 function techOpenStroke(i){ techState.strokeIdx = i; techState.faultIdx = 0; techRenderFault(); }
+function techOpenMiss(i){
+  const m = TECH_MISSES[i]; if(!m) return;
+  techState.strokeIdx = m.s; techState.faultIdx = m.f;
+  techRenderFault();
+}
 
 function techRenderFault(){
   techState.answered = false;
@@ -4733,7 +4871,11 @@ function techAnswer(k){
         <div class="tech-cue-feel">${f.cue.feel}</div>
         <div class="tech-cue-drill">${f.cue.drill}</div>
       </div>
-      <button class="tech-cta" onclick="${last ? 'techRenderHome()' : 'techNextFault()'}">${last ? 'Back to clubs →' : 'Next miss →'}</button>
+      ${f.course ? `<div class="tech-course">
+        <div class="tech-course-label">⛳ Next round</div>
+        <div class="tech-course-body">${f.course}</div>
+      </div>` : ''}
+      <button class="tech-cta" onclick="${last ? 'techRenderHome()' : 'techNextFault()'}">${last ? 'Back to clinic →' : 'Next miss →'}</button>
     </div>`;
   setTimeout(() => { const r = document.getElementById('techReveal'); if(r) r.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 120);
 }
@@ -7991,21 +8133,24 @@ let wObDismissed = false;
 // ── COLD OPEN: one real decision on a hole BEFORE any questions ──
 const GOLF_COLD_OPENS = [
   {
-    situation: "150 yards in. The pin is cut left, tucked behind a deep bunker. The right half of the green is wide open.",
+    situation: "150 yards in. Pin cut left, tucked behind a deep bunker. The right looks open — but the green runs off there into a collection area, and the surface tilts back-to-front.",
     question: "Where do you aim?",
     you: { x: 100, y: 128 },
     geo: `<ellipse cx="100" cy="42" rx="58" ry="24" fill="#2d7a2d"/><ellipse cx="100" cy="42" rx="46" ry="17" fill="#3d9a3d"/>
       <ellipse cx="52" cy="64" rx="20" ry="10" fill="#d4b896"/><text x="52" y="67" text-anchor="middle" font-size="6" fill="#8B6914" font-family="DM Sans">BUNKER</text>
+      <path d="M150 34 Q172 44 168 70 L150 66 Q156 50 144 44 Z" fill="#1f5a24" opacity="0.85"/>
+      <path d="M156 46 l6 4 M158 54 l6 4 M158 62 l6 4" stroke="#0d3a12" stroke-width="1" opacity="0.7"/>
+      <text x="166" y="80" text-anchor="middle" font-size="5.2" fill="#7cb37c" font-family="DM Sans">RUN-OFF</text>
       <line x1="66" y1="36" x2="66" y2="20" stroke="#ccc" stroke-width="1.3"/><polygon points="66,20 77,24 66,28" fill="#e05252"/>`,
     options: [
       { label: 'At the pin', sub: 'That is what it is there for', target: { x: 66, y: 40 }, correct: false,
         verdict: "This is the miss that wrecks cards. A slight pull and you're in the bunker, short-sided to a tucked pin — the hardest up-and-down in golf. The flag is information, not an instruction." },
-      { label: 'Fat of the green, right', sub: 'Big target, putt at it', target: { x: 124, y: 40 }, correct: true,
-        verdict: "Right. The centre-right gives you the whole green to land in and a makeable putt. Your dispersion covers the pin anyway — and the bad miss simply can't happen from this line." },
-      { label: 'Lay up short', sub: 'Take no risk at all', target: { x: 100, y: 88 }, correct: false,
-        verdict: "Too timid — there's nothing short of the green to fear. Laying up here protects against a danger that doesn't exist and donates a stroke to the field." }
+      { label: 'Dead centre', sub: 'Take both dangers out', target: { x: 100, y: 40 }, correct: true,
+        verdict: "Right. The centre is the only target that takes BOTH dangers out — the bunker left and the run-off right. Your dispersion still covers the pin, and your worst result is a long putt, not an up-and-down." },
+      { label: 'Bail to the open right', sub: 'Looks like all that room', target: { x: 144, y: 52 }, correct: false,
+        verdict: "The trap. 'Open right' isn't open — the green sheds off into a collection area, and now you're chipping back UP the slope to a pin tucked behind the bunker. You just swapped one short-side for another." }
     ],
-    insight: "Tiger Woods built his dominance on a quiet rule: every approach had a pre-chosen miss. The skill isn't hitting the green — it's deciding, before you swing, where the bad shot is allowed to go."
+    insight: "The amateur aims at space; the pro aims at the spot where every miss is survivable. 'Wide open' is the most expensive illusion in golf — read where the green sends a slightly-off shot, not where it looks roomy at address."
   },
   {
     situation: "Par 5. 220 to carry the water and reach the green. Your reliable 3-wood carries 235, and you pull this shot off 8 times out of 10.",
