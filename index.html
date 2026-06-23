@@ -6437,6 +6437,92 @@ const ALL_HOLES = [
     finish_double:{ final:true, score:6, label:'DOUBLE', emoji:'😬', color:'#e05252' },
   }
 }
+,
+// ── Camera hole 9 — Famous: Riviera 10th (the great driveable par 4) ──
+{
+  par:4, name:'The 10th — Driveable', badge:'📡 Next-Shot Camera', yardage:315,
+  course:'Riviera · The Genesis', location:'Los Angeles, CA', famous:true, mapType:'camera',
+  cam:{ mapId:'riviera10', anchors:{ tee:[100,418] },
+    zones:{ tee:[0,0,1000,470], fairway:[380,180,470,221], approach:[560,40,470,221], greenside:[650,73,330,155], putt:[690,91,250,118] } },
+  nodes:{
+    tee:{ shot:1, situation:"Riviera's 10th — barely 315 yards and driveable, yet maybe the most strategic hole in golf. The tiny green sits at an angle behind a deep bunker: from the LEFT it plays deep and holdable; from the right it's a sliver running away. Drive it and a small miss is a nightmare; lay up to the correct side and it's a wedge for birdie.", mapState:'tee',
+      broadcast:"Tee · 315 yds · Driveable · Tiny angled green — angle beats distance",
+      choices:[
+        { badge:'AGG', label:'Driver at the green', sub:'Eagle on, but a miss is brutal.', next:'tee_drive', type:'agg' },
+        { badge:'SMART', label:'Lay up LEFT — open the angle', sub:'A full wedge from the best side.', next:'tee_left', type:'smart' },
+        { badge:'SAFE', label:'Lay up right — safe and simple', sub:'Dry, but the worst angle in.', next:'tee_right', type:'safe' },
+      ] },
+    tee_drive:{ shot:1, outcome:true, result:'🏖️ Short-Sided',
+      consequence:"The driver caught the green's edge and skipped just over into the gnarly stuff by the bunker — short-sided to a green running away. The classic Riviera 10 gamble that doesn't quite come off.",
+      pro:"'The 10th green is too small to aim at — even a near-perfect drive leaves a short-sided recovery to a green that won't hold. The genius of the hole is that going for it is usually wrong.'",
+      mapState:'greenside', ballTo:[770,196], broadcast:"Short-sided · Green runs away · Up-and-down for birdie", next:'recover' },
+    tee_left:{ shot:1, outcome:true, result:'✅ The Smart Angle',
+      consequence:"Laid up to the LEFT — the green now plays deep and inviting in front of you, 70 yards, a full wedge to the holdable side. The shot the smart money plays at 10.",
+      pro:"'The left lay-up turns a sliver of a green into a deep, holdable target. On the 10th, the angle you create is worth far more than the 70 yards you gave up.'",
+      mapState:'fairway', ballTo:[560,250], broadcast:"Fairway left · 70 yds · Best angle · Green plays deep", next:'approach' },
+    tee_right:{ shot:1, outcome:true, result:'🛡️ The Lazy Side',
+      consequence:"Laid up safely to the right — dry and simple, but now the green is a shallow sliver running away from you. Par is the realistic ceiling from here.",
+      pro:"'The right lay-up feels safe, but it leaves the very angle the hole is designed to punish — a shallow green you can't attack. Safe isn't the same as smart on the 10th.'",
+      mapState:'fairway', ballTo:[620,330], broadcast:"Fairway right · 80 yds · Worst angle · Green runs away", next:'pitch' },
+    recover:{ shot:2, situation:"Short-sided by the green, the surface running away toward the back. Flop it at the flag, or take your medicine and bump it on?", mapState:'greenside',
+      broadcast:"Recovery · Short-sided · Green runs away · Touch shot",
+      choices:[
+        { badge:'AGG', label:'Flop it at the flag', sub:'Pull it off — birdie putt.', next:'rec_flop', type:'agg' },
+        { badge:'SMART', label:'Bump it on, take two putts', sub:'Save what you can.', next:'rec_safe', type:'smart' },
+      ] },
+    rec_flop:{ shot:2, outcome:true, result:'✅ Pulled Off the Flop',
+      consequence:"A perfect flop that landed soft and checked to 6 feet — a genuine birdie putt rescued from a brutal spot. Filthy.",
+      pro:"'When you've short-sided yourself, the high soft flop is the only shot — but it's the highest-risk shot in golf. Glorious when it works.'",
+      mapState:'greenside', ballTo:[830,150], broadcast:"On the green · 6 ft · For birdie · Brilliant", next:'putt_birdie' },
+    rec_safe:{ shot:2, outcome:true, result:'🛡️ Took the Medicine',
+      consequence:"Bumped it on to 20 feet, well below the hole — no hero, no disaster. A two-putt par from a spot that could have been much worse.",
+      pro:"'From short-sided trouble, getting it safely on is the win. A two-putt par here feels like a birdie given where you were.'",
+      mapState:'greenside', ballTo:[810,160], broadcast:"On the green · 20 ft · Two-putt par · Damage controlled", next:'putt_par' },
+    approach:{ shot:2, situation:"A full wedge from the perfect left angle, the green deep and holdable in front of you. Attack the flag, or take the safe centre?", mapState:'approach',
+      broadcast:"Wedge · 70 yds · Best angle · Green plays deep",
+      choices:[
+        { badge:'AGG', label:'Attack the flag', sub:'Spin it close.', next:'app_attack', type:'agg' },
+        { badge:'SMART', label:'Centre, two-putt birdie look', sub:'Safe and sound.', next:'app_safe', type:'smart' },
+      ] },
+    app_attack:{ shot:2, outcome:true, result:'✅ Stuffed It',
+      consequence:"From the ideal angle the green accepted it — spun back to 8 feet, pin-high. This is why you laid up left.",
+      pro:"'The reward for the smart lay-up: a holdable green and a wedge you can fire at. The angle made the aggressive shot the safe one.'",
+      mapState:'approach', ballTo:[838,148], broadcast:"On the green · 8 ft · For birdie · Earned it", next:'putt_birdie' },
+    app_safe:{ shot:2, outcome:true, result:'✅ Centre of the Green',
+      consequence:"Pured it to the middle, 16 feet, holding easily from the good angle. A stress-free birdie look, par in the bank.",
+      pro:"'Centre of the green from the correct angle is how birdies stack up without risk. The lay-up earned this calm.'",
+      mapState:'approach', ballTo:[818,156], broadcast:"On the green · 16 ft · Uphill · For birdie", next:'putt_birdie' },
+    pitch:{ shot:2, situation:"A wedge from the wrong angle to a shallow green running away — hard to stop. Nip it and hope it holds, or land it safe and accept a long one?", mapState:'approach',
+      broadcast:"Wedge · 80 yds · Worst angle · Green runs away",
+      choices:[
+        { badge:'AGG', label:'Nip it at the flag', sub:'It may not hold the sliver.', next:'pitch_tight', type:'agg' },
+        { badge:'SMART', label:'Land it safe, take a long putt', sub:'Protect the par.', next:'pitch_safe', type:'smart' },
+      ] },
+    pitch_tight:{ shot:2, outcome:true, result:'🌀 Held the Sliver',
+      consequence:"Just held the shallow green from the bad angle — but it skipped to 30 feet at the back. On the dance floor, but a long two-putt for par.",
+      pro:"'Attacking a shallow green from the wrong angle rarely ends close — the surface won't hold a hot one. You did well to keep it on at all.'",
+      mapState:'approach', ballTo:[826,150], broadcast:"On the green · 30 ft · Long two-putt · For par", next:'putt_par' },
+    pitch_safe:{ shot:2, outcome:true, result:'✅ Landed It Safe',
+      consequence:"Played for the front and let it trundle on to 28 feet, never risking the run-off. A sensible two-putt par from the lazy side.",
+      pro:"'From the wrong angle, the smart wedge accepts a long putt rather than chasing a flag the green won't hold. Par is a fine score here.'",
+      mapState:'approach', ballTo:[812,158], broadcast:"On the green · 28 ft · Two-putt par · Below the hole", next:'putt_par' },
+    putt_birdie:{ shot:3, situation:"A putt for birdie at the 10th — the reward for playing the angles right.", mapState:'putt',
+      broadcast:"Putt · For birdie · The reward",
+      choices:[
+        { badge:'BIRDIE', label:'Roll it in for birdie', sub:'Cash in the strategy.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Two-putt par', sub:'Bank the four.', next:'finish_par', type:'smart' },
+      ] },
+    putt_par:{ shot:3, situation:"A long two-putt across the green for par — lag it close.", mapState:'putt',
+      broadcast:"Putt · Long lag · For par",
+      choices:[
+        { badge:'PAR', label:'Lag to a tap-in par', sub:'No three-putt.', next:'finish_par', type:'smart' },
+        { badge:'BOGEY', label:'Charge it — risk the three-putt', sub:'Greedy on a long one.', next:'finish_bogey', type:'agg' },
+      ] },
+    finish_birdie:{ final:true, score:3, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:4, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:5, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -7482,8 +7568,35 @@ CAM_MAPS.reachable_giant = buildReachableGiantSVG;
 CAM_MAPS.sawgrass17      = buildSawgrass17CamSVG;
 CAM_MAPS.augusta12       = buildAugusta12CamSVG;
 CAM_MAPS.pebble7         = buildPebble7CamSVG;
+// FAMOUS — Riviera 10th: driveable par 4, tiny angled green behind a deep bunker,
+// left lay-up = best angle (green plays deep), right lay-up = worst angle (shallow).
+function buildRiviera10CamSVG(){
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#27451c"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.5"/>
+    <path d="M90,430 Q300,420 480,380 Q640,346 760,280 Q820,238 858,176" stroke="#3f6f33" stroke-width="84" fill="none" stroke-linecap="round"/>
+    <path d="M90,430 Q300,420 480,380 Q640,346 760,280 Q820,238 858,176" stroke="#508f43" stroke-width="56" fill="none" stroke-linecap="round" opacity="0.6"/>
+    <!-- ideal LEFT lay-up + lazy RIGHT lay-up markers -->
+    <ellipse cx="560" cy="250" rx="26" ry="15" fill="#4d9243" opacity="0.4"/><text x="560" y="234" text-anchor="middle" font-size="8" fill="#bfe6c0" font-family="DM Sans,sans-serif" opacity="0.8">best angle</text>
+    <ellipse cx="620" cy="330" rx="24" ry="14" fill="#3a5a2a" opacity="0.4"/><text x="620" y="358" text-anchor="middle" font-size="8" fill="#9bbf8e" font-family="DM Sans,sans-serif" opacity="0.7">lazy side</text>
+    <!-- deep front bunker guarding the green -->
+    <ellipse cx="752" cy="206" rx="30" ry="15" fill="#cdb07a"/><ellipse cx="752" cy="206" rx="30" ry="15" fill="none" stroke="#8a6a30" stroke-width="1.5"/><ellipse cx="752" cy="206" rx="16" ry="8" fill="#7a5e2c"/>
+    <ellipse cx="888" cy="172" rx="20" ry="12" fill="#e3cd9a"/>
+    <!-- tiny angled green -->
+    <ellipse cx="820" cy="150" rx="58" ry="34" fill="#2f6b2a" transform="rotate(-22 820 150)"/>
+    <ellipse cx="820" cy="150" rx="46" ry="24" fill="#46a23f" transform="rotate(-22 820 150)"/>
+    <ellipse cx="820" cy="150" rx="46" ry="24" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6" transform="rotate(-22 820 150)"/>
+    ${camGreenEngine(820,150,1,1)}
+    <circle cx="834" cy="156" r="2.6" fill="#0c2208"/>
+    <line x1="834" y1="156" x2="834" y2="128" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="834,128 852,134 834,140" fill="#e05252"/>
+    <rect x="80" y="426" width="46" height="24" rx="5" fill="#69a85a"/>
+    <text x="430" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">RIVIERA · 10TH</text>
+  </svg>`;
+}
 CAM_MAPS.augusta13       = buildAugusta13CamSVG;
 CAM_MAPS.roadhole        = buildRoadHoleCamSVG;
+CAM_MAPS.riviera10       = buildRiviera10CamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
