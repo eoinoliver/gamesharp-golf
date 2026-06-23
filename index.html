@@ -6676,6 +6676,107 @@ const ALL_HOLES = [
     finish_lost_safe:{ final:true, score:4, label:'MATCH LOST', emoji:'😞', color:'#e05252' },
   }
 }
+,
+// ── Camera hole 12 — The Recovery: scrambling / damage-control (punch out vs hero) ──
+{
+  par:4, name:'The Recovery — Out of Trouble', badge:'📡 Next-Shot Camera', yardage:400, mapType:'camera',
+  cam:{ mapId:'recovery', anchors:{ tee:[100,418] },
+    zones:{ tee:[0,0,1000,470], drive:[220,200,480,226], approach:[560,40,470,221], greenside:[650,73,330,155], putt:[690,91,250,118] } },
+  nodes:{
+    tee:{ shot:1, situation:"A tight par 4, trees pinching both sides. Driver brings the trouble into play but leaves a short approach; an iron is safe but long. The whole hole is really about one thing: when you find trouble, do you have the discipline to take your medicine?", mapState:'tee',
+      broadcast:"Tee · 400 yds · Tree-lined · Trouble both sides — discipline wins",
+      choices:[
+        { badge:'AGG', label:'Driver — take it on', sub:'Short approach, but the trees lurk.', next:'tee_driver', type:'agg' },
+        { badge:'SMART', label:'Iron — safe to the fairway', sub:'Longer in, but in play.', next:'tee_iron', type:'smart' },
+      ] },
+    tee_driver:{ shot:1, outcome:true, result:'😬 In the Trees',
+      consequence:"Leaked the driver into the trees on the right — blocked, with only a small gap toward the green and branches everywhere. Now the hole tests your head, not your swing.",
+      pro:"'The drive that flirts the trees for a shorter approach is the bargain that often isn't. Now the only thing that matters is the next decision — and it's a decision, not a shot.'",
+      mapState:'drive', ballTo:[600,360], broadcast:"In the trees · Blocked · A decision, not a shot", next:'recover' },
+    tee_iron:{ shot:1, outcome:true, result:'✅ Safe in the Fairway',
+      consequence:"Took the iron and the trouble out — 175 to the green from the short grass. Longer in, but you're playing golf, not escape artistry.",
+      pro:"'On a tight hole, the fairway is worth more than the fifteen yards an aggressive driver buys. Position first, always.'",
+      mapState:'drive', ballTo:[500,320], broadcast:"Fairway · 175 yds · In play · Approach from the short grass", next:'approach' },
+    recover:{ shot:2, situation:"Blocked in the trees, a tempting gap toward the green but a branch hanging in the way. The hero shot through the gap, or the disciplined punch out sideways to the fairway?", mapState:'drive',
+      broadcast:"Recovery · Small gap · Branch in the way · Take your medicine?",
+      choices:[
+        { badge:'AGG', label:'Thread the gap at the green', sub:'Clip a branch and it gets ugly.', next:'rec_hero', type:'agg' },
+        { badge:'SMART', label:'Punch out sideways to the fairway', sub:'Concede a shot, salvage the hole.', next:'rec_punch', type:'smart' },
+      ] },
+    rec_hero:{ shot:2, outcome:true, result:'😬 Caught the Branch',
+      consequence:"Went for the gap and clipped the branch — the ball dropped barely 20 yards on, still in the rough, still blocked. One stubborn decision just turned a bogey into a real mess.",
+      pro:"'The hero shot from the trees is how bogeys become triples. The branch you can see is the one that gets you — when in doubt, the punch-out is never the wrong answer.'",
+      mapState:'drive', ballTo:[668,330], broadcast:"Still in trouble · Playing your 4th · One mistake compounds", next:'pitch_late' },
+    rec_punch:{ shot:2, outcome:true, result:'✅ Took the Medicine',
+      consequence:"Punched out sideways to the fairway — 110 yards in, clean lie, playing your third. No hero, no disaster: exactly how you stop a bad drive becoming a big number.",
+      pro:"'Punching out feels like surrender; it's actually the bravest, smartest shot in golf. You traded a stroke to take the double bogey off the table.'",
+      mapState:'approach', ballTo:[700,250], broadcast:"Fairway · 110 yds · Playing your 3rd · Bogey, maybe par", next:'app_late' },
+    approach:{ shot:2, situation:"175 from the fairway after the safe iron. A long-iron green in two — attack the flag, or take the centre?", mapState:'approach',
+      broadcast:"Approach · 175 yds · From the fairway · For birdie",
+      choices:[
+        { badge:'AGG', label:'Go at the flag', sub:'Green in two, birdie on.', next:'app_attack', type:'agg' },
+        { badge:'SMART', label:'Centre, two-putt birdie look', sub:'Safe and sound.', next:'app_safe', type:'smart' },
+      ] },
+    app_attack:{ shot:2, outcome:true, result:'✅ Hit the Green',
+      consequence:"Flushed the long iron to 18 feet — a birdie putt earned by keeping the drive in play. Position paid.",
+      pro:"'The reward for the disciplined drive: a clean look at the green and a putt for birdie, while the gambler is still in the trees.'",
+      mapState:'approach', ballTo:[846,148], broadcast:"On the green · 18 ft · For birdie · Position paid", next:'putt_birdie' },
+    app_safe:{ shot:2, outcome:true, result:'✅ Centre of the Green',
+      consequence:"Pured it to the heart, 22 feet, no trouble flirted. A two-putt par with a birdie look — golf the boring, winning way.",
+      pro:"'Centre of the green from the fairway is how good rounds are built — birdie chances without blow-up risk.'",
+      mapState:'approach', ballTo:[824,154], broadcast:"On the green · 22 ft · Two-putt par · For birdie", next:'putt_birdie' },
+    app_late:{ shot:3, situation:"110 yards in after the punch-out, playing your third. A full wedge — attack for an unlikely par, or centre it for the certain bogey?", mapState:'approach',
+      broadcast:"Wedge · 110 yds · Playing your 3rd · Up-and-down for par",
+      choices:[
+        { badge:'AGG', label:'Attack the flag — chase par', sub:'Get up and down for a great 4.', next:'al_attack', type:'agg' },
+        { badge:'SMART', label:'Centre, two-putt bogey', sub:'Bank the damage control.', next:'al_safe', type:'smart' },
+      ] },
+    al_attack:{ shot:3, outcome:true, result:'✅ Nipped It Close',
+      consequence:"A lovely wedge to 7 feet — a real putt to save par from a drive that was in the trees. That's how you erase a mistake.",
+      pro:"'The wedge after the punch-out is where rounds are saved. Get this close and your bad drive costs you nothing.'",
+      mapState:'greenside', ballTo:[836,152], broadcast:"On the green · 7 ft · For par · Mistake erased", next:'putt_par' },
+    al_safe:{ shot:3, outcome:true, result:'🛡️ Safe to the Centre',
+      consequence:"Wedged to the middle, 20 feet — never short-siding, never risking worse. A two-putt bogey, the disciplined result of a disciplined recovery.",
+      pro:"'After a punch-out, a centre-green wedge and a two-putt bogey is a win — you contained the damage to one shot.'",
+      mapState:'approach', ballTo:[844,150], broadcast:"On the green · 20 ft · Two-putt bogey · Contained", next:'putt_par' },
+    pitch_late:{ shot:3, situation:"Still in the rough after the branch, finally a clear pitch to the green — but you're playing your fourth. Damage control now: nip it for a bogey, or just get it on?", mapState:'greenside',
+      broadcast:"Pitch · Playing your 4th · The hero shot's bill comes due",
+      choices:[
+        { badge:'AGG', label:'Nip it close for bogey', sub:'Salvage a 5 from the mess.', next:'pl_tight', type:'agg' },
+        { badge:'SMART', label:'Just get it on, two putts', sub:'Stop the bleeding at double.', next:'pl_safe', type:'smart' },
+      ] },
+    pl_tight:{ shot:3, outcome:true, result:'🌀 Salvaged a Look',
+      consequence:"A gritty pitch to 9 feet — a putt to save bogey and rescue something from a hole the hero shot nearly wrecked.",
+      pro:"'Even after a compounding mistake, the next shot is a fresh decision. A tidy pitch keeps a double from becoming a triple.'",
+      mapState:'greenside', ballTo:[834,152], broadcast:"On the green · 9 ft · For bogey · Rescue job", next:'putt_bogey' },
+    pl_safe:{ shot:3, outcome:true, result:'🛡️ Stopped the Bleeding',
+      consequence:"Pitched safely on to 25 feet, no more heroics — a two-putt double, but the bleeding stops here. Sometimes a 6 is a good score.",
+      pro:"'Once you're in a mess, the goal is to stop it getting worse. Taking your double cleanly is far better than chasing a par that's already gone.'",
+      mapState:'greenside', ballTo:[820,158], broadcast:"On the green · 25 ft · Two-putt double · Bleeding stopped", next:'putt_bogey' },
+    putt_birdie:{ shot:3, situation:"A birdie putt — the reward for keeping it in play.", mapState:'putt',
+      broadcast:"Putt · For birdie",
+      choices:[
+        { badge:'BIRDIE', label:'Roll it in for birdie', sub:'Cash in the discipline.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Two-putt par', sub:'Bank the four.', next:'finish_par', type:'smart' },
+      ] },
+    putt_par:{ shot:4, situation:"A putt to save par after the recovery.", mapState:'putt',
+      broadcast:"Putt · For par · Mistake erased?",
+      choices:[
+        { badge:'PAR', label:'Roll it in for par', sub:'A brilliant 4 from trouble.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY', label:'Two-putt for bogey', sub:'Bank the contained damage.', next:'finish_bogey', type:'smart' },
+      ] },
+    putt_bogey:{ shot:4, situation:"A putt to save bogey after the mess.", mapState:'putt',
+      broadcast:"Putt · For bogey · Stop the bleeding",
+      choices:[
+        { badge:'BOGEY', label:'Roll it in for bogey', sub:'Rescue the 5.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 6 and move on.', next:'finish_double', type:'smart' },
+      ] },
+    finish_birdie:{ final:true, score:3, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:4, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:5, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+    finish_double:{ final:true, score:6, label:'DOUBLE', emoji:'😬', color:'#e05252' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -7805,8 +7906,34 @@ function buildCloserCamSVG(){
   </svg>`;
 }
 CAM_MAPS.riviera10       = buildRiviera10CamSVG;
+// The Recovery — a tight, tree-lined par 4 (the driver leaks into the right trees).
+function buildRecoveryCamSVG(){
+  var tree=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#1c3a14"/><circle cx="${x-2}" cy="${y-2}" r="${r*0.7}" fill="#24501a" opacity="0.8"/>`;
+  var L='',R='';
+  for(var i=0;i<7;i++){ L+=tree(150+i*100, 250-i*18, 16); }
+  for(var j=0;j<7;j++){ R+=tree(150+j*100, 392-j*20, 17); }
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#27451c"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.5"/>
+    <path d="M90,432 Q300,420 480,372 Q640,330 750,262 Q810,224 862,160" stroke="#3f6f33" stroke-width="50" fill="none" stroke-linecap="round"/>
+    <path d="M90,432 Q300,420 480,372 Q640,330 750,262 Q810,224 862,160" stroke="#508f43" stroke-width="30" fill="none" stroke-linecap="round" opacity="0.65"/>
+    ${L}${R}
+    <text x="640" y="378" text-anchor="middle" font-size="8" fill="#8fae82" font-family="DM Sans,sans-serif" opacity="0.7">the trees</text>
+    <ellipse cx="892" cy="176" rx="20" ry="12" fill="#e3cd9a"/>
+    <ellipse cx="840" cy="150" rx="60" ry="38" fill="#2f6b2a"/>
+    <ellipse cx="840" cy="150" rx="46" ry="28" fill="#46a23f"/>
+    <ellipse cx="840" cy="150" rx="46" ry="28" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
+    ${camGreenEngine(840,150,1,1)}
+    <circle cx="838" cy="156" r="2.6" fill="#0c2208"/>
+    <line x1="838" y1="156" x2="838" y2="128" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="838,128 856,134 838,140" fill="#e05252"/>
+    <rect x="80" y="426" width="46" height="24" rx="5" fill="#69a85a"/>
+    <text x="380" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">THE RECOVERY</text>
+  </svg>`;
+}
 CAM_MAPS.augusta11       = buildAugusta11CamSVG;
 CAM_MAPS.closer          = buildCloserCamSVG;
+CAM_MAPS.recovery        = buildRecoveryCamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
