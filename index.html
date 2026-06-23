@@ -6523,6 +6523,105 @@ const ALL_HOLES = [
     finish_bogey: { final:true, score:5, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
   }
 }
+,
+// ── Camera hole 10 — Famous: Augusta National 11th "White Dogwood" (completes Amen Corner) ──
+{
+  par:4, name:'White Dogwood — 11th', badge:'📡 Next-Shot Camera', yardage:520,
+  course:'Augusta National · The Masters', location:'Amen Corner', famous:true, mapType:'camera',
+  cam:{ mapId:'augusta11', anchors:{ tee:[100,418] },
+    zones:{ tee:[0,0,1000,470], drive:[220,200,480,226], approach:[580,40,470,221], greenside:[675,73,330,155], putt:[715,91,250,118], drop:[430,120,470,221] } },
+  nodes:{
+    tee:{ shot:1, situation:"The 11th, 'White Dogwood' — the start of Amen Corner and the hardest par on the course. A long downhill drive through the trees, then a brutal second to a green with a pond hard on its left. The whole hole asks one question: how brave do you need to be? Hogan said if you ever saw him on this green in two, he'd missed his shot.", mapState:'tee',
+      broadcast:"Tee · 520 yds · Downhill drive · Pond left of the green — par is a great score",
+      choices:[
+        { badge:'AGG', label:'Bomb it down the chute', sub:'A shorter, but still long, second.', next:'tee_bomb', type:'agg' },
+        { badge:'SMART', label:'Fairway first, take what comes', sub:'Position over a few extra yards.', next:'tee_safe', type:'smart' },
+      ] },
+    tee_bomb:{ shot:1, outcome:true, result:'🔥 Bombed the Chute',
+      consequence:"Threaded the trees and chased it down the slope — 175 in now, the shortest second you'll get on the 11th. It's still a long iron to a pond-guarded green.",
+      pro:"'Distance helps at 11, but it doesn't change the question — even from 175, the pond on the left makes the brave shot a gamble. Length just buys you a slightly shorter argument.'",
+      mapState:'drive', ballTo:[560,300], broadcast:"Fairway · 175 yds · Long iron in · Pond guards the left", next:'approach' },
+    tee_safe:{ shot:1, outcome:true, result:'✅ Fairway Found',
+      consequence:"Played for the fairway, not the hero drive — dry and in play, 205 in. A long way to a dangerous green, but you're in position.",
+      pro:"'On the hardest par on the course, the fairway is everything. A long second from the short grass beats a slightly shorter one from the trees.'",
+      mapState:'drive', ballTo:[500,320], broadcast:"Fairway · 205 yds · Long approach · Pond guards the left", next:'approach' },
+    approach:{ shot:2, situation:"The famous second to the 11th. The pin sits left, tempting, just over the pond. Right of the green is open grass — Larry Mize won a Masters chipping from there. The whole tournament's worth of players have bailed right and made par. What do you do?", mapState:'approach',
+      broadcast:"Approach · Pond hard left · Bail-out right · Par wins here",
+      choices:[
+        { badge:'AGG', label:'Go at the flag — over the pond', sub:'Birdie on, but the water is right there.', next:'app_water', type:'agg' },
+        { badge:'SMART', label:"Bail right — Hogan's play", sub:'Dry, take the water out, make par.', next:'app_right', type:'smart' },
+        { badge:'SAFE', label:'Lay up short-right, pitch on', sub:'Concede the green, protect the card.', next:'app_lay', type:'safe' },
+      ] },
+    app_water:{ shot:2, outcome:true, penalty:1, result:'💧 Flirted the Pond',
+      consequence:"Went at the left flag and pulled it a fraction — straight into the pond. The 11th punishes greed more than any hole at Augusta. Drop, and you're playing your fourth.",
+      pro:"'The left pin at 11 is a trap dressed as an opportunity. The water is exactly where a tired, brave shot goes — and par was sitting open to the right.'",
+      mapState:'greenside', ballTo:[780,182], broadcast:"Drop zone · Penalty · Playing your 4th · Greed punished", next:'drop_zone' },
+    app_right:{ shot:2, outcome:true, result:'✅ Bailed Right — the Smart Play',
+      consequence:"Aimed well right of the flag, away from the pond — and found the right edge of the green, 35 feet from the hole. Dry, safe, and a putt at it. Exactly how the 11th is meant to be played.",
+      pro:"'Aiming right at 11 isn't fear, it's mastery — it removes the only number that beats you. From there a long putt can drop, and par is never in doubt.'",
+      mapState:'approach', ballTo:[870,150], broadcast:"On the green · 35 ft · Dry, the smart side · For par", next:'putt_right' },
+    app_lay:{ shot:2, outcome:true, result:'🛡️ Laid Up Short',
+      consequence:"Took the pond completely out — laid up short-right, leaving a simple pitch. Conceding the green to protect against the big number.",
+      pro:"'On a long par 4 you can't reach safely, the lay-up is a legitimate play — a pitch and a putt for par beats a watery double every time.'",
+      mapState:'approach', ballTo:[720,210], broadcast:"Short-right · 40 yds · Simple pitch · Pond removed", next:'pitch' },
+    drop_zone:{ shot:3, situation:"From the drop, a wedge back to that same left pin over the pond. Bogey is gettable — but it's the very shot that just got you.", mapState:'drop',
+      broadcast:"Drop zone · Over the pond again · For bogey",
+      choices:[
+        { badge:'SMART', label:'To the centre — find the green', sub:'Take the water out for good.', next:'drop_center', type:'smart' },
+        { badge:'AGG', label:'At the flag — chase the bogey', sub:'Left pin, same danger.', next:'drop_pin', type:'agg' },
+      ] },
+    drop_center:{ shot:3, outcome:true, result:'✅ Found the Green',
+      consequence:"Calm wedge to the centre, 20 feet. Dry at last, a putt to save bogey — the discipline the hole demanded one shot too late.",
+      pro:"'After the water, the centre is the only target. Bogey from here is a recovery; another splash is a disaster.'",
+      mapState:'approach', ballTo:[848,150], broadcast:"On the green · 20 ft · Two-putt double · Bogey if it drops", next:'putt_long' },
+    drop_pin:{ shot:3, outcome:true, result:'🌀 Back at the Flag',
+      consequence:"Took on the left pin again and held it — 10 feet. Dry, a real putt for bogey. Bold, after the pond already bit once.",
+      pro:"'Going back at the 11th pin from the drop is nerve, not wisdom — but a held wedge to 10 feet earns the bogey putt.'",
+      mapState:'greenside', ballTo:[824,164], broadcast:"On the green · 10 ft · For bogey · Bold", next:'putt_short' },
+    pitch:{ shot:3, situation:"A simple pitch from short-right to the 11th green, the pond still glinting left. Nip it close for par, or play safe?", mapState:'greenside',
+      broadcast:"Pitch · 40 yds · Pond left · For par",
+      choices:[
+        { badge:'AGG', label:'Nip it close to the flag', sub:'Go get the par.', next:'pitch_tight', type:'agg' },
+        { badge:'SMART', label:'Safe to the centre, two putts', sub:'Never flirt the water.', next:'pitch_safe', type:'smart' },
+      ] },
+    pitch_tight:{ shot:3, outcome:true, result:'✅ Nipped It Close',
+      consequence:"A crisp pitch to 7 feet — a real putt to save a hard-earned par on the hardest hole at Augusta.",
+      pro:"'The controlled pitch that ignores the water and finds the hole is the smart player's par on the 11th.'",
+      mapState:'greenside', ballTo:[836,154], broadcast:"On the green · 7 ft · For par · Crisp", next:'putt_par' },
+    pitch_safe:{ shot:3, outcome:true, result:'✅ Safe to the Centre',
+      consequence:"Pitched to the heart, 16 feet, never near the pond. A putt for par, a tap-in for bogey from the safest spot.",
+      pro:"'Centre of the green, away from the water — the boring pitch that quietly saves par while others find the pond.'",
+      mapState:'approach', ballTo:[844,150], broadcast:"On the green · 16 ft · Safe centre · For par", next:'putt_par' },
+    putt_right:{ shot:3, situation:"35 feet across the green for an outside birdie — the bail-right special. A two-putt par is a fine result here.", mapState:'putt',
+      broadcast:"Putt · 35 ft · For birdie · Two-putt par",
+      choices:[
+        { badge:'BIRDIE', label:'Pour the long one — a Mize moment', sub:'Drain it from the safe side.', next:'finish_birdie', type:'agg' },
+        { badge:'PAR', label:'Two-putt for a priceless par', sub:'Bank the four at Amen Corner.', next:'finish_par', type:'smart' },
+      ] },
+    putt_par:{ shot:4, situation:"A putt to save par on the 11th.", mapState:'putt',
+      broadcast:"Putt · For par",
+      choices:[
+        { badge:'PAR', label:'Roll it in for par', sub:'A great score here.', next:'finish_par', type:'agg' },
+        { badge:'BOGEY', label:'Two-putt for bogey', sub:'Bank the dry bogey.', next:'finish_bogey', type:'smart' },
+      ] },
+    putt_long:{ shot:4, situation:"20 feet to save bogey after the drop.", mapState:'putt',
+      broadcast:"Putt · 20 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Roll it in for bogey', sub:'Steal one back.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 6.', next:'finish_double', type:'smart' },
+      ] },
+    putt_short:{ shot:4, situation:"10 feet to save bogey after going back at the flag.", mapState:'putt',
+      broadcast:"Putt · 10 ft · For bogey",
+      choices:[
+        { badge:'BOGEY', label:'Knock it in for bogey', sub:'Reward the nerve.', next:'finish_bogey', type:'agg' },
+        { badge:'DOUBLE', label:'Miss, tap in double', sub:'Amen Corner exacts its price.', next:'finish_double', type:'safe' },
+      ] },
+    finish_birdie:{ final:true, score:3, label:'BIRDIE', emoji:'🐦', color:'#4caf50' },
+    finish_par:   { final:true, score:4, label:'PAR',    emoji:'⛳', color:'#c8a84b' },
+    finish_bogey: { final:true, score:5, label:'BOGEY',  emoji:'😤', color:'#ff8f00' },
+    finish_double:{ final:true, score:6, label:'DOUBLE', emoji:'😬', color:'#e05252' },
+  }
+}
 ];
 let HOLE = null;
 
@@ -7594,9 +7693,39 @@ function buildRiviera10CamSVG(){
     <text x="430" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">RIVIERA · 10TH</text>
   </svg>`;
 }
+// FAMOUS — Augusta National 11th "White Dogwood": long par 4, pond hard on the LEFT
+// of the green, open grass bail-out RIGHT (Larry Mize's spot), drop zone front.
+function buildAugusta11CamSVG(){
+  return `${camSvgOpen()}
+    <rect width="1000" height="470" fill="#27451c"/>
+    <rect width="1000" height="470" fill="url(#camRough)" opacity="0.5"/>
+    <path d="M80,430 Q300,420 470,372 Q620,330 740,256 Q800,218 862,158" stroke="#3f6f33" stroke-width="58" fill="none" stroke-linecap="round"/>
+    <path d="M80,430 Q300,420 470,372 Q620,330 740,256 Q800,218 862,158" stroke="#508f43" stroke-width="34" fill="none" stroke-linecap="round" opacity="0.65"/>
+    <!-- pond hard on the LEFT / front-left of the green -->
+    <path d="M690,150 Q700,196 760,206 Q812,214 818,176 Q812,150 760,142 Q716,138 690,150 Z" fill="#1f5e8f"/>
+    <path d="M690,150 Q700,196 760,206 Q812,214 818,176 Q812,150 760,142 Q716,138 690,150 Z" fill="#2a78b0" opacity="0.4"/>
+    <text x="742" y="178" text-anchor="middle" font-size="9" fill="#bfe6ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1" opacity="0.85">POND</text>
+    <ellipse cx="470" cy="318" rx="28" ry="16" fill="#3f7a36"/><ellipse cx="470" cy="318" rx="28" ry="16" fill="#4d9243" opacity="0.5"/>
+    <text x="470" y="346" text-anchor="middle" font-size="8" fill="#8fce86" font-family="DM Sans,sans-serif" opacity="0.8">drop zone</text>
+    <!-- green, with the open bail-out to the RIGHT -->
+    <ellipse cx="850" cy="150" rx="62" ry="40" fill="#2f6b2a"/>
+    <ellipse cx="850" cy="150" rx="48" ry="30" fill="#46a23f"/>
+    <ellipse cx="850" cy="150" rx="48" ry="30" fill="none" stroke="#5fc057" stroke-width="0.8" opacity="0.6"/>
+    <text x="924" y="150" text-anchor="middle" font-size="8" fill="#bfe6c0" font-family="DM Sans,sans-serif" opacity="0.7">bail right</text>
+    ${camGreenEngine(850,150,1,1)}
+    <!-- left pin, tight to the pond -->
+    <circle cx="822" cy="164" r="2.6" fill="#0c2208"/>
+    <line x1="822" y1="164" x2="822" y2="136" stroke="#f4f4f4" stroke-width="1.6"/>
+    <polygon points="822,136 840,142 822,148" fill="#e05252"/>
+    <path d="M800,176 Q818,166 838,168" stroke="#e05252" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0.8"/>
+    <rect x="80" y="426" width="46" height="24" rx="5" fill="#69a85a"/>
+    <text x="430" y="40" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.5)" font-family="DM Sans,sans-serif" letter-spacing="2">WHITE DOGWOOD · 11TH</text>
+  </svg>`;
+}
 CAM_MAPS.augusta13       = buildAugusta13CamSVG;
 CAM_MAPS.roadhole        = buildRoadHoleCamSVG;
 CAM_MAPS.riviera10       = buildRiviera10CamSVG;
+CAM_MAPS.augusta11       = buildAugusta11CamSVG;
 
 function renderHoleMap(state){
   if(!HOLE) return;
