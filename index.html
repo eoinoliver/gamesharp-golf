@@ -7293,6 +7293,9 @@ function buildShotLesson(node, valence, lastDec){
 }
 
 function showHoleOutcome(node){
+  // Valence haptic — crisp double-tap on a good outcome, dull buzz on a bad one
+  // (Android/Chrome only; degrades silently on iOS).
+  try { const v = outcomeValence(node.result); if (navigator.vibrate && v !== 'neutral') navigator.vibrate(v === 'good' ? [10, 55, 14] : 26); } catch(e) {}
   if(HOLE && HOLE.mapType === 'camera'){ HS._suppressCam = true; updateCamBroadcast(node); }
   if(node.penalty){ HS.shotCount += node.penalty; }  // count the dropped stroke(s) live
   const oc = document.getElementById('outcome-card');
