@@ -4281,9 +4281,13 @@ function gswRender(t){
   if(!_gsw) return;
   const {frames,cfg,base,ov} = _gsw.data;
   const SW = 0.62;                       // swing portion of the timeline
+  const IMP = SW * 0.55;                 // impact moment (pose keyframe 'i' sits at 55% of the swing)
   const sp = Math.min(t/SW, 1);
   const pose = gswPose(frames, sp);
-  const fp = t>SW ? (t-SW)/(1-SW) : 0;   // flight portion
+  // Ball flies FROM IMPACT, not from the end of the swing — the follow-through
+  // completes over the flying ball, like real golf. (Previously the struck
+  // ball sat frozen ~640ms while the figure finished the swing.)
+  const fp = t>IMP ? (t-IMP)/(1-IMP) : 0;
   const mode=_gsw.mode, MISS=mode==='miss';
   const AC = MISS ? '#e05252' : '#4caf50';
   const ball = base.ball;
@@ -4319,6 +4323,11 @@ function gswRender(t){
     const bp=gswFlight((ov.out||['normal'])[0], ball, Math.min(fp,1));
     g+=`<circle cx="${bp[0]}" cy="${bp[1]}" r="4" fill="#fff"/>`;
     if(fp>0.15){ const tr=gswFlight((ov.out||['normal'])[0], ball, Math.min(fp,1)*0.55); g+=`<circle cx="${tr[0]}" cy="${tr[1]}" r="2" fill="#fff" opacity=".35"/>`; }
+  }
+  // contact flash — a ~100ms white burst at the strike sells the hit
+  if(t>IMP && t<IMP+0.05){
+    const ft=(t-IMP)/0.05;
+    g+=`<circle cx="${ball[0]}" cy="${ball[1]}" r="${4+ft*11}" fill="none" stroke="#fff" stroke-width="2.2" opacity="${(1-ft).toFixed(2)}"/>`;
   }
   // annotation + outcome label
   g+=`<text x="16" y="22" fill="${AC}" font-size="10" font-weight="700" font-family="DM Sans,sans-serif" letter-spacing=".06em">${MISS?'THE MISS':'THE FIX'} · ${ov.note||''}</text>`;
@@ -5140,7 +5149,7 @@ function techVisualDirection(shape, rev){
     <path d="${p.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <circle cx="${p.ex}" cy="${p.ey}" r="4" fill="${R}"/>
     ${techTLabel(p.ex, p.ey-7, p.danger, R, 7.5)}
-    ${rev ? `<path d="M140,160 L140,30" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.25s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.25s" fill="freeze"/><animateMotion dur="0.9s" begin="0.25s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M140,160 L140,30"/></circle>${techTLabel(118,98,'FIXED',G,8)}` : ''}
+    ${rev ? `<path d="M140,160 L140,30" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.05s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.05s" fill="freeze"/><animateMotion dur="0.9s" begin="0.05s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M140,160 L140,30"/></circle>${techTLabel(118,98,'FIXED',G,8)}` : ''}
     <circle cx="140" cy="160" r="5.5" fill="${GOLD}"/>
     ${techTLabel(140,176,'YOUR MISS',R,8)}`);
 }
@@ -5169,7 +5178,7 @@ function techVisualContact(shape, rev){
     <path d="M44,143 Q150,52 230,148" stroke="rgba(76,175,80,.32)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
     <path d="${f.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     ${techTLabel(f.lx, f.ly, f.lab, R, 7)}
-    ${rev ? `<path d="M44,143 Q150,52 230,148" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.25s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.25s" fill="freeze"/><animateMotion dur="0.9s" begin="0.25s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M44,143 Q150,52 230,148"/></circle>${techTLabel(150,46,'FIXED',G,8)}` : ''}
+    ${rev ? `<path d="M44,143 Q150,52 230,148" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.05s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.05s" fill="freeze"/><animateMotion dur="0.9s" begin="0.05s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M44,143 Q150,52 230,148"/></circle>${techTLabel(150,46,'FIXED',G,8)}` : ''}
     <circle cx="44" cy="143" r="5.5" fill="${GOLD}"/>`);
 }
 function techVisualPutt(shape, rev){
@@ -5191,7 +5200,7 @@ function techVisualPutt(shape, rev){
     <path d="${f.d}" stroke="${R}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <circle cx="${f.mx}" cy="${f.my}" r="4.5" fill="${R}"/>
     ${techTLabel(f.mx, f.my-7, f.lab, R, 7.5)}
-    ${rev ? `<path d="M140,150 L140,49" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.25s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.25s" fill="freeze"/><animateMotion dur="0.9s" begin="0.25s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M140,150 L140,49"/></circle>` : ''}
+    ${rev ? `<path d="M140,150 L140,49" stroke="${G}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400"><animate attributeName="stroke-dashoffset" from="400" to="0" dur="0.9s" begin="0.05s" fill="freeze"/></path><circle r="4.5" fill="#4caf50" stroke="#fff" stroke-width="1" opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.05s" begin="0.05s" fill="freeze"/><animateMotion dur="0.9s" begin="0.05s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" path="M140,150 L140,49"/></circle>` : ''}
     <circle cx="140" cy="150" r="5.5" fill="${GOLD}"/>
     ${techTLabel(140,168,'YOUR PUTT',GOLD,8)}`);
 }
