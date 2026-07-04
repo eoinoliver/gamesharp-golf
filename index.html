@@ -7101,6 +7101,14 @@ function nextUnplayedHoleIndex(from){
 }
 
 function startHole(){
+  // First-ever Play a Hole is the flagship, not a date-modulo dice roll (which
+  // could land a brand-new user on The Recovery — a hole that STARTS in trouble).
+  let firstEver = false;
+  try { firstEver = !localStorage.getItem('gs_first_hole_done'); } catch(e) {}
+  if(firstEver){
+    const fi = ALL_HOLES.findIndex(h => h.cam && h.cam.mapId === 'reachable_risk');
+    if(fi >= 0){ showView('hole'); beginHole(fi); return; }
+  }
   const bi = todaysBroadcastIndex();
   if(bi >= 0){ openBroadcast(bi); return; }
   showView('hole');
@@ -7225,6 +7233,7 @@ function showHolePicker(){
 }
 
 function beginHole(index){
+  try { localStorage.setItem('gs_first_hole_done', '1'); } catch(e) {}
   HOLE = ALL_HOLES[index];
   HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [], ballPos: null };
   document.getElementById('hole-picker').style.display = 'none';
