@@ -2959,20 +2959,38 @@ function buildTodaysDaily(){
   const phases = ['tee','approach','short'];
   const stepLabels = { tee:'OFF THE TEE', approach:'THE APPROACH', short:'AROUND THE GREEN', putt:'ON THE GREEN', any:'THE DECISION' };
   const daily = []; const used = new Set();
+  // Similarity guard: a themed day narrows the pool to one score-leak, which
+  // makes near-twin scenarios likely (e.g. Q106/Q178, both trees+punch-out).
+  // Reject any candidate sharing its module or 2+ tag tokens with a question
+  // already in today's set — the theme should vary the ANGLE, not repeat it.
+  const _tagTok = q => new Set(String(q.tags||'').toLowerCase().split(/[,\s]+/).filter(t => t.length > 2));
+  const tooSimilar = q => daily.some(p => {
+    if(p.module && p.module === q.module) return true;
+    const a = _tagTok(q), b = _tagTok(p); let n = 0;
+    a.forEach(t => { if(b.has(t)) n++; });
+    return n >= 2;
+  });
   phases.forEach(ph => {
-    let pick = pool.find(q => !used.has(q.id) && phaseOf(q) === ph);
-    if(!pick && ph === 'short') pick = pool.find(q => !used.has(q.id) && phaseOf(q) === 'putt');
+    let pick = pool.find(q => !used.has(q.id) && phaseOf(q) === ph && !tooSimilar(q));
+    if(!pick && ph === 'short') pick = pool.find(q => !used.has(q.id) && phaseOf(q) === 'putt' && !tooSimilar(q));
+    if(!pick) pick = pool.find(q => !used.has(q.id) && !tooSimilar(q));
+    // last resort: allow a similar one rather than an empty slot
     if(!pick) pick = pool.find(q => !used.has(q.id));
     if(pick){ used.add(pick.id); daily.push(pick); }
   });
-  while(daily.length < 3){ const p = pool.find(q => !used.has(q.id)); if(!p) break; used.add(p.id); daily.push(p); }
+  while(daily.length < 3){
+    const p = pool.find(q => !used.has(q.id) && !tooSimilar(q)) || pool.find(q => !used.has(q.id));
+    if(!p) break; used.add(p.id); daily.push(p);
+  }
 
   // play the hole in order: tee, then approach, then around the green
   const phaseOrder = { tee:0, approach:1, any:1.5, short:2, putt:3 };
   daily.sort((a,b) => (phaseOrder[phaseOf(a)] ?? 1.5) - (phaseOrder[phaseOf(b)] ?? 1.5));
 
-  // 4th rep: one swing fix from the Technique library
-  const techQ = techFaultAsQuestion(parseInt(seed));
+  // 4th rep: one swing fix from the Technique library — nudge the seed past
+  // any fault that overlaps today's scenario theme (e.g. bunker day + bunker fault)
+  let techQ = techFaultAsQuestion(parseInt(seed));
+  for(let k = 1; techQ && tooSimilar(techQ) && k <= 4; k++) techQ = techFaultAsQuestion(parseInt(seed) + k);
   let steps = daily.map(q => stepLabels[phaseOf(q)] || 'THE DECISION');
   // all-putting days get a real arc instead of "ON THE GREEN" three times
   if(steps.length===3 && steps.every(x=>x===steps[0])){
@@ -7062,11 +7080,31 @@ function todaysBroadcastIndex(){
   const seed = parseInt(todayStr().replace(/-/g,''));
   return (seed % 3 === 0) ? (Math.floor(seed/3) % BROADCAST.length) : -1;
 }
+// ── Played-today rotation: re-entering Play a Hole must never serve a hole
+// you already completed today (the deterministic hole-of-the-day did exactly
+// that). Completions are recorded in finishHole; the entry point and NEXT
+// HOLE both skip past them.
+function holesPlayedToday(){
+  try { const o = JSON.parse(localStorage.getItem('gs_holes_played') || '{}');
+    return (o.d === todayStr() && Array.isArray(o.ids)) ? o.ids : []; } catch(e){ return []; }
+}
+function recordHolePlayed(index){
+  try { const ids = holesPlayedToday();
+    if(!ids.includes(index)) ids.push(index);
+    localStorage.setItem('gs_holes_played', JSON.stringify({ d: todayStr(), ids })); } catch(e){}
+}
+function nextUnplayedHoleIndex(from){
+  const played = holesPlayedToday(), n = ALL_HOLES.length;
+  const start = (typeof from === 'number') ? from : holeOfTheDayIndex();
+  for(let k = 0; k < n; k++){ const c = (start + k) % n; if(!played.includes(c)) return c; }
+  return start % n;  // everything played today — cycle from the start point
+}
+
 function startHole(){
   const bi = todaysBroadcastIndex();
   if(bi >= 0){ openBroadcast(bi); return; }
   showView('hole');
-  beginHole(holeOfTheDayIndex());
+  beginHole(nextUnplayedHoleIndex());
 }
 
 // Browsing is still available, just demoted off the front door
@@ -7079,7 +7117,7 @@ function browseHoles(){
 function nextHole(){
   const i = ALL_HOLES.indexOf(HOLE);
   showView('hole');
-  beginHole((i + 1) % ALL_HOLES.length);
+  beginHole(nextUnplayedHoleIndex(i + 1));
 }
 
 // Hole of the day: date-rotating featured hole for one-tap tee off
@@ -7348,7 +7386,7 @@ function showHoleOutcome(node){
   renderHoleMap(node.mapState || 'tee');
   const flightMs = animateHoleBall(node, valence, lastDec);
   clearTimeout(HS._tickT);
-  HS._tickT = setTimeout(() => setShots(HS.shotCount, true), 1000);  // tick on landing
+  HS._tickT = setTimeout(() => setShots(HS.shotCount, true), 850);  // tick on landing
   clearTimeout(HS._revealT);
   HS._revealT = setTimeout(() => {
     const av = document.querySelector('.view.active');
@@ -7377,6 +7415,7 @@ function advanceHole(){
 }
 
 function finishHole(finalNode){
+  recordHolePlayed(ALL_HOLES.indexOf(HOLE));   // completions drive today's rotation
   document.getElementById('shot-panel').style.display = 'none';
   document.getElementById('outcome-card').style.display = 'none';
   // Reconcile the live shot counter with the real score (penalty + implied putts
@@ -7416,18 +7455,20 @@ function renderScorecard(finalNode){
         <div class="sc-ring-par">${parLabel}</div>
       </div>
     </div>
-    <div class="sc-takeaways">
-      <div class="sc-take smart" style="animation-delay:1.0s"><div class="sc-take-label">🏆 Smartest Decision</div><div class="sc-take-body">${takeaways.smartest}</div></div>
-      <div class="sc-take costly" style="animation-delay:1.08s"><div class="sc-take-label">💸 Costliest Decision</div><div class="sc-take-body">${takeaways.costliest}</div></div>
-      <div class="sc-take rule" style="animation-delay:1.16s"><div class="sc-take-label">📌 One Rule for Your Next Round</div><div class="sc-take-body">${takeaways.rule}</div></div>
-    </div>
-    <div class="sc-decisions-header" style="animation-delay:1.26s">YOUR DECISIONS</div>
-    <div class="sc-decisions" style="animation-delay:1.32s">${decisionSummary}</div>
-    <div class="sc-actions" style="animation-delay:1.4s">
+    <!-- The one-more-hole loop is the retention engine: NEXT HOLE appears WITH
+         the score (0.35s), not after a 1.4s stagger below three cards. -->
+    <div class="sc-actions" style="animation-delay:0.35s">
       <button class="btn btn-gold" onclick="nextHole()">NEXT HOLE →</button>
       <button class="btn btn-dark" onclick="browseHoles()">CHOOSE A HOLE</button>
       <button class="btn btn-dark" onclick="renderHome();showView('home')">HOME</button>
-    </div>`;
+    </div>
+    <div class="sc-takeaways">
+      <div class="sc-take smart" style="animation-delay:0.6s"><div class="sc-take-label">🏆 Smartest Decision</div><div class="sc-take-body">${takeaways.smartest}</div></div>
+      <div class="sc-take costly" style="animation-delay:0.68s"><div class="sc-take-label">💸 Costliest Decision</div><div class="sc-take-body">${takeaways.costliest}</div></div>
+      <div class="sc-take rule" style="animation-delay:0.76s"><div class="sc-take-label">📌 One Rule for Your Next Round</div><div class="sc-take-body">${takeaways.rule}</div></div>
+    </div>
+    <div class="sc-decisions-header" style="animation-delay:0.86s">YOUR DECISIONS</div>
+    <div class="sc-decisions" style="animation-delay:0.92s">${decisionSummary}</div>`;
 }
 
 // Derive Smartest / Costliest / One Rule from the decisions taken this hole
@@ -7562,7 +7603,9 @@ function animateCameraBall(node, valence, lastDec){
   const span=Math.hypot(ex-sx,ey-sy)||1;
   const arcH=isPutt?6:Math.min(180, span*0.34+44);
   const path=`M${sx},${sy} Q${((sx+ex)/2).toFixed(0)},${(Math.min(sy,ey)-arcH).toFixed(0)} ${ex},${ey}`;
-  const fDur=isPutt?0.7:0.95, fBegin=0.12, landAt=(fBegin+fDur);
+  // Strike is the dopamine moment: launch effectively AT the tap (0.02s, was
+  // 0.12s of dead air) and keep the flight tight (0.8s, was 0.95s).
+  const fDur=isPutt?0.6:0.8, fBegin=0.02, landAt=(fBegin+fDur);
   const dash=(span*1.5+260).toFixed(0);
   svg.querySelectorAll('.camShot').forEach(n=>n.remove());
   setCamBall(svg, null);
@@ -7577,6 +7620,7 @@ function animateCameraBall(node, valence, lastDec){
       <circle r="8.5" fill="${col}" opacity="0.4"/><circle r="6.5" fill="url(#camBallRG)" stroke="#fff" stroke-width="1"/>
       <animateMotion dur="${fDur}s" begin="${fBegin}s" fill="freeze" calcMode="spline" keySplines="0.15 0.5 0.3 1" path="${path}"/>
     </g>
+    <circle cx="${sx}" cy="${sy}" r="2" fill="none" stroke="#fff" stroke-width="2.5" opacity="0"><animate attributeName="r" values="2;16" dur="0.22s" begin="${fBegin}s" fill="freeze"/><animate attributeName="opacity" values="0.95;0" dur="0.22s" begin="${fBegin}s" fill="freeze"/></circle>
     ${water?`<circle cx="${ex}" cy="${ey}" r="5" fill="none" stroke="#64b5f6" stroke-width="3" opacity="0"><animate attributeName="r" values="5;48" dur="0.9s" begin="${landAt.toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values="0.9;0" dur="0.9s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
     ${(valence==='good'&&!isPutt)?`<circle cx="${ex}" cy="${ey}" r="0" fill="none" stroke="#4caf50" stroke-width="3" opacity="0.9"><animate attributeName="r" values="0;24;19" dur="0.55s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
   </g>`);
@@ -7585,7 +7629,7 @@ function animateCameraBall(node, valence, lastDec){
   const restMs=landAt*1000;
   setTimeout(()=>{ setCamBall(svg, end); HS._suppressCam=false; }, restMs);
   if(sand && valence!=='good'){ setTimeout(()=>{ wrap.classList.remove('thud'); void wrap.offsetWidth; wrap.classList.add('thud'); }, restMs); }
-  return Math.round(restMs+560);
+  return Math.round(restMs+300);
 }
 // Shared SVG chrome for every camera map (1000×470 canvas).
 function camSvgOpen(){
