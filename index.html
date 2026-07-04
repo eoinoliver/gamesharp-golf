@@ -708,6 +708,11 @@ svg { display:block; }
 .tss-try      { border-left-color:#5b9bd5; }
 .tss-tomorrow { border-left-color:rgba(255,255,255,.3); }
 .tss-tomorrow .tss-block-body { color:var(--muted); font-style:italic; }
+.dcc-rooms { padding:2px 16px 16px; }
+.dcc-rooms-label { font-size:10px; font-weight:800; letter-spacing:1.4px; color:rgba(255,255,255,.42); margin-bottom:8px; }
+.dcc-rooms-row { display:flex; flex-wrap:wrap; gap:8px; }
+.dcc-room-chip { border:1px solid; border-radius:20px; padding:8px 14px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:700; cursor:pointer; }
+.dcc-room-chip:active { transform:scale(.96); }
 
 /* =============================================
    PLAY A HOLE
@@ -1718,6 +1723,12 @@ svg { display:block; }
     </div>
   </div>
 
+  <!-- Discovery engine: today's questions name the rooms they came from — tap to explore -->
+  <div class="dcc-rooms" id="dcc-rooms" style="display:none">
+    <div class="dcc-rooms-label">TODAY'S QUESTIONS CAME FROM</div>
+    <div class="dcc-rooms-row" id="dcc-rooms-row"></div>
+  </div>
+
   <div class="dcc-actions" style="padding:0 16px 24px">
     <button class="btn btn-gold"  onclick="startHole()">Keep Sharpening — Play a Hole →</button>
     <button class="btn btn-dark"  onclick="renderHome();showView('home')">Back to Home</button>
@@ -2297,6 +2308,58 @@ const QUESTIONS = [
 {id:"Q394",pillar:"Score Smart",module:"Scoring Strategy",difficulty:"Club",handicap_band:"Club",format:"Scenario",hook_type:"Green Light",decision_type:"Mental",primary_score_leak:"Double bogey",visual_must_show:false,confidence_level:"High",question:"Reviewing your season: zero penalty strokes, but you also can't remember a single eagle putt or drivable-par-4 attempt. What does that pattern reveal?",option_a:"Over-protection leaks strokes too — caution isn't free",option_b:"Perfect discipline — zero penalties is the goal",option_c:"Nothing, scoring is about putting",option_d:"You need new equipment",correct_answer:"A",why_right:"Zero penalties with zero scoring chances means your risk dial is stuck on protect — and over-protection is a leak with no scorecard symptom. Every safe club off a harmless tee, every middle-green aim at an open pin quietly costs fractions of strokes that compound across a season. The goal was never zero risk; it was correctly priced risk. A season without a single green light taken means dozens of them were missed.",pro_insight:"Strokes-gained audits of amateur rounds find both leak types — but the over-protector's leak is invisible because it never makes a highlight reel of disasters. It just slowly pays out.",common_pitfall:"Measuring discipline by absence of disaster. The scorecard punishes unclaimed birdies exactly as hard as splashed drives — one stroke at a time.",action_tip:"Audit your rounds for green lights taken, not just blow-ups avoided. If the answer is 'none', your protection is costing you.",tags:"green-light,season-audit,over-protection",tier:"Free",techAnim:"approach_landing_zone",techAnimParams:{}},
 ];
 
+// ── Near-twin similarity groups ────────────────────────
+// Scenario repetition is deliberate — re-meeting the same decision after a
+// gap is the spaced-repetition rep that beats novelty for retention. The rule
+// is only that group-mates never land in the SAME batch and get at least
+// TWIN_SPACING_DAYS between sightings. Curated from tools/question-dedup-review.md;
+// when adding a question that re-runs an existing scenario, add its id here.
+// Each id may appear in at most one group.
+const SIMILAR_GROUPS = [
+  ["Q048","Q129","Q273"],            // buried / fried-egg bunker lie
+  ["Q071","Q147"],                   // penalty area: which relief is NOT valid
+  ["Q019","Q210","Q225","Q229"],     // tight lie / hardpan → bump-and-run
+  ["Q051","Q275","Q276"],            // long bunker shot distance control
+  ["Q139","Q320"],                   // perfect shot hits sprinkler → acceptance
+  ["Q006","Q119","Q159"],            // pin tucked behind bunker → play to fat side
+  ["Q097","Q105"],                   // crosswind vs natural fade cancel
+  ["Q086","Q165","Q166","Q189"],     // head/tailwind clubbing ladder
+  ["Q010","Q167"],                   // strong wind → low punch
+  ["Q036","Q126"],                   // aim putter face at start line
+  ["Q106","Q178","QE5_022","QE5_031"], // tee shot in trees: punch vs chip out
+  ["Q035","Q209","Q355"],            // embedded ball relief
+  ["Q116","Q202"],                   // read wind via treetops + flag
+  ["Q044","Q255","Q261"],            // clear path → low chip 7/8-iron
+  ["Q172","Q240"],                   // blocked by tree → punch under
+  ["Q060","Q338"],                   // the yips: cause
+  ["Q016","Q092","Q193"],            // next tee after a double: reset
+  ["Q142","Q334"],                   // worst post-blow-up thought: chase birdie
+  ["Q213","Q237"],                   // flyer lie
+  ["Q034","Q122"],                   // altitude adds carry
+  ["Q023","Q120"],                   // first links round → bump-and-run
+  ["Q266","Q270"],                   // competition: take the simpler bump-and-run
+  ["Q214","Q238"],                   // deep rough 50yd → sand wedge bounce
+  ["Q045","Q272"],                   // standard greenside bunker setup
+  ["Q089","Q271"],                   // bunker: hit sand before ball
+  ["Q042","Q135","Q230"],            // fairway bunker: clean-contact setup
+  ["Q050","Q259","Q278","QE5_035"],  // Texas wedge / putt from off green
+  ["Q015","Q138"],                   // match play: opponent in trouble on 17
+  ["Q009","Q107","Q254"],            // two-tier green: land on the pin's tier
+  ["Q094","Q101","Q151"],            // tight tee shot → 3-wood for position
+  ["Q082","Q096"],                   // par-5 layup to full wedge
+  ["Q001","Q155"],                   // par-5 water → lay up to wedge range
+  ["Q011","Q156"],                   // carry math says no → lay up
+  ["Q378","Q392"],                   // attack the makeable chip
+  ["Q018","Q186"],                   // approach play is the biggest leak
+  ["Q308","Q335"],                   // routine = consistent trigger
+  ["Q003","Q084"],                   // trouble short → extra club, fat of green
+  ["Q095","Q103"],                   // sucker pin → centre green, accept the putt
+  ["Q258","Q299"],                   // elevated green → pitch up to it
+  ["Q300","Q307"]                    // around green: putter → bump → pitch ladder
+];
+const TWIN_GROUP = {};
+SIMILAR_GROUPS.forEach((g,i) => g.forEach(id => TWIN_GROUP[id] = i));
+
 const PILLARS = [
   {
     id:'score-smart', name:'Score Smart', emoji:'⛳', color:'#c8a84b',
@@ -2780,6 +2843,12 @@ function renderSharpen(){
 }
 
 // ── Pillar Screen ──────────────────────────────────────
+// Open a pillar by name — used by the daily-complete "today's rooms" chips.
+function dccOpenPillar(name){
+  const p = PILLARS.find(x => x.name === name);
+  if(p) openPillar(p);
+}
+
 function openPillar(pillar){
   setPillarColor(pillar.color);
   const header = document.getElementById('pillar-header');
@@ -2842,13 +2911,19 @@ function bandPrefer(pool){
 // Tracks served question ids so daily + quizzes prefer unseen content.
 const SEEN_KEY = 'gs_golf_seen_v1';
 function getSeenIds(){ const v = LS.get(SEEN_KEY); return (v && Array.isArray(v.ids)) ? v.ids : []; }
+function getSeenAt(){ const v = LS.get(SEEN_KEY); return (v && v.at) ? v.at : {}; }
 function markSeen(qs){
-  const set = new Set(getSeenIds());
-  (qs||[]).forEach(q => q && q.id && set.add(q.id));
+  const v = LS.get(SEEN_KEY) || {};
+  const set = new Set(Array.isArray(v.ids) ? v.ids : []);
+  const at = v.at || {};
+  const today = todayStr();
+  (qs||[]).forEach(q => { if(q && q.id){ set.add(q.id); at[q.id] = today; } });
   let ids = [...set];
   // when nearly everything has been seen, forget the oldest half so rotation continues
   if(ids.length > QUESTIONS.length - 20) ids = ids.slice(Math.floor(ids.length/2));
-  LS.set(SEEN_KEY, { ids });
+  const keep = new Set(ids);
+  Object.keys(at).forEach(id => { if(!keep.has(id)) delete at[id]; });
+  LS.set(SEEN_KEY, { ids, at });
 }
 function preferUnseen(pool){
   const seen = new Set(getSeenIds());
@@ -2857,10 +2932,52 @@ function preferUnseen(pool){
   return fresh.concat(old);
 }
 
+// ── Twin spacing ───────────────────────────────────────
+// Group-mates (SIMILAR_GROUPS) are good reps only when separated in time:
+// never two in one batch, and none within TWIN_SPACING_DAYS of a sibling.
+const TWIN_SPACING_DAYS = 2;
+function twinTooFresh(q){
+  const gi = TWIN_GROUP[q.id]; if(gi === undefined) return false;
+  const at = getSeenAt(); const now = new Date(todayStr());
+  return SIMILAR_GROUPS[gi].some(id => {
+    if(id === q.id || !at[id]) return false;
+    const days = (now - new Date(at[id])) / 86400000;
+    return days >= 0 && days < TWIN_SPACING_DAYS;
+  });
+}
+// Pick n questions from an already-prioritised pool: at most one per
+// similarity group, skipping twins of recently-seen questions. Relaxes the
+// recency rule first, then the group rule, rather than under-fill the batch.
+function pickSpaced(pool, n){
+  const out = [], groups = new Set(), used = new Set();
+  const take = q => { out.push(q); used.add(q.id); const gi = TWIN_GROUP[q.id]; if(gi !== undefined) groups.add(gi); };
+  for(const q of pool){ if(out.length >= n) break;
+    const gi = TWIN_GROUP[q.id];
+    if((gi === undefined || !groups.has(gi)) && !twinTooFresh(q)) take(q); }
+  for(const q of pool){ if(out.length >= n) break;
+    const gi = TWIN_GROUP[q.id];
+    if(!used.has(q.id) && (gi === undefined || !groups.has(gi))) take(q); }
+  for(const q of pool){ if(out.length >= n) break; if(!used.has(q.id)) take(q); }
+  return out;
+}
+// Reorder a full quiz list so group-mates never sit back-to-back — module
+// quizzes keep every question, twins just get distance between them.
+function spreadTwins(list){
+  const a = [...list];
+  for(let i = 1; i < a.length; i++){
+    const g = TWIN_GROUP[a[i].id];
+    if(g === undefined || TWIN_GROUP[a[i-1].id] !== g) continue;
+    let j = i + 1;
+    while(j < a.length && TWIN_GROUP[a[j].id] === g) j++;
+    if(j < a.length) [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 // ── Quiz Engine ────────────────────────────────────────
 function startQuiz(pillar, module, questions){
   S.quiz = {
-    qs: preferUnseen(bandPrefer(shuffle(questions))),
+    qs: spreadTwins(preferUnseen(bandPrefer(shuffle(questions)))),
     idx: 0, score: 0,
     answers: [],
     pillar, module,
@@ -2910,7 +3027,7 @@ function techFaultAsQuestion(seedNum){
     while(opts.length<4) opts.push('The equipment — wrong club for this shot');
     return {
       id:'T-'+g.key+'-'+f.name, pillar:'Technique', module:g.label+' · '+f.name,
-      difficulty:'Club', handicap_band:'Club', format:'Scenario', hook_type:'THE RANGE FIX',
+      difficulty:'Club', handicap_band:'Club', format:'Scenario', hook_type:'SHOT CLINIC',
       decision_type:'Recovery', primary_score_leak:'Failed recovery',
       visual_must_show:true, confidence_level:'High',
       question:f.situation+' What is the usual culprit?',
@@ -2963,9 +3080,13 @@ function buildTodaysDaily(){
   // makes near-twin scenarios likely (e.g. Q106/Q178, both trees+punch-out).
   // Reject any candidate sharing its module or 2+ tag tokens with a question
   // already in today's set — the theme should vary the ANGLE, not repeat it.
+  // The curated SIMILAR_GROUPS + twinTooFresh add the cross-day spacing rule:
+  // a twin of something seen in the last TWIN_SPACING_DAYS waits its turn.
   const _tagTok = q => new Set(String(q.tags||'').toLowerCase().split(/[,\s]+/).filter(t => t.length > 2));
-  const tooSimilar = q => daily.some(p => {
+  const tooSimilar = q => twinTooFresh(q) || daily.some(p => {
     if(p.module && p.module === q.module) return true;
+    const gq = TWIN_GROUP[q.id];
+    if(gq !== undefined && gq === TWIN_GROUP[p.id]) return true;
     const a = _tagTok(q), b = _tagTok(p); let n = 0;
     a.forEach(t => { if(b.has(t)) n++; });
     return n >= 2;
@@ -2983,6 +3104,16 @@ function buildTodaysDaily(){
     if(!p) break; used.add(p.id); daily.push(p);
   }
 
+  // Breadth promise: with the Shot Clinic slot, every daily spans >=3 pillars —
+  // so the scenario picks themselves must span >=2. Swap the last pick for a
+  // missing-pillar candidate when a theme day goes mono-pillar.
+  if(daily.length >= 2 && new Set(daily.map(q => q.pillar)).size < 2){
+    const have = new Set(daily.map(q => q.pillar));
+    const alt = pool.find(q => !used.has(q.id) && !have.has(q.pillar) && !tooSimilar(q))
+             || QUESTIONS.find(q => !used.has(q.id) && !have.has(q.pillar) && q.pillar !== 'Technique' && !tooSimilar(q));
+    if(alt){ used.add(alt.id); daily[daily.length - 1] = alt; }
+  }
+
   // play the hole in order: tee, then approach, then around the green
   const phaseOrder = { tee:0, approach:1, any:1.5, short:2, putt:3 };
   daily.sort((a,b) => (phaseOrder[phaseOf(a)] ?? 1.5) - (phaseOrder[phaseOf(b)] ?? 1.5));
@@ -2996,7 +3127,7 @@ function buildTodaysDaily(){
   if(steps.length===3 && steps.every(x=>x===steps[0])){
     steps = steps[0]==='ON THE GREEN' ? ['THE READ','THE PACE','THE PRESSURE PUTT'] : ['DECISION ONE','DECISION TWO','DECISION THREE'];
   }
-  if(techQ){ daily.push(techQ); steps.push('THE RANGE FIX'); }
+  if(techQ){ daily.push(techQ); steps.push('SHOT CLINIC'); }
   return { qs: daily, theme: leak.theme, steps };
 }
 
@@ -3032,11 +3163,11 @@ function startCrashCourse(){
 
   // Get unanswered questions from that pillar, up to 10
   const pool = QUESTIONS.filter(q => q.pillar === weakPillar.name && !S.completed[q.id]);
-  const qs = shuffle(pool).slice(0, 10);
+  const qs = pickSpaced(shuffle(pool), 10);
   if(!qs.length){
     // All answered — reset completed for this pillar and retry
     const all = QUESTIONS.filter(q => q.pillar === weakPillar.name);
-    const qs2 = shuffle(all).slice(0, 10);
+    const qs2 = pickSpaced(shuffle(all), 10);
     S.quiz = { qs: qs2, idx:0, score:0, answers:[], pillar: weakPillar, module: 'Crash Course', mode: 'crash' };
   } else {
     S.quiz = { qs, idx:0, score:0, answers:[], pillar: weakPillar, module: 'Crash Course', mode: 'crash' };
@@ -3074,7 +3205,7 @@ function startSaturdayCard(){
   const seed = weekNumber();
   const rng  = seededRng(seed);
   const pool = [...QUESTIONS].sort(() => rng() - 0.5);
-  const qs   = pool.slice(0, 3);
+  const qs   = pickSpaced(pool, 3);
   S.quiz = {
     qs, idx:0, score:0, answers:[],
     pillar: { name:'Pre-Round Warm-Up', color:'#c8a84b', emoji:'🏌️' },
@@ -3230,7 +3361,7 @@ function launchLeakSession(){
   // Primary pool: questions tagged with the diagnosed score-leak, freshest first
   let pool = leak ? QUESTIONS.filter(q => leak.leakTags.includes(q.primary_score_leak)) : [];
   if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
-  const qs = preferUnseen(bandPrefer(shuffle(pool))).slice(0, 5);
+  const qs = pickSpaced(preferUnseen(bandPrefer(shuffle(pool))), 5);
   S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Fix Your Leak', mode:'crash' };
   setPillarColor(pillar.color);
   document.getElementById('qt-pillar').textContent = leak ? ('Fix Your Leak · ' + leak.label) : 'Fix Your Leak';
@@ -3264,6 +3395,26 @@ function loadQuestion(){
   document.getElementById('hook-label').textContent = thread
     ? `${thread.steps[S.quiz.idx] || 'THE DECISION'} · ${thread.theme}`
     : (q.hook_type || q.pillar);
+  // Provenance chip (daily only) — the daily wears its breadth on its sleeve:
+  // every question names the room of the app it came from.
+  let prov = document.getElementById('hook-provenance');
+  if(!prov){
+    const hl = document.getElementById('hook-label');
+    if(hl){ prov = document.createElement('div'); prov.id = 'hook-provenance'; hl.insertAdjacentElement('afterend', prov); }
+  }
+  if(prov){
+    if(thread && q.pillar){
+      const isTech = String(q.id).slice(0,2) === 'T-';
+      const p = PILLARS.find(x => x.name === q.pillar);
+      const emoji = isTech ? '🔧' : (p ? p.emoji : '⛳');
+      const label = isTech ? 'SHOT CLINIC' : q.pillar.toUpperCase();
+      const col = isTech ? '#c8a84b' : (p ? p.color : '#c8a84b');
+      prov.style.cssText = `display:inline-block;margin:7px 0 0;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:800;letter-spacing:1px;border:1px solid ${col}66;color:${col};background:${col}14;`;
+      prov.textContent = `${emoji} ${label}${q.module ? ' · ' + q.module : ''}`;
+    } else {
+      prov.style.display = 'none';
+    }
+  }
   document.getElementById('question-text').textContent = q.question;
   document.getElementById('opt-a').textContent = q.option_a;
   document.getElementById('opt-b').textContent = q.option_b;
@@ -3580,6 +3731,23 @@ function finishQuiz(){
     setTxt('tss-tomorrow-body', deb.tomorrow);
     const mb = document.getElementById('dcc-mulligan');
     if(mb) mb.style.display = mulliganUsed ? '' : 'none';
+    // Today's rooms — the daily doubles as the app's discovery engine
+    const roomsRow = document.getElementById('dcc-rooms-row');
+    if(roomsRow){
+      const seenRooms = new Set(); const chips = [];
+      qs.forEach(q => {
+        const isTech = String(q.id).slice(0,2) === 'T-';
+        const key = isTech ? 'SHOT CLINIC' : q.pillar;
+        if(!key || seenRooms.has(key)) return; seenRooms.add(key);
+        const p = isTech ? null : PILLARS.find(x => x.name === q.pillar);
+        const emoji = isTech ? '🔧' : (p ? p.emoji : '⛳');
+        const col = isTech ? '#c8a84b' : (p ? p.color : '#c8a84b');
+        chips.push(`<button class="dcc-room-chip" style="border-color:${col}66;color:${col};background:${col}12" onclick="${isTech ? 'openTechnique()' : `dccOpenPillar('${key}')`}">${emoji} ${key} →</button>`);
+      });
+      roomsRow.innerHTML = chips.join('');
+      const rw = document.getElementById('dcc-rooms');
+      if(rw) rw.style.display = chips.length ? '' : 'none';
+    }
     const shareBtn = document.getElementById('dcc-share-btn');
     shareBtn.onclick = shareDaily;
     showView('daily-complete');
@@ -4802,7 +4970,7 @@ function launchPlayPrepChallenge(leakTag){
   let pool = QUESTIONS.filter(q => q.primary_score_leak === leakTag);
   if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
   if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => !pool.includes(q)));
-  const qs = preferUnseen(bandPrefer(shuffle(pool))).slice(0,5);
+  const qs = pickSpaced(preferUnseen(bandPrefer(shuffle(pool))), 5);
   S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Play Prep Challenge', mode:'crash' };
   setPillarColor(pillar.color);
   document.getElementById('qt-pillar').textContent = 'Play Prep · ' + leakTag;

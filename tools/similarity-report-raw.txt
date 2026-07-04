@@ -1,0 +1,403 @@
+134 pairs >= 0.34
+--- 0.597 q=0.40 t=1.00 c=0.63 w=0.31
+ Q071 [Rules Edge Cases] Your ball is in a penalty area. Which option is NOT valid under Rule 17? || CORRECT: Free drop within 2 club lengths of where it crossed the margin
+ Q147 [Rules Edge Cases] Your ball is in a yellow penalty area (water hazard). You decide to take relief. Which is NOT one of your opti || CORRECT: Drop within two club-lengths of where the ball entered the penalty are
+--- 0.597 q=0.50 t=1.00 c=0.50 w=0.22
+ Q048 [Greenside Bunker] Buried lie (fried egg) in greenside bunker. How do you play it? || CORRECT: Square the face, steep swing, dig in behind the ball
+ Q273 [Greenside Bunker] Your ball is in a greenside bunker with a buried 'fried egg' lie. How does this change your setup and techniqu || CORRECT: Square or closed clubface, steep downswing, less follow-through — dig 
+--- 0.587 q=0.67 t=1.00 c=0.17 w=0.29
+ Q048 [Greenside Bunker] Buried lie (fried egg) in greenside bunker. How do you play it? || CORRECT: Square the face, steep swing, dig in behind the ball
+ Q129 [Greenside Bunker] You're in a greenside bunker with a plugged (buried) lie. What changes from a standard bunker shot? || CORRECT: Close the face, hit steeper into the sand closer to the ball
+--- 0.550 q=0.31 t=0.67 c=1.00 w=0.11
+ Q019 [Approach Play] 40 yards, tight lie on hardpan. Which shot gives highest percentage outcome? || CORRECT: Bump-and-run with a 9-iron or pitching wedge
+ Q210 [Tight Lies] You're chipping from a tight lie just off the green, 15 yards to the flag. What's the highest-percentage techn || CORRECT: Bump-and-run with an 8-iron or 9-iron
+--- 0.543 q=0.33 t=1.00 c=0.60 w=0.10
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q276 [Greenside Bunker] Your bunker shots either fly the green or stay in the sand. What is the key to controlling bunker distance? || CORRECT: Vary the swing length — longer swing for longer bunker shots
+--- 0.516 q=0.20 t=0.71 c=1.00 w=0.07
+ Q210 [Tight Lies] You're chipping from a tight lie just off the green, 15 yards to the flag. What's the highest-percentage techn || CORRECT: Bump-and-run with an 8-iron or 9-iron
+ Q225 [Tight Lies] In winter conditions, the ground is frozen hard (permafrost). Your ball is sitting on a tight, hard lie 60 yar || CORRECT: Bump-and-run with 8-iron along the ground
+--- 0.500 q=0.73 t=0.67 c=0.13 w=0.11
+ Q139 [Bad Bounce Response] You hit a perfect approach shot that bounces off a sprinkler head into a bunker. How do you respond? || CORRECT: Accept it immediately — golf has random events and your response is al
+ Q320 [Bad Bounce Response] You hit a perfect shot that bounces badly off a sprinkler head and rolls into a bunker. How should you respond || CORRECT: Accept it without emotion, reset physically, and focus on the bunker s
+--- 0.499 q=0.56 t=1.00 c=0.00 w=0.26
+ Q129 [Greenside Bunker] You're in a greenside bunker with a plugged (buried) lie. What changes from a standard bunker shot? || CORRECT: Close the face, hit steeper into the sand closer to the ball
+ Q273 [Greenside Bunker] Your ball is in a greenside bunker with a buried 'fried egg' lie. How does this change your setup and techniqu || CORRECT: Square or closed clubface, steep downswing, less follow-through — dig 
+--- 0.490 q=0.36 t=0.80 c=0.50 w=0.22
+ Q006 [Par 3 Strategy] Par 3, 165 yards. Pin front-left, tucked behind a bunker. Penalty area left of green. What do you do? || CORRECT: Club up and aim right-centre of the green
+ Q017 [Par 5 Strategy] Par 5 third shot, 120 yards, pin tucked tight-left behind a bunker. What's the correct play? || CORRECT: Aim to the right half of the green for a makeable birdie putt
+--- 0.479 q=0.33 t=0.60 c=0.67 w=0.29
+ Q097 [Reading Wind] You're hitting into a crosswind from right to left. Your ball flight is a natural fade (left to right). What s || CORRECT: Aim left and let the wind and fade cancel each other out — straight sh
+ Q105 [Wind Adjustments] You have a 165-yard approach with a strong crosswind from the right. You're a natural fade player. What's your || CORRECT: Aim at the flag — the fade and wind will cancel
+--- 0.473 q=0.21 t=0.80 c=0.67 w=0.21
+ Q086 [Wind Adjustments] You have 150 yards to the flag, directly into a 10mph headwind. You normally hit 7-iron 150 yards. What do you || CORRECT: 6-iron — one club stronger
+ Q165 [Wind Adjustments] You're 150 yards into a direct headwind of 15mph. Your normal 150-yard club is a 7-iron. What's your adjustmen || CORRECT: Take two extra clubs — 5-iron
+--- 0.470 q=0.17 t=0.57 c=1.00 w=0.11
+ Q210 [Tight Lies] You're chipping from a tight lie just off the green, 15 yards to the flag. What's the highest-percentage techn || CORRECT: Bump-and-run with an 8-iron or 9-iron
+ Q229 [Tight Lies] You're on a links course with a very tight lie in the fairway, 145 yards from the green. The green is running  || CORRECT: Bump-and-run with a 6-iron, land short of the green and run it up
+--- 0.465 q=0.13 t=0.60 c=1.00 w=0.15
+ Q007 [Approach Play] 150 yards out but the pin is 20 yards above you on a steep uphill. How much extra club? || CORRECT: 1–2 clubs more
+ Q117 [Uphill/Downhill Lies] You're hitting from an uphill lie, 150 yards to the green. Your flat-lie 8-iron goes 150. What are the key adj || CORRECT: Ball forward, one more club, expect a higher shot
+--- 0.463 q=0.14 t=0.80 c=0.67 w=0.39
+ Q036 [Putting IQ] Reading an 8-footer right-to-left. Where should you aim the putter face at address? || CORRECT: At your intended start line, not the hole
+ Q126 [Putting IQ] You have a 30-foot putt with 4 feet of break. You've read the putt — the ball should start on the left edge of || CORRECT: Aiming the face at your start line, not the hole
+--- 0.461 q=0.35 t=0.57 c=0.67 w=0.10
+ Q106 [Risk-Reward] You've pulled your drive into trees on the left, 210 yards from the green. You have a gap but it requires a lo || CORRECT: Punch out sideways to the fairway — accept bogey at worst
+ Q178 [Recovery Strategy] You've hit your tee shot into the trees on the right. You have a gap to attempt a punch shot through to the gr || CORRECT: Chip out sideways to the fairway
+--- 0.456 q=0.00 t=1.00 c=0.71 w=0.28
+ Q035 [Wet Conditions] Your ball embeds in the fairway after heavy rain. What's the correct ruling? || CORRECT: Take free relief under the embedded ball rule — lift, clean and drop
+ Q209 [Wet Conditions] Wet conditions cause your ball to 'plug' (bury) in soft ground near the green. Under the Rules of Golf in norm || CORRECT: Take free relief under the embedded ball rule if in the general area
+--- 0.453 q=0.14 t=1.00 c=0.50 w=0.20
+ Q147 [Rules Edge Cases] Your ball is in a yellow penalty area (water hazard). You decide to take relief. Which is NOT one of your opti || CORRECT: Drop within two club-lengths of where the ball entered the penalty are
+ Q350 [Rules Edge Cases] Your ball lands in a water hazard (penalty area) and you're unsure if it entered the water. You can't find it. || CORRECT: Treat it as in the penalty area — one stroke, then relief
+--- 0.447 q=0.54 t=0.60 c=0.20 w=0.31
+ Q087 [Uphill/Downhill Lies] You have a downhill lie in the fairway, 145 yards to the green. Your flat-lie 8-iron goes 145. What adjustment || CORRECT: 8-iron, ball back, expect a lower flight
+ Q117 [Uphill/Downhill Lies] You're hitting from an uphill lie, 150 yards to the green. Your flat-lie 8-iron goes 150. What are the key adj || CORRECT: Ball forward, one more club, expect a higher shot
+--- 0.446 q=0.27 t=0.80 c=0.50 w=0.14
+ Q165 [Wind Adjustments] You're 150 yards into a direct headwind of 15mph. Your normal 150-yard club is a 7-iron. What's your adjustmen || CORRECT: Take two extra clubs — 5-iron
+ Q166 [Wind Adjustments] Playing a downwind hole, 160 yards to the flag, normal 7-iron distance. 20mph tailwind. What's your club selec || CORRECT: 9-iron — two clubs less for a downwind shot
+--- 0.443 q=0.31 t=1.00 c=0.17 w=0.28
+ Q116 [Reading Wind] You're trying to judge wind direction but can't feel it on the ground. What's the most reliable method? || CORRECT: Look at the tops of the trees and flag at the same time
+ Q202 [Reading Wind] You're unsure of wind direction on the course. What's the most reliable method for checking wind direction bef || CORRECT: Watch the treetops and flag together for a combined reading
+--- 0.441 q=0.10 t=0.50 c=1.00 w=0.26
+ Q082 [Double-Bogey Avoidance] Par 5, two shots played, you're 240 yards from the green. There's water short-left and trees right. You're 1-u || CORRECT: Lay up to 80-100 yards and give yourself a full wedge in
+ Q096 [Risk-Reward] Par 5, reachable in two with a perfect 3-wood. Tight bailout area left, water right, pin back-left. You're pla || CORRECT: Lay up to 100 yards — give yourself a full wedge for a genuine birdie 
+--- 0.441 q=0.25 t=1.00 c=0.33 w=0.08
+ Q050 [Putting from Off-Green] You're just off the green, 15 feet from the pin, on short-cut fringe with a flat path to the hole. When is the || CORRECT: When the ground is flat and firm all the way to the hole
+ Q278 [Fringe Decision + Putting from Off-Green] When is it appropriate to putt from off the green through the fringe? || CORRECT: When the fringe is short, firm and even
+--- 0.441 q=0.43 t=0.00 c=1.00 w=0.19
+ Q006 [Par 3 Strategy] Par 3, 165 yards. Pin front-left, tucked behind a bunker. Penalty area left of green. What do you do? || CORRECT: Club up and aim right-centre of the green
+ Q084 [Double-Bogey Avoidance] You're on a par 3, over water, 165 yards. The pin is front-left, just behind the water. Your normal 6-iron goe || CORRECT: Take one more club and aim for the centre-right of the green
+--- 0.438 q=0.28 t=0.67 c=0.60 w=0.11
+ Q019 [Approach Play] 40 yards, tight lie on hardpan. Which shot gives highest percentage outcome? || CORRECT: Bump-and-run with a 9-iron or pitching wedge
+ Q225 [Tight Lies] In winter conditions, the ground is frozen hard (permafrost). Your ball is sitting on a tight, hard lie 60 yar || CORRECT: Bump-and-run with 8-iron along the ground
+--- 0.438 q=0.25 t=1.00 c=0.33 w=0.04
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q129 [Greenside Bunker] You're in a greenside bunker with a plugged (buried) lie. What changes from a standard bunker shot? || CORRECT: Close the face, hit steeper into the sand closer to the ball
+--- 0.438 q=0.07 t=0.60 c=1.00 w=0.09
+ Q007 [Approach Play] 150 yards out but the pin is 20 yards above you on a steep uphill. How much extra club? || CORRECT: 1–2 clubs more
+ Q032 [Uphill/Downhill Lies] Hitting an approach from a downhill lie — how does the ball typically fly? || CORRECT: Lower with more run — the slope delofts the club
+--- 0.430 q=0.11 t=0.50 c=1.00 w=0.12
+ Q172 [Second Shot Decisions] Par 4, your second shot is 130 yards but you're blocked by a large tree. You can punch under it, try to curve  || CORRECT: Punch low under the tree branches
+ Q240 [Dogleg Strategy] On a dogleg-right par 4, there's a tree blocking the direct line to the green from the left rough. You're in l || CORRECT: Punch low under the branches — the low route wins unless the gap is be
+--- 0.430 q=0.33 t=1.00 c=0.17 w=0.05
+ Q048 [Greenside Bunker] Buried lie (fried egg) in greenside bunker. How do you play it? || CORRECT: Square the face, steep swing, dig in behind the ball
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+--- 0.428 q=0.38 t=0.71 c=0.33 w=0.13
+ Q278 [Fringe Decision + Putting from Off-Green] When is it appropriate to putt from off the green through the fringe? || CORRECT: When the fringe is short, firm and even
+ Q279 [Fringe Decision + Putting from Off-Green] You're putting from 5 feet off the green through 8 feet of fringe to a hole 15 feet on the green. The fringe i || CORRECT: Add extra pace to compensate for the slowing effect of longer fringe
+--- 0.427 q=0.43 t=1.00 c=0.00 w=0.05
+ Q042 [Fairway Bunker] Key technical adjustment for hitting from a fairway bunker vs fairway? || CORRECT: Ball further back and grip down for cleaner contact
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+--- 0.424 q=0.13 t=0.43 c=1.00 w=0.14
+ Q127 [Chip vs Pitch Decision] You're 8 yards off the green, 20 yards to the hole, with a clear path of short-cut grass. No obstacles. What's || CORRECT: 7-iron bump and run — use the green to do the work
+ Q210 [Tight Lies] You're chipping from a tight lie just off the green, 15 yards to the flag. What's the highest-percentage techn || CORRECT: Bump-and-run with an 8-iron or 9-iron
+--- 0.423 q=0.18 t=0.67 c=0.67 w=0.19
+ Q086 [Wind Adjustments] You have 150 yards to the flag, directly into a 10mph headwind. You normally hit 7-iron 150 yards. What do you || CORRECT: 6-iron — one club stronger
+ Q166 [Wind Adjustments] Playing a downwind hole, 160 yards to the flag, normal 7-iron distance. 20mph tailwind. What's your club selec || CORRECT: 9-iron — two clubs less for a downwind shot
+--- 0.422 q=0.27 t=0.60 c=0.50 w=0.38
+ Q067 [Rules Edge Cases] Three options when you declare a ball unplayable (Rule 19). Which set is correct? || CORRECT: Drop within 2 club lengths (no nearer hole), go back on line as far as
+ Q071 [Rules Edge Cases] Your ball is in a penalty area. Which option is NOT valid under Rule 17? || CORRECT: Free drop within 2 club lengths of where it crossed the margin
+--- 0.421 q=0.26 t=0.60 c=0.60 w=0.17
+ Q266 [Bump and Run] You're in competition. 35 yards from hole, there's light fringe with a clear path. Your natural shot is a lob  || CORRECT: The caddie — the 8-iron bump is the more reliable play
+ Q270 [Bump and Run] In a competition, you've been struggling with your short game all day. On the 16th, you have a 25-yard bump-an || CORRECT: Switch to the bump-and-run — the simpler shot should produce more reli
+--- 0.420 q=0.37 t=0.83 c=0.20 w=0.14
+ Q050 [Putting from Off-Green] You're just off the green, 15 feet from the pin, on short-cut fringe with a flat path to the hole. When is the || CORRECT: When the ground is flat and firm all the way to the hole
+ Q259 [Chip vs Pitch Decision] Ten feet off the green on tight mown fringe, your partner hands you the putter: 'Texas wedge.' When is that th || CORRECT: The putter — from off the green over smooth ground
+--- 0.418 q=0.13 t=0.60 c=0.80 w=0.15
+ Q003 [Wind Adjustments] 185 yards out, dead into the wind, water guards the front of the green. What's your play? || CORRECT: Two clubs more, aim at the fat of the green
+ Q084 [Double-Bogey Avoidance] You're on a par 3, over water, 165 yards. The pin is front-left, just behind the water. Your normal 6-iron goe || CORRECT: Take one more club and aim for the centre-right of the green
+--- 0.417 q=0.19 t=0.67 c=0.67 w=0.09
+ Q142 [Double-Bogey Reset] You've just made a double bogey. The next hole is a par 3 over water. What's the worst mindset to bring to tha || CORRECT: 'I need to get one back — birdie would be perfect here'
+ Q334 [Double-Bogey Reset] After a triple-bogey, what's the single most dangerous thought to have on the very next tee? || CORRECT: 'I need to make birdie to get back on track'
+--- 0.416 q=0.26 t=0.86 c=0.33 w=0.13
+ Q252 [Links vs Parkland / Pin Position] On a parkland course, the pin is in position A (back-left). There's a steep slope at the back of the green tha || CORRECT: Aim at the centre of the green, accepting a 25-foot putt rather than r
+ Q253 [Links vs Parkland / Pin Position] The pin is in position C (front-right) on a green that slopes left-to-right significantly. What approach shot  || CORRECT: Aim left and let the slope feed it in from the safe side
+--- 0.413 q=0.40 t=0.80 c=0.17 w=0.11
+ Q060 [Pressure Putting] Most common cause of the yips in putting? || CORRECT: Focus on outcome rather than process — target anxiety
+ Q338 [Pressure Putting] What's the 'yips' and what's the primary cause? || CORRECT: An involuntary stroke twitch driven by anxiety and over-control
+--- 0.412 q=0.06 t=0.75 c=0.75 w=0.14
+ Q010 [Wind Adjustments] Into a strong headwind — which shot shape gives best distance and control? || CORRECT: Low punch with reduced swing — limits spin, stays under the wind
+ Q167 [Wind Adjustments] You're on a links course, 180 yards, hard left-to-right crosswind. Your natural miss is a fade (also left to r || CORRECT: Punch it low to take the crosswind out of play
+--- 0.410 q=0.20 t=0.80 c=0.44 w=0.19
+ Q214 [Deep Rough] You're in waist-high rough 50 yards from the green. You have a sand wedge and a lob wedge. Which do you use? || CORRECT: Sand wedge — the bounce helps the club move through the thick grass
+ Q238 [Deep Rough] You're in deep rough, 50 yards from the green, needing to carry a bunker. What is the optimal club and techniq || CORRECT: Sand wedge with square face, steep swing — the bounce helps navigate t
+--- 0.409 q=0.19 t=1.00 c=0.29 w=0.13
+ Q045 [Greenside Bunker] Standard greenside bunker shot — face and body alignment? || CORRECT: Open face, aim body left, swing along your line
+ Q272 [Greenside Bunker] In a greenside bunker, the pin is 30 feet away on the same level. You have a standard flat lie. What setup adj || CORRECT: Open stance, open clubface, aim 1-2 inches behind the ball, full follo
+--- 0.404 q=0.17 t=0.80 c=0.50 w=0.12
+ Q378 [Scrambling] Greenside chip, perfect lie, uphill to the pin with 30 feet of green to work with. What's your mindset? || CORRECT: Try to hole it — this is the chip the pros attack
+ Q392 [Scrambling] Your up-and-down rate from good greenside lies is 50%. Your partner says aim every chip 6 feet short 'for safe || CORRECT: Attack — the cautious chip leaves the very putt it fears
+--- 0.402 q=0.06 t=0.80 c=0.67 w=0.12
+ Q255 [Chip vs Pitch Decision] When should you chip rather than pitch around the green? || CORRECT: When the ground to the hole is clear and smooth
+ Q259 [Chip vs Pitch Decision] Ten feet off the green on tight mown fringe, your partner hands you the putter: 'Texas wedge.' When is that th || CORRECT: The putter — from off the green over smooth ground
+--- 0.402 q=0.44 t=0.60 c=0.29 w=0.06
+ Q123 [Blind Shots] You have a blind approach over a ridge with 155 yards to the flag. You can see the flag but not the green. Wha || CORRECT: Trust the yardage and fly it pin-high — ignore the ridge
+ Q247 [Blind Shots] You're hitting a blind approach shot over a hill. You can't see the flag. You know the green is 160 yards away || CORRECT: Ask your caddie to stand at the top of the hill and signal the pin pos
+--- 0.400 q=0.17 t=0.67 c=0.57 w=0.24
+ Q031 [Putting IQ] Reading greens with Bermuda grass — how does grain affect your putt? || CORRECT: Down-grain: faster, more break. Into-grain: slower, less.
+ Q132 [Putting IQ] Putts keep breaking less than you read on this course, and the grass shines down-grain. What is grain doing —  || CORRECT: Shiny grass means down-grain and faster; dull means slower
+--- 0.399 q=0.17 t=0.80 c=0.50 w=0.07
+ Q119 [Pin Position] The flag is front-right, tucked behind a bunker. You're in the fairway with a full approach. What's the correc || CORRECT: Middle-left of the green — away from the bunker, reasonable putt
+ Q159 [Par 3 Strategy] Par 3, 165 yards, pin front-left with a deep bunker directly in front of the pin. Wind is calm. What's your id || CORRECT: Center of the green — take bunker out of play
+--- 0.398 q=0.21 t=0.80 c=0.40 w=0.12
+ Q032 [Uphill/Downhill Lies] Hitting an approach from a downhill lie — how does the ball typically fly? || CORRECT: Lower with more run — the slope delofts the club
+ Q117 [Uphill/Downhill Lies] You're hitting from an uphill lie, 150 yards to the green. Your flat-lie 8-iron goes 150. What are the key adj || CORRECT: Ball forward, one more club, expect a higher shot
+--- 0.396 q=0.12 t=1.00 c=0.33 w=0.14
+ Q044 [Chip vs Pitch Decision] You're 20 yards off the green with flat ground between you and the pin, no obstacles in the way. Which shot gi || CORRECT: Chip with a 7-iron or 8-iron, running the ball to the hole
+ Q261 [Chip vs Pitch Decision] You have a chip from 20 yards with the ball in light rough. The fringe is clear and the green is receptive. Wh || CORRECT: 7-iron — low trajectory, minimal air time, predictable roll
+--- 0.394 q=0.25 t=1.00 c=0.17 w=0.03
+ Q045 [Greenside Bunker] Standard greenside bunker shot — face and body alignment? || CORRECT: Open face, aim body left, swing along your line
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+--- 0.390 q=0.21 t=0.20 c=1.00 w=0.06
+ QE5_035 [Shot Selection Around Green] Ball on tight fringe, 18 yards to hole, no obstacle, slight upslope. You can putt, bump 8-iron, or fly a wedge || CORRECT: Putt
+ Q259 [Chip vs Pitch Decision] Ten feet off the green on tight mown fringe, your partner hands you the putter: 'Texas wedge.' When is that th || CORRECT: The putter — from off the green over smooth ground
+--- 0.390 q=0.26 t=0.60 c=0.50 w=0.10
+ Q089 [Bunker Play] Greenside bunker, good lie, 15 yards to the pin. You have a full swing. Where should you look when you make co || CORRECT: Two inches behind the ball — sand first, not ball
+ Q272 [Greenside Bunker] In a greenside bunker, the pin is 30 feet away on the same level. You have a standard flat lie. What setup adj || CORRECT: Open stance, open clubface, aim 1-2 inches behind the ball, full follo
+--- 0.389 q=0.17 t=1.00 c=0.17 w=0.31
+ Q071 [Rules Edge Cases] Your ball is in a penalty area. Which option is NOT valid under Rule 17? || CORRECT: Free drop within 2 club lengths of where it crossed the margin
+ Q350 [Rules Edge Cases] Your ball lands in a water hazard (penalty area) and you're unsure if it entered the water. You can't find it. || CORRECT: Treat it as in the penalty area — one stroke, then relief
+--- 0.389 q=0.20 t=1.00 c=0.20 w=0.09
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q271 [Greenside Bunker] You keep leaving bunker shots in the sand. What is the one greenside-bunker concept most amateurs never learn? || CORRECT: You must hit the sand before the ball — not the ball itself
+--- 0.389 q=0.27 t=0.80 c=0.29 w=0.08
+ Q280 [Fringe Decision + Putting from Off-Green] On a downhill fringe putt with significant break, is it better to putter or chip? || CORRECT: Putt — a miss stays on the green; chip only on a steep downslope
+ Q305 [Uphill Chips] You're playing an uphill chip on a green that breaks significantly left. Where do you aim? || CORRECT: Right of the flag — the ball will still break left even on an uphill c
+--- 0.388 q=0.23 t=1.00 c=0.14 w=0.10
+ Q009 [Approach Play] 160 yards, pin on the back shelf of a two-tier green. What's your strategy? || CORRECT: Hit to the back tier, accepting any position up there
+ Q107 [Approach Play] You have 145 yards to the flag on a two-tier green. The pin is on the upper tier. Landing short means the ball || CORRECT: Take one more club and land it on the upper tier — fly it to the level
+--- 0.388 q=0.35 t=0.60 c=0.33 w=0.13
+ Q135 [Fairway Bunker] In a fairway bunker with a good lie, 140 yards to the green. The lip is low. What technique change from a norm || CORRECT: Ball back in stance, hit ball first — ball before sand
+ Q230 [Tight Lies] From a tight lie in a fairway bunker, 140 yards to the green, what is the single most important setup adjustme || CORRECT: Grip down to shorten the radius and hit ball-first
+--- 0.387 q=0.21 t=0.50 c=0.67 w=0.10
+ Q025 [Par 3 Strategy] 150 yards downhill to a pin on a firm, fast green. What's the most common mistake? || CORRECT: Aiming at the flag, ignoring slope and run
+ Q187 [Par 5 Strategy] Par 5, you've laid up to 90 yards. The green is firm and fast. Should you land the ball short and run it up, o || CORRECT: Land it 10-15 yards short and run it up to the flag
+--- 0.387 q=0.24 t=0.43 c=0.67 w=0.19
+ Q095 [Approach Play] You're 155 yards from a front pin, firm green, with a bunker directly behind the flag. Miss short is the fring || CORRECT: Aim for the fat part of the green, short of the flag, accepting a long
+ Q103 [Second Shot Decisions] You're 190 yards from the green with a 5-iron. The green has a bunker front-right, water left, and is firm and || CORRECT: Aim for the centre of the green and accept a longer putt
+--- 0.386 q=0.27 t=0.67 c=0.40 w=0.13
+ Q256 [Chip vs Pitch Decision] You're 15 yards off the green. Between you and the hole there's 5 yards of fringe and 10 yards of putting surf || CORRECT: Just onto the putting surface — minimise bounce uncertainty by landing
+ Q258 [Chip vs Pitch Decision] The green is elevated 4 feet above your ball position off the fringe. The flag is 20 feet on the green. Should || CORRECT: Pitch — fly it up onto the elevated green
+--- 0.385 q=0.15 t=1.00 c=0.25 w=0.11
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q089 [Bunker Play] Greenside bunker, good lie, 15 yards to the pin. You have a full swing. Where should you look when you make co || CORRECT: Two inches behind the ball — sand first, not ball
+--- 0.383 q=0.25 t=0.75 c=0.33 w=0.12
+ Q045 [Greenside Bunker] Standard greenside bunker shot — face and body alignment? || CORRECT: Open face, aim body left, swing along your line
+ Q048 [Greenside Bunker] Buried lie (fried egg) in greenside bunker. How do you play it? || CORRECT: Square the face, steep swing, dig in behind the ball
+--- 0.382 q=0.20 t=0.20 c=1.00 w=0.02
+ QE5_035 [Shot Selection Around Green] Ball on tight fringe, 18 yards to hole, no obstacle, slight upslope. You can putt, bump 8-iron, or fly a wedge || CORRECT: Putt
+ Q280 [Fringe Decision + Putting from Off-Green] On a downhill fringe putt with significant break, is it better to putter or chip? || CORRECT: Putt — a miss stays on the green; chip only on a steep downslope
+--- 0.382 q=0.06 t=0.75 c=0.67 w=0.03
+ Q044 [Chip vs Pitch Decision] You're 20 yards off the green with flat ground between you and the pin, no obstacles in the way. Which shot gi || CORRECT: Chip with a 7-iron or 8-iron, running the ball to the hole
+ Q262 [Chip vs Pitch Decision] Under severe pressure in a competition, you face a chip from 15 yards with a choice between your reliable 8-ir || CORRECT: 8-iron chip — the reliable shot is always correct under pressure
+--- 0.380 q=0.36 t=0.50 c=0.33 w=0.27
+ Q035 [Wet Conditions] Your ball embeds in the fairway after heavy rain. What's the correct ruling? || CORRECT: Take free relief under the embedded ball rule — lift, clean and drop
+ Q355 [Drops and Relief] Your ball is in an embedded lie (plugged) in the fairway after heavy rain. What relief are you entitled to? || CORRECT: Free relief — drop within one club-length, no nearer the hole
+--- 0.380 q=0.29 t=0.67 c=0.33 w=0.13
+ Q086 [Wind Adjustments] You have 150 yards to the flag, directly into a 10mph headwind. You normally hit 7-iron 150 yards. What do you || CORRECT: 6-iron — one club stronger
+ Q189 [Wind Adjustments] You're playing into a 25mph headwind, 130 yards to the green. Standard 25mph headwind rule says add 2.5 clubs. || CORRECT: 6-iron with a punch shot to keep ball low and reduce wind effect
+--- 0.380 q=0.14 t=1.00 c=0.25 w=0.11
+ Q002 [Tee Shot Strategy] Tight driving hole — OB left, rough right. Where do you aim? || CORRECT: At the right rough — taking OB completely out of play
+ Q094 [Tee Shot Strategy] The fairway is 30 yards wide at 230 yards. Rough left, OB right. You hit driver 240 on average. What's the opt || CORRECT: 3-wood or hybrid, take OB out of play by aiming left-centre
+--- 0.379 q=0.25 t=0.75 c=0.29 w=0.20
+ Q008 [Tee Shot Strategy] Dogleg-right par 4. Safe line leaves 220 in. Cutting the corner leaves 170. You're a confident driver. Do you  || CORRECT: Cut it only if you carry the corner on a stock swing, not your best on
+ Q121 [Dogleg Strategy] A dogleg left at 220 yards. You hit driver 250. Trees line the left at 220 yards. What's the best tee shot? || CORRECT: Driver, aim right — carry past the corner but stay in the fairway
+--- 0.379 q=0.31 t=1.00 c=0.00 w=0.06
+ Q016 [Recovery Strategy] After a double bogey, what's the most important thing to do on the very next tee? || CORRECT: Breathe, reset your routine, focus on making bogey or better
+ Q193 [Recovery Strategy] You've made a double bogey on the 5th hole. Statistically, what is the most important thing to do for your sco || CORRECT: Play exactly the same strategy you had for holes 6-8 before the double
+--- 0.378 q=0.06 t=0.40 c=1.00 w=0.05
+ Q007 [Approach Play] 150 yards out but the pin is 20 yards above you on a steep uphill. How much extra club? || CORRECT: 1–2 clubs more
+ Q084 [Double-Bogey Avoidance] You're on a par 3, over water, 165 yards. The pin is front-left, just behind the water. Your normal 6-iron goe || CORRECT: Take one more club and aim for the centre-right of the green
+--- 0.378 q=0.24 t=0.83 c=0.25 w=0.13
+ Q094 [Tee Shot Strategy] The fairway is 30 yards wide at 230 yards. Rough left, OB right. You hit driver 240 on average. What's the opt || CORRECT: 3-wood or hybrid, take OB out of play by aiming left-centre
+ Q151 [Tee Shot Strategy] You're on a 420-yard par 4 with OB tight down the right side and a wide bailout left. The fairway is 28 yards  || CORRECT: 3-wood aimed at the center of the fairway
+--- 0.378 q=0.06 t=0.40 c=1.00 w=0.05
+ Q007 [Approach Play] 150 yards out but the pin is 20 yards above you on a steep uphill. How much extra club? || CORRECT: 1–2 clubs more
+ Q118 [Wet Conditions] After overnight rain, the fairways are soft and holding. How should you adjust your club selection on approach || CORRECT: One more club — soft turf kills the roll
+--- 0.378 q=0.42 t=0.80 c=0.00 w=0.11
+ Q016 [Recovery Strategy] After a double bogey, what's the most important thing to do on the very next tee? || CORRECT: Breathe, reset your routine, focus on making bogey or better
+ Q334 [Double-Bogey Reset] After a triple-bogey, what's the single most dangerous thought to have on the very next tee? || CORRECT: 'I need to make birdie to get back on track'
+--- 0.377 q=0.14 t=0.71 c=0.50 w=0.17
+ Q166 [Wind Adjustments] Playing a downwind hole, 160 yards to the flag, normal 7-iron distance. 20mph tailwind. What's your club selec || CORRECT: 9-iron — two clubs less for a downwind shot
+ Q189 [Wind Adjustments] You're playing into a 25mph headwind, 130 yards to the green. Standard 25mph headwind rule says add 2.5 clubs. || CORRECT: 6-iron with a punch shot to keep ball low and reduce wind effect
+--- 0.376 q=0.05 t=0.80 c=0.57 w=0.13
+ Q300 [Lob Shot + Flop Shot + Uphill Chips] From a clean lie in the rough 15 yards from the hole, the pin is cut just 6 feet on the green over a collar. W || CORRECT: Putter → bump-and-run → standard pitch → lob → flop
+ Q307 [Chip vs Pitch Decision] You're 12 yards off the green, the fringe is tight and flat, and there's 20 feet of green to the flag. Wind is || CORRECT: Putt first if ground is clean, bump-and-run second, pitch third
+--- 0.375 q=0.33 t=0.71 c=0.17 w=0.22
+ Q213 [Deep Rough] You're in deep rough with a 'flyer lie' — the ball is sitting up on top of the grass. 150 yards to the green.  || CORRECT: Take less club — a flyer lie can add 20-30 yards to your shot
+ Q237 [Deep Rough] You're in deep rough with a 'flier lie' — the ball sitting up slightly in grass with grass behind it. What sho || CORRECT: A flier — the ball will fly further than normal with less spin and mor
+--- 0.375 q=0.38 t=0.75 c=0.00 w=0.37
+ QE5_007 [Approach Underclubbing] From 150 yards, how often does a 20-handicap leave the approach short? || CORRECT: 50%
+ QE5_008 [Better-Player Underclubbing] From 150 yards, how often is the average 5-handicap still short? || CORRECT: 29%
+--- 0.373 q=0.20 t=0.75 c=0.38 w=0.12
+ Q107 [Approach Play] You have 145 yards to the flag on a two-tier green. The pin is on the upper tier. Landing short means the ball || CORRECT: Take one more club and land it on the upper tier — fly it to the level
+ Q254 [Links vs Parkland / Pin Position] You're playing a parkland course with a middle pin position on a large green. The green is two-tiered. The pin || CORRECT: Confirm which tier the pin is on and ensure your approach lands on the
+--- 0.373 q=0.25 t=0.63 c=0.40 w=0.16
+ Q185 [Par 3 Strategy] You're playing a par 3 that plays 8 yards uphill. The pin is 155 yards on the card. What's your effective play || CORRECT: 163 yards — uphill adds to effective distance
+ Q192 [Par 3 Strategy] Par 3, 195 yards, slightly downhill, 10mph tailwind. You carry your 5-iron 185 yards. What's the adjusted effe || CORRECT: 178 yards — downhill and tailwind both reduce playing distance
+--- 0.370 q=0.11 t=0.67 c=0.60 w=0.09
+ Q019 [Approach Play] 40 yards, tight lie on hardpan. Which shot gives highest percentage outcome? || CORRECT: Bump-and-run with a 9-iron or pitching wedge
+ Q229 [Tight Lies] You're on a links course with a very tight lie in the fairway, 145 yards from the green. The green is running  || CORRECT: Bump-and-run with a 6-iron, land short of the green and run it up
+--- 0.369 q=0.24 t=0.80 c=0.25 w=0.13
+ Q165 [Wind Adjustments] You're 150 yards into a direct headwind of 15mph. Your normal 150-yard club is a 7-iron. What's your adjustmen || CORRECT: Take two extra clubs — 5-iron
+ Q189 [Wind Adjustments] You're playing into a 25mph headwind, 130 yards to the green. Standard 25mph headwind rule says add 2.5 clubs. || CORRECT: 6-iron with a punch shot to keep ball low and reduce wind effect
+--- 0.369 q=0.11 t=0.57 c=0.67 w=0.17
+ Q187 [Par 5 Strategy] Par 5, you've laid up to 90 yards. The green is firm and fast. Should you land the ball short and run it up, o || CORRECT: Land it 10-15 yards short and run it up to the flag
+ Q229 [Tight Lies] You're on a links course with a very tight lie in the fairway, 145 yards from the green. The green is running  || CORRECT: Bump-and-run with a 6-iron, land short of the green and run it up
+--- 0.368 q=0.31 t=0.67 c=0.25 w=0.14
+ Q006 [Par 3 Strategy] Par 3, 165 yards. Pin front-left, tucked behind a bunker. Penalty area left of green. What do you do? || CORRECT: Club up and aim right-centre of the green
+ Q159 [Par 3 Strategy] Par 3, 165 yards, pin front-left with a deep bunker directly in front of the pin. Wind is calm. What's your id || CORRECT: Center of the green — take bunker out of play
+--- 0.367 q=0.23 t=0.71 c=0.33 w=0.13
+ Q278 [Fringe Decision + Putting from Off-Green] When is it appropriate to putt from off the green through the fringe? || CORRECT: When the fringe is short, firm and even
+ Q282 [Fringe Decision + Putting from Off-Green] You're 3 feet off the green with 20 feet of green to a back pin. The green is fast. Should you land a chip jus || CORRECT: Putt through the fringe — pace is easier to judge rolling
+--- 0.367 q=0.20 t=0.75 c=0.33 w=0.16
+ Q121 [Dogleg Strategy] A dogleg left at 220 yards. You hit driver 250. Trees line the left at 220 yards. What's the best tee shot? || CORRECT: Driver, aim right — carry past the corner but stay in the fairway
+ Q216 [Dogleg Strategy] On a dogleg right par 4, which tee position gives you the best angle to cut the corner? || CORRECT: Left side of the tee box, aimed right toward the corner
+--- 0.366 q=0.28 t=0.50 c=0.50 w=0.05
+ Q006 [Par 3 Strategy] Par 3, 165 yards. Pin front-left, tucked behind a bunker. Penalty area left of green. What do you do? || CORRECT: Club up and aim right-centre of the green
+ Q095 [Approach Play] You're 155 yards from a front pin, firm green, with a bunker directly behind the flag. Miss short is the fring || CORRECT: Aim for the fat part of the green, short of the flag, accepting a long
+--- 0.365 q=0.29 t=0.86 c=0.00 w=0.36
+ Q259 [Chip vs Pitch Decision] Ten feet off the green on tight mown fringe, your partner hands you the putter: 'Texas wedge.' When is that th || CORRECT: The putter — from off the green over smooth ground
+ Q278 [Fringe Decision + Putting from Off-Green] When is it appropriate to putt from off the green through the fringe? || CORRECT: When the fringe is short, firm and even
+--- 0.364 q=0.20 t=0.33 c=0.75 w=0.13
+ Q114 [Par 5 Strategy] Par 5, 510 yards. You've hit a good drive — 260 yards out. Headwind, 250 to the green. What's the par-5 play h || CORRECT: Lay up to a 100-yard wedge — the green's out of reach
+ Q188 [Second Shot Decisions] Par 4, your tee shot has ended up in the rough 200 yards from the green. The rough is thick. Do you go for the || CORRECT: Lay up to 80-100 yards for a controlled wedge shot
+--- 0.364 q=0.19 t=0.67 c=0.40 w=0.22
+ Q258 [Chip vs Pitch Decision] The green is elevated 4 feet above your ball position off the fringe. The flag is 20 feet on the green. Should || CORRECT: Pitch — fly it up onto the elevated green
+ Q299 [Lob Shot + Flop Shot + Uphill Chips] You're chipping from below a steep bank onto an elevated green. The bank is 4 feet tall. What is the correct t || CORRECT: Pitch high enough to clear the bank top and land on the green above
+--- 0.362 q=0.32 t=0.67 c=0.25 w=0.05
+ Q008 [Tee Shot Strategy] Dogleg-right par 4. Safe line leaves 220 in. Cutting the corner leaves 170. You're a confident driver. Do you  || CORRECT: Cut it only if you carry the corner on a stock swing, not your best on
+ Q110 [Lay Up vs Attack] Dogleg par 4, 380 yards. Cutting the corner with driver gives 100 yards in but risks the trees. Playing away f || CORRECT: Play away from the corner to a known 170 in
+--- 0.361 q=0.17 t=0.75 c=0.40 w=0.07
+ Q129 [Greenside Bunker] You're in a greenside bunker with a plugged (buried) lie. What changes from a standard bunker shot? || CORRECT: Close the face, hit steeper into the sand closer to the ball
+ Q271 [Greenside Bunker] You keep leaving bunker shots in the sand. What is the one greenside-bunker concept most amateurs never learn? || CORRECT: You must hit the sand before the ball — not the ball itself
+--- 0.361 q=0.17 t=0.83 c=0.25 w=0.23
+ Q018 [Scoring Strategy] Where does Tour data show club golfers (10–20 handicap) lose most strokes? || CORRECT: Approach play — too many greens missed
+ Q186 [Scoring Strategy] You're a 14-handicap. On which type of shot does improving your performance give you the most strokes gained b || CORRECT: Approach play from 100-150 yards — the most frequent scoring zone
+--- 0.360 q=0.28 t=0.60 c=0.33 w=0.16
+ Q095 [Approach Play] You're 155 yards from a front pin, firm green, with a bunker directly behind the flag. Miss short is the fring || CORRECT: Aim for the fat part of the green, short of the flag, accepting a long
+ Q119 [Pin Position] The flag is front-right, tucked behind a bunker. You're in the fairway with a full approach. What's the correc || CORRECT: Middle-left of the green — away from the bunker, reasonable putt
+--- 0.360 q=0.41 t=0.50 c=0.25 w=0.08
+ Q114 [Par 5 Strategy] Par 5, 510 yards. You've hit a good drive — 260 yards out. Headwind, 250 to the green. What's the par-5 play h || CORRECT: Lay up to a 100-yard wedge — the green's out of reach
+ Q201 [Par 5 Strategy] You're on a 510-yard par 5. You hit a 250-yard drive, leaving 260 yards to the green. A creek crosses at 240 y || CORRECT: Lay up short of the creek with an 8-iron to 120 yards
+--- 0.360 q=0.08 t=1.00 c=0.25 w=0.17
+ Q310 [Pre-Shot Routine] Research shows that the optimal pre-shot routine length for most golfers is approximately how long? || CORRECT: 20–40 seconds — prepared but not over-thinking
+ Q342 [Pre-Shot Routine] Should you use different pre-shot routines for different clubs (driver vs. putter vs. wedge)? || CORRECT: Yes in structure but consistent in timing and purpose
+--- 0.359 q=0.16 t=0.86 c=0.29 w=0.10
+ Q279 [Fringe Decision + Putting from Off-Green] You're putting from 5 feet off the green through 8 feet of fringe to a hole 15 feet on the green. The fringe i || CORRECT: Add extra pace to compensate for the slowing effect of longer fringe
+ Q282 [Fringe Decision + Putting from Off-Green] You're 3 feet off the green with 20 feet of green to a back pin. The green is fast. Should you land a chip jus || CORRECT: Putt through the fringe — pace is easier to judge rolling
+--- 0.359 q=0.24 t=0.83 c=0.20 w=0.06
+ Q001 [Lay Up vs Attack] Par 5, 230 yards to carry water and reach the green in two. Perfect lie, wind behind you. Do you go for it? || CORRECT: Lay up to your favourite wedge distance — then attack the pin with a f
+ Q011 [Lay Up vs Attack] Par 5, you can reach in two but a 15-yard-wide water crossing is 220 yards away. Your average 3-wood carry is  || CORRECT: Lay up — your average carry won't clear it
+--- 0.358 q=0.09 t=0.60 c=0.60 w=0.24
+ Q075 [Drops and Relief] Your ball is on a cart path (immovable obstruction). Correct free relief procedure? || CORRECT: Nearest point of complete relief, drop within one club-length
+ Q220 [Wet Conditions] After heavy rain, you find casual water (temporary standing water) in your path between your ball and the gree || CORRECT: Free relief — nearest point, no closer to the hole
+--- 0.358 q=0.22 t=0.75 c=0.29 w=0.10
+ Q121 [Dogleg Strategy] A dogleg left at 220 yards. You hit driver 250. Trees line the left at 220 yards. What's the best tee shot? || CORRECT: Driver, aim right — carry past the corner but stay in the fairway
+ Q183 [Tee Shot Strategy] You're playing a par 4 dogleg right. The bend is at 220 yards. Going over the corner requires a 240-yard carry || CORRECT: Driver down the left side of the fairway, accepting a longer second
+--- 0.357 q=0.14 t=0.75 c=0.40 w=0.13
+ Q035 [Wet Conditions] Your ball embeds in the fairway after heavy rain. What's the correct ruling? || CORRECT: Take free relief under the embedded ball rule — lift, clean and drop
+ Q220 [Wet Conditions] After heavy rain, you find casual water (temporary standing water) in your path between your ball and the gree || CORRECT: Free relief — nearest point, no closer to the hole
+--- 0.357 q=0.05 t=0.67 c=0.60 w=0.21
+ Q001 [Lay Up vs Attack] Par 5, 230 yards to carry water and reach the green in two. Perfect lie, wind behind you. Do you go for it? || CORRECT: Lay up to your favourite wedge distance — then attack the pin with a f
+ Q155 [Lay Up vs Attack] You're 210 yards from the flag on a par 5. A creek runs across the fairway at 190 yards. You can lay up short  || CORRECT: Lay up short of the creek to a comfortable wedge distance
+--- 0.356 q=0.08 t=0.50 c=0.75 w=0.13
+ Q034 [Altitude] Playing at 6,000 feet above sea level — how much extra carry should you expect? || CORRECT: 10–15% more than at sea level
+ Q122 [Altitude] You're playing at 5,000 feet elevation. How does altitude affect your club selection? || CORRECT: Ball flies further — take 1-2 clubs less than at sea level
+--- 0.356 q=0.35 t=0.83 c=0.00 w=0.07
+ Q001 [Lay Up vs Attack] Par 5, 230 yards to carry water and reach the green in two. Perfect lie, wind behind you. Do you go for it? || CORRECT: Lay up to your favourite wedge distance — then attack the pin with a f
+ Q371 [Lay Up vs Attack] Par 5, 215 to carry the water, flat lie, downwind. Your 3-wood carries 230 and you pull it off 8 times out of  || CORRECT: Yes — 15 yards of margin plus 8-of-10 reliability is a green light
+--- 0.355 q=0.14 t=0.67 c=0.50 w=0.07
+ QE5_020 [Par-3 Risk Pricing] Par 3, 205 yards. Water short-right, bunker left, pin back-right. You get a shot in stableford.  What would yo || CORRECT: Aim left half, take water out
+ QE5_025 [Match-Play Ev] Match play. You are 1 up with 2 to play. Opponent drives into trees. You have a reachable par 5 with water fro || CORRECT: Lay up short of water
+--- 0.355 q=0.13 t=0.20 c=1.00 w=0.05
+ QE5_035 [Shot Selection Around Green] Ball on tight fringe, 18 yards to hole, no obstacle, slight upslope. You can putt, bump 8-iron, or fly a wedge || CORRECT: Putt
+ Q377 [Pressure Putting] Six-foot par putt, straight and slightly uphill. What's the right stroke? || CORRECT: Firm into the back — uphill short putts want pace
+--- 0.355 q=0.00 t=0.40 c=1.00 w=0.05
+ Q003 [Wind Adjustments] 185 yards out, dead into the wind, water guards the front of the green. What's your play? || CORRECT: Two clubs more, aim at the fat of the green
+ Q007 [Approach Play] 150 yards out but the pin is 20 yards above you on a steep uphill. How much extra club? || CORRECT: 1–2 clubs more
+--- 0.354 q=0.14 t=0.67 c=0.50 w=0.06
+ Q006 [Par 3 Strategy] Par 3, 165 yards. Pin front-left, tucked behind a bunker. Penalty area left of green. What do you do? || CORRECT: Club up and aim right-centre of the green
+ Q170 [Par 5 Strategy] Par 5, 520 yards. After a good drive you have 245 yards to the green. There's a bunker at 220 yards on your li || CORRECT: Aim around the bunker with a fairway wood to reach the green
+--- 0.354 q=0.07 t=0.60 c=0.67 w=0.10
+ Q147 [Rules Edge Cases] Your ball is in a yellow penalty area (water hazard). You decide to take relief. Which is NOT one of your opti || CORRECT: Drop within two club-lengths of where the ball entered the penalty are
+ Q355 [Drops and Relief] Your ball is in an embedded lie (plugged) in the fairway after heavy rain. What relief are you entitled to? || CORRECT: Free relief — drop within one club-length, no nearer the hole
+--- 0.354 q=0.13 t=0.57 c=0.60 w=0.11
+ Q225 [Tight Lies] In winter conditions, the ground is frozen hard (permafrost). Your ball is sitting on a tight, hard lie 60 yar || CORRECT: Bump-and-run with 8-iron along the ground
+ Q229 [Tight Lies] You're on a links course with a very tight lie in the fairway, 145 yards from the green. The green is running  || CORRECT: Bump-and-run with a 6-iron, land short of the green and run it up
+--- 0.353 q=0.13 t=0.80 c=0.33 w=0.17
+ Q015 [Risk-Reward] Match play — you're 2-up with 3 to play. Opponent is in trouble on 17. What's your play? || CORRECT: Play safe — let them make their bogey and consolidate
+ Q085 [Lay Up vs Attack] Match play, all square, 17th hole. Your opponent is on the green in regulation 22 feet away. You're 210 yards  || CORRECT: Play to the fat right — make par and force their putt
+--- 0.353 q=0.14 t=0.83 c=0.33 w=0.04
+ Q011 [Lay Up vs Attack] Par 5, you can reach in two but a 15-yard-wide water crossing is 220 yards away. Your average 3-wood carry is  || CORRECT: Lay up — your average carry won't clear it
+ Q156 [Lay Up vs Attack] 180 yards to a peninsula green with water on three sides. Pin is tucked back-right. You carry your 5-iron 175  || CORRECT: Lay up short and accept the chip shot
+--- 0.353 q=0.25 t=0.75 c=0.25 w=0.03
+ Q048 [Greenside Bunker] Buried lie (fried egg) in greenside bunker. How do you play it? || CORRECT: Square the face, steep swing, dig in behind the ball
+ Q089 [Bunker Play] Greenside bunker, good lie, 15 yards to the pin. You have a full swing. Where should you look when you make co || CORRECT: Two inches behind the ball — sand first, not ball
+--- 0.353 q=0.25 t=0.00 c=1.00 w=0.03
+ QE5_031 [Card Management] Index 1 hole. Your tee shot finds trees. Punch-out leaves 130 for third. Hero gap could reach green but brings || CORRECT: Bogey
+ Q106 [Risk-Reward] You've pulled your drive into trees on the left, 210 yards from the green. You have a gap but it requires a lo || CORRECT: Punch out sideways to the fairway — accept bogey at worst
+--- 0.352 q=0.33 t=0.50 c=0.33 w=0.10
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q275 [Greenside Bunker] You have a long bunker shot — 40 yards from the green, sand is firm and wet after rain. What adjustments do yo || CORRECT: Less open face, closer to the ball, firm grip for firm sand
+--- 0.351 q=0.13 t=1.00 c=0.17 w=0.06
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q135 [Fairway Bunker] In a fairway bunker with a good lie, 140 yards to the green. The lip is low. What technique change from a norm || CORRECT: Ball back in stance, hit ball first — ball before sand
+--- 0.351 q=0.29 t=0.17 c=0.75 w=0.07
+ Q006 [Par 3 Strategy] Par 3, 165 yards. Pin front-left, tucked behind a bunker. Penalty area left of green. What do you do? || CORRECT: Club up and aim right-centre of the green
+ Q103 [Second Shot Decisions] You're 190 yards from the green with a 5-iron. The green has a bunker front-right, water left, and is firm and || CORRECT: Aim for the centre of the green and accept a longer putt
+--- 0.350 q=0.24 t=0.75 c=0.25 w=0.05
+ Q101 [Tee Shot Strategy] You're playing a 420-yard par 4 with a tight driving fairway. You hit driver 260 on average but have been spra || CORRECT: 3-wood or hybrid — accuracy beats length on a tight hole
+ Q151 [Tee Shot Strategy] You're on a 420-yard par 4 with OB tight down the right side and a wide bailout left. The fairway is 28 yards  || CORRECT: 3-wood aimed at the center of the fairway
+--- 0.349 q=0.27 t=0.67 c=0.20 w=0.24
+ Q147 [Rules Edge Cases] Your ball is in a yellow penalty area (water hazard). You decide to take relief. Which is NOT one of your opti || CORRECT: Drop within two club-lengths of where the ball entered the penalty are
+ Q352 [Penalty Areas] What's the difference between a red penalty area and a yellow penalty area? || CORRECT: Red areas provide an additional lateral relief option compared to yell
+--- 0.349 q=0.14 t=0.80 c=0.33 w=0.09
+ Q255 [Chip vs Pitch Decision] When should you chip rather than pitch around the green? || CORRECT: When the ground to the hole is clear and smooth
+ Q299 [Lob Shot + Flop Shot + Uphill Chips] You're chipping from below a steep bank onto an elevated green. The bank is 4 feet tall. What is the correct t || CORRECT: Pitch high enough to clear the bank top and land on the green above
+--- 0.349 q=0.17 t=0.75 c=0.33 w=0.11
+ Q280 [Fringe Decision + Putting from Off-Green] On a downhill fringe putt with significant break, is it better to putter or chip? || CORRECT: Putt — a miss stays on the green; chip only on a steep downslope
+ Q281 [Fringe Decision + Putting from Off-Green] Your ball is in the first cut of rough, 2 feet off the green. Should you chip or putt? || CORRECT: Check the rough length — if it's short enough, putt; if it's long, chi
+--- 0.348 q=0.08 t=0.80 c=0.40 w=0.17
+ Q308 [Pre-Shot Routine] What's the primary purpose of a pre-shot routine? || CORRECT: To build a consistent trigger for automatic execution
+ Q335 [Pre-Shot Routine] Your pre-shot routine keeps changing — sometimes you take one practice swing, sometimes two, sometimes you wag || CORRECT: Inconsistent routines build no trigger — every shot starts cold
+--- 0.348 q=0.28 t=0.50 c=0.33 w=0.28
+ Q023 [Playing Safe] Playing a links course for the first time in 25mph wind. What changes most in your strategy? || CORRECT: Play more bump-and-run shots and accept distance is unpredictable
+ Q120 [Links vs Parkland] You're playing a links course for the first time. The ground is firm, greens are fast, and wind is constant. W || CORRECT: Use bump-and-run shots instead of high approaches wherever possible
+--- 0.347 q=0.17 t=0.67 c=0.33 w=0.31
+ Q350 [Rules Edge Cases] Your ball lands in a water hazard (penalty area) and you're unsure if it entered the water. You can't find it. || CORRECT: Treat it as in the penalty area — one stroke, then relief
+ Q352 [Penalty Areas] What's the difference between a red penalty area and a yellow penalty area? || CORRECT: Red areas provide an additional lateral relief option compared to yell
+--- 0.347 q=0.22 t=0.60 c=0.40 w=0.08
+ Q259 [Chip vs Pitch Decision] Ten feet off the green on tight mown fringe, your partner hands you the putter: 'Texas wedge.' When is that th || CORRECT: The putter — from off the green over smooth ground
+ Q307 [Chip vs Pitch Decision] You're 12 yards off the green, the fringe is tight and flat, and there's 20 feet of green to the flag. Wind is || CORRECT: Putt first if ground is clean, bump-and-run second, pitch third
+--- 0.347 q=0.11 t=0.20 c=1.00 w=0.02
+ QE5_035 [Shot Selection Around Green] Ball on tight fringe, 18 yards to hole, no obstacle, slight upslope. You can putt, bump 8-iron, or fly a wedge || CORRECT: Putt
+ Q283 [Fringe Decision + Putting from Off-Green] Putting from three yards off the green, you tense up about the fringe. What is the right mental approach? || CORRECT: View the entire distance as a putt — read the green, pick your pace, a
+--- 0.347 q=0.24 t=0.86 c=0.13 w=0.07
+ Q279 [Fringe Decision + Putting from Off-Green] You're putting from 5 feet off the green through 8 feet of fringe to a hole 15 feet on the green. The fringe i || CORRECT: Add extra pace to compensate for the slowing effect of longer fringe
+ Q283 [Fringe Decision + Putting from Off-Green] Putting from three yards off the green, you tense up about the fringe. What is the right mental approach? || CORRECT: View the entire distance as a putt — read the green, pick your pace, a
+--- 0.346 q=0.28 t=0.75 c=0.14 w=0.11
+ Q121 [Dogleg Strategy] A dogleg left at 220 yards. You hit driver 250. Trees line the left at 220 yards. What's the best tee shot? || CORRECT: Driver, aim right — carry past the corner but stay in the fairway
+ Q215 [Dogleg Strategy] You're on a dogleg left par 4, 400 yards. The corner is at 220 yards. Cutting the corner requires carrying 200 || CORRECT: Calculate the carry needed including the tree height and decide
+--- 0.345 q=0.10 t=0.20 c=1.00 w=0.05
+ Q007 [Approach Play] 150 yards out but the pin is 20 yards above you on a steep uphill. How much extra club? || CORRECT: 1–2 clubs more
+ Q375 [Approach Play] Back pin, large green sloping back-to-front, nothing but fairway long. Most amateurs land it middle and leave  || CORRECT: One more club, fly it pin-high — long is safe here
+--- 0.345 q=0.18 t=0.80 c=0.25 w=0.12
+ Q017 [Par 5 Strategy] Par 5 third shot, 120 yards, pin tucked tight-left behind a bunker. What's the correct play? || CORRECT: Aim to the right half of the green for a makeable birdie putt
+ Q159 [Par 3 Strategy] Par 3, 165 yards, pin front-left with a deep bunker directly in front of the pin. Wind is calm. What's your id || CORRECT: Center of the green — take bunker out of play
+--- 0.345 q=0.21 t=1.00 c=0.00 w=0.09
+ Q051 [Bunker Play] Long greenside bunker shot — 40 yards. Key adjustment? || CORRECT: Sand wedge, longer swing, enter the sand closer to the ball
+ Q272 [Greenside Bunker] In a greenside bunker, the pin is 30 feet away on the same level. You have a standard flat lie. What setup adj || CORRECT: Open stance, open clubface, aim 1-2 inches behind the ball, full follo
+--- 0.343 q=0.14 t=0.60 c=0.40 w=0.36
+ Q067 [Rules Edge Cases] Three options when you declare a ball unplayable (Rule 19). Which set is correct? || CORRECT: Drop within 2 club lengths (no nearer hole), go back on line as far as
+ Q147 [Rules Edge Cases] Your ball is in a yellow penalty area (water hazard). You decide to take relief. Which is NOT one of your opti || CORRECT: Drop within two club-lengths of where the ball entered the penalty are
+--- 0.341 q=0.13 t=0.50 c=0.60 w=0.16
+ Q258 [Chip vs Pitch Decision] The green is elevated 4 feet above your ball position off the fringe. The flag is 20 feet on the green. Should || CORRECT: Pitch — fly it up onto the elevated green
+ Q260 [Chip vs Pitch Decision] You're in thick rough just off the green, 8 yards from the hole. The rough between you and the green is 3 inch || CORRECT: Lob pitch — carry the rough onto the green
+--- 0.341 q=0.04 t=0.50 c=0.75 w=0.11
+ Q167 [Wind Adjustments] You're on a links course, 180 yards, hard left-to-right crosswind. Your natural miss is a fade (also left to r || CORRECT: Punch it low to take the crosswind out of play
+ Q189 [Wind Adjustments] You're playing into a 25mph headwind, 130 yards to the green. Standard 25mph headwind rule says add 2.5 clubs. || CORRECT: 6-iron with a punch shot to keep ball low and reduce wind effect
+--- 0.340 q=0.05 t=1.00 c=0.25 w=0.08
+ Q004 [Birdie Conversion] 25-foot birdie putt. Opponent already made par. Aggressive or lag? || CORRECT: Play the break conservatively to leave an uphill tap-in
+ Q389 [Birdie Conversion] You've hit it to 15 feet, slightly uphill, on the easiest green on the course. Your partner says 'nice lag spo || CORRECT: Make it — an uphill 15-footer is a make attempt
