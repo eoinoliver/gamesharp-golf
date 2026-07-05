@@ -565,6 +565,14 @@ svg { display:block; }
 .dcc-di { margin-top:9px; font-size:11.5px; font-weight:800; letter-spacing:.09em; color:rgba(255,255,255,.75); }
 .dcc-di b { color:var(--gold); font-size:14px; }
 .dcc-di-sub { font-weight:600; letter-spacing:.02em; color:rgba(255,255,255,.4); text-transform:none; }
+/* Friend challenge head-to-head */
+.dcc-versus { margin:14px 16px 0; padding:13px 15px; border:1px solid rgba(200,168,75,.35); border-radius:14px; background:rgba(200,168,75,.06); text-align:center; }
+.dcc-vs-label { font-size:10px; font-weight:800; letter-spacing:1.4px; color:var(--gold); }
+.dcc-vs-row { margin-top:7px; font-size:15px; color:rgba(255,255,255,.85); }
+.dcc-vs-row b { color:#fff; font-size:18px; }
+.dcc-vs-sep { margin:0 10px; color:rgba(255,255,255,.3); }
+.dcc-vs-verdict { margin-top:5px; font-size:13px; font-weight:800; }
+.dcc-vs-back { margin-top:10px; width:auto; padding:9px 18px; font-size:12.5px; }
 
 /* Explanation Card */
 .explanation-card {
@@ -1717,6 +1725,7 @@ svg { display:block; }
     </div>
     <div class="dcc-streak-inline"><span class="dcc-streak-num" id="dcc-streak-num">1</span> <span class="dcc-streak-label">day streak 🔥</span></div>
     <div id="dcc-di" class="dcc-di" style="display:none"></div>
+    <div id="dcc-versus" class="dcc-versus" style="display:none"></div>
     <div id="dcc-mulligan" style="display:none;margin-top:8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#4caf50">🛡 MULLIGAN — your streak survived a missed day (1 per month)</div>
   </div>
 
@@ -1749,6 +1758,7 @@ svg { display:block; }
 
   <div class="dcc-actions" style="padding:0 16px 24px">
     <button class="btn btn-gold"  onclick="startHole()">Keep Sharpening — Play a Hole →</button>
+    <button class="btn btn-dark"  onclick="shareChallenge()">⚔️ Challenge a Friend</button>
     <button class="btn btn-dark"  onclick="renderHome();showView('home')">Back to Home</button>
     <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Edge</button>
   </div>
@@ -3131,6 +3141,7 @@ function showDailyReview(){
   setTxt('tss-tomorrow-body', d.tomorrow);
   if(d.endState) renderDailyEndState(d.endState);
   else { const es=document.getElementById('dcc-endstate'); if(es) es.style.display='none'; }
+  renderChallengeVersus();
   const shareBtn = document.getElementById('dcc-share-btn');
   if(shareBtn) shareBtn.onclick = shareDaily;
   showView('daily-complete');
@@ -3921,6 +3932,7 @@ function finishQuiz(){
       } else diEl.style.display = 'none';
     }
     gsSound('streak');
+    renderChallengeVersus();   // head-to-head if this daily was a friend's challenge
     const shareBtn = document.getElementById('dcc-share-btn');
     shareBtn.onclick = shareDaily;
     showView('daily-complete');
@@ -3982,6 +3994,49 @@ function deriveArchetype(){
   });
   // Match to archetype
   return ARCHETYPES.find(a => a.pillars.includes(best)) || ARCHETYPES[0];
+}
+
+// ── CHALLENGE A FRIEND ── the daily is date-seeded (identical for everyone),
+// so head-to-head needs NO server: the link carries date.score.total, the
+// recipient plays the SAME daily, and the completion screen compares scores.
+// Anonymous by design; links self-expire at midnight (date check).
+function parseChallengeFromURL(){
+  try{
+    const p = new URLSearchParams(location.search); const dc = p.get('dc');
+    if(!dc) return null;
+    const m = dc.match(/^(\d{4}-\d{2}-\d{2})\.(\d{1,2})\.(\d{1,2})$/);
+    if(!m) return null;
+    const ch = { date:m[1], score:+m[2], total:+m[3] };
+    if(ch.score > ch.total || ch.total > 6 || ch.total < 1) return null;
+    localStorage.setItem('gs_challenge', JSON.stringify(ch));
+    history.replaceState(null, '', location.pathname);
+    return ch;
+  }catch(e){ return null; }
+}
+function getChallenge(){
+  try{ const c = JSON.parse(localStorage.getItem('gs_challenge') || 'null');
+    return (c && c.date === todayStr()) ? c : null; }catch(e){ return null; }
+}
+function shareChallenge(){
+  const d = S.todayDebrief; if(!d) return;
+  const url = 'https://www.gamesharpgolf.com/?dc=' + todayStr() + '.' + d.score + '.' + d.total;
+  const text = `⚔️ I went ${d.score}/${d.total} on today's GAMESHARP Golf daily.\nSame questions — your turn: ${url}`;
+  if(navigator.share){ navigator.share({ title:'GAMESHARP Daily Challenge', text }).catch(()=>{}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>alert('Challenge copied — send it to a friend!')); }
+}
+function renderChallengeVersus(){
+  const el = document.getElementById('dcc-versus'); if(!el) return;
+  const ch = getChallenge(), d = S.todayDebrief;
+  if(!ch || !d || d.date !== todayStr()){ el.style.display = 'none'; return; }
+  const you = d.score, them = ch.score;
+  const v = you > them ? { t:'🏆 You win the day', c:'#4caf50' }
+        : you < them ? { t:'They took it — rematch tomorrow', c:'#e05252' }
+        :              { t:'⚖️ Dead level', c:'var(--gold)' };
+  el.style.display = '';
+  el.innerHTML = `<div class="dcc-vs-label">⚔️ FRIEND'S CHALLENGE</div>
+    <div class="dcc-vs-row"><span>You <b>${you}/${d.total}</b></span><span class="dcc-vs-sep">·</span><span>Them <b>${them}/${ch.total}</b></span></div>
+    <div class="dcc-vs-verdict" style="color:${v.c}">${v.t}</div>
+    <button class="btn btn-dark dcc-vs-back" onclick="shareChallenge()">Send one back →</button>`;
 }
 
 function shareDaily(){
@@ -8899,16 +8954,19 @@ function init(){
   } catch(e) {
     console.warn('GAMESHARP: loadState failed, using defaults', e);
   }
+  const _ch = parseChallengeFromURL();   // stash a friend's challenge before routing
   // Brief splash delay then route
   setTimeout(() => {
     try {
       if(!LS.get('onboarded')){
         showView('home');           // home sits behind the overlay
-        showWelcomeOnboarding();
+        showWelcomeOnboarding();    // challenge persists in localStorage past onboarding
       } else {
         setPillarColor('#c8a84b');
         renderHome();
         showView('home');
+        // A live same-day challenge routes straight into the arena
+        if(getChallenge()){ S.dailyDone ? showDailyReview() : startDaily(); }
       }
     } catch(e) {
       console.error('GAMESHARP: init routing failed', e);
