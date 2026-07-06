@@ -2465,15 +2465,20 @@ function provisionalLeak(){
 }
 
 function loadState(){
-  S.profile    = LS.get('profile') || null;
-  S.streak     = LS.get('streak')  || 0;
-  S.lastDaily  = LS.get('lastDaily') || null;
-  S.completed  = LS.get('completed') || {};
-  S.pillarStats= LS.get('pillarStats') || {};
-  S.leak       = LS.get('leak') || null;
-  S.todayDebrief = LS.get('todayDebrief') || null;
-  S.mulliganMonth = LS.get('mulliganMonth') || null;
-  S.recent     = LS.get('recentAnswers') || [];
+  // Shape guards: corrupted storage (e.g. a number where an object belongs)
+  // must never poison state — a bad `completed` once froze answering entirely.
+  const _obj = v => (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+  const _arr = v => Array.isArray(v) ? v : [];
+  const _prof = LS.get('profile');
+  S.profile    = (_prof && typeof _prof === 'object' && !Array.isArray(_prof)) ? _prof : null;
+  S.streak     = parseInt(LS.get('streak')) || 0;
+  S.lastDaily  = typeof LS.get('lastDaily') === 'string' ? LS.get('lastDaily') : null;
+  S.completed  = _obj(LS.get('completed'));
+  S.pillarStats= _obj(LS.get('pillarStats'));
+  S.leak       = LS.get('leak') && typeof LS.get('leak') === 'object' ? LS.get('leak') : null;
+  S.todayDebrief = LS.get('todayDebrief') && typeof LS.get('todayDebrief') === 'object' ? LS.get('todayDebrief') : null;
+  S.mulliganMonth = typeof LS.get('mulliganMonth') === 'string' ? LS.get('mulliganMonth') : null;
+  S.recent     = _arr(LS.get('recentAnswers'));
   provisionalLeak();
   const today  = todayStr();
   S.dailyDone  = S.lastDaily === today;
@@ -3808,6 +3813,9 @@ function showExplanation(q, isCorrect){
 }
 
 function nextQuestion(){
+  // Double-tap guard: only advance once the CURRENT question is answered —
+  // a fat-fingered double-tap on Next must never skip an unanswered question.
+  if(S.quiz.answers.length <= S.quiz.idx) return;
   S.quiz.idx++;
   if(S.quiz.idx >= S.quiz.qs.length){
     finishQuiz();
@@ -7802,6 +7810,7 @@ function renderHoleNode(nodeId){
   const node = HOLE.nodes[nodeId];
   if(!node) return;
   HS.currentNode = nodeId;
+  HS._decidedNode = null;   // fresh decision surface (incl. water-loop revisits)
   if(HOLE.mapType === 'camera'){ HS._suppressCam = false; updateCamBroadcast(node); }
 
   // Keep the scoreboard in sync (silent — the tick already fired at impact)
@@ -7833,6 +7842,12 @@ function renderHoleNode(nodeId){
 }
 
 function selectHoleChoice(choice, node){
+  // Double-tap guard: one decision per node — a rapid second tap must never
+  // double-count strokes or double-advance the tree.
+  if(HS._decidedNode === HS.currentNode) return;
+  HS._decidedNode = HS.currentNode;
+  // visual lock: mark the tapped card, dim the rest (CSS pointer-events off)
+  try{ document.querySelectorAll('#shot-panel .decision-card').forEach(c => c.classList.add('chosen')); }catch(e){}
   HS._suppressCam = false; // user moved on; let the camera follow (showHoleOutcome re-sets if needed)
   HS.shotCount++;
   HS.decisions.push({ shot: node.shot, label: choice.label, badge: choice.badge, type: choice.type, sub: choice.sub });
