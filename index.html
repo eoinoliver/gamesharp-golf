@@ -565,6 +565,10 @@ svg { display:block; }
 .dcc-di { margin-top:9px; font-size:11.5px; font-weight:800; letter-spacing:.09em; color:rgba(255,255,255,.75); }
 .dcc-di b { color:var(--gold); font-size:14px; }
 .dcc-di-sub { font-weight:600; letter-spacing:.02em; color:rgba(255,255,255,.4); text-transform:none; }
+.dcc-di-story { margin-top:5px; font-size:11px; font-weight:700; letter-spacing:.03em; color:rgba(255,255,255,.55); }
+/* Redemption callback + daily curiosity hook */
+.expl-redeemed { display:inline-block; margin:0 0 10px; padding:6px 12px; border-radius:10px; font-size:11.5px; font-weight:800; letter-spacing:.06em; color:#7CFFA0; background:rgba(76,175,80,.12); border:1px solid rgba(76,175,80,.35); }
+.dc-hookline { display:none; margin:8px 0 2px; font-size:12.5px; font-style:italic; color:rgba(200,168,75,.85); }
 /* Friend challenge head-to-head */
 .dcc-versus { margin:14px 16px 0; padding:13px 15px; border:1px solid rgba(200,168,75,.35); border-radius:14px; background:rgba(200,168,75,.06); text-align:center; }
 .dcc-vs-label { font-size:10px; font-weight:800; letter-spacing:1.4px; color:var(--gold); }
@@ -2960,6 +2964,22 @@ function decisionIndex(){
   return { cur, prev, delta: prev === null ? null : cur - prev, n: win.length };
 }
 
+// ── DI NARRATIVE ── one sentence of story under the number: strongest and
+// weakest pillar over the last 30 graded answers. Sample-gated (>=4 each,
+// >=12 total) so it's earned, never noise.
+function diNarrative(){
+  const r = (S.recent || []).slice(-30);
+  if(r.length < 12) return null;
+  const by = {};
+  r.forEach(a => { if(!a.p) return; (by[a.p] = by[a.p] || { g:0, t:0 }); by[a.p].t++; if(a.ok) by[a.p].g++; });
+  const rows = Object.keys(by).filter(k => by[k].t >= 4).map(k => ({ k, acc: by[k].g / by[k].t }));
+  if(rows.length < 2) return null;
+  rows.sort((a,b) => b.acc - a.acc);
+  const hi = rows[0], lo = rows[rows.length - 1];
+  if(hi.k === lo.k || hi.acc === lo.acc) return null;
+  return `Sharpest: ${hi.k} ${Math.round(hi.acc*100)}% · Next target: ${lo.k} ${Math.round(lo.acc*100)}%`;
+}
+
 // ── SOUND ── tiny synthesized cues via Web Audio (no assets — single-file).
 // Master toggle persisted; volumes deliberately low. iOS/Android require a
 // user gesture before audio, so the context is created/resumed on pointerdown.
@@ -3162,7 +3182,7 @@ function showDailyReview(){
   renderChallengeVersus();
   renderDccRooms(d.rooms || []);
   const shareBtn = document.getElementById('dcc-share-btn');
-  if(shareBtn) shareBtn.onclick = shareDaily;
+  if(shareBtn) shareBtn.onclick = shareEdgeCard;
   showView('daily-complete');
 }
 
@@ -3239,11 +3259,19 @@ function buildTodaysDaily(){
 function startDaily(){
   if(S.dailyDone){ showDailyReview(); return; }
   const d = buildTodaysDaily();
+  // Honest curiosity hook, derived from what's actually in today's set —
+  // never an invented statistic (the trust rule).
+  const _hasTrap = d.qs.some(q => q.common_pitfall && String(q.common_pitfall).trim() && String(q.id).slice(0,2) !== 'T-');
+  const _hasSharp = d.qs.some(q => q.difficulty === 'Competitor' || q.difficulty === 'Low Handicap');
+  const hookLine = _hasTrap ? 'One of today’s calls hides a documented club-golfer trap. Spot it.'
+                : _hasSharp ? 'One of today’s four separates scratch thinking from the field.'
+                : null;
   S.quiz = {
     qs: d.qs, idx:0, score:0, answers:[],
     pillar: {name:"Daily Challenge", color:'#c8a84b', emoji:'⛳'},
     module: 'Daily',
     mode: 'daily',
+    hookLine: hookLine,
     thread: { theme: d.theme, steps: d.steps }
   };
   setPillarColor('#c8a84b');
@@ -3559,6 +3587,18 @@ function loadQuestion(){
   // Scroll to top
   document.getElementById('view-quiz').scrollTop = 0;
 
+  // Curiosity hook — first question of the daily only
+  let hookEl = document.getElementById('dc-hookline');
+  if(!hookEl){
+    const hl = document.getElementById('hook-label');
+    if(hl){ hookEl = document.createElement('div'); hookEl.id = 'dc-hookline'; hookEl.className = 'dc-hookline'; hl.insertAdjacentElement('afterend', hookEl); }
+  }
+  if(hookEl){
+    if(S.quiz.mode === 'daily' && S.quiz.idx === 0 && S.quiz.hookLine){
+      hookEl.textContent = S.quiz.hookLine; hookEl.style.display = 'block';
+    } else hookEl.style.display = 'none';
+  }
+
   // SHOT CLINIC slot: the swing figure plays DURING the question (miss mode),
   // matching Shot Clinic proper — you WATCH the fault, then diagnose it.
   // (Previously the daily's tech question was text-only until the reveal.)
@@ -3621,9 +3661,19 @@ function selectAnswer(chosen, q){
 
   // Rolling answer log — powers adaptive difficulty + the Decision Index
   S.recent = S.recent || [];
-  S.recent.push({ d: todayStr(), ok: isCorrect, band: q.handicap_band || q.difficulty || 'Club' });
+  S.recent.push({ d: todayStr(), ok: isCorrect, band: q.handicap_band || q.difficulty || 'Club', p: q.pillar || null });
   if(S.recent.length > 200) S.recent = S.recent.slice(-200);
   LS.set('recentAnswers', S.recent);
+
+  // Redemption ledger — compounding made FELT: beating a question you once
+  // missed is a victory, and it gets named (with the date it got you).
+  const _wasWrong = S.completed[q.id] === 'wrong';
+  S._redeemed = null;
+  try{
+    const ma = LS.get('missedAt') || {};
+    if(isCorrect && _wasWrong){ S._redeemed = { on: ma[q.id] || null }; }
+    if(!isCorrect){ ma[q.id] = todayStr(); LS.set('missedAt', ma); }
+  }catch(e){}
 
   // Disable all buttons
   document.querySelectorAll('.option-btn').forEach(btn => {
@@ -3687,7 +3737,13 @@ function showExplanation(q, isCorrect){
   const _wm = _w.match(/^(.+?[.!?])\s+([\s\S]+)$/);
   const _lead = _wm ? _wm[1] : _w;
   const _rest = _wm ? _wm[2] : '';
-  whyEl.innerHTML = diffFlag + empathy
+  // Redemption callback — this exact question beat you before; today it didn't
+  let redeemed = '';
+  if(isCorrect && S._redeemed){
+    const when = S._redeemed.on ? gsFmtDay(S._redeemed.on) : null;
+    redeemed = `<div class="expl-redeemed">↩️ REDEEMED — this one got you ${when ? 'on ' + when : 'before'}. Not today.</div>`;
+  }
+  whyEl.innerHTML = redeemed + diffFlag + empathy
     + (_lead ? `<div class="expl-lead">${_lead}</div>` : '')
     + (_rest ? `<div class="expl-rest">${_rest}</div>` : '');
 
@@ -3937,16 +3993,18 @@ function finishQuiz(){
     if(diEl){
       if(di){
         const d = di.delta;
+        const story = diNarrative();
         diEl.style.display = '';
         diEl.innerHTML = `DECISION INDEX <b>${di.cur}</b>` +
           (d !== null && d !== 0 ? ` <span style="color:${d > 0 ? '#4caf50' : '#e05252'}">${d > 0 ? '▲' : '▼'}${Math.abs(d)}</span>` : '') +
-          ` <span class="dcc-di-sub">· last ${di.n} calls</span>`;
+          ` <span class="dcc-di-sub">· last ${di.n} calls</span>` +
+          (story ? `<div class="dcc-di-story">${story}</div>` : '');
       } else diEl.style.display = 'none';
     }
     gsSound('streak');
     renderChallengeVersus();   // head-to-head if this daily was a friend's challenge
     const shareBtn = document.getElementById('dcc-share-btn');
-    shareBtn.onclick = shareDaily;
+    shareBtn.onclick = shareEdgeCard;
     showView('daily-complete');
     return;
   }
@@ -4049,6 +4107,55 @@ function renderChallengeVersus(){
     <div class="dcc-vs-row"><span>You <b>${you}/${d.total}</b></span><span class="dcc-vs-sep">·</span><span>Them <b>${them}/${ch.total}</b></span></div>
     <div class="dcc-vs-verdict" style="color:${v.c}">${v.t}</div>
     <button class="btn btn-dark dcc-vs-back" onclick="shareChallenge()">Send one back →</button>`;
+}
+
+// ── TODAY'S EDGE CARD ── ideas travel, quizzes don't: the daily's one
+// distilled idea becomes a branded quote card for the share sheet.
+function buildEdgeCanvas(edgeText, theme){
+  return new Promise(resolve => { try{
+    const W=1080, H=1350, c=document.createElement('canvas'); c.width=W; c.height=H;
+    const x=c.getContext('2d');
+    const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,'#10211a'); g.addColorStop(1,'#0a140d');
+    x.fillStyle=g; x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(200,168,75,.5)'; x.lineWidth=4; x.strokeRect(28,28,W-56,H-56);
+    x.textBaseline='alphabetic'; x.textAlign='left';
+    x.font='800 52px "DM Sans",sans-serif'; x.fillStyle='#fff'; x.fillText('GAME',70,150);
+    const gw=x.measureText('GAME').width; x.fillStyle='#c8a84b'; x.fillText('SHARP',70+gw,150);
+    x.font='700 26px "DM Sans",sans-serif'; x.fillStyle='#7fcf94';
+    x.fillText(("Today's Edge" + (theme ? ' · ' + theme : '')).toUpperCase(), 70, 206);
+    x.fillStyle='#c8a84b'; x.font='800 130px Georgia,serif'; x.fillText('“', 60, 340);
+    x.fillStyle='#fff'; x.font='800 56px "DM Sans",sans-serif';
+    const words=String(edgeText||'').split(/\s+/), lines=[]; let cur='';
+    words.forEach(w => { const t=cur?cur+' '+w:w; if(x.measureText(t).width>W-200 && cur){ lines.push(cur); cur=w; } else cur=t; });
+    if(cur) lines.push(cur);
+    let yy=410; lines.slice(0,9).forEach(l => { x.fillText(l, 96, yy); yy+=74; });
+    x.strokeStyle='#c8a84b'; x.lineWidth=2; x.beginPath(); x.moveTo(96,yy+14); x.lineTo(540,yy+14); x.stroke();
+    x.fillStyle='rgba(255,255,255,.85)'; x.font='600 34px "DM Sans",sans-serif';
+    x.fillText('One edge a day · gamesharpgolf.com', 70, H-108);
+    c.toBlob(b => resolve(b), 'image/png');
+  }catch(e){ resolve(null); } });
+}
+function shareEdgeCard(){
+  const d = S.todayDebrief; if(!d || !d.edge) { shareDaily(); return; }
+  const caption = `⛳ Today's edge from GAMESHARP Golf:\n“${d.edge}”\nOne idea a day → gamesharpgolf.com`;
+  buildEdgeCanvas(d.edge, d.theme).then(blob => {
+    const file = blob ? new File([blob], 'gamesharp-edge.png', { type:'image/png' }) : null;
+    try{
+      if(file && navigator.canShare && navigator.canShare({ files:[file] })){
+        navigator.share({ files:[file], text:caption, title:'GAMESHARP' }).catch(()=>{}); return;
+      }
+      if(navigator.share){ navigator.share({ text:caption, title:'GAMESHARP' }).catch(()=>{}); return; }
+    }catch(e){}
+    if(blob){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='gamesharp-edge.png'; document.body.appendChild(a); a.click(); a.remove(); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(caption).then(()=>alert('Copied — send it on!')); }
+  });
+}
+
+// Short human date for callback lines: '2026-06-12' -> 'Jun 12'
+function gsFmtDay(ds){
+  try{ const d=new Date(ds+'T12:00:00');
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getDate();
+  }catch(e){ return null; }
 }
 
 function shareDaily(){
