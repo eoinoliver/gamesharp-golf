@@ -3128,6 +3128,24 @@ function techFaultAsQuestion(seedNum){
 }
 
 // Reopen today's completed debrief (Edge / Saved / Try / Tomorrow) for review
+// Shared renderer for the "today's questions came from" chips — used by both
+// the live completion and the same-day review (keys persisted in todayDebrief).
+function renderDccRooms(keys){
+  const roomsRow = document.getElementById('dcc-rooms-row');
+  const rw = document.getElementById('dcc-rooms');
+  if(!roomsRow || !rw) return;
+  const chips = (keys || []).map(key => {
+    const isTech = key === 'SHOT CLINIC';
+    const p = isTech ? null : PILLARS.find(x => x.name === key);
+    if(!isTech && !p) return '';
+    const emoji = isTech ? '🔧' : p.emoji;
+    const col = isTech ? '#c8a84b' : p.color;
+    return `<button class="dcc-room-chip" style="border-color:${col}66;color:${col};background:${col}12" onclick="${isTech ? 'openTechnique()' : `dccOpenPillar('${key}')`}">${emoji} ${key} →</button>`;
+  }).filter(Boolean);
+  roomsRow.innerHTML = chips.join('');
+  rw.style.display = chips.length ? '' : 'none';
+}
+
 function showDailyReview(){
   const d = S.todayDebrief;
   if(!d || d.date !== todayStr()){ renderHome(); showView('home'); return; }
@@ -3142,6 +3160,7 @@ function showDailyReview(){
   if(d.endState) renderDailyEndState(d.endState);
   else { const es=document.getElementById('dcc-endstate'); if(es) es.style.display='none'; }
   renderChallengeVersus();
+  renderDccRooms(d.rooms || []);
   const shareBtn = document.getElementById('dcc-share-btn');
   if(shareBtn) shareBtn.onclick = shareDaily;
   showView('daily-complete');
@@ -3902,23 +3921,16 @@ function finishQuiz(){
     setTxt('tss-tomorrow-body', deb.tomorrow);
     const mb = document.getElementById('dcc-mulligan');
     if(mb) mb.style.display = mulliganUsed ? '' : 'none';
-    // Today's rooms — the daily doubles as the app's discovery engine
-    const roomsRow = document.getElementById('dcc-rooms-row');
-    if(roomsRow){
-      const seenRooms = new Set(); const chips = [];
-      qs.forEach(q => {
-        const isTech = String(q.id).slice(0,2) === 'T-';
-        const key = isTech ? 'SHOT CLINIC' : q.pillar;
-        if(!key || seenRooms.has(key)) return; seenRooms.add(key);
-        const p = isTech ? null : PILLARS.find(x => x.name === q.pillar);
-        const emoji = isTech ? '🔧' : (p ? p.emoji : '⛳');
-        const col = isTech ? '#c8a84b' : (p ? p.color : '#c8a84b');
-        chips.push(`<button class="dcc-room-chip" style="border-color:${col}66;color:${col};background:${col}12" onclick="${isTech ? 'openTechnique()' : `dccOpenPillar('${key}')`}">${emoji} ${key} →</button>`);
-      });
-      roomsRow.innerHTML = chips.join('');
-      const rw = document.getElementById('dcc-rooms');
-      if(rw) rw.style.display = chips.length ? '' : 'none';
-    }
+    // Today's rooms — the daily doubles as the app's discovery engine.
+    // Keys persist in todayDebrief so the same-day review keeps the chips.
+    const roomKeys = [];
+    qs.forEach(q => {
+      const key = String(q.id).slice(0,2) === 'T-' ? 'SHOT CLINIC' : q.pillar;
+      if(key && !roomKeys.includes(key)) roomKeys.push(key);
+    });
+    S.todayDebrief.rooms = roomKeys;
+    LS.set('todayDebrief', S.todayDebrief);
+    renderDccRooms(roomKeys);
     // Decision Index — the visible "am I getting smarter?" answer
     const di = decisionIndex();
     const diEl = document.getElementById('dcc-di');
