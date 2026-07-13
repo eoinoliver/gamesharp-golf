@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="GAMESHARP DR — the Decision Rating for golf. Your handicap measures your results. This measures your judgment.">
+<meta name="theme-color" content="#0A0D0B">
+<title>GAMESHARP DR — The Decision Rating</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0D0B; --panel:#10140F; --panel2:#151A13; --line:rgba(255,255,255,.09);
+  --gold:#C8A84B; --gold-dim:rgba(200,168,75,.55); --good:#5BBA6F; --bad:#E05252;
+  --tx:#F2F1EC; --mut:rgba(242,241,236,.55); --mut2:rgba(242,241,236,.34);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--ink);color:var(--tx);font-family:'DM Sans',sans-serif;height:100%;}
+body{max-width:480px;margin:0 auto;position:relative;min-height:100vh;}
+.num{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;}
+.view{display:none;min-height:100vh;padding:0 0 92px;}
+.view.on{display:block;animation:vin .28s ease;}
+@keyframes vin{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.wrap{padding:0 22px;}
+.topbar{display:flex;align-items:baseline;justify-content:space-between;padding:26px 22px 6px;}
+.wordmark{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.06em;}
+.wordmark b{color:var(--gold);font-weight:400;}
+.wordmark .drtag{margin-left:7px;font-size:12px;color:var(--ink);background:var(--gold);border-radius:4px;padding:2px 6px;vertical-align:3px;letter-spacing:.14em;}
+.proto{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:var(--mut2);text-transform:uppercase;}
+.eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.sim{font-size:9px;font-weight:800;letter-spacing:.12em;color:var(--ink);background:var(--gold-dim);border-radius:4px;padding:2px 6px;text-transform:uppercase;vertical-align:2px;}
+h1{font-size:27px;font-weight:800;line-height:1.16;letter-spacing:-.01em;}
+.sub{color:var(--mut);font-size:14.5px;line-height:1.55;margin-top:9px;}
+.btn{display:block;width:100%;border:none;border-radius:14px;padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform .12s;}
+.btn:active{transform:scale(.98);}
+.btn-gold{background:var(--gold);color:#141109;}
+.btn-ghost{background:transparent;color:var(--tx);border:1px solid var(--line);}
+.btn-row{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
+/* bottom nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;background:rgba(10,13,11,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:50;}
+.nav button{flex:1;background:none;border:none;color:var(--mut2);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:12px 0 max(12px,env(safe-area-inset-bottom));cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:center;}
+.nav button.on{color:var(--gold);}
+.nav .ni{font-size:17px;line-height:1;}
+/* ===== INTRO ===== */
+#v-intro{display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding:40px 26px 60px;}
+#v-intro.off{display:none;}
+.intro-word{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.06em;margin-bottom:34px;}
+.intro-word b{color:var(--gold);font-weight:400;}
+.beat{margin-bottom:22px;}
+.beat .k{font-size:11px;font-weight:800;letter-spacing:.18em;color:var(--mut2);text-transform:uppercase;}
+.beat .v{font-size:22px;font-weight:800;line-height:1.25;margin-top:4px;}
+.beat .v em{font-style:normal;color:var(--gold);}
+.hcp-block{margin:26px 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;}
+.hcp-block label{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--mut);text-transform:uppercase;}
+.hcp-row{display:flex;align-items:center;gap:14px;margin-top:12px;}
+input[type=range]{flex:1;accent-color:var(--gold);}
+.hcp-val{font-family:'Bebas Neue',sans-serif;font-size:34px;min-width:52px;text-align:right;color:var(--gold);}
+/* ===== RATING ===== */
+.dr-hero{padding:26px 22px 10px;text-align:center;}
+.dr-title-band{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,168,75,.4);border-radius:20px;padding:6px 14px;}
+.dr-num{font-family:'Bebas Neue',sans-serif;font-size:110px;line-height:1;margin-top:12px;color:var(--tx);}
+.dr-num .delta{font-size:24px;vertical-align:58px;margin-left:6px;}
+.dr-sub{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--mut2);text-transform:uppercase;margin-top:2px;}
+.pct-block{margin:20px 22px 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;}
+.pct-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:700;color:var(--mut);}
+.pct-bar{height:8px;border-radius:6px;background:rgba(255,255,255,.07);margin-top:10px;position:relative;overflow:visible;}
+.pct-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(200,168,75,.35),var(--gold));}
+.pct-you{position:absolute;top:-5px;width:3px;height:18px;background:#fff;border-radius:2px;}
+.spark-block{margin:12px 22px 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 18px 10px;}
+.spark-lbl{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--mut2);text-transform:uppercase;}
+.howmoves{margin:12px 22px 0;border:1px solid var(--line);border-radius:16px;padding:14px 18px;background:transparent;}
+.howmoves summary{font-size:12.5px;font-weight:800;color:var(--mut);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;list-style:none;}
+.howmoves summary::-webkit-details-marker{display:none;}
+.howmoves p{font-size:13px;color:var(--mut);line-height:1.6;margin-top:10px;}
+.hist{margin:18px 22px 0;}
+.hist h3{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--mut2);text-transform:uppercase;margin-bottom:10px;}
+.hist-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+.hist-row .g{font-family:'Bebas Neue',sans-serif;font-size:19px;width:36px;}
+.hist-row .d{color:var(--mut);flex:1;}
+.hist-row .delta{font-weight:800;}
+.empty-note{color:var(--mut2);font-size:13px;padding:8px 0 2px;}
+.cta-stack{margin:22px 22px 0;display:flex;flex-direction:column;gap:10px;}
+/* ===== REVIEW ===== */
+.rv-head{padding:24px 22px 8px;}
+.rv-prog{display:flex;gap:5px;margin:14px 22px 4px;}
+.rv-dot{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.1);}
+.rv-dot.done{background:var(--gold);}
+.rv-dot.bad{background:var(--bad);}
+.rv-dot.good{background:var(--good);}
+.holecard{margin:14px 22px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;}
+.holenum{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.2em;color:var(--gold);}
+.holeq{font-size:19px;font-weight:800;margin-top:6px;line-height:1.3;}
+.sit-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px;}
+.sit{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:13px 12px;font-size:12.5px;font-weight:700;color:var(--tx);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.3;transition:border-color .15s;}
+.sit:active{border-color:var(--gold);}
+.sit .si{font-size:17px;display:block;margin-bottom:6px;}
+.sit.skip{grid-column:1/-1;text-align:center;color:var(--mut);}
+.choice{display:block;width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:14px 15px;margin-top:9px;font-size:14px;font-weight:700;color:var(--tx);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;}
+.choice:active{border-color:var(--gold);}
+.rv-back{background:none;border:none;color:var(--mut2);font-size:12.5px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;padding:6px 0;}
+/* ===== RESULT ===== */
+.res-hero{text-align:center;padding:30px 22px 6px;}
+.res-grade{font-family:'Bebas Neue',sans-serif;font-size:96px;line-height:1;}
+.res-donated{font-size:15px;color:var(--mut);margin-top:4px;}
+.res-donated b{color:var(--tx);}
+.res-strip{display:flex;gap:5px;margin:18px 22px 0;}
+.takes{margin:18px 22px 0;display:flex;flex-direction:column;gap:10px;}
+.take{border-left:3px solid var(--line);padding:12px 15px;background:var(--panel);border-radius:0 14px 14px 0;}
+.take.best{border-left-color:var(--good);}
+.take.cost{border-left-color:var(--bad);}
+.take.one{border-left-color:var(--gold);}
+.take .tl{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--mut2);}
+.take .tb{font-size:13.5px;line-height:1.5;margin-top:4px;}
+.dr-apply{margin:20px 22px 0;background:var(--panel);border:1px solid rgba(200,168,75,.35);border-radius:16px;padding:16px 18px;text-align:center;}
+.dr-apply .lbl{font-size:10.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.dr-apply .mv{font-family:'Bebas Neue',sans-serif;font-size:44px;margin-top:4px;}
+.footnote{margin:16px 22px 0;font-size:10.5px;line-height:1.55;color:var(--mut2);}
+/* ===== DAILY ===== */
+.tc-meta{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mut2);}
+.tc-chip{border:1px solid var(--line);border-radius:20px;padding:4px 10px;}
+.tc-chip.v{color:var(--good);border-color:rgba(91,186,111,.4);}
+.tc-card{margin:16px 22px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;}
+.tc-sit{font-size:16px;line-height:1.55;}
+.tc-sit b{color:var(--gold);}
+.tc-q{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:16px;}
+.reveal{margin:0 22px;}
+.rv-block{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:12px;}
+.rv-block .rl{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px;}
+.rv-block .rb{font-size:14px;line-height:1.6;color:var(--tx);}
+.rv-block.what .rl{color:var(--gold);}
+.rv-block.num .rl{color:var(--good);}
+.rv-block.field .rl{color:var(--mut2);}
+.verdict-you{margin:14px 22px 0;text-align:center;font-size:14px;font-weight:800;}
+/* ===== LEAGUE ===== */
+.lg-panel{margin:16px 22px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;}
+.lg-vs{display:flex;align-items:center;justify-content:space-between;margin:14px 0;}
+.lg-club{text-align:center;flex:1;}
+.lg-club .cn{font-size:13px;font-weight:800;}
+.lg-club .cd{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--gold);margin-top:2px;}
+.lg-x{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--mut2);}
+.lg-li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--mut);line-height:1.5;}
+.lg-li .n{color:var(--gold);font-weight:800;}
+</style>
+</head>
+<body>
+
+<!-- ============ INTRO (first run) ============ -->
+<div id="v-intro">
+  <div class="intro-word">GAME<b>SHARP</b> <span class="drtag" style="font-size:13px;color:#141109;background:var(--gold);border-radius:5px;padding:3px 8px;letter-spacing:.14em;">DR</span></div>
+  <div class="beat"><div class="k">Your handicap</div><div class="v">measures your <em>results</em>.</div></div>
+  <div class="beat"><div class="k">Nothing on earth</div><div class="v">measures your <em>judgment</em>.</div></div>
+  <div class="beat"><div class="k">Until now</div><div class="v">The Decision Rating. Chess gave players Elo. Golf gets <em>DR</em>.</div></div>
+  <div class="hcp-block">
+    <label>Your current handicap</label>
+    <div class="hcp-row">
+      <input type="range" id="hcpSlider" min="0" max="36" value="18" oninput="document.getElementById('hcpVal').textContent=this.value">
+      <div class="hcp-val" id="hcpVal">18</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="createProfile()">Reveal my provisional DR →</button>
+  </div>
+  <div class="footnote">Your provisional rating is seeded from your handicap. From there, only your decisions move it — reviewed rounds and daily calls. Results can lie about a round; decisions can't.</div>
+</div>
+
+<!-- ============ RATING (home) ============ -->
+<div class="view" id="v-rating">
+  <div class="topbar"><div class="wordmark">GAME<b>SHARP</b><span class="drtag">DR</span></div><div class="proto">Prototype</div></div>
+  <div class="dr-hero">
+    <div class="dr-title-band" id="drTitle">CLUB TACTICIAN</div>
+    <div class="dr-num" id="drNum">1140<span class="delta" id="drDelta" style="color:var(--good);display:none;">▲24</span></div>
+    <div class="dr-sub">Decision Rating</div>
+  </div>
+  <div class="pct-block">
+    <div class="pct-top"><span>You out-decide <b id="pctVal" style="color:var(--tx);">61%</b> of golfers</span><span class="sim">Simulated cohort</span></div>
+    <div class="pct-bar"><div class="pct-fill" id="pctFill" style="width:61%;"></div><div class="pct-you" id="pctYou" style="left:61%;"></div></div>
+  </div>
+  <div class="spark-block">
+    <div class="spark-lbl">Rating over time</div>
+    <svg id="spark" viewBox="0 0 300 64" width="100%" height="64" preserveAspectRatio="none"></svg>
+  </div>
+  <details class="howmoves">
+    <summary>How this number moves ▾</summary>
+    <p>Every reviewed round compares the strokes your decisions donated against what's expected at your rating. Beat the expectation and DR rises; donate more and it falls. Daily tour calls nudge it. Nothing else touches it — not luck, not putts lipping out, not your ball-striking. <b style="color:var(--tx)">Judgment only.</b></p>
+  </details>
+  <div class="hist">
+    <h3>Reviewed rounds</h3>
+    <div id="histList"><div class="empty-note">No rounds reviewed yet — your rating is provisional until the first one.</div></div>
+  </div>
+  <div class="cta-stack">
+    <button class="btn btn-gold" onclick="startReview()">Review a round → <span style="font-weight:600;opacity:.75;font-size:12.5px;">3 minutes, 9 decisions</span></button>
+    <button class="btn btn-ghost" onclick="show('v-daily');renderDaily();">Today's Tour Call →</button>
+  </div>
+</div>
+
+<!-- ============ ROUND REVIEW ============ -->
+<div class="view" id="v-review">
+  <div class="rv-head">
+    <div class="eyebrow">Round review</div>
+    <h1 id="rvH">Hole 1</h1>
+    <div class="sub" id="rvSub">What defined this hole?</div>
+  </div>
+  <div class="rv-prog" id="rvProg"></div>
+  <div class="holecard" id="rvCard"></div>
+  <div class="wrap"><button class="rv-back" onclick="rvBack()">← back a hole</button></div>
+  <div class="footnote">Answer honestly — this is a mirror, not a scorecard. Grading uses simplified strokes-gained heuristics from published amateur data; a live model replaces these after launch.</div>
+</div>
+
+<!-- ============ REVIEW RESULT ============ -->
+<div class="view" id="v-result">
+  <div class="topbar"><div class="wordmark">GAME<b>SHARP</b><span class="drtag">DR</span></div><div class="proto">Round review</div></div>
+  <div class="res-hero">
+    <div class="eyebrow">Decision grade</div>
+    <div class="res-grade" id="resGrade">B+</div>
+    <div class="res-donated" id="resDonated">Your decisions donated <b>2.7 strokes</b> today</div>
+  </div>
+  <div class="res-strip" id="resStrip"></div>
+  <div class="takes" id="resTakes"></div>
+  <div class="dr-apply">
+    <div class="lbl">Rating impact</div>
+    <div class="mv" id="resDr">▲ 18</div>
+  </div>
+  <div class="btn-row wrap">
+    <button class="btn btn-gold" onclick="applyRound()">Apply to my rating →</button>
+    <button class="btn btn-ghost" onclick="shareReview()">Share review card ⬆</button>
+  </div>
+  <div class="footnote">Like a chess engine reviewing your game: the result of a shot is noise, the decision is signal. Strokes shown are expectation deltas, not what happened — a bad call that worked is still a bad call.</div>
+</div>
+
+<!-- ============ TOUR CALL (daily) ============ -->
+<div class="view" id="v-daily">
+  <div class="topbar"><div class="wordmark">GAME<b>SHARP</b><span class="drtag">DR</span></div><div class="proto">Prototype</div></div>
+  <div class="wrap" style="padding-top:10px;">
+    <div class="eyebrow">Today's Tour Call</div>
+    <h1 id="tcTitle">Carnoustie, 1999</h1>
+    <div class="tc-meta"><span class="tc-chip" id="tcWho">Jean van de Velde</span><span class="tc-chip v">✓ Verified moment</span></div>
+  </div>
+  <div class="tc-card">
+    <div class="tc-sit" id="tcSit"></div>
+    <div class="tc-q">What's the call?</div>
+    <div id="tcOpts"></div>
+  </div>
+  <div class="reveal" id="tcReveal" style="display:none;"></div>
+  <div class="verdict-you" id="tcYou" style="display:none;"></div>
+  <div class="btn-row wrap" id="tcShareRow" style="display:none;">
+    <button class="btn btn-ghost" onclick="shareTour()">Share this call ⬆</button>
+  </div>
+  <div class="footnote">Historical facts are documented public record. The strokes-gained read is GAMESHARP's own analysis. "The field" is simulated until launch.</div>
+</div>
+
+<!-- ============ LEAGUE (teaser) ============ -->
+<div class="view" id="v-league">
+  <div class="topbar"><div class="wordmark">GAME<b>SHARP</b><span class="drtag">DR</span></div><div class="proto">Concept</div></div>
+  <div class="wrap" style="padding-top:10px;">
+    <div class="eyebrow">Winter Decision League</div>
+    <h1>Your club vs. theirs.<br>All winter. No golf required.</h1>
+    <div class="sub">Twelve weeks of daily calls and reviewed rounds, scored by club. The off-season is the only season every golfer can train — judgment is the only part of golf that works in January.</div>
+  </div>
+  <div class="lg-panel">
+    <div class="eyebrow" style="text-align:center;">Week 4 · <span class="sim">Simulated</span></div>
+    <div class="lg-vs">
+      <div class="lg-club"><div class="cn">Laytown &amp; Bettystown</div><div class="cd">1188</div></div>
+      <div class="lg-x">VS</div>
+      <div class="lg-club"><div class="cn">Co. Louth</div><div class="cd">1173</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--mut2);text-align:center;">Average Decision Rating · 41 members active</div>
+  </div>
+  <div class="wrap">
+    <div class="lg-li"><span class="n">01</span><span>Your pro sees every member's DR and weak pillars — winter lessons finally have a syllabus.</span></div>
+    <div class="lg-li"><span class="n">02</span><span>Club vs. club standings post weekly in the clubhouse — the argument starts itself.</span></div>
+    <div class="lg-li"><span class="n">03</span><span>Come April, the study runs: did the league's DR gains show up on real cards?</span></div>
+  </div>
+  <div class="btn-row wrap">
+    <button class="btn btn-ghost" onclick="alert('Prototype — the league opens with the first club partner.')">Register a club (concept)</button>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<div class="nav" id="nav" style="display:none;">
+  <button id="nb-rating" class="on" onclick="show('v-rating');renderRating();"><span class="ni">◈</span>Rating</button>
+  <button id="nb-review" onclick="startReview()"><span class="ni">▦</span>Review</button>
+  <button id="nb-daily" onclick="show('v-daily');renderDaily();"><span class="ni">⛳</span>Tour Call</button>
+  <button id="nb-league" onclick="show('v-league')"><span class="ni">⚑</span>League</button>
+</div>
+
+<script>
+/* ================= STATE ================= */
+const DB = {
+  get(){ try{ return JSON.parse(localStorage.getItem('gsdr')||'null'); }catch(e){ return null; } },
+  set(v){ try{ localStorage.setItem('gsdr', JSON.stringify(v)); }catch(e){} }
+};
+let P = DB.get();
+
+const TITLES = [[1700,'TOUR BRAIN'],[1500,'SCRATCH DECISION-MAKER'],[1300,'STRATEGIST'],[1100,'CLUB TACTICIAN'],[900,'COURSE READER'],[0,'LEARNER']];
+function titleFor(dr){ for(const [t,n] of TITLES) if(dr>=t) return n; return 'LEARNER'; }
+function pctFor(dr){ // simulated cohort: normal(1150, 180) — labeled simulated in UI
+  const z=(dr-1150)/180, t=1/(1+.2316419*Math.abs(z));
+  let d=.3989423*Math.exp(-z*z/2)*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
+  return Math.round(100*(z>0?1-d:d));
+}
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+function createProfile(){
+  const hcp = parseInt(document.getElementById('hcpSlider').value);
+  const dr = Math.max(760, Math.min(1500, 1460 - hcp*18));
+  P = { hcp, dr, provisional:true, rounds:[], drLog:[{d:todayStr(), dr}], daily:{} };
+  DB.set(P); boot();
+}
+
+/* ================= NAV ================= */
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+  const map={ 'v-rating':'nb-rating','v-review':'nb-review','v-result':'nb-review','v-daily':'nb-daily','v-league':'nb-league' };
+  const nb=document.getElementById(map[id]||'nb-rating'); if(nb) nb.classList.add('on');
+  window.scrollTo(0,0);
+}
+function boot(){
+  const intro=document.getElementById('v-intro');
+  if(!P){ intro.classList.remove('off'); document.getElementById('nav').style.display='none'; return; }
+  intro.classList.add('off');
+  document.getElementById('nav').style.display='flex';
+  show('v-rating'); renderRating();
+}
+
+/* ================= RATING ================= */
+function renderRating(animDelta){
+  document.getElementById('drTitle').textContent = titleFor(P.dr) + (P.provisional?' · PROVISIONAL':'');
+  const n=document.getElementById('drNum');
+  n.firstChild.nodeValue = P.dr;
+  const dEl=document.getElementById('drDelta');
+  if(animDelta){ dEl.style.display='inline'; dEl.style.color=animDelta>0?'var(--good)':'var(--bad)'; dEl.textContent=(animDelta>0?'▲':'▼')+Math.abs(animDelta); setTimeout(()=>{dEl.style.display='none';},4200); }
+  const pct=pctFor(P.dr);
+  document.getElementById('pctVal').textContent=pct+'%';
+  document.getElementById('pctFill').style.width=pct+'%';
+  document.getElementById('pctYou').style.left=pct+'%';
+  // sparkline
+  const log=P.drLog.slice(-12);
+  const svg=document.getElementById('spark');
+  const min=Math.min(...log.map(x=>x.dr))-20, max=Math.max(...log.map(x=>x.dr))+20;
+  const pts=log.map((x,i)=>[ (log.length===1?150:i*(300/(log.length-1))), 58-52*((x.dr-min)/(max-min||1)) ]);
+  svg.innerHTML = (pts.length>1?`<polyline points="${pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="#C8A84B" stroke-width="2.5" stroke-linecap="round"/>`:'')
+    + pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="#C8A84B"/>`).join('');
+  // history
+  const h=document.getElementById('histList');
+  if(!P.rounds.length){ h.innerHTML='<div class="empty-note">No rounds reviewed yet — your rating is provisional until the first one.</div>'; }
+  else h.innerHTML=P.rounds.slice(-6).reverse().map(r=>
+    `<div class="hist-row"><span class="g" style="color:${r.donated<=1?'var(--good)':(r.donated>=2.5?'var(--bad)':'var(--gold)')}">${r.grade}</span><span class="d">${r.d} · donated ${r.donated.toFixed(1)} strokes</span><span class="delta" style="color:${r.delta>=0?'var(--good)':'var(--bad)'}">${r.delta>=0?'+':''}${r.delta}</span></div>`).join('');
+}
+
+/* ================= ROUND REVIEW ================= */
+const SITS=[
+ {id:'tee',    icon:'🏌️', label:'Tight tee shot — trouble one side', opts:[
+   {t:'Driver, straight at it', sg:-0.28, why:'Your dispersion brings the trouble fully into play — the fairway-first club is the published amateur edge.'},
+   {t:'Position club short of the trouble', sg:0.06, best:'Fairway first. The single most repeatable stroke-saver in amateur golf.'},
+   {t:'Driver, aimed away from trouble', sg:-0.06, why:'Better than at it — but the two-way miss still leaks.'}]},
+ {id:'risk',   icon:'💧', label:'Reachable green — water or OB guarding', opts:[
+   {t:'Went for it', sg:-0.15, why:'Right only with real carry margin AND an 8-of-10 swing. Without both, this is where doubles are born.'},
+   {t:'Laid up to a full wedge', sg:0.06, best:'The lay-up to a FULL number — not just short of trouble — is the pro pattern.'},
+   {t:'Laid up… to an awkward half-shot', sg:-0.10, why:'A lay-up that buys a shot you hate gave the stroke back.'}]},
+ {id:'pin',    icon:'🎯', label:'Tucked pin near trouble', opts:[
+   {t:'Fired at the flag', sg:-0.32, why:'Tour players aim away from more flags than amateurs believe. The tucked pin is bait.'},
+   {t:'Centre of the green', sg:0.08, best:'The centre-green call against a tucked pin is worth a third of a stroke, every time it comes up.'},
+   {t:'Bailed away long / wide', sg:-0.06, why:'Safe-ish — but long is often the dead miss. Centre beats scared.'}]},
+ {id:'trees',  icon:'🌲', label:'In the trees / deep trouble', opts:[
+   {t:'Hero shot through the gap', sg:-0.55, why:'The most expensive decision in amateur golf. The gap is smaller than your dispersion.'},
+   {t:'Punched out sideways', sg:0.10, best:'One wasted-looking stroke that prevents two. The bravest boring call there is.'},
+   {t:'Advanced it low up the fairway', sg:-0.12, why:'Sometimes right — but usually a hero shot wearing a disguise.'}]},
+ {id:'longapp',icon:'📏', label:'Long approach — 180+ yards', opts:[
+   {t:'Attacked the pin with a wood/hybrid', sg:-0.18, why:'From 180+, amateurs hit the green far less than they feel. Front edge is the target.'},
+   {t:'Clubbed for the front, took the putter', sg:0.05, best:'Front-edge thinking turns a hard shot into an easy chip or a putt.'},
+   {t:'Laid back to a favourite number', sg:-0.03, why:'Defensible — but usually costs more than the comfort returns.'}]},
+ {id:'wedge',  icon:'🪁', label:'Scoring wedge — inside 110', opts:[
+   {t:'Fired at the pin regardless', sg:-0.12, why:'Short-siding from a wedge is the quiet leak. Fat side keeps the up-and-down alive.'},
+   {t:'Played to the fat side of the pin', sg:0.06, best:'Wedges are for the fat side, not the flagstick.'},
+   {t:'Hit a hard partial swing', sg:-0.08, why:'The half-swing under pressure is a dispersion machine.'}]},
+ {id:'bunker', icon:'🏖️', label:'Greenside bunker', opts:[
+   {t:'Went at the pin', sg:-0.20, why:'The bunker shot at a tucked pin turns one hazard into two.'},
+   {t:'Splashed to safe middle', sg:0.05, best:'Out first, hole second. Bogey\'s ceiling beats double\'s floor.'},
+   {t:'Tried to nip it clean', sg:-0.35, why:'The thin across the green is the worst outcome in the short game.'}]},
+ {id:'lag',    icon:'🥏', label:'Long first putt — 40ft+', opts:[
+   {t:'Charged it at the hole', sg:-0.16, why:'Three-putts come from the first putt, not the second. Pace beats line at range.'},
+   {t:'Lagged to tap-in range', sg:0.06, best:'The lag mindset is a decision, not a stroke.'},
+   {t:'Rushed it, trusted instinct', sg:-0.09, why:'Reading time is free strokes at this distance.'}]},
+ {id:'clean',  icon:'—', label:'No big call this hole', opts:[{t:'(skipped)', sg:0}]}
+];
+const HOLES=9;
+let RV=null;
+function startReview(){
+  RV={ i:0, picks:[] };
+  show('v-review'); renderReviewStep();
+}
+function renderReviewStep(){
+  const h=RV.i+1;
+  document.getElementById('rvH').textContent='Hole '+h;
+  document.getElementById('rvSub').textContent = RV.stage==='choice' ? 'What did you choose?' : 'What defined this hole?';
+  document.getElementById('rvProg').innerHTML = Array.from({length:HOLES},(_,i)=>{
+    const p=RV.picks[i];
+    return `<div class="rv-dot ${p ? (p.sg>0?'good':(p.sg<-0.09?'bad':'done')) : ''}"></div>`;
+  }).join('');
+  const card=document.getElementById('rvCard');
+  if(RV.stage!=='choice'){
+    card.innerHTML = `<div class="holenum">HOLE ${h} OF ${HOLES}</div><div class="holeq">What defined this hole?</div>
+      <div class="sit-grid">${SITS.map((s,i)=>`<button class="sit ${s.id==='clean'?'skip':''}" onclick="pickSit(${i})"><span class="si">${s.icon}</span>${s.label}</button>`).join('')}</div>`;
+  } else {
+    const s=SITS[RV.sit];
+    card.innerHTML = `<div class="holenum">HOLE ${h} · ${s.label.toUpperCase()}</div><div class="holeq">What did you choose?</div>
+      ${s.opts.map((o,i)=>`<button class="choice" onclick="pickChoice(${i})">${o.t}</button>`).join('')}`;
+  }
+}
+function pickSit(i){
+  if(SITS[i].id==='clean'){ RV.picks[RV.i]={sit:i,opt:0,sg:0,label:'No big call'}; nextHole(); return; }
+  RV.sit=i; RV.stage='choice'; renderReviewStep();
+}
+function pickChoice(oi){
+  const s=SITS[RV.sit], o=s.opts[oi];
+  RV.picks[RV.i]={ sit:RV.sit, opt:oi, sg:o.sg, label:s.label, choice:o.t, why:o.best||o.why, isBest:!!o.best };
+  RV.stage=null; nextHole();
+}
+function nextHole(){
+  RV.i++;
+  if(RV.i>=HOLES){ finishReview(); return; }
+  renderReviewStep();
+}
+function rvBack(){
+  if(RV.stage==='choice'){ RV.stage=null; renderReviewStep(); return; }
+  if(RV.i>0){ RV.i--; RV.picks[RV.i]=undefined; RV.stage=null; renderReviewStep(); }
+}
+function gradeFor(total){
+  total = Math.round(total*100)/100;   // float-sum noise must never move a grade boundary
+  if(total>= 0.15) return 'A';
+  if(total>=-0.20) return 'A−';
+  if(total>=-0.70) return 'B+';
+  if(total>=-1.20) return 'B';
+  if(total>=-1.80) return 'C';
+  if(total>=-2.60) return 'D';
+  return 'E';
+}
+let LAST=null;
+function finishReview(){
+  const picks=RV.picks.filter(Boolean);
+  const total=picks.reduce((a,p)=>a+p.sg,0);
+  const donated=Math.max(0,-total);
+  const grade=gradeFor(total);
+  const expected=Math.max(0.4,(1500-P.dr)/160);       // expected donation at this rating
+  const delta=Math.max(-60,Math.min(60,Math.round((expected-donated)*14)));
+  const best=[...picks].sort((a,b)=>b.sg-a.sg)[0];
+  const cost=[...picks].sort((a,b)=>a.sg-b.sg)[0];
+  LAST={ d:todayStr(), donated, grade, delta, picks, best, cost, total };
+  document.getElementById('resGrade').textContent=grade;
+  document.getElementById('resGrade').style.color = donated<=1?'var(--good)':(donated>=2.5?'var(--bad)':'var(--gold)');
+  document.getElementById('resDonated').innerHTML = donated===0
+    ? 'A clean round — your decisions <b>donated nothing</b>.'
+    : `Your decisions donated <b>${donated.toFixed(1)} strokes</b> today`;
+  document.getElementById('resStrip').innerHTML = RV.picks.map(p=>`<div class="rv-dot ${p?(p.sg>0?'good':(p.sg<-0.09?'bad':'done')):''}" style="height:6px;"></div>`).join('');
+  const takes=[];
+  if(best && best.sg>0) takes.push(`<div class="take best"><div class="tl">🏆 Best call</div><div class="tb"><b>${best.choice}</b> — ${best.why}</div></div>`);
+  if(cost && cost.sg<0) takes.push(`<div class="take cost"><div class="tl">💸 Costliest call</div><div class="tb"><b>${cost.choice}</b> (${cost.label.toLowerCase()}) — ${cost.why}</div></div>`);
+  if(cost && cost.sg<0) takes.push(`<div class="take one"><div class="tl">📌 The one change</div><div class="tb">Next round, when you meet “${cost.label.toLowerCase()}”, take the boring option once. That single swap is worth ~${Math.abs(cost.sg).toFixed(1)} strokes a round.</div></div>`);
+  if(!takes.length) takes.push(`<div class="take best"><div class="tl">🏆 The read</div><div class="tb">Nothing to fix — pressure now moves to execution, which is exactly where you want it.</div></div>`);
+  document.getElementById('resTakes').innerHTML=takes.join('');
+  const rd=document.getElementById('resDr');
+  rd.textContent=(delta>=0?'▲ ':'▼ ')+Math.abs(delta);
+  rd.style.color=delta>=0?'var(--good)':'var(--bad)';
+  show('v-result');
+}
+function applyRound(){
+  if(!LAST) return;
+  P.dr=Math.max(400,Math.min(2000,P.dr+LAST.delta));
+  P.provisional=false;
+  P.rounds.push({ d:LAST.d, donated:LAST.donated, grade:LAST.grade, delta:LAST.delta });
+  P.drLog.push({ d:LAST.d, dr:P.dr });
+  DB.set(P);
+  show('v-rating'); renderRating(LAST.delta);
+}
+
+/* share card: round review */
+function shareReview(){
+  if(!LAST) return;
+  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;
+  const x=c.getContext('2d');
+  x.fillStyle='#0A0D0B';x.fillRect(0,0,W,H);
+  x.strokeStyle='rgba(200,168,75,.5)';x.lineWidth=4;x.strokeRect(28,28,W-56,H-56);
+  x.textAlign='left';x.textBaseline='alphabetic';
+  x.font='800 50px "DM Sans",sans-serif';x.fillStyle='#fff';x.fillText('GAME',70,140);
+  const gw=x.measureText('GAME').width;x.fillStyle='#C8A84B';x.fillText('SHARP',70+gw,140);
+  x.fillStyle='#C8A84B';x.fillRect(70+gw+x.measureText('SHARP').width+16,104,64,44);
+  x.fillStyle='#0A0D0B';x.font='800 30px "DM Sans",sans-serif';x.fillText('DR',70+gw+x.measureText('SHARP').width+27,137);
+  x.font='700 26px "DM Sans",sans-serif';x.fillStyle='#7fcf94';x.fillText('ROUND DECISION REVIEW',70,200);
+  x.font='400 300px "Bebas Neue",sans-serif';
+  x.fillStyle=LAST.donated<=1?'#5BBA6F':(LAST.donated>=2.5?'#E05252':'#C8A84B');
+  x.fillText(LAST.grade,70,560);
+  x.font='600 40px "DM Sans",sans-serif';x.fillStyle='rgba(255,255,255,.85)';
+  x.fillText(LAST.donated===0?'Zero strokes donated to decisions':('Decisions donated '+LAST.donated.toFixed(1)+' strokes'),70,640);
+  x.font='800 34px "DM Sans",sans-serif';x.fillStyle='#fff';
+  x.fillText('Decision Rating '+P.dr+(LAST.delta>=0?'  ▲':'  ▼')+Math.abs(LAST.delta),70,720);
+  // hole dots
+  LAST.picks.forEach((p,i)=>{ if(!p)return;
+    x.fillStyle=p.sg>0?'#5BBA6F':(p.sg<-0.09?'#E05252':'#C8A84B');
+    x.beginPath();x.arc(86+i*44,790,13,0,7);x.fill();
+  });
+  x.font='600 32px "DM Sans",sans-serif';x.fillStyle='rgba(255,255,255,.85)';
+  x.fillText('Your judgment has a number now.',70,H-160);
+  x.fillStyle='#C8A84B';x.fillText('gamesharpgolf.com',70,H-104);
+  c.toBlob(b=>{
+    const f=b?new File([b],'gamesharp-dr-review.png',{type:'image/png'}):null;
+    const cap=`⛳ My round, reviewed like a chess game: grade ${LAST.grade}, ${LAST.donated.toFixed(1)} strokes donated to decisions. DR ${P.dr}.`;
+    try{ if(f&&navigator.canShare&&navigator.canShare({files:[f]})){ navigator.share({files:[f],text:cap,title:'GAMESHARP DR'}).catch(()=>{}); return; } }catch(e){}
+    if(b){ const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='gamesharp-dr-review.png';document.body.appendChild(a);a.click();a.remove(); }
+  },'image/png');
+}
+
+/* ================= TOUR CALL ================= */
+/* Historical facts below are documented public record; the strokes-gained
+   read is GAMESHARP's own analysis (labeled in UI). */
+const MOMENTS=[
+ { title:'Carnoustie, 1999', who:'Jean van de Velde', where:'The Open · 72nd hole',
+   sit:`Final hole of The Open. <b>Three-shot lead.</b> A double bogey six still wins it. The 18th at Carnoustie: the Barry Burn snakes across the fairway, out of bounds left.`,
+   opts:['Driver — play the hole like any other','Iron off the tee, wedge, wedge — take six the boring way','Long iron at the green in two'],
+   what:`He hit driver, then went for the green with his second. It ricocheted off the grandstand into deep rough; the next found the Barry Burn. He removed his shoes and considered playing from the water. Triple-bogey seven. He lost the playoff to Paul Lawrie.`,
+   read:`With a three-shot cushion, the boring route (iron-wedge-wedge, two putts) wins The Open with a stroke to spare something like 99 times in 100. The driver didn't lose the Open — the DECISION FRAME did: he played the hole, not the tournament. Champion-level judgment plays the scoreboard.`,
+   field:72, fieldPick:1 },
+ { title:'Augusta, 2019', who:'Francesco Molinari (& the field)', where:'The Masters · Sunday, 12th',
+   sit:`Sunday at the Masters, the leader stands on the 12th tee — the heart of Amen Corner. Swirling wind, Rae's Creek short, the pin cut right where the carry is longest. <b>Molinari leads.</b>`,
+   opts:['At the pin — take your shot at history','Centre of the green over the bunker, ignore the flag','Long and left — anywhere but the water'],
+   what:`Molinari, Koepka, Poulter and Finau ALL found Rae's Creek at 12 that Sunday. Tiger Woods aimed at the centre-left of the green, away from the pin, made his par — and won his fifth Masters.`,
+   read:`The right-side pin at 12 is the most documented sucker pin in golf: the carry is longest exactly where the flag sits, and the Sunday wind is unreadable. Centre-green costs you nothing and removes the tournament-ending number. Four elite players chose the flag; the one who chose the middle put on the jacket.`,
+   field:58, fieldPick:1 },
+ { title:'Augusta, 2010', who:'Phil Mickelson', where:'The Masters · Sunday, 13th',
+   sit:`Sunday, 13th at Augusta, off the pine straw among the trees right of the fairway. <b>207 yards to the pin</b>, over the tributary of Rae's Creek, through a gap in two Georgia pines. A pitch-out to the fairway is stress-free.`,
+   opts:['Through the gap at the green — the shot they’ll replay forever','Punch out to the fairway, wedge on, take par or birdie putt','Advance it low up the gap, short of the water'],
+   what:`He took 6-iron through the gap to a few feet and made birdie — one of the most famous shots in Masters history. He won by three.`,
+   read:`Here's the uncomfortable part: for almost anyone — including most tour players — the punch-out is the higher-expectation play, and Mickelson's own caddie argued for it. It worked, and it's immortal. But a decision isn't graded by one outcome; it's graded by the thousand rounds where you face it again. Result ≠ decision — the hardest lesson in golf.`,
+   field:44, fieldPick:1 },
+ { title:'Augusta, 2016', who:'Jordan Spieth', where:'The Masters · Sunday, 12th',
+   sit:`Sunday. Spieth has led the Masters for what feels like two straight years. After back-to-back bogeys the lead is one, and the 12th waits: 150 yards, Rae's Creek short, <b>pin on the right</b> — the sucker side.`,
+   opts:['9-iron at the pin — stop the bleeding with a birdie look','Centre of the green — par, breathe, regroup','Club up, long — take the water out entirely'],
+   what:`He went at the right side. The ball came up short into Rae's Creek. After the drop, the wedge came up short into the water again. Quadruple-bogey seven; the jacket went to Danny Willett.`,
+   read:`Wounded golfers attack — it feels like taking control. The numbers say the opposite: after consecutive bogeys, variance is your enemy, and centre-green is the play that ends the slide. The 12th didn't beat Spieth; the instinct to fix momentum with aggression did.`,
+   field:63, fieldPick:1 },
+];
+function momentToday(){ return MOMENTS[ Math.floor(new Date().getTime()/86400000) % MOMENTS.length ]; }
+let TCPICK=null;
+function renderDaily(){
+  const m=momentToday();
+  document.getElementById('tcTitle').textContent=m.title;
+  document.getElementById('tcWho').textContent=m.who+' · '+m.where;
+  document.getElementById('tcSit').innerHTML=m.sit;
+  const done=P.daily[todayStr()];
+  document.getElementById('tcOpts').innerHTML=m.opts.map((o,i)=>`<button class="choice" ${done!==undefined?'disabled style="opacity:.5"':''} onclick="tcPick(${i})">${o}</button>`).join('');
+  if(done!==undefined){ TCPICK=done; revealDaily(false); } else { document.getElementById('tcReveal').style.display='none'; document.getElementById('tcYou').style.display='none'; document.getElementById('tcShareRow').style.display='none'; }
+}
+function tcPick(i){
+  if(P.daily[todayStr()]!==undefined) return;
+  TCPICK=i; P.daily[todayStr()]=i;
+  const m=momentToday();
+  const smart = i===m.fieldPick;
+  P.dr=Math.max(400,Math.min(2000,P.dr+(smart?4:-2)));
+  P.drLog.push({d:todayStr(),dr:P.dr});
+  DB.set(P);
+  revealDaily(true);
+}
+function revealDaily(fresh){
+  const m=momentToday();
+  const r=document.getElementById('tcReveal');
+  r.style.display='block';
+  r.innerHTML=`
+    <div class="rv-block what"><div class="rl">What he did — verified</div><div class="rb">${m.what}</div></div>
+    <div class="rv-block num"><div class="rl">What the numbers say — GAMESHARP analysis</div><div class="rb">${m.read}</div></div>
+    <div class="rv-block field"><div class="rl">The field <span class="sim">Simulated</span></div><div class="rb">${m.field}% of golfers chose the higher-expectation call here.</div></div>`;
+  const you=document.getElementById('tcYou');
+  you.style.display='block';
+  const smart=TCPICK===m.fieldPick;
+  you.innerHTML = smart
+    ? `<span style="color:var(--good)">✓ You made the percentage call — DR ▲4</span>`
+    : `<span style="color:var(--gold)">Your call: “${m.opts[TCPICK]}” — the numbers lean elsewhere. DR ▼2</span>`;
+  document.getElementById('tcShareRow').style.display='flex';
+  document.querySelectorAll('#tcOpts .choice').forEach((b,i)=>{ b.disabled=true; b.style.opacity = i===TCPICK||i===m.fieldPick ? '1':'.45'; if(i===m.fieldPick) b.style.borderColor='var(--good)'; if(i===TCPICK&&TCPICK!==m.fieldPick) b.style.borderColor='var(--gold)'; });
+  if(fresh) setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+function shareTour(){
+  const m=momentToday();
+  const smart=TCPICK===m.fieldPick;
+  const cap=`⛳ Today's Tour Call — ${m.who}, ${m.title}.\nI ${smart?'made':'missed'} the percentage call. Would you?\ngamesharpgolf.com`;
+  if(navigator.share){ navigator.share({text:cap,title:'GAMESHARP DR'}).catch(()=>{}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(cap).then(()=>alert('Copied — send it on!')); }
+}
+
+boot();
+</script>
+</body>
+</html>
