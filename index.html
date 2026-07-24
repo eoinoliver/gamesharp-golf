@@ -1687,7 +1687,8 @@ svg { display:block; }
     <div class="ar-desc"  id="ar-desc"></div>
   </div>
   <div class="result-actions">
-    <button class="btn btn-gold"  id="result-share-btn">Share Result</button>
+    <button class="btn btn-gold"  onclick="startPractice()">Keep Sharpening — Another 4 →</button>
+    <button class="btn btn-dark"  id="result-share-btn">Share Result</button>
     <button class="btn btn-dark"  onclick="showView('home')">Back to Home</button>
   </div>
 </div>
@@ -1780,6 +1781,7 @@ svg { display:block; }
 
   <div class="dcc-actions" style="padding:0 16px 24px">
     <button class="btn btn-gold"  onclick="startHole()">Keep Sharpening — Play a Hole →</button>
+    <button class="btn btn-dark"  onclick="startPractice()">🎯 Another 4 Questions →</button>
     <button class="btn btn-dark"  onclick="shareChallenge()">⚔️ Challenge a Friend</button>
     <button class="btn btn-dark"  onclick="renderHome();showView('home')">Back to Home</button>
     <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Edge</button>
@@ -4093,6 +4095,22 @@ function finishQuiz(){
   // Result screen
   renderResult(score, total, pillar);
   showView('result');
+}
+
+// Keep-training loop: a fresh mixed 4 (3 scenario + 1 SHOT CLINIC), unseen-first
+// and twin-spaced, that does NOT affect the daily or streak but DOES feed the
+// Decision Index. Lets players keep going instead of dead-ending after one set.
+function startPractice(){
+  let pool = pickSpaced(preferUnseen(bandPrefer(shuffle(QUESTIONS.slice()))), 3);
+  const techQ = techFaultAsQuestion(((Date.now()/1000)|0) % 997);
+  const qs = (techQ ? pool.concat([techQ]) : pool).filter(Boolean);
+  if(!qs.length){ return; }
+  S.quiz = { qs, idx:0, score:0, answers:[], pillar:{ name:'Practice', color:'#4caf50', emoji:'🎯' }, module:'Practice', mode:'practice' };
+  setPillarColor('#4caf50');
+  const pt = document.getElementById('qt-pillar'); if(pt){ pt.textContent = 'Keep Sharpening'; pt.style.color = '#4caf50'; }
+  const pb = document.getElementById('quiz-prog'); if(pb) pb.style.background = '#4caf50';
+  loadQuestion();
+  showView('quiz');
 }
 
 function renderResult(score, total, pillar){
