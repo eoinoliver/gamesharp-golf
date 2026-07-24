@@ -583,6 +583,9 @@ svg { display:block; }
   margin:0 16px 16px; background:var(--card);
   border-radius:var(--radius); border:1px solid var(--border);
   overflow:hidden; display:none;
+  flex-shrink:0;   /* #view-quiz is a flex column; without this, overflow:hidden lets
+                      the flex algorithm crush a tall reveal to a sliver (the explanation
+                      was invisible on any reveal taller than the screen). */
   animation:slideUp .35s cubic-bezier(.16,1,.3,1) both;
 }
 .explanation-card.show { display:block; }
@@ -605,6 +608,17 @@ svg { display:block; }
 .pi-label { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
 .pi-text  { font-size:13px; line-height:1.6; color:var(--text); font-style:italic; }
 .pi-disclaimer { font-size:10px; color:rgba(255,255,255,.3); margin-top:8px; font-style:normal; }
+.exp-headline { margin-bottom:4px; }
+.pro-insight-box { margin-top:12px; }
+.exp-toggle { display:flex; align-items:center; justify-content:center; gap:7px; width:100%; margin:12px 0 0;
+  background:transparent; border:1px solid rgba(200,168,75,.35); border-radius:11px; padding:11px;
+  color:var(--gold); font-family:inherit; font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:background .2s; }
+.exp-toggle:active { background:rgba(200,168,75,.1); }
+.exp-toggle-caret { display:inline-block; transition:transform .25s; }
+.exp-toggle.open .exp-toggle-caret { transform:rotate(180deg); }
+.exp-deeper { max-height:0; overflow:hidden; opacity:0; transition:max-height .38s ease, opacity .3s ease; }
+.exp-deeper.open { max-height:1800px; opacity:1; margin-top:12px; }
+.exp-deeper > div { margin-bottom:12px; }
 .anim-wrap { }
 .anim-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
 .anim-container {
@@ -1632,17 +1646,21 @@ svg { display:block; }
       <span class="verdict-text" id="verdict-text"></span>
     </div>
     <div class="exp-body">
-      <div><div class="exp-label">Why this is right</div><div class="exp-text" id="exp-why"></div></div>
-      <div class="pro-insight-box">
-        <div class="pi-label">🏆 Pro Lens</div>
+      <div class="exp-text exp-headline" id="exp-why"></div>
+      <div class="pro-insight-box" id="exp-prolens">
+        <div class="pi-label" id="exp-pro-label">🏆 Pro Lens</div>
         <div class="pi-text" id="exp-pro"></div>
-        <div class="pi-disclaimer">Reflects the player's known philosophy</div>
+        <div class="pi-disclaimer" id="exp-pro-disc">Reflects the player's known philosophy</div>
       </div>
-      <div><div class="exp-label">⚠️ Common Pitfall</div><div class="exp-text" id="exp-pitfall"></div></div>
-      <div><div class="exp-label">✅ Action Tip</div><div class="exp-text" id="exp-tip"></div></div>
-      <div class="anim-wrap">
-        <div class="anim-label" id="anim-label">Scenario ·</div>
-        <div class="anim-container" id="anim-container"></div>
+      <button class="exp-toggle" id="exp-toggle" type="button" onclick="toggleExpDeeper()"><span id="exp-toggle-txt">Go deeper</span> <span class="exp-toggle-caret">↓</span></button>
+      <div class="exp-deeper" id="exp-deeper">
+        <div id="exp-why-rest-wrap"><div class="exp-label">The full read</div><div class="exp-text" id="exp-why-rest"></div></div>
+        <div id="exp-pitfall-wrap"><div class="exp-label">⚠️ Common Pitfall</div><div class="exp-text" id="exp-pitfall"></div></div>
+        <div id="exp-tip-wrap"><div class="exp-label" id="exp-tip-label">✅ Action Tip</div><div class="exp-text" id="exp-tip"></div></div>
+        <div class="anim-wrap">
+          <div class="anim-label" id="anim-label">Scenario ·</div>
+          <div class="anim-container" id="anim-container"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -3121,6 +3139,30 @@ const DAILY_LEAKS = [
 ];
 
 // Convert a Technique fault into a quiz-pipeline question (the daily's 4th rep)
+// A genuine "insight" for each swing/short-game fault — the counterintuitive
+// angle a coach adds ON TOP of the mechanism, so a SHOT CLINIC answer teaches
+// rather than just names the fix. Established ball-flight / short-game facts.
+const TECH_LENS = {
+  'The slice':"Amateurs blame the swing; a launch monitor blames the face. The clubface sets the great majority of where the ball starts and most of the curve — square it, and even a poor path barely bends the ball.",
+  'The sky / pop-up':"Driver is the only club you swing UP on. A sky-mark is proof your low point was in front of the ball and you came down steeply into it — the opposite of every iron.",
+  'The snap-hook':"A hook is a slicer's overcorrection: the face is now closed to the path. That's why classic 'anti-slice' feels are exactly what tip a good player into the left trees.",
+  'The thin / blade':"You can't lift a golf ball — the loft does that for you. Thin shots come from trying to help it up; the pros trap it by hitting down, and the ball climbs because of it.",
+  'The fat / heavy':"Fat and thin are the same fault in different clothes: the low point is in the wrong place. Move where the club bottoms out and both misses vanish together.",
+  'The push / block':"A block isn't a face fault — the face is square. The path is pointing right. That's why 'aim more left' never fixes it and often makes it worse.",
+  'Inconsistent distance':"Wedge distance is controlled by swing LENGTH at a constant tempo — not by hitting harder or softer. The moment you decelerate to steer the yardage, control is gone.",
+  'The thin pitch':"The scoop feels like helping the ball up; it is the fault itself. Keep the lead wrist firm through impact and the loft on the club does all the lifting.",
+  'The chunked pitch':"Most fat pitches are a weight problem, not a swing problem. Hang back and the low point drops behind the ball — get weight and low point forward and the strike cleans up.",
+  'The chunk':"A chip is a putt with loft: weight forward, hands ahead, no lift required. The instinct to scoop it into the air is what buries the leading edge.",
+  'The blade across the green':"The blade and the chunk share one cause — the trail hand flipping past the lead. Quiet the hands and both the fat and the thin disappear at once.",
+  'Stubbed off a tight lie':"On a tight lie, steep digs. The bounce on your wedge is engineered to slide across the turf — shallow the strike and let it skid; don't force the leading edge down.",
+  "Won't come out":"A ball that stays in the bunker is a leading-edge digging in. Open the face so the sole's bounce splashes UNDER the ball, and keep accelerating — a decelerating swing leaves it in the sand every time.",
+  'The skull over the green':"In a greenside bunker you never hit the ball — you hit the sand a couple of inches behind it and let the splash carry it out. The skull comes from trying to pick it clean.",
+  'Too much sand, comes up short':"Bunker distance is set by how much sand you take, not how hard you swing. Take a thinner cushion and accelerate — more speed reaches the ball through less sand.",
+  'Push / pull off the face':"Most missed short putts are a face problem, not a read: the face angle at impact sets the overwhelming majority of the start line. If they slide by, check the face before the line.",
+  'Leaving it short':"A putt dying at the hole must catch the exact centre; a putt with 12–18 inches of pace holds its line through the bumpy edge. 'Never up, never in' is physics, not a cliché.",
+  'Three-jacks from range':"Long putts are pace problems wearing a line costume. From 40 feet, get the speed inside a three-foot circle and the second putt takes care of itself — eyes on distance, not break."
+};
+
 function techFaultAsQuestion(seedNum){
   try{
     const flat=[];
@@ -3144,9 +3186,10 @@ function techFaultAsQuestion(seedNum){
       option_a:opts[0], option_b:opts[1], option_c:opts[2], option_d:opts[3],
       correct_answer:'ABCD'[ci],
       why_right:f.why,
-      pro_insight:"On the range, feel: '"+f.cue.feel+"' — "+f.cue.drill,
-      common_pitfall:'', action_tip:f.cue.drill,
+      pro_insight:TECH_LENS[f.name] || '',
+      common_pitfall:'', action_tip:"Feel: “"+f.cue.feel+"” — "+f.cue.drill,
       tags:'technique,'+g.key, tier:'Free',
+      _clinic:true,
       _techVis:f.vis, _figKey:g.key+':'+pick.fi
     };
   }catch(e){ return null; }
@@ -3737,6 +3780,7 @@ function showExplanation(q, isCorrect){
 
   // Revelation-first: the first sentence of why_right is the punchline —
   // bolded and led with; the rest reads as supporting detail, not homework.
+  const isClinic = !!q._clinic || String(q.id || '').slice(0,2) === 'T-';
   const whyEl = document.getElementById('exp-why');
   const _w = (q.why_right || '').trim();
   const _wm = _w.match(/^(.+?[.!?])\s+([\s\S]+)$/);
@@ -3748,21 +3792,41 @@ function showExplanation(q, isCorrect){
     const when = S._redeemed.on ? gsFmtDay(S._redeemed.on) : null;
     redeemed = `<div class="expl-redeemed">↩️ REDEEMED — this one got you ${when ? 'on ' + when : 'before'}. Not today.</div>`;
   }
+  // Headline: verdict context + the one-line punchline (always visible)
   whyEl.innerHTML = redeemed + diffFlag + empathy
-    + (_lead ? `<div class="expl-lead">${_lead}</div>` : '')
-    + (_rest ? `<div class="expl-rest">${_rest}</div>` : '');
+    + (_lead ? `<div class="expl-lead">${_lead}</div>` : '');
+  const restEl = document.getElementById('exp-why-rest');
+  const restWrap = document.getElementById('exp-why-rest-wrap');
+  if(restEl) restEl.textContent = _rest || '';
+  if(restWrap) restWrap.style.display = _rest ? '' : 'none';
 
-  document.getElementById('exp-pro').textContent    = q.pro_insight || '';
-  document.getElementById('exp-pitfall').textContent= q.common_pitfall || '';
-  document.getElementById('exp-tip').textContent    = q.action_tip || '';
-  // Hide reveal sections with no content (data-led items have no pro quote/pitfall)
-  (function(){
-    const proBox = document.querySelector('#explanation-card .pro-insight-box');
-    if(proBox) proBox.style.display = (q.pro_insight && q.pro_insight.trim()) ? '' : 'none';
-    [['exp-pitfall', q.common_pitfall],['exp-tip', q.action_tip]].forEach(function(p){
-      var el=document.getElementById(p[0]); if(el && el.parentElement) el.parentElement.style.display = (p[1] && p[1].trim()) ? '' : 'none';
-    });
-  })();
+  // Pro Lens — always visible, it's the reward. Framed by type: a coach's
+  // insight on a SHOT CLINIC fault, or the player's real philosophy on a scenario.
+  document.getElementById('exp-pro').textContent = q.pro_insight || '';
+  const proLabel = document.getElementById('exp-pro-label');
+  const proDisc  = document.getElementById('exp-pro-disc');
+  if(proLabel) proLabel.textContent = isClinic ? '🎯 The Insight' : '🏆 Pro Lens';
+  if(proDisc)  proDisc.style.display = isClinic ? 'none' : '';
+  const proBox = document.getElementById('exp-prolens');
+  if(proBox) proBox.style.display = (q.pro_insight && q.pro_insight.trim()) ? '' : 'none';
+
+  // Pitfall + tip (tip relabelled for clinic range drills)
+  document.getElementById('exp-pitfall').textContent = q.common_pitfall || '';
+  document.getElementById('exp-tip').textContent     = q.action_tip || '';
+  const tipLabel = document.getElementById('exp-tip-label');
+  if(tipLabel) tipLabel.textContent = isClinic ? '🔧 On the range' : '✅ Action Tip';
+  [['exp-pitfall-wrap', q.common_pitfall],['exp-tip-wrap', q.action_tip]].forEach(function(p){
+    var el = document.getElementById(p[0]); if(el) el.style.display = (p[1] && String(p[1]).trim()) ? '' : 'none';
+  });
+
+  // Reset the expandable "deeper" section to collapsed for each new reveal
+  const _willAnim = (q.visual_must_show !== false) || q._techVis || q.techAnim;
+  const _hasDeep = !!(_rest || (q.common_pitfall || '').trim() || (q.action_tip || '').trim() || _willAnim);
+  const deeper = document.getElementById('exp-deeper');
+  const tgl = document.getElementById('exp-toggle'), tglTxt = document.getElementById('exp-toggle-txt');
+  if(deeper) deeper.classList.remove('open');
+  if(tgl){ tgl.classList.remove('open'); tgl.style.display = _hasDeep ? '' : 'none'; }
+  if(tglTxt) tglTxt.textContent = 'Go deeper';
 
   // Decision visual — start position, target zone, danger zone, wrong-shot consequence, tactical label
   const animLabel = document.getElementById('anim-label');
@@ -3810,6 +3874,15 @@ function showExplanation(q, isCorrect){
       card.scrollIntoView({ behavior:'smooth', block:'start' });
     }
   }, 300);
+}
+
+function toggleExpDeeper(){
+  const d = document.getElementById('exp-deeper');
+  if(!d) return;
+  const open = d.classList.toggle('open');
+  const t = document.getElementById('exp-toggle'); if(t) t.classList.toggle('open', open);
+  const txt = document.getElementById('exp-toggle-txt'); if(txt) txt.textContent = open ? 'Show less' : 'Go deeper';
+  if(open) setTimeout(() => { try{ d.scrollIntoView({ behavior:'smooth', block:'nearest' }); }catch(e){} }, 160);
 }
 
 function nextQuestion(){
