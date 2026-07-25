@@ -5688,12 +5688,6 @@ function techAnswer(k){
   const g = GOLF_TECHNIQUE[techState.strokeIdx];
   const f = g.faults[techState.faultIdx];
   const chosen = f.options[k];
-  try {
-    localStorage.setItem('gs_last_shot_fault', JSON.stringify({
-      stroke:techState.strokeIdx, fault:techState.faultIdx, key:g.key,
-      name:f.name, cue:f.cue && f.cue.feel, at:Date.now()
-    }));
-  } catch(e) {}
   const ci = f.options.findIndex(o => o.correct);
   gsHaptic(chosen.correct ? 'good' : 'bad');
   gsSound(chosen.correct ? 'good' : 'bad');
@@ -8082,13 +8076,6 @@ function renderHoleNode(nodeId){
   mountShotSimulator(nodeId, node);
 }
 
-function recentShotFault(){
-  try {
-    const f = JSON.parse(localStorage.getItem('gs_last_shot_fault') || 'null');
-    return f && Date.now() - Number(f.at || 0) < 1000*60*60*24*120 ? f : null;
-  } catch(e) { return null; }
-}
-
 function simulatorSpec(nodeId, node){
   const copy = `${nodeId} ${node.mapState||''} ${node.broadcast||''} ${node.situation||''}`.toLowerCase();
   const facts = String(node.broadcast||'').split('·').map(v=>v.trim()).filter(Boolean);
@@ -8099,9 +8086,6 @@ function simulatorSpec(nodeId, node){
   const recovery = /chip|pitch|recovery|flop|apron|fringe/.test(roleCopy) && !bunker;
   const wedge = /wedge|drop zone|drop_zone/.test(roleCopy);
   const approach = !tee && (/approach|second|layup|fairway|drive/.test(roleCopy) || wedge || recovery);
-  const recent = recentShotFault();
-  const expectedKey = putt ? 'putting' : bunker ? 'bunker' : recovery ? 'chipping' : wedge ? 'wedges' : approach ? 'irons' : 'driver';
-  const saved = recent && recent.key === expectedKey ? recent : null;
   const divot = /divot/.test(copy) || (HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'approach_195');
   const downhill = /downhill|down a bank|downslope|runs away/.test(copy);
   const uphill = /uphill|below the hole/.test(copy);
@@ -8114,7 +8098,7 @@ function simulatorSpec(nodeId, node){
     approach ? 'Fairway' : 'Tee';
   let condition = facts.slice(2,4).join(' · ') || (putt?'Read pace first':'Play the full picture');
   if(condition.length > 42) condition = condition.slice(0,39).trim()+'…';
-  let trend = saved ? saved.name : (HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'tee' ? 'Hook window left' : '');
+  let trend = HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'tee' ? 'Hook window left' : '';
   let caption = putt ? 'See the start line. Feel the pace. Choose one intention.' :
     bunker ? 'Read the face, lip and landing shelf before choosing the escape.' :
     recovery ? 'The landing spot matters more than the flag. Choose the first bounce.' :
@@ -8124,7 +8108,7 @@ function simulatorSpec(nodeId, node){
     'See the corridor, choose the miss, then commit.';
   return {
     scene:putt?'putt':bunker?'bunker':recovery?'recovery':approach?'approach':'tee',
-    lie, condition, trend, caption, saved, divot, downhill, uphill, water, wall, trees
+    lie, condition, trend, caption, divot, downhill, uphill, water, wall, trees
   };
 }
 
@@ -8142,7 +8126,7 @@ function mountShotSimulator(nodeId, node){
   el.className = 'shot-sim';
   el.id = 'shot-sim';
   el.setAttribute('role','img');
-  el.setAttribute('aria-label', `${s.lie}. ${s.condition}.${s.trend?' Current pattern: '+s.trend+'.':''}`);
+  el.setAttribute('aria-label', `${s.lie}. ${s.condition}.${s.trend?' Scenario pattern: '+s.trend+'.':''}`);
   el.innerHTML = `
     <svg class="sim-svg" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
       <defs><linearGradient id="simFair" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4f8b45"/><stop offset="1" stop-color="#193f21"/></linearGradient></defs>
@@ -8166,7 +8150,7 @@ function mountShotSimulator(nodeId, node){
            <circle class="sim-ball" cx="195" cy="271" r="9" fill="#fff"/>
            <path class="sim-club" d="M120 298L181 278L190 285L180 292Z" fill="#cbd2d4" transform-origin="181px 282px"/>`}
     </svg>
-    <div class="sim-hud"><div class="sim-chip">LIE<strong>${s.lie}</strong></div><div class="sim-chip">PICTURE<strong>${s.condition}</strong></div>${s.trend?`<div class="sim-chip sim-trend">${s.saved?'YOUR RECENT MISS':'SHOT VARIABLE'}<strong>${s.trend}</strong></div>`:''}</div>
+    <div class="sim-hud"><div class="sim-chip">LIE<strong>${s.lie}</strong></div><div class="sim-chip">PICTURE<strong>${s.condition}</strong></div>${s.trend?`<div class="sim-chip sim-trend">SCENARIO PATTERN<strong>${s.trend}</strong></div>`:''}</div>
     <div class="sim-caption">${s.caption}</div>`;
   wrap.appendChild(el);
 }
