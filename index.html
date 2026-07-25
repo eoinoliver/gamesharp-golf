@@ -1033,6 +1033,40 @@ svg { display:block; }
     radial-gradient(135% 100% at 50% 42%, rgba(0,0,0,0) 52%, rgba(0,0,0,.55) 100%);
   box-shadow: inset 0 -26px 38px -20px rgba(0,0,0,.65);
 }
+.shot-sim {
+  position:absolute; inset:0; z-index:4; overflow:hidden; color:#fff;
+  background:linear-gradient(180deg,#9ac4dc 0 30%,#345f2d 31% 100%);
+  animation:simCutIn var(--motion-enter) var(--ease-out-quint) both;
+}
+.shot-sim::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(100% 80% at 50% 42%,transparent 45%,rgba(3,9,5,.58) 100%);
+}
+@keyframes simCutIn { from{opacity:0;transform:scale(1.035)} to{opacity:1;transform:none} }
+.sim-svg { width:100%;height:100%;min-height:310px;display:block }
+.sim-hud { position:absolute;z-index:3;left:12px;right:12px;top:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none }
+.sim-chip { background:rgba(7,12,8,.82);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:7px 9px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 5px 16px rgba(0,0,0,.24) }
+.sim-chip strong { display:block;color:var(--gold);font-size:11px;margin-top:2px }
+.sim-trend { border-color:rgba(224,82,82,.55);text-align:right }
+.sim-trend strong { color:#ff9e91 }
+.sim-caption { position:absolute;z-index:3;left:12px;bottom:12px;max-width:72%;background:rgba(7,12,8,.84);border-left:3px solid var(--gold);padding:8px 10px;font-size:11px;line-height:1.35 }
+.shot-sim.is-playing .sim-club { animation:simSwing .72s cubic-bezier(.3,.02,.15,1) both }
+.shot-sim.is-playing .sim-ball { animation:simLaunch .92s .25s var(--ease-out-quint) both }
+.shot-sim.is-playing .sim-flight { animation:simFlight .9s .28s linear both }
+.shot-sim.is-playing .sim-putt-ball { animation:simPutt 1.05s .2s var(--ease-out-quint) both }
+.shot-sim.is-playing .sim-putter { animation:simPutter .46s cubic-bezier(.4,0,.2,1) both }
+@keyframes simSwing { 0%{transform:rotate(0)} 46%{transform:rotate(-37deg)} 57%{transform:rotate(9deg)} 100%{transform:rotate(25deg)} }
+@keyframes simLaunch { 0%,25%{opacity:1;transform:none} 100%{opacity:0;transform:translate(9px,-205px) scale(.12)} }
+@keyframes simFlight { from{stroke-dashoffset:320;opacity:1} to{stroke-dashoffset:0;opacity:.9} }
+@keyframes simPutt { from{transform:none} to{transform:translate(2px,-190px) scale(.34)} }
+@keyframes simPutter { 0%{transform:translateY(0)} 48%{transform:translateY(17px)} 100%{transform:translateY(-5px)} }
+.clinic-callback { margin-top:12px;padding:12px;border-radius:10px;background:rgba(224,82,82,.09);border:1px solid rgba(224,82,82,.34) }
+.clinic-kicker { color:#ff9e91;font-size:10px;font-weight:800;letter-spacing:.12em }
+.clinic-copy { font-size:12px;line-height:1.45;margin:5px 0 9px;color:rgba(255,255,255,.78) }
+.clinic-btn { border:0;border-radius:8px;padding:8px 10px;background:#e05252;color:#fff;font-weight:800;font-size:11px;cursor:pointer }
+@media (prefers-reduced-motion:reduce) {
+  .shot-sim,.shot-sim * { animation-duration:.01ms!important;animation-delay:0ms!important }
+}
 
 /* Shot panel */
 .shot-panel { padding:16px; }
@@ -5654,6 +5688,12 @@ function techAnswer(k){
   const g = GOLF_TECHNIQUE[techState.strokeIdx];
   const f = g.faults[techState.faultIdx];
   const chosen = f.options[k];
+  try {
+    localStorage.setItem('gs_last_shot_fault', JSON.stringify({
+      stroke:techState.strokeIdx, fault:techState.faultIdx, key:g.key,
+      name:f.name, cue:f.cue && f.cue.feel, at:Date.now()
+    }));
+  } catch(e) {}
   const ci = f.options.findIndex(o => o.correct);
   gsHaptic(chosen.correct ? 'good' : 'bad');
   gsSound(chosen.correct ? 'good' : 'bad');
@@ -8039,6 +8079,80 @@ function renderHoleNode(nodeId){
     card.onclick = () => selectHoleChoice(c, node, card);
     decs.appendChild(card);
   });
+  mountShotSimulator(nodeId, node);
+}
+
+function recentShotFault(){
+  try {
+    const f = JSON.parse(localStorage.getItem('gs_last_shot_fault') || 'null');
+    return f && Date.now() - Number(f.at || 0) < 1000*60*60*24*120 ? f : null;
+  } catch(e) { return null; }
+}
+
+function simulatorSpec(nodeId, node){
+  const putt = /^putt_/.test(nodeId);
+  const bunker = nodeId === 'bunker_up';
+  const wedge = nodeId === 'wedge_72';
+  const approach = /^approach_/.test(nodeId);
+  const recent = recentShotFault();
+  const expectedKey = putt ? 'putting' : bunker ? 'bunker' : wedge ? 'wedges' : approach ? 'irons' : 'driver';
+  const saved = recent && recent.key === expectedKey ? recent : null;
+  let lie = putt ? 'Green' : bunker ? 'Downslope bunker' : wedge ? 'Tight fairway' :
+    nodeId === 'approach_195' ? 'Ball in a divot' : approach ? 'Fairway' : 'Tee';
+  let wind = putt ? (nodeId==='putt_8'?'Fast · downhill':'Grain into · subtle break') :
+    bunker ? 'Down a bank' : wedge ? 'Gusting 11 mph' : 'R→L · hurting 14 mph';
+  let trend = saved ? saved.name : (nodeId === 'tee' ? 'Hook window left' : '');
+  let caption = putt ? 'Low camera: choose start line and pace. The roll will show your consequence.' :
+    bunker ? 'Ball below your feet on a downslope. See the landing shelf before choosing the hero shot.' :
+    nodeId === 'approach_195' ? 'The divot changes strike and carry. Decide with the lie—not the yardage alone.' :
+    'Your target corridor includes wind, lie and your current dispersion.';
+  return { scene:putt?'putt':bunker?'bunker':approach||wedge?'approach':'tee', lie, wind, trend, caption, saved };
+}
+
+function mountShotSimulator(nodeId, node){
+  if(!HOLE || HOLE.name !== 'The Reachable Risk' || !node || !node.choices) return;
+  const wrap = document.getElementById('hole-map-wrap');
+  if(!wrap) return;
+  const old = document.getElementById('shot-sim');
+  if(old) old.remove();
+  const s = simulatorSpec(nodeId,node);
+  const green = s.scene === 'putt';
+  const sand = s.scene === 'bunker';
+  const divot = nodeId === 'approach_195';
+  const el = document.createElement('div');
+  el.className = 'shot-sim';
+  el.id = 'shot-sim';
+  el.setAttribute('role','img');
+  el.setAttribute('aria-label', `${s.lie}. ${s.wind}.${s.trend?' Current pattern: '+s.trend+'.':''}`);
+  el.innerHTML = `
+    <svg class="sim-svg" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
+      <defs><linearGradient id="simFair" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4f8b45"/><stop offset="1" stop-color="#193f21"/></linearGradient></defs>
+      <rect width="390" height="104" fill="${green?'#b7d1dc':'#9fc7dd'}"/>
+      ${green
+        ? `<path d="M0 82 Q195 55 390 84V310H0Z" fill="#4a9a4d"/>
+           <path d="M24 125Q130 100 365 132M5 181Q180 143 387 175M0 240Q190 196 390 222" fill="none" stroke="rgba(220,255,210,.2)" stroke-width="2"/>
+           <ellipse cx="198" cy="105" rx="12" ry="4" fill="#173a19"/><line x1="198" y1="105" x2="198" y2="54" stroke="#fff" stroke-width="2"/><path d="M198 54l25 8-25 9z" fill="#e05252"/>
+           <path d="M194 276 Q176 205 198 109" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-dasharray="5 7"/>
+           <circle class="sim-putt-ball" cx="194" cy="276" r="8" fill="#fff"/><path class="sim-putter" d="M149 292h78M174 292v-65" stroke="#cdd5d8" stroke-width="7" transform-origin="190px 292px"/>`
+        : `<path d="M0 95L145 80L245 80L390 95V310H0Z" fill="${sand?'#b89a5e':'url(#simFair)'}"/>
+           <path d="M145 80L20 310H370L245 80Z" fill="${sand?'#d8bd7d':'#4e8d43'}"/>
+           ${sand?`<path d="M0 230Q88 188 156 211T390 174V310H0Z" fill="#c7a968"/>`:''}
+           ${divot?`<path d="M165 263q26-18 54 1q-28 15-54-1" fill="#302717"/><path d="M164 257q25-13 55 2" fill="none" stroke="#917044" stroke-width="4"/>`:''}
+           <ellipse cx="195" cy="80" rx="8" ry="3" fill="#20411d"/>
+           <path class="sim-flight" d="${s.trend&&/hook/i.test(s.trend)?'M195 271 Q270 155 132 82':'M195 271 Q194 145 195 82'}" fill="none" stroke="${s.trend?'#ff9e91':'rgba(255,255,255,.8)'}" stroke-width="3" stroke-dasharray="320" stroke-dashoffset="320"/>
+           <circle class="sim-ball" cx="195" cy="271" r="9" fill="#fff"/>
+           <path class="sim-club" d="M120 298L181 278L190 285L180 292Z" fill="#cbd2d4" transform-origin="181px 282px"/>`}
+    </svg>
+    <div class="sim-hud"><div class="sim-chip">LIE<strong>${s.lie}</strong></div><div class="sim-chip">CONDITION<strong>${s.wind}</strong></div>${s.trend?`<div class="sim-chip sim-trend">${s.saved?'YOUR RECENT MISS':'SHOT VARIABLE'}<strong>${s.trend}</strong></div>`:''}</div>
+    <div class="sim-caption">${s.caption}</div>`;
+  wrap.appendChild(el);
+}
+
+function playShotSimulator(){
+  const el = document.getElementById('shot-sim');
+  if(!el) return 180;
+  el.classList.add('is-playing');
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 80 : 1180;
 }
 
 function selectHoleChoice(choice, node, tappedCard){
@@ -8067,8 +8181,11 @@ function selectHoleChoice(choice, node, tappedCard){
   const nextNode = HOLE.nodes[choice.next];
   if(!nextNode) return;
 
+  const simulatorMs = playShotSimulator();
   if(nextNode.outcome) previewCameraShot(nextNode, choice);
-  gsAfter(180, () => {
+  gsAfter(simulatorMs, () => {
+    const sim = document.getElementById('shot-sim');
+    if(sim) sim.remove();
     if(nextNode.outcome){
       showHoleOutcome(nextNode);
     } else if(nextNode.final){
@@ -8122,6 +8239,7 @@ function showHoleOutcome(node){
   if(HOLE && HOLE.mapType === 'camera'){ HS._suppressCam = true; updateCamBroadcast(node); }
   if(node.penalty){ HS.shotCount += node.penalty; }  // count the dropped stroke(s) live
   const oc = document.getElementById('outcome-card');
+  document.querySelectorAll('#outcome-card .clinic-callback').forEach(el => el.remove());
   document.getElementById('shot-panel').style.display = 'none';
   oc.style.display = 'none';           // hidden until the ball lands — the shot is the event
   oc.classList.remove('reveal');
@@ -8156,6 +8274,7 @@ function showHoleOutcome(node){
   // The lesson: connect this decision -> consequence -> rule, in one line.
   const lessonEl = document.getElementById('oc-lesson');
   if(lessonEl) lessonEl.innerHTML = '<span class="oc-lesson-label">THE LESSON</span>' + buildShotLesson(node, valence, lastDec);
+  renderClinicCallback(node, valence);
 
   const btn = document.getElementById('hole-next-btn');
   const nextNode = HOLE.nodes[node.next];
@@ -8180,6 +8299,25 @@ function showHoleOutcome(node){
     void oc.offsetWidth;
     oc.classList.add('reveal');
   });
+}
+
+function renderClinicCallback(node, valence){
+  const host = document.getElementById('oc-pro');
+  if(!host) return;
+  const text = `${node.result||''} ${node.consequence||''}`.toLowerCase();
+  let target = null;
+  if(/heavy|divot|ground first|fat/.test(text)) target = {s:1,f:1,label:'Heavy iron contact'};
+  else if(/thin|skull/.test(text) && /bunker|sand|flop/.test(text)) target = {s:4,f:1,label:'Thin bunker strike'};
+  else if(/short/.test(text) && /putt/.test(text)) target = {s:5,f:1,label:'Putts left short'};
+  if(!target || valence === 'good') return;
+  host.insertAdjacentHTML('afterend', `<div class="clinic-callback"><div class="clinic-kicker">FIX THE SHOT · RECOMMENDED</div><div class="clinic-copy">${target.label} appeared in this consequence. Diagnose it now, then bring the correction back to your next hole.</div><button class="clinic-btn" onclick="openClinicFault(${target.s},${target.f})">OPEN SHOT CLINIC →</button></div>`);
+}
+
+function openClinicFault(strokeIdx, faultIdx){
+  showView('technique');
+  techState.strokeIdx = strokeIdx;
+  techState.faultIdx = faultIdx;
+  techRenderFault();
 }
 
 function advanceHole(){
