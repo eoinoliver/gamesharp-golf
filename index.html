@@ -2680,7 +2680,7 @@ function renderHome(){
   const hodEl = document.getElementById('hec-hod');
   if(hodEl){
     try{
-      const hod = ALL_HOLES[nextUnplayedHoleIndex()];
+      const hod = ALL_HOLES[holeEntryIndex()];
       hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
     }catch(e){}
   }
@@ -5256,7 +5256,8 @@ function ppBriefHtml(c){
     reveal:`<div class="pp-dq-strat"><span class="pp-dq-slabel">Best strategy</span>${h.strategy}</div>
             <div class="pp-dq-miss"><span class="pp-dq-slabel">Common mistake</span>${h.mistake}</div>
             <div class="pp-dq-local">⛳ ${h.local}</div>` })).join('');
-  // Five local-knowledge traps (interactive)
+  // Local-knowledge traps (interactive). The count is authored per course,
+  // so every promise in the UI must derive from the array rather than drift.
   const decisions = c.decisions.map((d,i)=>ppDecisionCard('d',i,{
     eyebrow:`Local knowledge ${i+1} of ${c.decisions.length}`, scene:d.scene, options:d.options,
     reveal:`<div class="pp-dq-why">${d.why}</div><div class="pp-dq-local">⛳ ${d.local}</div>` })).join('');
@@ -5286,7 +5287,7 @@ function ppBriefHtml(c){
     ${ppWindViz()}
     <div class="pp-section">
       <div class="pp-eyebrow">Now read it like a member</div>
-      <div class="pp-h2">Five local reads <span class="pp-score" id="pp-score">0 / ${c.decisions.length}</span></div>
+      <div class="pp-h2">${c.decisions.length} local reads <span class="pp-score" id="pp-score">0 / ${c.decisions.length}</span></div>
       <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 16px">The obvious play is often the trap. What does a member know that a visitor doesn't?</div>
       ${decisions}
     </div>
@@ -5463,7 +5464,7 @@ function openCoursePicker(){
     <div class="pp-section" style="padding-top:18px">
       <div class="pp-eyebrow">Play a Course</div>
       <div class="pp-h2">Choose your course</div>
-      <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 16px">A short decision brief before you tee off — three holes, five local reads.</div>
+      <div class="pp-card-sub" style="color:var(--muted);margin:-6px 0 16px">A short decision brief before you tee off — three holes plus local reads tailored to each course.</div>
       ${cards}
     </div><div style="height:30px"></div>`;
   showView('playprep');
@@ -7847,19 +7848,23 @@ function nextUnplayedHoleIndex(from){
   return start % n;  // everything played today — cycle from the start point
 }
 
-function startHole(){
-  // First-ever Play a Hole is the flagship, not a date-modulo dice roll (which
-  // could land a brand-new user on The Recovery — a hole that STARTS in trouble).
+function holeEntryIndex(){
+  // First-ever Play a Hole is the flagship, not a date-modulo dice roll. This
+  // single selector powers BOTH the home-card promise and the entry action.
   let firstEver = false;
   try { firstEver = !localStorage.getItem('gs_first_hole_done'); } catch(e) {}
   if(firstEver){
     const fi = ALL_HOLES.findIndex(h => h.cam && h.cam.mapId === 'reachable_risk');
-    if(fi >= 0){ showView('hole'); beginHole(fi); return; }
+    if(fi >= 0) return fi;
   }
+  return nextUnplayedHoleIndex();
+}
+
+function startHole(){
   // Product contract: this entry point always starts a complete, authored hole.
   // Never substitute Decision Broadcast or another one-decision format here.
   showView('hole');
-  beginHole(nextUnplayedHoleIndex());
+  beginHole(holeEntryIndex());
 }
 
 // Browsing is still available, just demoted off the front door
