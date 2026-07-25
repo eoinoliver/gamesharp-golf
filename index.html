@@ -8090,27 +8090,46 @@ function recentShotFault(){
 }
 
 function simulatorSpec(nodeId, node){
-  const putt = /^putt_/.test(nodeId);
-  const bunker = nodeId === 'bunker_up';
-  const wedge = nodeId === 'wedge_72';
-  const approach = /^approach_/.test(nodeId);
+  const copy = `${nodeId} ${node.mapState||''} ${node.broadcast||''} ${node.situation||''}`.toLowerCase();
+  const facts = String(node.broadcast||'').split('·').map(v=>v.trim()).filter(Boolean);
+  const roleCopy = `${nodeId} ${node.mapState||''} ${facts[0]||''}`.toLowerCase();
+  const tee = nodeId === 'tee' || node.mapState === 'tee';
+  const putt = /putt/.test(roleCopy);
+  const bunker = /bunker|sand/.test(roleCopy);
+  const recovery = /chip|pitch|recovery|flop|apron|fringe/.test(roleCopy) && !bunker;
+  const wedge = /wedge|drop zone|drop_zone/.test(roleCopy);
+  const approach = !tee && (/approach|second|layup|fairway|drive/.test(roleCopy) || wedge || recovery);
   const recent = recentShotFault();
-  const expectedKey = putt ? 'putting' : bunker ? 'bunker' : wedge ? 'wedges' : approach ? 'irons' : 'driver';
+  const expectedKey = putt ? 'putting' : bunker ? 'bunker' : recovery ? 'chipping' : wedge ? 'wedges' : approach ? 'irons' : 'driver';
   const saved = recent && recent.key === expectedKey ? recent : null;
-  let lie = putt ? 'Green' : bunker ? 'Downslope bunker' : wedge ? 'Tight fairway' :
-    nodeId === 'approach_195' ? 'Ball in a divot' : approach ? 'Fairway' : 'Tee';
-  let wind = putt ? (nodeId==='putt_8'?'Fast · downhill':'Grain into · subtle break') :
-    bunker ? 'Down a bank' : wedge ? 'Gusting 11 mph' : 'R→L · hurting 14 mph';
-  let trend = saved ? saved.name : (nodeId === 'tee' ? 'Hook window left' : '');
-  let caption = putt ? 'Low camera: choose start line and pace. The roll will show your consequence.' :
-    bunker ? 'Ball below your feet on a downslope. See the landing shelf before choosing the hero shot.' :
-    nodeId === 'approach_195' ? 'The divot changes strike and carry. Decide with the lie—not the yardage alone.' :
-    'Your target corridor includes wind, lie and your current dispersion.';
-  return { scene:putt?'putt':bunker?'bunker':approach||wedge?'approach':'tee', lie, wind, trend, caption, saved };
+  const divot = /divot/.test(copy) || (HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'approach_195');
+  const downhill = /downhill|down a bank|downslope|runs away/.test(copy);
+  const uphill = /uphill|below the hole/.test(copy);
+  const water = /water|pond|creek|rae's|lake|island|ocean|pacific|sea/.test(copy);
+  const wall = /wall|road hole|hotel|out of bounds|\\bob\\b/.test(copy);
+  const trees = /tree|chute|dogleg|blind/.test(copy);
+  let lie = putt ? 'Putting green' : bunker ? (downhill?'Downslope sand':'Bunker') :
+    divot ? 'Ball in a divot' : /drop/.test(copy) ? 'Drop zone' :
+    /apron|fringe/.test(copy) ? 'Tight apron' : recovery ? 'Greenside lie' :
+    approach ? 'Fairway' : 'Tee';
+  let condition = facts.slice(2,4).join(' · ') || (putt?'Read pace first':'Play the full picture');
+  if(condition.length > 42) condition = condition.slice(0,39).trim()+'…';
+  let trend = saved ? saved.name : (HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'tee' ? 'Hook window left' : '');
+  let caption = putt ? 'See the start line. Feel the pace. Choose one intention.' :
+    bunker ? 'Read the face, lip and landing shelf before choosing the escape.' :
+    recovery ? 'The landing spot matters more than the flag. Choose the first bounce.' :
+    divot ? 'The lie changes strike and carry. Decide with the ball—not the yardage alone.' :
+    water ? 'Choose a flight and miss that keep the penalty out of play.' :
+    wall ? 'The boundary is part of the shot. Pick the window before the club.' :
+    'See the corridor, choose the miss, then commit.';
+  return {
+    scene:putt?'putt':bunker?'bunker':recovery?'recovery':approach?'approach':'tee',
+    lie, condition, trend, caption, saved, divot, downhill, uphill, water, wall, trees
+  };
 }
 
 function mountShotSimulator(nodeId, node){
-  if(!HOLE || HOLE.name !== 'The Reachable Risk' || !node || !node.choices) return;
+  if(!HOLE || HOLE.mapType !== 'camera' || !node || !node.choices) return;
   const wrap = document.getElementById('hole-map-wrap');
   if(!wrap) return;
   const old = document.getElementById('shot-sim');
@@ -8118,12 +8137,12 @@ function mountShotSimulator(nodeId, node){
   const s = simulatorSpec(nodeId,node);
   const green = s.scene === 'putt';
   const sand = s.scene === 'bunker';
-  const divot = nodeId === 'approach_195';
+  const recovery = s.scene === 'recovery';
   const el = document.createElement('div');
   el.className = 'shot-sim';
   el.id = 'shot-sim';
   el.setAttribute('role','img');
-  el.setAttribute('aria-label', `${s.lie}. ${s.wind}.${s.trend?' Current pattern: '+s.trend+'.':''}`);
+  el.setAttribute('aria-label', `${s.lie}. ${s.condition}.${s.trend?' Current pattern: '+s.trend+'.':''}`);
   el.innerHTML = `
     <svg class="sim-svg" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
       <defs><linearGradient id="simFair" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4f8b45"/><stop offset="1" stop-color="#193f21"/></linearGradient></defs>
@@ -8132,18 +8151,22 @@ function mountShotSimulator(nodeId, node){
         ? `<path d="M0 82 Q195 55 390 84V310H0Z" fill="#4a9a4d"/>
            <path d="M24 125Q130 100 365 132M5 181Q180 143 387 175M0 240Q190 196 390 222" fill="none" stroke="rgba(220,255,210,.2)" stroke-width="2"/>
            <ellipse cx="198" cy="105" rx="12" ry="4" fill="#173a19"/><line x1="198" y1="105" x2="198" y2="54" stroke="#fff" stroke-width="2"/><path d="M198 54l25 8-25 9z" fill="#e05252"/>
-           <path d="M194 276 Q176 205 198 109" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-dasharray="5 7"/>
+           <path d="M194 276 Q${s.downhill?'224':'176'} 205 198 109" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-dasharray="5 7"/>
+           ${s.downhill?`<path d="M62 155l20 10-20 10M308 205l20 10-20 10" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"/>`:''}
            <circle class="sim-putt-ball" cx="194" cy="276" r="8" fill="#fff"/><path class="sim-putter" d="M149 292h78M174 292v-65" stroke="#cdd5d8" stroke-width="7" transform-origin="190px 292px"/>`
         : `<path d="M0 95L145 80L245 80L390 95V310H0Z" fill="${sand?'#b89a5e':'url(#simFair)'}"/>
            <path d="M145 80L20 310H370L245 80Z" fill="${sand?'#d8bd7d':'#4e8d43'}"/>
+           ${s.water?`<path d="M0 ${recovery?'145':'112'}Q95 ${recovery?'127':'98'} 190 ${recovery?'148':'118'}T390 ${recovery?'142':'110'}V${recovery?'195':'158'}Q290 ${recovery?'170':'145'} 190 ${recovery?'190':'160'}T0 ${recovery?'184':'152'}Z" fill="#277fa1"/><path d="M0 ${recovery?'152':'121'}Q110 ${recovery?'135':'105'} 220 ${recovery?'154':'128'}T390 ${recovery?'148':'119'}" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.wall?`<path d="M0 100L390 84V121L0 139Z" fill="#77736b"/><path d="M0 106L390 90" stroke="#aaa59b" stroke-width="4"/>`:''}
+           ${s.trees?`<g fill="#173c22"><circle cx="38" cy="89" r="31"/><circle cx="75" cy="82" r="38"/><circle cx="320" cy="82" r="36"/><circle cx="360" cy="92" r="32"/></g>`:''}
            ${sand?`<path d="M0 230Q88 188 156 211T390 174V310H0Z" fill="#c7a968"/>`:''}
-           ${divot?`<path d="M165 263q26-18 54 1q-28 15-54-1" fill="#302717"/><path d="M164 257q25-13 55 2" fill="none" stroke="#917044" stroke-width="4"/>`:''}
+           ${s.divot?`<path d="M165 263q26-18 54 1q-28 15-54-1" fill="#302717"/><path d="M164 257q25-13 55 2" fill="none" stroke="#917044" stroke-width="4"/>`:''}
            <ellipse cx="195" cy="80" rx="8" ry="3" fill="#20411d"/>
            <path class="sim-flight" d="${s.trend&&/hook/i.test(s.trend)?'M195 271 Q270 155 132 82':'M195 271 Q194 145 195 82'}" fill="none" stroke="${s.trend?'#ff9e91':'rgba(255,255,255,.8)'}" stroke-width="3" stroke-dasharray="320" stroke-dashoffset="320"/>
            <circle class="sim-ball" cx="195" cy="271" r="9" fill="#fff"/>
            <path class="sim-club" d="M120 298L181 278L190 285L180 292Z" fill="#cbd2d4" transform-origin="181px 282px"/>`}
     </svg>
-    <div class="sim-hud"><div class="sim-chip">LIE<strong>${s.lie}</strong></div><div class="sim-chip">CONDITION<strong>${s.wind}</strong></div>${s.trend?`<div class="sim-chip sim-trend">${s.saved?'YOUR RECENT MISS':'SHOT VARIABLE'}<strong>${s.trend}</strong></div>`:''}</div>
+    <div class="sim-hud"><div class="sim-chip">LIE<strong>${s.lie}</strong></div><div class="sim-chip">PICTURE<strong>${s.condition}</strong></div>${s.trend?`<div class="sim-chip sim-trend">${s.saved?'YOUR RECENT MISS':'SHOT VARIABLE'}<strong>${s.trend}</strong></div>`:''}</div>
     <div class="sim-caption">${s.caption}</div>`;
   wrap.appendChild(el);
 }
