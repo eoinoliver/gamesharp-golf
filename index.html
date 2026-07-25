@@ -38,6 +38,15 @@
 :root {
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  /* MOTION SYSTEM — one rhythm across every GAMESHARP surface.
+     micro: press/tick, fast: local reveal, base: card/screen, slow: camera */
+  --motion-micro: 120ms;
+  --motion-fast: 220ms;
+  --motion-base: 360ms;
+  --motion-slow: 700ms;
+  --motion-hold: 180ms;
+  --ease-standard: cubic-bezier(.2,.8,.2,1);
+  --ease-camera: cubic-bezier(.25,.1,.25,1);
   --dark:    #111111;
   --card:    #1c1c1c;
   --card2:   #242424;
@@ -89,6 +98,21 @@ svg { display:block; }
 }
 @keyframes fadeIn {
   from { opacity:0; } to { opacity:1; }
+}
+@keyframes gsEnter {
+  from { opacity:0; transform:translateY(10px) scale(.985); }
+  to { opacity:1; transform:none; }
+}
+@keyframes gsSelected {
+  0% { transform:scale(1); }
+  52% { transform:scale(1.018); box-shadow:0 0 0 1px rgba(200,168,75,.45),0 8px 24px rgba(200,168,75,.14); }
+  100% { transform:scale(1.008); box-shadow:0 0 0 1px rgba(200,168,75,.32); }
+}
+@keyframes gsImpact {
+  0%{transform:translateY(0)}
+  28%{transform:translateY(3px)}
+  58%{transform:translateY(-1px)}
+  100%{transform:translateY(0)}
 }
 
 /* ---- Typography ---- */
@@ -256,7 +280,7 @@ svg { display:block; }
 .wob-diag-text{ font-size:14.5px; color:#fff; line-height:1.55; }
 .wob-streak-badge{ display:inline-flex; align-items:center; gap:7px; background:rgba(200,168,75,.12); border:1px solid rgba(200,168,75,.3); color:#e3c878; font-size:12px; font-weight:700; letter-spacing:.3px; padding:7px 13px; border-radius:20px; margin-top:2px; }
 .wob-track{ position:relative; display:flex; align-items:center; gap:6px; margin:0 0 30px; height:12px; }
-.wob-dot{ flex:1; height:6px; border-radius:3px; background:rgba(255,255,255,.15); transition:all .4s var(--ease-out-quint); }
+.wob-dot{ flex:1; height:6px; border-radius:3px; background:rgba(255,255,255,.15); transition:background var(--motion-base) var(--ease-out-quint),transform var(--motion-base) var(--ease-out-quint),opacity var(--motion-base); }
 .wob-dot.done{ background:#4caf50; }
 .wob-dot.now{ background:#4caf50; box-shadow:0 0 10px rgba(76,175,80,.55); }
 .wob-ball{ position:absolute; top:50%; width:11px; height:11px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff,#d8d8d8 72%); box-shadow:0 0 9px rgba(200,168,75,.85); transform:translate(-50%,-50%); z-index:3; }
@@ -1022,10 +1046,16 @@ svg { display:block; }
   background:var(--card); border:1px solid var(--border);
   border-radius:var(--radius); padding:14px 16px;
   cursor:pointer; display:flex; align-items:flex-start; gap:12px;
-  transition:border-color .15s, background .15s;
+  transition:border-color var(--motion-fast),background var(--motion-fast),opacity var(--motion-fast),filter var(--motion-fast),transform var(--motion-micro),box-shadow var(--motion-fast);
 }
 .decision-card:active { transform:scale(.98); }
 .decision-card.chosen { pointer-events:none; }
+.decision-card.selected-choice {
+  border-color:var(--gold); background:rgba(200,168,75,.09);
+  animation:gsSelected var(--motion-base) var(--ease-spring) both;
+}
+.decision-card.unselected-choice { opacity:.28; filter:saturate(.55); transform:scale(.985); }
+.decision-card.launching .dc-letter { background:var(--gold); border-color:var(--gold); color:#111; }
 .dc-badge {
   flex-shrink:0; border-radius:20px; padding:3px 9px;
   font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
@@ -1054,8 +1084,14 @@ svg { display:block; }
   padding:18px; border:1px solid var(--border);
   animation:slideUp .35s cubic-bezier(.16,1,.3,1) both;
 }
-.outcome-card.reveal { animation: ocReveal .45s var(--ease-out-quint) both; }
+.outcome-card.reveal { animation: ocReveal var(--motion-base) var(--ease-out-quint) both; }
 @keyframes ocReveal { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+.outcome-card.reveal .oc-result { animation:gsEnter var(--motion-fast) var(--ease-standard) both; }
+.outcome-card.reveal .oc-consequence { animation:gsEnter var(--motion-base) var(--ease-standard) 70ms both; }
+.outcome-card.reveal .oc-effects { animation:gsEnter var(--motion-base) var(--ease-standard) 140ms both; }
+.outcome-card.reveal .oc-lesson { animation:gsEnter var(--motion-base) var(--ease-standard) 220ms both; }
+.outcome-card.reveal .oc-pro { animation:gsEnter var(--motion-base) var(--ease-standard) 300ms both; }
+.outcome-card.reveal .hole-next-btn { animation:gsEnter var(--motion-base) var(--ease-standard) 340ms both; }
 .oc-result       { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:10px; }
 .oc-consequence  { font-size:14px; line-height:1.65; color:var(--text); margin-bottom:12px; }
 .oc-effects      { display:flex; gap:8px; margin-bottom:12px; }
@@ -1120,6 +1156,28 @@ svg { display:block; }
 .sc-dec-label    { font-size:12px; color:var(--text); flex:1; }
 .sc-actions      { display:flex; gap:10px; }
 .sc-actions .btn { flex:1; }
+
+/* Persistent instructional traces: old shots stay as quiet spatial memory. */
+.camShot.cam-trace { opacity:.2; }
+.camShot.cam-trace > g,
+.camShot.cam-trace > circle { display:none; }
+.camShot.cam-trace path { stroke-width:1.5; stroke-dasharray:8 7; }
+.cam-preview { pointer-events:none; }
+.cam-preview path { animation:gsPreviewPulse 1s ease-in-out infinite; }
+@keyframes gsPreviewPulse { 0%,100%{opacity:.28} 50%{opacity:.72} }
+
+/* One global accessibility contract. Meaning remains; travel and repetition stop. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.001ms!important;
+    animation-delay:0ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    transition-delay:0ms!important;
+  }
+  .splash-pulse,.think-beat,.pp-wind-line,.pp-wv-wind,.cam-preview path{animation:none!important}
+}
 
 /* =============================================
    INSTALL PROMPT
@@ -3009,6 +3067,20 @@ function diNarrative(){
 // Master toggle persisted; volumes deliberately low. iOS/Android require a
 // user gesture before audio, so the context is created/resumed on pointerdown.
 let _ac = null;
+function gsReducedMotion(){ return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+function gsMotionMs(ms){ return gsReducedMotion() ? 0 : ms; }
+function gsAfter(ms, fn){ return setTimeout(fn, gsMotionMs(ms)); }
+function gsScrollTo(el, block){
+  if(!el) return;
+  try{ el.scrollIntoView({ behavior:gsReducedMotion()?'auto':'smooth', block:block||'nearest' }); }catch(e){}
+}
+function gsHaptic(kind){
+  if(gsReducedMotion()) return;
+  try{
+    if(!navigator.vibrate) return;
+    navigator.vibrate(kind==='good' ? [10,55,14] : kind==='bad' ? 26 : 9);
+  }catch(e){}
+}
 function gsSoundOn(){ const v = LS.get('soundOn'); return (v === null || v === undefined) ? true : !!v; }
 function gsToggleSound(){ LS.set('soundOn', !gsSoundOn()); gsSyncSoundChips(); if(gsSoundOn()) gsSound('good'); }
 function gsSyncSoundChips(){ document.querySelectorAll('.gs-snd-chip').forEach(c => { c.textContent = gsSoundOn() ? '🔊' : '🔇'; }); }
@@ -3687,10 +3759,10 @@ function loadQuestion(){
   const _btns = Array.from(document.querySelectorAll('.option-btn'));
   _btns.forEach(b => { b.style.visibility = ''; b.classList.add('beat-hold'); });
   if(beat) beat.style.display = 'block';
-  S._beatT = setTimeout(() => {
+  S._beatT = gsAfter(1100, () => {
     _btns.forEach(b => b.classList.remove('beat-hold'));
     if(beat) beat.style.display = 'none';
-  }, 1100);
+  });
 
   // Attach answer handlers
   document.querySelectorAll('.option-btn').forEach(btn => {
@@ -3706,7 +3778,7 @@ function selectAnswer(chosen, q){
   const isCorrect = chosen === dispCorrect;
 
   // Valence haptic + sound — same pattern as hole outcomes
-  try { if(navigator.vibrate) navigator.vibrate(isCorrect ? [10, 55, 14] : 26); } catch(e) {}
+  gsHaptic(isCorrect ? 'good' : 'bad');
   gsSound(isCorrect ? 'good' : 'bad');
 
   // Rolling answer log — powers adaptive difficulty + the Decision Index
@@ -3860,7 +3932,7 @@ function showExplanation(q, isCorrect){
   }
 
   card.classList.add('show');
-  setTimeout(() => { try{ card.scrollIntoView({ behavior:'smooth', block:'start' }); }catch(e){} }, 180);
+  gsAfter(180, () => gsScrollTo(card,'start'));
 
   // Next button
   const nextBtn = document.getElementById('next-btn');
@@ -3871,11 +3943,11 @@ function showExplanation(q, isCorrect){
   nextBtn.classList.add('show');
 
   // Scroll to explanation
-  setTimeout(() => {
+  gsAfter(300, () => {
     if(card && typeof card.scrollIntoView === 'function') {
-      card.scrollIntoView({ behavior:'smooth', block:'start' });
+      gsScrollTo(card,'start');
     }
-  }, 300);
+  });
 }
 
 function toggleExpDeeper(){
@@ -3884,7 +3956,7 @@ function toggleExpDeeper(){
   const open = d.classList.toggle('open');
   const t = document.getElementById('exp-toggle'); if(t) t.classList.toggle('open', open);
   const txt = document.getElementById('exp-toggle-txt'); if(txt) txt.textContent = open ? 'Show less' : 'Go deeper';
-  if(open) setTimeout(() => { try{ d.scrollIntoView({ behavior:'smooth', block:'nearest' }); }catch(e){} }, 160);
+  if(open) gsAfter(160, () => gsScrollTo(d,'nearest'));
 }
 
 function nextQuestion(){
@@ -5551,7 +5623,7 @@ function techAnswer(k){
   const f = g.faults[techState.faultIdx];
   const chosen = f.options[k];
   const ci = f.options.findIndex(o => o.correct);
-  try { if(navigator.vibrate) navigator.vibrate(chosen.correct ? [10, 55, 14] : 26); } catch(e) {}
+  gsHaptic(chosen.correct ? 'good' : 'bad');
   gsSound(chosen.correct ? 'good' : 'bad');
   // Switch the live swing figure to the FIX and replay it
   if(_gsw && TECH_FIGS[g.key + ':' + techState.faultIdx]){
@@ -5582,7 +5654,7 @@ function techAnswer(k){
       </div>` : ''}
       <button class="tech-cta" onclick="${last ? 'techRenderHome()' : 'techNextFault()'}">${last ? 'Back to clinic →' : 'Next miss →'}</button>
     </div>`;
-  setTimeout(() => { const r = document.getElementById('techReveal'); if(r) r.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 120);
+  gsAfter(120, () => gsScrollTo(document.getElementById('techReveal'),'nearest'));
 }
 function techNextFault(){
   techState.faultIdx++;
@@ -7714,7 +7786,7 @@ function bcChoose(i){
     <button class="bc-next" onclick="renderHome();showView('home')">Done →</button>`;
   rev.hidden = false;
   if(typeof wobHaptic==='function') wobHaptic();
-  setTimeout(()=>{ try{ rev.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} }, 1400);
+  gsAfter(1400,()=>gsScrollTo(rev,'center'));
 }
 
 // Front door rotation: every 3rd day is an elite Decision Broadcast, else a hole.
@@ -7927,18 +7999,29 @@ function renderHoleNode(nodeId){
         <div class="dc-label">${c.label}</div>
         <div class="dc-sub">${c.sub}</div>
       </div>`;
-    card.onclick = () => selectHoleChoice(c, node);
+    card.onclick = () => selectHoleChoice(c, node, card);
     decs.appendChild(card);
   });
 }
 
-function selectHoleChoice(choice, node){
+function selectHoleChoice(choice, node, tappedCard){
   // Double-tap guard: one decision per node — a rapid second tap must never
   // double-count strokes or double-advance the tree.
   if(HS._decidedNode === HS.currentNode) return;
   HS._decidedNode = HS.currentNode;
-  // visual lock: mark the tapped card, dim the rest (CSS pointer-events off)
-  try{ document.querySelectorAll('#shot-panel .decision-card').forEach(c => c.classList.add('chosen')); }catch(e){}
+  // Visual lock: preserve the user's call long enough to connect choice → line → result.
+  // Only the selected card is emphasised; alternatives recede without disappearing.
+  try{
+    document.querySelectorAll('#shot-panel .decision-card').forEach(c => {
+      c.classList.add('chosen');
+      if(c === tappedCard){ c.classList.add('selected-choice','launching'); }
+      else c.classList.add('unselected-choice');
+    });
+  }catch(e){
+    try{
+      document.querySelectorAll('#shot-panel .decision-card').forEach(c => c.classList.add('chosen'));
+    }catch(_e){}
+  }
   HS._suppressCam = false; // user moved on; let the camera follow (showHoleOutcome re-sets if needed)
   HS.shotCount++;
   HS.decisions.push({ shot: node.shot, label: choice.label, badge: choice.badge, type: choice.type, sub: choice.sub });
@@ -7947,14 +8030,17 @@ function selectHoleChoice(choice, node){
   const nextNode = HOLE.nodes[choice.next];
   if(!nextNode) return;
 
-  if(nextNode.outcome){
-    showHoleOutcome(nextNode);
-  } else if(nextNode.final){
-    finishHole(nextNode);
-  } else {
-    renderHoleMap(nextNode.mapState || 'tee');
-    renderHoleNode(choice.next);
-  }
+  if(nextNode.outcome) previewCameraShot(nextNode, choice);
+  gsAfter(180, () => {
+    if(nextNode.outcome){
+      showHoleOutcome(nextNode);
+    } else if(nextNode.final){
+      finishHole(nextNode);
+    } else {
+      renderHoleMap(nextNode.mapState || 'tee');
+      renderHoleNode(choice.next);
+    }
+  });
 }
 
 // Classify an outcome's valence from its result label: good / bad / neutral
@@ -7993,9 +8079,9 @@ function showHoleOutcome(node){
   // Valence haptic — crisp double-tap on a good outcome, dull buzz on a bad one
   // (Android/Chrome only; degrades silently on iOS).
   const _v = outcomeValence(node.result);
-  try { if (navigator.vibrate && _v !== 'neutral') navigator.vibrate(_v === 'good' ? [10, 55, 14] : 26); } catch(e) {}
+  if(_v !== 'neutral') gsHaptic(_v);
   gsSound('strike');                                            // contact at the tap
-  if(_v !== 'neutral') setTimeout(() => gsSound(_v === 'good' ? 'good' : 'bad'), 850);  // verdict at landing
+  if(_v !== 'neutral') gsAfter(820, () => gsSound(_v === 'good' ? 'good' : 'bad'));  // verdict at landing
   if(HOLE && HOLE.mapType === 'camera'){ HS._suppressCam = true; updateCamBroadcast(node); }
   if(node.penalty){ HS.shotCount += node.penalty; }  // count the dropped stroke(s) live
   const oc = document.getElementById('outcome-card');
@@ -8048,15 +8134,15 @@ function showHoleOutcome(node){
   renderHoleMap(node.mapState || 'tee');
   const flightMs = animateHoleBall(node, valence, lastDec);
   clearTimeout(HS._tickT);
-  HS._tickT = setTimeout(() => setShots(HS.shotCount, true), 850);  // tick on landing
+  HS._tickT = gsAfter(Math.max(0, flightMs-300), () => setShots(HS.shotCount, true));
   clearTimeout(HS._revealT);
-  HS._revealT = setTimeout(() => {
+  HS._revealT = gsAfter(flightMs, () => {
     const av = document.querySelector('.view.active');
     if(av && av.id !== 'view-hole') return;
     oc.style.display = '';
     void oc.offsetWidth;
     oc.classList.add('reveal');
-  }, flightMs);
+  });
 }
 
 function advanceHole(){
@@ -8198,14 +8284,41 @@ function camBoundsVB(a,b,pad){
 // dependent on requestAnimationFrame. The target is also written as the base value,
 // so the framing is correct even if SMIL is throttled (graceful: a cut, never a freeze).
 function animateCamViewBox(svg, target, ms){
-  const cur = svg.getAttribute('viewBox') || CAM.vbFull.join(' ');
   const to  = target.join(' ');
+  if(gsReducedMotion()){ svg.setAttribute('viewBox',to); return; }
+  const cur = svg.getAttribute('viewBox') || CAM.vbFull.join(' ');
   const old = svg.querySelector('#camVBAnim'); if(old) old.remove();
   const dur = Math.max(0.2, ms/1000).toFixed(2);
   svg.insertAdjacentHTML('afterbegin',
     `<animate id="camVBAnim" attributeName="viewBox" from="${cur}" to="${to}" dur="${dur}s" begin="0s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.25 0.1 0.25 1"/>`);
   svg.setAttribute('viewBox', to);
   try{ const a=svg.querySelector('#camVBAnim'); if(a && a.beginElement) a.beginElement(); }catch(e){}
+}
+// Establish → track → settle. Keeping all three frames in one declarative SMIL
+// animation avoids launch cuts and makes the geography of the decision readable.
+function animateCamFlight(svg, establish, target, ms){
+  const to=target.join(' ');
+  if(gsReducedMotion()){ svg.setAttribute('viewBox',to); return; }
+  const cur=svg.getAttribute('viewBox') || CAM.vbFull.join(' ');
+  const mid=establish.join(' ');
+  const old=svg.querySelector('#camVBAnim'); if(old) old.remove();
+  const dur=Math.max(.35,ms/1000).toFixed(2);
+  svg.insertAdjacentHTML('afterbegin',
+    `<animate id="camVBAnim" attributeName="viewBox" values="${cur};${mid};${to}" dur="${dur}s" begin="0s" fill="freeze" calcMode="spline" keyTimes="0;.2;1" keySplines="0.2 0.7 0.25 1;0.25 0.1 0.25 1"/>`);
+  svg.setAttribute('viewBox',to);
+  try{ const a=svg.querySelector('#camVBAnim'); if(a&&a.beginElement)a.beginElement(); }catch(e){}
+}
+function previewCameraShot(node){
+  if(!HOLE || HOLE.mapType!=='camera' || !node) return;
+  const svg=document.querySelector('#hole-map-wrap svg.cam-svg'); if(!svg) return;
+  svg.querySelectorAll('.cam-preview').forEach(n=>n.remove());
+  const start=(HS.ballPos||camCfg().anchors.tee||[78,406]).slice();
+  const end=(node.ballTo||camZoneCenter(node.mapState)).slice();
+  const sx=start[0],sy=start[1],ex=end[0],ey=end[1];
+  const span=Math.hypot(ex-sx,ey-sy)||1;
+  const arcH=/putt/.test(node.mapState||'')?6:Math.min(180,span*.34+44);
+  const path=`M${sx},${sy} Q${((sx+ex)/2).toFixed(0)},${(Math.min(sy,ey)-arcH).toFixed(0)} ${ex},${ey}`;
+  svg.insertAdjacentHTML('beforeend',`<g class="cam-preview"><path d="${path}" fill="none" stroke="#c8a84b" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 9" opacity=".5"/><circle cx="${ex}" cy="${ey}" r="18" fill="none" stroke="#c8a84b" stroke-width="2" stroke-dasharray="5 4" opacity=".55"/></g>`);
 }
 function setCamBall(svg, pos){
   let b=svg.querySelector('#camBall');
@@ -8259,6 +8372,8 @@ function animateCameraBall(node, valence, lastDec){
   const txt=((node.consequence||'')+' '+(node.result||'')).toLowerCase();
   const water=/water|splash|drink|wet/.test(txt) && valence==='bad';
   const sand=/bunker|sand/.test(txt);
+  const rough=/rough|thick|deep grass|heather|gorse/.test(txt);
+  const trees=/tree|branches|blocked|stymied/.test(txt);
   const isPutt=/putt/.test(node.mapState||'');
   const col= valence==='bad' ? '#e05252' : (valence==='good' ? '#4caf50' : '#c8a84b');
   const sx=start[0], sy=start[1], ex=end[0], ey=end[1];
@@ -8269,12 +8384,15 @@ function animateCameraBall(node, valence, lastDec){
   // 0.12s of dead air) and keep the flight tight (0.8s, was 0.95s).
   const fDur=isPutt?0.6:0.8, fBegin=0.02, landAt=(fBegin+fDur);
   const dash=(span*1.5+260).toFixed(0);
-  svg.querySelectorAll('.camShot').forEach(n=>n.remove());
+  svg.querySelectorAll('.cam-preview').forEach(n=>n.remove());
+  svg.querySelectorAll('.camShot:not(.cam-trace)').forEach(n=>n.classList.add('cam-trace'));
+  const oldTraces=svg.querySelectorAll('.camShot.cam-trace');
+  oldTraces.forEach((n,i)=>{ if(i<oldTraces.length-3)n.remove(); });
   setCamBall(svg, null);
   if(!svg.querySelector('#camBallRG'))
     svg.insertAdjacentHTML('afterbegin', `<defs><radialGradient id="camBallRG" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fff"/><stop offset="0.7" stop-color="#eef4ee"/><stop offset="1" stop-color="#c2d2c2"/></radialGradient></defs>`);
-  // establishing frame that contains start+landing, then push into the landing zone as the ball flies
-  svg.setAttribute('viewBox', camBoundsVB(start,end,90).join(' '));
+  // Establishing frame contains start + landing; camera then tracks and settles.
+  const establishing=camBoundsVB(start,end,90);
   svg.insertAdjacentHTML('beforeend', `<g class="camShot">
     <path d="${path}" stroke="${col}" stroke-width="3.4" fill="none" stroke-linecap="round" opacity="0.5" stroke-dasharray="${dash}" stroke-dashoffset="${dash}"><animate attributeName="stroke-dashoffset" to="0" dur="${fDur}s" begin="${fBegin}s" fill="freeze" calcMode="spline" keySplines="0.15 0.5 0.3 1"/></path>
     <path d="${path}" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.95" stroke-dasharray="${dash}" stroke-dashoffset="${dash}"><animate attributeName="stroke-dashoffset" to="0" dur="${fDur}s" begin="${fBegin}s" fill="freeze" calcMode="spline" keySplines="0.15 0.5 0.3 1"/></path>
@@ -8284,14 +8402,17 @@ function animateCameraBall(node, valence, lastDec){
     </g>
     <circle cx="${sx}" cy="${sy}" r="2" fill="none" stroke="#fff" stroke-width="2.5" opacity="0"><animate attributeName="r" values="2;16" dur="0.22s" begin="${fBegin}s" fill="freeze"/><animate attributeName="opacity" values="0.95;0" dur="0.22s" begin="${fBegin}s" fill="freeze"/></circle>
     ${water?`<circle cx="${ex}" cy="${ey}" r="5" fill="none" stroke="#64b5f6" stroke-width="3" opacity="0"><animate attributeName="r" values="5;48" dur="0.9s" begin="${landAt.toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values="0.9;0" dur="0.9s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
+    ${sand?`<g opacity="0"><set attributeName="opacity" to="1" begin="${landAt.toFixed(2)}s"/><circle cx="${ex-8}" cy="${ey}" r="2" fill="#e6d29a"><animate attributeName="cx" values="${ex-8};${ex-24}" dur=".42s" begin="${landAt.toFixed(2)}s"/><animate attributeName="cy" values="${ey};${ey-12}" dur=".42s" begin="${landAt.toFixed(2)}s"/></circle><circle cx="${ex+5}" cy="${ey}" r="2.5" fill="#d8bf7d"><animate attributeName="cx" values="${ex+5};${ex+20}" dur=".38s" begin="${landAt.toFixed(2)}s"/><animate attributeName="cy" values="${ey};${ey-15}" dur=".38s" begin="${landAt.toFixed(2)}s"/></circle></g>`:''}
+    ${rough?`<circle cx="${ex}" cy="${ey}" r="5" fill="none" stroke="#9ccc65" stroke-width="2" opacity="0"><animate attributeName="r" values="5;17" dur=".32s" begin="${landAt.toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values=".8;0" dur=".32s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
+    ${trees?`<path d="M${ex-16},${ey-14} L${ex+15},${ey+13} M${ex+15},${ey-14} L${ex-16},${ey+13}" stroke="#e05252" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;.9;.45" dur=".48s" begin="${landAt.toFixed(2)}s" fill="freeze"/></path>`:''}
     ${(valence==='good'&&!isPutt)?`<circle cx="${ex}" cy="${ey}" r="0" fill="none" stroke="#4caf50" stroke-width="3" opacity="0.9"><animate attributeName="r" values="0;24;19" dur="0.55s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
   </g>`);
-  animateCamViewBox(svg, camZone(node.mapState), landAt*1000+320);
+  animateCamFlight(svg, establishing, camZone(node.mapState), landAt*1000+320);
   HS.ballPos = end;
   const restMs=landAt*1000;
-  setTimeout(()=>{ setCamBall(svg, end); HS._suppressCam=false; }, restMs);
-  if(sand && valence!=='good'){ setTimeout(()=>{ wrap.classList.remove('thud'); void wrap.offsetWidth; wrap.classList.add('thud'); }, restMs); }
-  return Math.round(restMs+300);
+  gsAfter(restMs, ()=>{ setCamBall(svg, end); HS._suppressCam=false; });
+  if((sand||trees) && valence!=='good'){ gsAfter(restMs, ()=>{ wrap.classList.remove('thud'); void wrap.offsetWidth; wrap.classList.add('thud'); }); }
+  return gsMotionMs(Math.round(restMs+300));
 }
 // Shared SVG chrome for every camera map (1000×470 canvas).
 function camSvgOpen(){
@@ -8911,7 +9032,7 @@ function coldChoose(i){
       </div>`;
   }
   const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='none';
-  setTimeout(()=>{ const r=document.getElementById('coldReveal'); if(r) r.scrollIntoView({behavior:'smooth',block:'center'}); },120);
+  gsAfter(120,()=>gsScrollTo(document.getElementById('coldReveal'),'center'));
 }
 
 function coldContinue(){
@@ -8920,7 +9041,7 @@ function coldContinue(){
   const inner=document.getElementById('wObInner'); if(inner) inner.scrollTop=0;
 }
 
-function wobHaptic(){ try{ if(navigator.vibrate) navigator.vibrate(9); }catch(e){} }
+function wobHaptic(){ gsHaptic('micro'); }
 
 function wobTrack(activeIdx){
   const total = WELCOME_QUESTIONS.length;
@@ -9007,7 +9128,7 @@ function renderWelcomeSelection(tag){
     const last = wObState.idx >= WELCOME_QUESTIONS.length-1;
     nx.innerHTML = `<button class="wob-cta wob-next" onclick="advanceWelcome()">${last?'Build my profile':'Continue'} →</button>`;
   }
-  setTimeout(()=>{ const c=document.getElementById('wobConfirm'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+  gsAfter(80,()=>gsScrollTo(document.getElementById('wobConfirm'),'center'));
 }
 
 function advanceWelcome(){
@@ -9147,7 +9268,7 @@ function habitChoose(tag){
     <div style="margin-top:12px;"><span class="wob-streak-badge">🔥 Day 1 of your 30-day streak</span></div>`;
   const nx=document.getElementById('habitNext');
   if(nx) nx.innerHTML = `<button class="wob-cta wob-next" onclick="finishWelcome()">Start Day 1 →</button>`;
-  setTimeout(()=>{ const c=document.getElementById('habitConfirm'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+  gsAfter(80,()=>gsScrollTo(document.getElementById('habitConfirm'),'center'));
 }
 
 function finishWelcome(){
