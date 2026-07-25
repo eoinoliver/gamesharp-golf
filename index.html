@@ -2674,17 +2674,14 @@ function renderHome(){
     }
   }
 
-  // Hole of the day — the signature mode names today's hole
+  // Hole of the day — Play a Hole must always name and launch a complete hole.
+  // Decision Broadcast is a useful quick-read format, but it must never replace
+  // the signature multi-shot promise made by this card.
   const hodEl = document.getElementById('hec-hod');
   if(hodEl){
     try{
-      const bi = (typeof todaysBroadcastIndex==='function') ? todaysBroadcastIndex() : -1;
-      if(bi >= 0){
-        hodEl.innerHTML = `📺 <strong>Today:</strong> Decision Broadcast · ${BROADCAST[bi].title}`;
-      } else {
-        const hod = ALL_HOLES[holeOfTheDayIndex()];
-        hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
-      }
+      const hod = ALL_HOLES[nextUnplayedHoleIndex()];
+      hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
     }catch(e){}
   }
 
@@ -7823,7 +7820,8 @@ function bcChoose(i){
   gsAfter(1400,()=>gsScrollTo(rev,'center'));
 }
 
-// Front door rotation: every 3rd day is an elite Decision Broadcast, else a hole.
+// Date rotation for the standalone Decision Broadcast format. This must not be
+// used by startHole(): a one-decision broadcast is not a complete hole.
 function todaysBroadcastIndex(){
   if(typeof BROADCAST==='undefined' || !BROADCAST.length) return -1;
   const seed = parseInt(todayStr().replace(/-/g,''));
@@ -7858,8 +7856,8 @@ function startHole(){
     const fi = ALL_HOLES.findIndex(h => h.cam && h.cam.mapId === 'reachable_risk');
     if(fi >= 0){ showView('hole'); beginHole(fi); return; }
   }
-  const bi = todaysBroadcastIndex();
-  if(bi >= 0){ openBroadcast(bi); return; }
+  // Product contract: this entry point always starts a complete, authored hole.
+  // Never substitute Decision Broadcast or another one-decision format here.
   showView('hole');
   beginHole(nextUnplayedHoleIndex());
 }
