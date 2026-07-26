@@ -430,6 +430,26 @@ svg { display:block; }
 .gsw-btn  { background:var(--card2); border:1px solid var(--border); color:var(--muted); border-radius:20px; padding:5px 11px; font-size:10.5px; font-weight:700; letter-spacing:.06em; cursor:pointer; }
 .gsw-btn.on { border-color:var(--gold); color:var(--gold); }
 .gsw-scrub { flex:1; accent-color:var(--gold); height:4px; }
+.gsl-shell { position:relative; overflow:hidden; border-radius:16px; background:radial-gradient(130% 110% at 50% 10%,#173d1d 0%,#0b1d0e 64%,#061008 100%); border:1px solid rgba(200,168,75,.25); box-shadow:inset 0 0 52px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.38); }
+.gsl-head { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:39px; padding:8px 11px; border-bottom:1px solid rgba(255,255,255,.07); }
+.gsl-brand { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:8.5px; font-weight:800; letter-spacing:1.45px; color:rgba(200,168,75,.95); }
+.gsl-badge { flex:0 0 auto; border-radius:12px; padding:3px 7px; background:var(--gold); color:#101007; font-size:8px; font-weight:900; letter-spacing:.08em; }
+.gsl-stage { position:relative; min-height:220px; }
+.gsl-compare { display:grid; grid-template-columns:1fr 1fr; min-height:220px; }
+.gsl-panel { position:relative; min-width:0; border-right:1px solid rgba(255,255,255,.1); }
+.gsl-panel:last-child { border-right:0; }
+.gsl-panel-label { position:absolute; top:7px; left:50%; z-index:2; transform:translateX(-50%); border-radius:10px; padding:3px 7px; background:rgba(5,10,6,.7); font-size:8px; font-weight:900; letter-spacing:.12em; }
+.gsl-panel-label.miss { color:#ff9188; }.gsl-panel-label.fix { color:#7bd887; }
+.gsl-note { padding:8px 11px 10px; border-top:1px solid rgba(255,255,255,.06); color:rgba(255,255,255,.52); font-size:10.5px; line-height:1.4; text-align:center; }
+.gsw-ctrl { flex-wrap:wrap; }
+.gsw-modes { display:flex; gap:6px; flex:1 1 100%; }
+.gsw-modes .gsw-btn { flex:1; min-height:40px; border-radius:9px; }
+.gsw-study { display:grid; grid-template-columns:44px minmax(90px,1fr) 44px 55px; align-items:center; gap:7px; width:100%; }
+.gsw-step,.gsw-hand { min-height:44px; border:1px solid var(--border); border-radius:9px; background:var(--card2); color:#fff; font-weight:800; cursor:pointer; }
+.gsw-hand { font-size:10px; color:var(--gold); }
+.gsw-lefty svg { transform:scaleX(-1); transform-origin:center; }
+.gsw-lefty svg text { transform:scaleX(-1); transform-box:fill-box; transform-origin:center; }
+@media(max-width:420px){ .gsl-stage,.gsl-compare{min-height:200px}.gsl-note{font-size:10px}.gsw-modes .gsw-btn{min-height:44px} }
 .section-title { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
 
 /* Pillar Grid */
@@ -4862,6 +4882,14 @@ function gswFlight(kind, ball, p){
 
 function gswRender(t){
   if(!_gsw) return;
+  if(_gsw.mode === 'compare'){
+    const keep={mode:_gsw.mode,data:_gsw.data,svg:_gsw.svg,ghostOut:_gsw.ghostOut};
+    _gsw.mode='miss'; _gsw.data=gswFrames(_gsw.figKey,'miss'); _gsw.svg=_gsw.missSvg; _gsw.ghostOut=null; gswRender(t);
+    _gsw.mode='fix'; _gsw.data=gswFrames(_gsw.figKey,'fix'); _gsw.svg=_gsw.fixSvg; _gsw.ghostOut=null; gswRender(t);
+    _gsw.mode=keep.mode; _gsw.data=keep.data; _gsw.svg=keep.svg; _gsw.ghostOut=keep.ghostOut;
+    if(_gsw.scrub && !_gsw.scrubbing) _gsw.scrub.value=Math.round(t*100);
+    return;
+  }
   const {frames,cfg,base,ov} = _gsw.data;
   const SW = 0.62;                       // swing portion of the timeline
   const IMP = SW * 0.55;                 // impact moment (pose keyframe 'i' sits at 55% of the swing)
@@ -4953,12 +4981,41 @@ function gswGhostOut(figKey){
 function gswSetMode(mode, autoplay){
   if(!_gsw) return;
   _gsw.mode=mode;
-  _gsw.data=gswFrames(_gsw.figKey, mode);
+  _gsw.data=gswFrames(_gsw.figKey, mode==='compare'?'miss':mode);
   _gsw.ghostOut = mode==='fix' ? gswGhostOut(_gsw.figKey) : null;
-  const mb=document.getElementById(_gsw.ctrlId+'-miss'), fb=document.getElementById(_gsw.ctrlId+'-fix');
+  gswBuildStage(mode);
+  const mb=document.getElementById(_gsw.ctrlId+'-miss'), fb=document.getElementById(_gsw.ctrlId+'-fix'), cb=document.getElementById(_gsw.ctrlId+'-compare');
   if(mb) mb.classList.toggle('on', mode==='miss');
   if(fb) fb.classList.toggle('on', mode==='fix');
+  if(cb) cb.classList.toggle('on', mode==='compare');
   if(autoplay) gswPlay(); else gswRender(1);
+}
+
+function gswBuildStage(mode){
+  if(!_gsw || !_gsw.stage) return;
+  if(mode==='compare'){
+    _gsw.stage.innerHTML=`<div class="gsl-compare"><div class="gsl-panel"><div class="gsl-panel-label miss">MISS</div><svg viewBox="0 0 280 220" aria-label="Faulty swing"></svg></div><div class="gsl-panel"><div class="gsl-panel-label fix">FIX</div><svg viewBox="0 0 280 220" aria-label="Corrected swing"></svg></div></div>`;
+    const svgs=_gsw.stage.querySelectorAll('svg'); _gsw.missSvg=svgs[0]; _gsw.fixSvg=svgs[1]; _gsw.svg=null;
+  }else{
+    _gsw.stage.innerHTML=`<svg viewBox="0 0 280 220" width="100%" style="display:block;max-height:260px;min-height:170px" aria-label="${mode==='fix'?'Corrected':'Faulty'} golf swing"></svg>`;
+    _gsw.svg=_gsw.stage.querySelector('svg'); _gsw.missSvg=_gsw.fixSvg=null;
+  }
+}
+
+function gswStep(dir){
+  if(!_gsw) return;
+  cancelAnimationFrame(_gsw.raf); _gsw.scrubbing=true;
+  const now=Number(_gsw.scrub ? _gsw.scrub.value : 0);
+  const next=Math.max(0,Math.min(100,now+dir*4));
+  if(_gsw.scrub) _gsw.scrub.value=next;
+  gswRender(next/100); _gsw.scrubbing=false;
+}
+
+function gswToggleHand(){
+  if(!_gsw) return;
+  _gsw.lefty=!_gsw.lefty;
+  _gsw.shell.classList.toggle('gsw-lefty',_gsw.lefty);
+  const b=document.getElementById(_gsw.ctrlId+'-hand'); if(b) b.textContent=(_gsw.lefty?'LH':'RH')+' ↔';
 }
 
 function mountGolfSwing(stageId, ctrlId, figKey, mode, autoplay){
@@ -4967,17 +5024,28 @@ function mountGolfSwing(stageId, ctrlId, figKey, mode, autoplay){
   if(!TECH_FIGS[figKey]){ return false; }
   if(_gsw) cancelAnimationFrame(_gsw.raf);
   stage.style.width='100%';   // survive flex/centered parents that shrink-to-fit
-  stage.innerHTML=`<svg viewBox="0 0 280 220" width="100%" style="display:block;max-height:230px;min-height:150px" xmlns="http://www.w3.org/2000/svg"></svg>`;
-  _gsw={ figKey, mode, ctrlId, svg:stage.querySelector('svg'), raf:0, scrub:null, scrubbing:false,
+  const clinicLabel=figKey.split(':')[0].replace(/^./,c=>c.toUpperCase());
+  stage.innerHTML=`<div class="gsl-shell"><div class="gsl-head"><span class="gsl-brand">◉ GAMESHARP LAB · ${clinicLabel.toUpperCase()}</span><span class="gsl-badge">DIAGNOSTIC</span></div><div class="gsl-stage"></div><div class="gsl-note">Miss and fix use the same camera and timing. Scrub to the decisive frame, then compare.</div></div>`;
+  const shell=stage.querySelector('.gsl-shell'), labStage=stage.querySelector('.gsl-stage');
+  _gsw={ figKey, mode, ctrlId, stage:labStage, shell, svg:null, missSvg:null, fixSvg:null, lefty:false, raf:0, scrub:null, scrubbing:false,
          data:gswFrames(figKey,mode), ghostOut: mode==='fix' ? gswGhostOut(figKey) : null };
+  gswBuildStage(mode);
   if(ctrl){
     ctrl.innerHTML=`
-      <button class="gsw-btn" onclick="gswPlay()">▶ REPLAY</button>
-      <button class="gsw-btn ${mode==='miss'?'on':''}" id="${ctrlId}-miss" onclick="gswSetMode('miss',true)">MISS</button>
-      <button class="gsw-btn ${mode==='fix'?'on':''}" id="${ctrlId}-fix" onclick="gswSetMode('fix',true)">FIX</button>
-      <input class="gsw-scrub" type="range" min="0" max="100" value="0"
-        oninput="if(_gsw){_gsw.scrubbing=true;cancelAnimationFrame(_gsw.raf);gswRender(this.value/100);}"
-        onchange="if(_gsw)_gsw.scrubbing=false;">`;
+      <div class="gsw-modes">
+        <button class="gsw-btn ${mode==='miss'?'on':''}" id="${ctrlId}-miss" onclick="gswSetMode('miss',true)">THE MISS</button>
+        <button class="gsw-btn ${mode==='fix'?'on':''}" id="${ctrlId}-fix" onclick="gswSetMode('fix',true)">THE FIX</button>
+        <button class="gsw-btn" id="${ctrlId}-compare" onclick="gswSetMode('compare',true)">COMPARE</button>
+      </div>
+      <div class="gsw-study">
+        <button class="gsw-step" onclick="gswStep(-1)" aria-label="Previous frame">‹</button>
+        <input class="gsw-scrub" type="range" min="0" max="100" value="0" aria-label="Study the swing frame by frame"
+          oninput="if(_gsw){_gsw.scrubbing=true;cancelAnimationFrame(_gsw.raf);gswRender(this.value/100);}"
+          onchange="if(_gsw)_gsw.scrubbing=false;">
+        <button class="gsw-step" onclick="gswStep(1)" aria-label="Next frame">›</button>
+        <button class="gsw-hand" id="${ctrlId}-hand" onclick="gswToggleHand()" aria-label="Toggle left or right handed">RH ↔</button>
+      </div>
+      <button class="gsw-btn" style="width:100%;min-height:44px" onclick="gswPlay()">↻ REPLAY</button>`;
     _gsw.scrub=ctrl.querySelector('.gsw-scrub');
   }
   if(autoplay) gswPlay(); else gswRender(0);
@@ -5628,7 +5696,7 @@ function techRenderHome(){
       </svg>
       <div class="tech-stroke-emoji">${g.emoji}</div>
       <div class="tech-stroke-name">${g.label}</div>
-      <div class="tech-stroke-meta">Common misses</div>
+      <div class="tech-stroke-meta">★ Diagnostic Lab · ${g.faults.length} faults</div>
     </button>`).join('');
   const missCards = TECH_MISSES.map((m,i) =>
     `<button class="tech-miss" onclick="techOpenMiss(${i})">
@@ -5637,9 +5705,9 @@ function techRenderHome(){
       <span class="tech-miss-chev">›</span>
     </button>`).join('');
   techApp().innerHTML = `
-    <div class="tech-eyebrow">Shot Clinic · Diagnose your miss</div>
-    <h1 class="tech-h1">What was your miss today?</h1>
-    <p class="tech-intro">Tap the shot that cost you. We'll find the culprit, give you the one cue that fixes it — and what to do with it on your next round.</p>
+    <div class="tech-eyebrow">Shot Clinic · Read the pattern</div>
+    <h1 class="tech-h1">Which miss do you want to solve?</h1>
+    <p class="tech-intro">Choose a familiar scenario. Diagnose the likely culprit, study miss versus fix, then take one practical cue to the course.</p>
     <div class="tech-miss-list">${missCards}</div>
     <div class="tech-or">or browse by club</div>
     <div class="tech-grid">${cards}</div>`;
@@ -5691,9 +5759,9 @@ function techAnswer(k){
   const ci = f.options.findIndex(o => o.correct);
   gsHaptic(chosen.correct ? 'good' : 'bad');
   gsSound(chosen.correct ? 'good' : 'bad');
-  // Switch the live swing figure to the FIX and replay it
+  // End on the synchronized comparison: same camera, same timing, miss versus fix.
   if(_gsw && TECH_FIGS[g.key + ':' + techState.faultIdx]){
-    gswSetMode('fix', true);
+    gswSetMode('compare', true);
   } else {
     const vWrap = document.querySelector('#view-technique .tech-visual');
     if(vWrap) vWrap.innerHTML = techVisual(f.vis, true);
@@ -9527,10 +9595,10 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gs-focus-trigger::after{content:'EXPAND';position:absolute;right:48px;padding:5px 8px;border-radius:7px;background:rgba(5,12,7,.84);color:rgba(255,255,255,.82);font-size:8px;letter-spacing:1px;opacity:0;transform:translateX(4px);transition:.18s;pointer-events:none}
 .gs-focus-trigger:focus-visible,.gs-focus-close:focus-visible,.gs-focus-screen:focus-visible{outline:3px solid #d8b74f;outline-offset:2px}
 @media(hover:hover){.gs-focus-trigger:hover::after{opacity:1;transform:none}}
-.gs-focus-overlay{position:fixed;inset:0;z-index:100000;display:none;grid-template-rows:auto minmax(0,1fr) auto;background:radial-gradient(120% 80% at 50% 30%,#18391b 0%,#080d09 64%,#030504 100%);color:#fff;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.gs-focus-overlay{position:fixed;inset:0;z-index:100000;display:none;grid-template-rows:auto minmax(0,1fr) auto;min-width:0;box-sizing:border-box;background:radial-gradient(120% 80% at 50% 30%,#18391b 0%,#080d09 64%,#030504 100%);color:#fff;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
 .gs-focus-overlay.open{display:grid;animation:gsFocusIn .24s cubic-bezier(.2,.8,.3,1)}
 @keyframes gsFocusIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
-.gs-focus-bar{display:flex;align-items:center;gap:10px;min-height:52px}
+.gs-focus-bar{display:flex;align-items:center;gap:10px;width:100%;min-width:0;max-width:100%;min-height:52px;overflow:hidden;box-sizing:border-box}
 .gs-focus-brand{min-width:0;flex:1}.gs-focus-kicker{font-size:9px;font-weight:800;letter-spacing:1.8px;color:#c8a84b}.gs-focus-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
 .gs-focus-close,.gs-focus-screen{width:44px;height:44px;flex:0 0 44px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(255,255,255,.07);color:#fff;font-size:20px;cursor:pointer}
 .gs-focus-stage{min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px 0}
@@ -9539,10 +9607,14 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gs-focus-stage>.anim-container,.gs-focus-stage>.tech-visual,.gs-focus-stage>#qTechWrap,.gs-focus-stage>.hole-map-wrap{height:min(72vh,720px)!important;min-height:300px!important;background:radial-gradient(120% 90% at 50% 35%,#285d29 0%,#123317 62%,#07160a 100%);border-radius:18px;overflow:auto}
 .gs-focus-stage svg{display:block;width:100%!important;height:auto!important;max-height:calc(100% - 54px)!important}
 .gs-focus-stage .gsw-btn{min-height:44px;padding-left:14px;padding-right:14px}.gs-focus-stage .gsw-scrub{min-height:44px}
+.gs-focus-stage>.tech-visual{height:min(76vh,760px)!important;overscroll-behavior:contain}
+.gs-focus-stage .gsl-stage{min-height:min(46vh,480px)}
+.gs-focus-stage .gsl-stage svg{max-height:none!important}
+.gs-focus-stage .gsw-step,.gs-focus-stage .gsw-hand,.gs-focus-stage .gsw-modes .gsw-btn{min-height:44px}
 .gs-focus-foot{min-height:52px;padding:8px 4px 2px;text-align:center}
 .gs-focus-cue{font-size:13px;line-height:1.45;color:rgba(255,255,255,.74);max-width:720px;margin:auto}
 .gs-focus-hint{font-size:9px;letter-spacing:1.2px;color:rgba(200,168,75,.72);margin-top:5px;text-transform:uppercase}
-@media(max-width:600px) and (orientation:portrait){.gs-focus-stage>.anim-container,.gs-focus-stage>.tech-visual,.gs-focus-stage>#qTechWrap,.gs-focus-stage>.hole-map-wrap{height:min(66vh,580px)!important}.gs-focus-title{font-size:17px}}
+@media(max-width:600px) and (orientation:portrait){.gs-focus-stage>.anim-container,.gs-focus-stage>#qTechWrap,.gs-focus-stage>.hole-map-wrap{height:min(66vh,580px)!important}.gs-focus-stage>.tech-visual{height:68vh!important}.gs-focus-stage .gsl-note{font-size:11px}.gs-focus-title{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.gs-focus-overlay.open{animation:none}}
 </style>
 <script id="gs-focus-view">
