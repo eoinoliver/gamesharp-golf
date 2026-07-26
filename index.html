@@ -7524,7 +7524,7 @@ const ALL_HOLES = [
   cam:{ mapId:'closer', anchors:{ tee:[100,418] },
     zones:{ tee:[0,0,1000,470], approach:[560,40,470,221], greenside:[650,73,330,155], putt:[690,91,250,118] } },
   nodes:{
-    tee:{ shot:1, situation:"The 18th, match play. You're in the fairway with a mid-iron in; water guards the right of the green, the left is the fat, safe side. The right shot here has nothing to do with the green and everything to do with the scoreboard. So — what's the situation?", mapState:'tee',
+    tee:{ shot:1, context:true, situation:"The 18th, match play. You're in the fairway with a mid-iron in; water guards the right of the green, the left is the fat, safe side. The right shot here has nothing to do with the green and everything to do with the scoreboard. So — what's the situation?", mapState:'tee',
       broadcast:"18th · Match play · Water right of the green · The score decides the shot",
       choices:[
         { badge:'1 UP', label:"You're 1 UP — protect the lead", sub:'Win or halve the hole to win the match.', next:'up_play', type:'smart' },
@@ -8125,7 +8125,7 @@ function renderHoleNode(nodeId){
 
   // Situation
   const sitBox = document.getElementById('situation-box');
-  sitBox.innerHTML = `<div class="sit-shot">Shot ${node.shot || HS.shotCount + 1}</div><div class="sit-text">${node.situation}</div>`;
+  sitBox.innerHTML = `<div class="sit-shot">${node.context ? 'Match situation' : `Shot ${node.shot || HS.shotCount + 1}`}</div><div class="sit-text">${node.situation}</div>`;
 
   // Decision cards
   const decs = document.getElementById('decisions');
@@ -8148,27 +8148,42 @@ function simulatorSpec(nodeId, node){
   const copy = `${nodeId} ${node.mapState||''} ${node.broadcast||''} ${node.situation||''}`.toLowerCase();
   const facts = String(node.broadcast||'').split('·').map(v=>v.trim()).filter(Boolean);
   const roleCopy = `${nodeId} ${node.mapState||''} ${facts[0]||''}`.toLowerCase();
-  const tee = nodeId === 'tee' || node.mapState === 'tee';
+  // The broadcast is the authored truth for what this camera frame must show.
+  // Situation copy can mention hazards that belong to a later shot on the hole.
+  const pictureCopy = `${nodeId} ${node.mapState||''} ${node.broadcast||''}`.toLowerCase();
+  const explicitApproach = /in the fairway|from the fairway|mid-iron in|approach/.test(copy);
+  const tee = (nodeId === 'tee' || node.mapState === 'tee') && !explicitApproach;
   const putt = /putt/.test(roleCopy);
   const bunker = /bunker|sand/.test(roleCopy);
   const recovery = /chip|pitch|recovery|flop|apron|fringe/.test(roleCopy) && !bunker;
   const wedge = /wedge|drop zone|drop_zone/.test(roleCopy);
-  const approach = !tee && (/approach|second|layup|fairway|drive/.test(roleCopy) || wedge || recovery);
+  const approach = explicitApproach || (!tee && (/approach|second|layup|fairway|drive/.test(roleCopy) || wedge || recovery));
   const divot = /divot/.test(copy) || (HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'approach_195');
   const downhill = /downhill|down a bank|downslope|runs away/.test(copy);
   const uphill = /uphill|below the hole/.test(copy);
-  const water = /water|pond|creek|rae's|lake|island|ocean|pacific|sea/.test(copy);
-  const wall = /wall|road hole|hotel|out of bounds|\\bob\\b/.test(copy);
-  const trees = /tree|chute|dogleg|blind/.test(copy);
+  const water = /water|pond|creek|rae's|lake|island|ocean|pacific|sea/.test(pictureCopy);
+  // Hazard direction must follow the authored situation. A generic water strip
+  // across the target line contradicts scenarios where the penalty is lateral.
+  const waterIsland = water && /island green|no bail-out anywhere/.test(pictureCopy);
+  const waterLong = water && !waterIsland && /water (?:waiting |lurking )?(?:long|beyond)|pacific waiting long|ocean .*beyond|bay .*long/.test(pictureCopy);
+  const waterShortRight = water && !waterIsland && /water (?:sits |is )?short-right|short-right water/.test(pictureCopy);
+  const waterFrontLeft = water && !waterIsland && /water (?:hugs |guards |is )?(?:the )?front-left|front-left (?:of the green )?(?:water|pond)|pond hard on (?:the )?left/.test(pictureCopy);
+  const waterRight = water && !waterIsland && !waterShortRight && /water (?:guards |runs |is |sits )?(?:down |on |to )?the right|water right|right-side water|penalty area (?:down |on )?the right/.test(pictureCopy);
+  const waterLeft = water && !waterIsland && !waterFrontLeft && /water (?:guards |runs |is |sits )?(?:down |on |to )?the left|water left|left-side water|penalty area (?:down |on )?the left/.test(pictureCopy);
+  const waterFront = water && !waterIsland && !waterLong && !waterShortRight && !waterFrontLeft && !waterRight && !waterLeft;
+  const wall = /wall|road hole|hotel|out of bounds|\\bob\\b/.test(pictureCopy);
+  const treeRecovery = /blocked|branch|small gap|punch|medicine|recover/.test(pictureCopy);
+  const trees = treeRecovery || /tree|chute|dogleg|blind/.test(pictureCopy);
   let lie = putt ? 'Putting green' : bunker ? (downhill?'Downslope sand':'Bunker') :
     divot ? 'Ball in a divot' : /drop/.test(copy) ? 'Drop zone' :
-    /apron|fringe/.test(copy) ? 'Tight apron' : recovery ? 'Greenside lie' :
+    /apron|fringe/.test(copy) ? 'Tight apron' : treeRecovery ? 'In the trees' : recovery ? 'Greenside lie' :
     approach ? 'Fairway' : 'Tee';
   let condition = facts.slice(2,4).join(' · ') || (putt?'Read pace first':'Play the full picture');
   if(condition.length > 42) condition = condition.slice(0,39).trim()+'…';
   let trend = HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'tee' ? 'Hook window left' : '';
   let caption = putt ? 'See the start line. Feel the pace. Choose one intention.' :
     bunker ? 'Read the face, lip and landing shelf before choosing the escape.' :
+    treeRecovery ? 'See the exit window first. The branches—not the flag—decide the shot.' :
     recovery ? 'The landing spot matters more than the flag. Choose the first bounce.' :
     divot ? 'The lie changes strike and carry. Decide with the ball—not the yardage alone.' :
     water ? 'Choose a flight and miss that keep the penalty out of play.' :
@@ -8176,7 +8191,7 @@ function simulatorSpec(nodeId, node){
     'See the corridor, choose the miss, then commit.';
   return {
     scene:putt?'putt':bunker?'bunker':recovery?'recovery':approach?'approach':'tee',
-    lie, condition, trend, caption, divot, downhill, uphill, water, wall, trees
+    lie, condition, trend, caption, divot, downhill, uphill, water, waterIsland, waterLong, waterShortRight, waterFrontLeft, waterRight, waterLeft, waterFront, wall, trees, treeRecovery
   };
 }
 
@@ -8208,9 +8223,22 @@ function mountShotSimulator(nodeId, node){
            <circle class="sim-putt-ball" cx="194" cy="276" r="8" fill="#fff"/><path class="sim-putter" d="M149 292h78M174 292v-65" stroke="#cdd5d8" stroke-width="7" transform-origin="190px 292px"/>`
         : `<path d="M0 95L145 80L245 80L390 95V310H0Z" fill="${sand?'#b89a5e':'url(#simFair)'}"/>
            <path d="M145 80L20 310H370L245 80Z" fill="${sand?'#d8bd7d':'#4e8d43'}"/>
-           ${s.water?`<path d="M0 ${recovery?'145':'112'}Q95 ${recovery?'127':'98'} 190 ${recovery?'148':'118'}T390 ${recovery?'142':'110'}V${recovery?'195':'158'}Q290 ${recovery?'170':'145'} 190 ${recovery?'190':'160'}T0 ${recovery?'184':'152'}Z" fill="#277fa1"/><path d="M0 ${recovery?'152':'121'}Q110 ${recovery?'135':'105'} 220 ${recovery?'154':'128'}T390 ${recovery?'148':'119'}" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.waterIsland?`<path d="M0 76H390V240Q338 205 300 206Q250 208 218 246Q170 210 112 207Q62 205 0 244Z" fill="#277fa1"/><path d="M0 94Q86 78 156 104T300 99T390 105M0 164Q82 145 154 171T302 165T390 171" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/><path d="M132 92Q195 68 258 92L302 204Q195 224 88 204Z" fill="#4e8d43"/>`:''}
+           ${s.waterLong?`<path d="M0 78Q92 96 190 82T390 86V132Q292 118 194 136T0 126Z" fill="#277fa1"/><path d="M0 93Q92 111 190 97T390 101" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.waterShortRight?`<path d="M218 112Q300 96 390 114V220Q318 194 244 218Q226 166 218 112Z" fill="#277fa1"/><path d="M236 130Q306 116 390 132M248 174Q316 154 390 176" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.waterFrontLeft?`<path d="M0 106Q86 88 178 116Q168 164 186 216Q92 192 0 216Z" fill="#277fa1"/><path d="M0 124Q82 106 172 132M0 174Q90 152 176 180" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.waterRight?`<path d="M302 78Q346 96 390 88V310H328Q300 246 316 184Q326 130 302 78Z" fill="#277fa1"/><path d="M320 90Q350 112 390 104M326 166Q356 184 390 176M334 242Q360 258 390 250" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.waterLeft?`<path d="M88 78Q44 96 0 88V310H62Q90 246 74 184Q64 130 88 78Z" fill="#277fa1"/><path d="M70 90Q40 112 0 104M64 166Q34 184 0 176M56 242Q30 258 0 250" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
+           ${s.waterFront?`<path d="M0 ${recovery?'145':'112'}Q95 ${recovery?'127':'98'} 190 ${recovery?'148':'118'}T390 ${recovery?'142':'110'}V${recovery?'195':'158'}Q290 ${recovery?'170':'145'} 190 ${recovery?'190':'160'}T0 ${recovery?'184':'152'}Z" fill="#277fa1"/><path d="M0 ${recovery?'152':'121'}Q110 ${recovery?'135':'105'} 220 ${recovery?'154':'128'}T390 ${recovery?'148':'119'}" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
            ${s.wall?`<path d="M0 100L390 84V121L0 139Z" fill="#77736b"/><path d="M0 106L390 90" stroke="#aaa59b" stroke-width="4"/>`:''}
            ${s.trees?`<g fill="#173c22"><circle cx="38" cy="89" r="31"/><circle cx="75" cy="82" r="38"/><circle cx="320" cy="82" r="36"/><circle cx="360" cy="92" r="32"/></g>`:''}
+           ${s.treeRecovery?`<g aria-hidden="true">
+             <path d="M0 50Q58 92 124 128Q154 146 181 166" fill="none" stroke="#173417" stroke-width="22" stroke-linecap="round"/>
+             <path d="M390 42Q334 82 278 122Q246 145 220 166" fill="none" stroke="#173417" stroke-width="24" stroke-linecap="round"/>
+             <path d="M62 78Q112 124 150 170M334 70Q286 118 246 172" fill="none" stroke="#315127" stroke-width="8" stroke-linecap="round"/>
+             <ellipse cx="195" cy="144" rx="48" ry="70" fill="none" stroke="rgba(231,214,128,.65)" stroke-width="2" stroke-dasharray="5 6"/>
+             <text x="195" y="62" text-anchor="middle" font-size="10" fill="#f0d77f" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1">SMALL EXIT WINDOW</text>
+           </g>`:''}
            ${sand?`<path d="M0 230Q88 188 156 211T390 174V310H0Z" fill="#c7a968"/>`:''}
            ${s.divot?`<path d="M165 263q26-18 54 1q-28 15-54-1" fill="#302717"/><path d="M164 257q25-13 55 2" fill="none" stroke="#917044" stroke-width="4"/>`:''}
            <ellipse cx="195" cy="80" rx="8" ry="3" fill="#20411d"/>
@@ -8249,14 +8277,14 @@ function selectHoleChoice(choice, node, tappedCard){
     }catch(_e){}
   }
   HS._suppressCam = false; // user moved on; let the camera follow (showHoleOutcome re-sets if needed)
-  HS.shotCount++;
+  if(!node.context) HS.shotCount++;
   HS.decisions.push({ shot: node.shot, label: choice.label, badge: choice.badge, type: choice.type, sub: choice.sub });
   HS.pendingNext = choice.next;
 
   const nextNode = HOLE.nodes[choice.next];
   if(!nextNode) return;
 
-  const simulatorMs = playShotSimulator();
+  const simulatorMs = node.context ? 0 : playShotSimulator();
   if(nextNode.outcome) previewCameraShot(nextNode, choice);
   gsAfter(simulatorMs, () => {
     const sim = document.getElementById('shot-sim');
