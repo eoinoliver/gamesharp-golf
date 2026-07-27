@@ -1073,13 +1073,47 @@ svg { display:block; }
   background:radial-gradient(100% 80% at 50% 42%,transparent 45%,rgba(3,9,5,.58) 100%);
 }
 @keyframes simCutIn { from{opacity:0;transform:scale(1.035)} to{opacity:1;transform:none} }
-.sim-svg { width:100%;height:100%;min-height:310px;display:block }
-.sim-hud { position:absolute;z-index:3;left:12px;right:12px;top:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none }
+.sim-svg { width:100%;height:100%;min-height:0;display:block }
+.sim-svg[data-camera] { display:none }
+.sim-svg[data-camera].is-active { display:block }
+.sim-camera-bar {
+  position:absolute;z-index:6;left:50%;top:8px;transform:translateX(-50%);
+  display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(5,10,6,.82);
+  border:1px solid rgba(255,255,255,.16);box-shadow:0 5px 18px rgba(0,0,0,.28);
+}
+.sim-camera-btn {
+  min-height:38px;border:0;border-radius:999px;padding:7px 10px;background:transparent;
+  color:rgba(255,255,255,.62);font:700 9px/1 'DM Sans',sans-serif;letter-spacing:.08em;
+  text-transform:uppercase;white-space:nowrap;cursor:pointer;
+}
+.sim-camera-btn[aria-pressed="true"] { background:#f4f2e9;color:#152016 }
+.shot-sim[data-camera="broadcast"] .sim-hud,
+.shot-sim[data-camera="plan"] .sim-hud { display:none }
+.sim-hud { position:absolute;z-index:3;left:10px;right:10px;top:54px;display:flex;justify-content:space-between;gap:6px;pointer-events:none }
 .sim-chip { background:rgba(7,12,8,.82);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:7px 9px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 5px 16px rgba(0,0,0,.24) }
 .sim-chip strong { display:block;color:var(--gold);font-size:11px;margin-top:2px }
 .sim-trend { border-color:rgba(224,82,82,.55);text-align:right }
 .sim-trend strong { color:#ff9e91 }
-.sim-caption { position:absolute;z-index:3;left:12px;bottom:12px;max-width:72%;background:rgba(7,12,8,.84);border-left:3px solid var(--gold);padding:8px 10px;font-size:11px;line-height:1.35 }
+.sim-caption { position:absolute;z-index:3;left:10px;right:10px;bottom:10px;background:rgba(7,12,8,.88);border-left:3px solid var(--gold);padding:8px 10px;font-size:11px;line-height:1.35 }
+.sim-caption b { color:var(--gold);font-size:9px;letter-spacing:.11em;text-transform:uppercase;margin-right:5px }
+.sim-review-label { fill:#f4f2e9;font:700 9px 'DM Sans',sans-serif;letter-spacing:1px }
+.sim-review-note { fill:rgba(244,242,233,.8);font:600 8px 'DM Sans',sans-serif }
+.sim-safe { fill:rgba(91,185,99,.22);stroke:#7ee088;stroke-width:2;stroke-dasharray:5 4 }
+.sim-danger { fill:rgba(224,82,82,.18);stroke:#ff867a;stroke-width:2;stroke-dasharray:4 4 }
+.sim-target { fill:none;stroke:#f0d77f;stroke-width:3 }
+.sim-review .sim-flight { stroke-dashoffset:0;opacity:.52 }
+.sim-camera-btn:focus-visible { outline:2px solid var(--gold);outline-offset:2px }
+@media (max-width:430px) {
+  .sim-chip { padding:6px 7px;font-size:8px;max-width:34%;overflow:hidden }
+  .sim-chip strong { font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+  .sim-camera-btn { padding:6px 8px;font-size:8px }
+}
+@media (orientation:landscape) and (max-height:520px) {
+  .sim-camera-bar { top:5px }
+  .sim-hud { top:50px }
+  .sim-caption { padding:6px 8px;font-size:10px;bottom:6px }
+  .sim-chip { padding:5px 7px }
+}
 .shot-sim.is-playing .sim-club { animation:simSwing .72s cubic-bezier(.3,.02,.15,1) both }
 .shot-sim.is-playing .sim-ball { animation:simLaunch .92s .25s var(--ease-out-quint) both }
 .shot-sim.is-playing .sim-flight { animation:simFlight .9s .28s linear both }
@@ -8198,10 +8232,12 @@ function simulatorSpec(nodeId, node){
   // The broadcast is the authored truth for what this camera frame must show.
   // Situation copy can mention hazards that belong to a later shot on the hole.
   const pictureCopy = `${nodeId} ${node.mapState||''} ${node.broadcast||''}`.toLowerCase();
-  const explicitApproach = /in the fairway|from the fairway|mid-iron in|approach/.test(copy);
-  const tee = (nodeId === 'tee' || node.mapState === 'tee') && !explicitApproach;
+  const baseTee = nodeId === 'tee' || node.mapState === 'tee';
+  const explicitApproach = !baseTee && /in the fairway|from the fairway|mid-iron in|approach/.test(copy);
+  const tee = baseTee;
   const putt = /putt/.test(roleCopy);
   const bunker = /bunker|sand/.test(roleCopy);
+  const bunkerHazard = /bunker|sand/.test(pictureCopy);
   const recovery = /chip|pitch|recovery|flop|apron|fringe/.test(roleCopy) && !bunker;
   const wedge = /wedge|drop zone|drop_zone/.test(roleCopy);
   const approach = explicitApproach || (!tee && (/approach|second|layup|fairway|drive/.test(roleCopy) || wedge || recovery));
@@ -8212,11 +8248,14 @@ function simulatorSpec(nodeId, node){
   // Hazard direction must follow the authored situation. A generic water strip
   // across the target line contradicts scenarios where the penalty is lateral.
   const waterIsland = water && /island green|no bail-out anywhere/.test(pictureCopy);
-  const waterLong = water && !waterIsland && /water (?:waiting |lurking )?(?:long|beyond)|pacific waiting long|ocean .*beyond|bay .*long/.test(pictureCopy);
-  const waterShortRight = water && !waterIsland && /water (?:sits |is )?short-right|short-right water/.test(pictureCopy);
-  const waterFrontLeft = water && !waterIsland && /water (?:hugs |guards |is )?(?:the )?front-left|front-left (?:of the green )?(?:water|pond)|pond hard on (?:the )?left/.test(pictureCopy);
-  const waterRight = water && !waterIsland && !waterShortRight && /water (?:guards |runs |is |sits )?(?:down |on |to )?the right|water right|right-side water|penalty area (?:down |on )?the right/.test(pictureCopy);
-  const waterLeft = water && !waterIsland && !waterFrontLeft && /water (?:guards |runs |is |sits )?(?:down |on |to )?the left|water left|left-side water|penalty area (?:down |on )?the left/.test(pictureCopy);
+  const waterLong = water && !waterIsland && /(?:water|pond|creek|ocean|pacific|sea|bay).{0,24}(?:long|beyond)|(?:long|beyond).{0,24}(?:water|pond|creek|ocean|pacific|sea|bay)/.test(pictureCopy);
+  const waterShortRight = water && !waterIsland && /(?:water|pond|creek|penalty area).{0,20}short-right|short-right.{0,20}(?:water|pond|creek|penalty area)/.test(pictureCopy);
+  const waterFrontLeft = water && !waterIsland && /(?:water|pond|creek|penalty area).{0,24}front-left|front-left.{0,24}(?:water|pond|creek|penalty area)/.test(pictureCopy);
+  const waterRightMention = /(?:water|pond|creek|penalty area).{0,24}(?:right|right-side)|(?:right|right-side).{0,24}(?:water|pond|creek|penalty area)/.test(pictureCopy);
+  const waterLeftMention = /(?:water|pond|creek|rae's creek|penalty area).{0,24}(?:left|left-side)|(?:left|left-side).{0,24}(?:water|pond|creek|rae's creek|penalty area)/.test(pictureCopy);
+  const firstLeft = pictureCopy.search(/left/), firstRight = pictureCopy.search(/right/);
+  const waterRight = water && !waterIsland && !waterShortRight && waterRightMention && !(waterLeftMention && firstLeft >= 0 && (firstRight < 0 || firstLeft < firstRight));
+  const waterLeft = water && !waterIsland && !waterFrontLeft && waterLeftMention && !(waterRightMention && firstRight >= 0 && (firstLeft < 0 || firstRight < firstLeft));
   const waterFront = water && !waterIsland && !waterLong && !waterShortRight && !waterFrontLeft && !waterRight && !waterLeft;
   const wall = /wall|road hole|hotel|out of bounds|\\bob\\b/.test(pictureCopy);
   const treeRecovery = /blocked|branch|small gap|punch|medicine|recover/.test(pictureCopy);
@@ -8236,10 +8275,107 @@ function simulatorSpec(nodeId, node){
     water ? 'Choose a flight and miss that keep the penalty out of play.' :
     wall ? 'The boundary is part of the shot. Pick the window before the club.' :
     'See the corridor, choose the miss, then commit.';
+  const danger = treeRecovery ? 'Branches' : water ? 'Penalty area' : wall ? 'Boundary' : trees ? 'Trees' :
+    bunkerHazard ? 'Bunker' : downhill ? 'Run-out' : 'Your costly miss';
+  const intention = putt ? 'Start line + pace' : treeRecovery ? 'Exit window' :
+    bunker ? 'Landing shelf' : recovery ? 'First bounce' : divot ? 'Ball-first strike' :
+    water || wall ? 'Safe-side target' : 'Committed corridor';
   return {
     scene:putt?'putt':bunker?'bunker':recovery?'recovery':approach?'approach':'tee',
-    lie, condition, trend, caption, divot, downhill, uphill, water, waterIsland, waterLong, waterShortRight, waterFrontLeft, waterRight, waterLeft, waterFront, wall, trees, treeRecovery
+    lie, condition, trend, caption, danger, intention, divot, downhill, uphill, bunkerHazard, water, waterIsland, waterLong, waterShortRight, waterFrontLeft, waterRight, waterLeft, waterFront, wall, trees, treeRecovery
   };
+}
+
+function simulatorReviewMarkup(s){
+  const planHazard = s.waterIsland
+    ? `<path d="M0 74H390V228H0Z" fill="#277fa1"/><ellipse cx="195" cy="118" rx="70" ry="48" fill="#4e8d43"/>`
+    : s.waterRight
+      ? `<path d="M292 0H390V310H326Q298 234 316 150Z" fill="#277fa1"/>`
+      : s.waterLeft
+        ? `<path d="M98 0H0V310H64Q92 234 74 150Z" fill="#277fa1"/>`
+        : s.waterLong
+          ? `<path d="M0 0H390V25H0Z" fill="#277fa1"/>`
+          : s.waterShortRight
+            ? `<path d="M238 84H390V205Q310 188 246 220Z" fill="#277fa1"/>`
+            : s.waterFrontLeft
+              ? `<path d="M0 84H174Q158 152 188 215Q90 190 0 218Z" fill="#277fa1"/>`
+              : s.waterFront
+                ? `<path d="M0 96Q98 78 196 103T390 96V150Q290 133 194 158T0 148Z" fill="#277fa1"/>`
+                : '';
+  const planTrees = s.trees ? `<g fill="#183e22"><circle cx="42" cy="82" r="35"/><circle cx="348" cy="82" r="35"/></g>` : '';
+  const planBunkers = s.bunkerHazard ? `<g fill="#d7bd82"><ellipse cx="132" cy="112" rx="34" ry="17"/><ellipse cx="260" cy="94" rx="30" ry="15"/></g>` : '';
+  const planWall = s.wall ? `<path d="M274 14L310 296" stroke="#8f8b82" stroke-width="16"/><path d="M274 14L310 296" stroke="#c3beb4" stroke-width="3"/>` : '';
+  const dangerZone = s.waterRight ? `<ellipse class="sim-danger" cx="330" cy="152" rx="48" ry="92"/>` :
+    s.waterLeft ? `<ellipse class="sim-danger" cx="60" cy="152" rx="48" ry="92"/>` :
+    (s.waterFront || s.waterFrontLeft || s.waterShortRight) ? `<ellipse class="sim-danger" cx="195" cy="125" rx="126" ry="38"/>` :
+    s.waterLong ? `<ellipse class="sim-danger" cx="195" cy="58" rx="132" ry="30"/>` :
+    s.treeRecovery ? `<ellipse class="sim-danger" cx="195" cy="112" rx="82" ry="48"/>` :
+    s.bunkerHazard ? `<ellipse class="sim-danger" cx="196" cy="103" rx="112" ry="34"/>` :
+    s.wall ? `<rect class="sim-danger" x="28" y="54" width="334" height="38" rx="12"/>` :
+    `<ellipse class="sim-danger" cx="${s.downhill?300:82}" cy="118" rx="48" ry="34"/>`;
+  const safeX = s.waterRight ? 145 : s.waterLeft ? 245 : s.waterFrontLeft ? 270 : s.waterShortRight ? 125 : 195;
+  let broadcastHazard = '';
+  if(s.waterLong) broadcastHazard += `<path d="M350 170Q374 162 390 168V232H344Z" fill="#277fa1"/><text class="sim-review-label" x="369" y="194" text-anchor="middle">LONG</text>`;
+  else if(s.waterRight || s.waterShortRight) broadcastHazard += `<path d="M306 182Q350 162 390 174V232H300Z" fill="#277fa1"/><text class="sim-review-label" x="347" y="204" text-anchor="middle">RIGHT-SIDE</text>`;
+  else if(s.waterLeft) broadcastHazard += `<path d="M0 176Q44 162 88 182L94 232H0Z" fill="#277fa1"/><text class="sim-review-label" x="44" y="204" text-anchor="middle">LEFT-SIDE</text>`;
+  else if(s.water) broadcastHazard += `<path d="M202 188Q258 162 316 180L308 232H196Z" fill="#277fa1"/><text class="sim-review-label" x="254" y="207" text-anchor="middle">${s.waterFrontLeft?'FRONT-LEFT':'CARRY'}</text>`;
+  if(s.trees) broadcastHazard += `<g fill="#183e22"><circle cx="278" cy="117" r="48"/><rect x="267" y="118" width="22" height="92"/></g>`;
+  if(s.bunkerHazard) broadcastHazard += `<path d="M224 188Q278 162 338 184Q316 216 238 218Z" fill="#d7bd82"/><text class="sim-review-label" x="280" y="198" text-anchor="middle">BUNKER</text>`;
+  if(s.wall) broadcastHazard += `<rect x="334" y="74" width="20" height="146" fill="#77736b"/><path d="M334 78h20M334 104h20M334 130h20M334 156h20" stroke="#aaa59b" stroke-width="3"/>`;
+  const broadcastScene = s.scene === 'putt'
+    ? `<rect width="390" height="310" fill="#4a9a4d"/>
+       <path d="M0 230Q180 200 390 226M0 170Q180 142 390 166" fill="none" stroke="rgba(225,255,220,.2)" stroke-width="3"/>
+       <circle cx="330" cy="174" r="9" fill="#173a19"/><line x1="330" y1="174" x2="330" y2="90" stroke="#fff" stroke-width="2"/>
+       <circle cx="52" cy="248" r="8" fill="#fff"/><path class="sim-flight" d="M52 248Q186 ${s.downhill?'194':'222'} 330 174" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="320" stroke-dashoffset="320"/>
+       <ellipse cx="330" cy="174" rx="48" ry="34" fill="none" stroke="#f0d77f" stroke-width="2" stroke-dasharray="6 5"/>
+       <text class="sim-review-label" x="18" y="62">ROLL AND PACE</text><text class="sim-review-note" x="18" y="78">Start line first. Finish inside the gold zone.</text>`
+    : `<rect width="390" height="162" fill="#9fc7dd"/><path d="M0 230Q180 202 390 230V310H0Z" fill="#376e36"/>
+       ${broadcastHazard}<circle cx="52" cy="248" r="8" fill="#fff"/>
+       <path class="sim-flight" d="${s.trend&&/hook/i.test(s.trend)?'M52 248Q174 38 316 182':'M52 248Q178 62 326 174'}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="320" stroke-dashoffset="320"/>
+       <path d="M316 172l18 1-10 15" fill="none" stroke="#f0d77f" stroke-width="3"/>
+       <text class="sim-review-label" x="18" y="62">BALL FLIGHT</text><text class="sim-review-note" x="18" y="78">Watch curve, height and landing.</text>
+       <text class="sim-review-label" x="326" y="204" text-anchor="middle">LAND HERE</text>`;
+  const planScene = s.scene === 'putt'
+    ? `<rect width="390" height="310" fill="#347e3d"/><ellipse cx="195" cy="158" rx="154" ry="126" fill="#4a9a4d"/>
+       <circle cx="218" cy="58" r="9" fill="#173a19"/><circle cx="195" cy="274" r="8" fill="#fff"/>
+       <path d="M195 274Q${s.downhill?'246':'170'} 176 218 64" fill="none" stroke="#f0d77f" stroke-width="3" stroke-dasharray="7 6"/>
+       <ellipse class="sim-safe" cx="218" cy="58" rx="48" ry="32"/><path d="M75 155h34m-17-17v34M282 195h34m-17-17v34" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+       <text class="sim-review-label" x="18" y="62">START LINE AND PACE</text><text class="sim-review-note" x="18" y="78">Gold = intended roll · green = safe finish</text>`
+    : `<rect width="390" height="310" fill="#183a20"/><path d="M144 310Q120 176 158 48Q195 12 232 48Q270 176 246 310Z" fill="#4e8d43"/>
+       <ellipse cx="195" cy="46" rx="64" ry="32" fill="#68a85b"/>${planHazard}${planBunkers}${planTrees}${planWall}
+       ${dangerZone}<ellipse class="sim-safe" cx="${safeX}" cy="70" rx="62" ry="30"/>
+       <path d="M195 280Q${safeX} 176 ${safeX} 76" fill="none" stroke="#f0d77f" stroke-width="3" stroke-dasharray="7 6"/>
+       <circle cx="195" cy="280" r="8" fill="#fff"/><circle class="sim-target" cx="${safeX}" cy="70" r="13"/>
+       <text class="sim-review-label" x="18" y="62">TARGET AND MISS</text><text class="sim-review-note" x="18" y="78">Gold target · red danger · green playable</text>`;
+  return `
+    <svg class="sim-svg sim-review" data-camera="broadcast" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
+      ${broadcastScene}
+    </svg>
+    <svg class="sim-svg sim-review" data-camera="plan" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
+      ${planScene}
+    </svg>`;
+}
+
+function setSimulatorCamera(camera, replay){
+  const sim = document.getElementById('shot-sim');
+  if(!sim) return;
+  const allowed = ['player','broadcast','plan'];
+  const next = allowed.includes(camera) ? camera : 'player';
+  sim.dataset.camera = next;
+  sim.querySelectorAll('.sim-svg[data-camera]').forEach(view => view.classList.toggle('is-active', view.dataset.camera === next));
+  sim.querySelectorAll('.sim-camera-btn').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.cameraTarget === next)));
+  const cue = sim.querySelector('.sim-caption');
+  if(cue){
+    const labels = {player:'WHAT YOU FACE',broadcast:'WHAT THE BALL DOES',plan:'WHERE THE MISS GOES'};
+    cue.querySelector('b').textContent = labels[next];
+    const copy = cue.querySelector('.sim-caption-copy');
+    if(copy) copy.textContent = sim.dataset[`${next}Cue`] || '';
+  }
+  if(replay){
+    sim.classList.remove('is-playing');
+    void sim.offsetWidth;
+    sim.classList.add('is-playing');
+  }
 }
 
 function mountShotSimulator(nodeId, node){
@@ -8255,10 +8391,21 @@ function mountShotSimulator(nodeId, node){
   const el = document.createElement('div');
   el.className = 'shot-sim';
   el.id = 'shot-sim';
+  el.dataset.camera = 'player';
+  el.dataset.playerCue = s.caption;
+  el.dataset.broadcastCue = s.scene === 'putt'
+    ? 'Watch the start line, break and finishing pace.'
+    : `Watch launch, curve and landing relative to ${s.danger.toLowerCase()}.`;
+  el.dataset.planCue = `Intention: ${s.intention.toLowerCase()}. Keep ${s.danger.toLowerCase()} out of play.`;
   el.setAttribute('role','img');
-  el.setAttribute('aria-label', `${s.lie}. ${s.condition}.${s.trend?' Scenario pattern: '+s.trend+'.':''}`);
+  el.setAttribute('aria-label', `${s.lie}. ${s.condition}.${s.trend?' Scenario pattern: '+s.trend+'.':''} Danger: ${s.danger}. Intention: ${s.intention}.`);
   el.innerHTML = `
-    <svg class="sim-svg" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
+    <div class="sim-camera-bar" role="group" aria-label="Review this shot">
+      <button class="sim-camera-btn" data-camera-target="player" aria-pressed="true" onclick="setSimulatorCamera('player',false)">Player</button>
+      <button class="sim-camera-btn" data-camera-target="broadcast" aria-pressed="false" onclick="setSimulatorCamera('broadcast',true)">Broadcast</button>
+      <button class="sim-camera-btn" data-camera-target="plan" aria-pressed="false" onclick="setSimulatorCamera('plan',false)">Plan</button>
+    </div>
+    <svg class="sim-svg is-active" data-camera="player" viewBox="0 0 390 310" preserveAspectRatio="none" aria-hidden="true">
       <defs><linearGradient id="simFair" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4f8b45"/><stop offset="1" stop-color="#193f21"/></linearGradient></defs>
       <rect width="390" height="104" fill="${green?'#b7d1dc':'#9fc7dd'}"/>
       ${green
@@ -8270,6 +8417,7 @@ function mountShotSimulator(nodeId, node){
            <circle class="sim-putt-ball" cx="194" cy="276" r="8" fill="#fff"/><path class="sim-putter" d="M149 292h78M174 292v-65" stroke="#cdd5d8" stroke-width="7" transform-origin="190px 292px"/>`
         : `<path d="M0 95L145 80L245 80L390 95V310H0Z" fill="${sand?'#b89a5e':'url(#simFair)'}"/>
            <path d="M145 80L20 310H370L245 80Z" fill="${sand?'#d8bd7d':'#4e8d43'}"/>
+           ${s.bunkerHazard&&!sand?`<path d="M82 150Q122 128 160 151Q141 180 94 177Z" fill="#d7bd82"/><path d="M258 128Q300 108 338 132Q318 160 270 156Z" fill="#d7bd82"/>`:''}
            ${s.waterIsland?`<path d="M0 76H390V240Q338 205 300 206Q250 208 218 246Q170 210 112 207Q62 205 0 244Z" fill="#277fa1"/><path d="M0 94Q86 78 156 104T300 99T390 105M0 164Q82 145 154 171T302 165T390 171" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/><path d="M132 92Q195 68 258 92L302 204Q195 224 88 204Z" fill="#4e8d43"/>`:''}
            ${s.waterLong?`<path d="M0 78Q92 96 190 82T390 86V132Q292 118 194 136T0 126Z" fill="#277fa1"/><path d="M0 93Q92 111 190 97T390 101" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
            ${s.waterShortRight?`<path d="M218 112Q300 96 390 114V220Q318 194 244 218Q226 166 218 112Z" fill="#277fa1"/><path d="M236 130Q306 116 390 132M248 174Q316 154 390 176" fill="none" stroke="rgba(220,250,255,.55)" stroke-width="2"/>`:''}
@@ -8293,16 +8441,23 @@ function mountShotSimulator(nodeId, node){
            <circle class="sim-ball" cx="195" cy="271" r="9" fill="#fff"/>
            <path class="sim-club" d="M120 298L181 278L190 285L180 292Z" fill="#cbd2d4" transform-origin="181px 282px"/>`}
     </svg>
+    ${simulatorReviewMarkup(s)}
     <div class="sim-hud"><div class="sim-chip">LIE<strong>${s.lie}</strong></div><div class="sim-chip">PICTURE<strong>${s.condition}</strong></div>${s.trend?`<div class="sim-chip sim-trend">SCENARIO PATTERN<strong>${s.trend}</strong></div>`:''}</div>
-    <div class="sim-caption">${s.caption}</div>`;
+    <div class="sim-caption"><b>WHAT YOU FACE</b><span class="sim-caption-copy">${s.caption}</span></div>`;
   wrap.appendChild(el);
 }
 
 function playShotSimulator(){
   const el = document.getElementById('shot-sim');
   if(!el) return 180;
+  setSimulatorCamera('player', false);
   el.classList.add('is-playing');
-  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 80 : 1180;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduced) gsAfter(360, () => {
+    const current = document.getElementById('shot-sim');
+    if(current === el) setSimulatorCamera('broadcast', false);
+  });
+  return reduced ? 80 : 1240;
 }
 
 function selectHoleChoice(choice, node, tappedCard){

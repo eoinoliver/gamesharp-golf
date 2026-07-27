@@ -75,6 +75,12 @@ const holes = extractConst('ALL_HOLES', 'let HOLE = null;');
 const maps = new Set([...html.matchAll(/CAM_MAPS\.([A-Za-z0-9_]+)\s*=/g)].map(m => m[1]));
 let nodeCount = 0;
 let decisionCount = 0;
+const sceneCounts = {tee:0, approach:0, recovery:0, bunker:0, putt:0};
+const specStart = html.indexOf('function simulatorSpec(');
+const specEnd = html.indexOf('function simulatorReviewMarkup(', specStart);
+const specContext = {};
+vm.createContext(specContext);
+vm.runInContext(`${html.slice(specStart, specEnd)};this.auditSimulatorSpec=simulatorSpec;`, specContext);
 for (const hole of holes) {
   if (hole.mapType !== 'camera') failures.push(`${hole.name}: not on camera renderer`);
   if (!hole.cam?.mapId || !maps.has(hole.cam.mapId)) failures.push(`${hole.name}: missing map renderer`);
@@ -84,6 +90,23 @@ for (const hole of holes) {
     if (node.mapState && !hole.cam?.zones?.[node.mapState]) failures.push(`${hole.name}/${id}: missing camera zone ${node.mapState}`);
     if (node.choices) {
       decisionCount++;
+      specContext.HOLE = hole;
+      const spec = specContext.auditSimulatorSpec(id, node);
+      sceneCounts[spec.scene] = (sceneCounts[spec.scene] || 0) + 1;
+      if (!spec.lie || !spec.danger || !spec.intention || !spec.caption) failures.push(`${hole.name}/${id}: incomplete visual learning contract`);
+      const waterDirections = ['waterIsland','waterLong','waterShortRight','waterFrontLeft','waterRight','waterLeft','waterFront'].filter(key => spec[key]);
+      if (spec.water && waterDirections.length !== 1) failures.push(`${hole.name}/${id}: water requires exactly one rendered geography, got ${waterDirections.join(',') || 'none'}`);
+      const authored = String(node.broadcast || '').toLowerCase();
+      if ((id === 'tee' || node.mapState === 'tee') && spec.lie !== 'Tee') failures.push(`${hole.name}/${id}: tee misclassified as ${spec.lie}`);
+      if (node.mapState === 'putt' && spec.scene !== 'putt') failures.push(`${hole.name}/${id}: putt misclassified as ${spec.scene}`);
+      if (/branch|small gap/.test(authored) && !spec.treeRecovery) failures.push(`${hole.name}/${id}: recovery window not rendered`);
+      if (/bunker|sand/.test(String(node.broadcast || '').toLowerCase()) && !spec.bunkerHazard) failures.push(`${hole.name}/${id}: authored bunker not rendered`);
+      const waterText = /water|pond|creek|ocean|pacific|sea|bay/.test(authored);
+      const authoredLeft = authored.search(/left/), authoredRight = authored.search(/right/);
+      if (waterText && /island green/.test(authored) && !spec.waterIsland) failures.push(`${hole.name}/${id}: island water not rendered`);
+      if (waterText && !spec.waterIsland && /(?:water|pond|creek|penalty area).{0,24}right|right.{0,24}(?:water|pond|creek|penalty area)/.test(authored) && !(authoredLeft >= 0 && authoredLeft < authoredRight) && !spec.waterRight && !spec.waterShortRight) failures.push(`${hole.name}/${id}: right-side water not rendered right`);
+      if (waterText && !spec.waterIsland && /(?:water|pond|creek|rae's creek|penalty area).{0,24}left|left.{0,24}(?:water|pond|creek|rae's creek|penalty area)/.test(authored) && !(authoredRight >= 0 && authoredRight < authoredLeft) && !spec.waterLeft && !spec.waterFrontLeft) failures.push(`${hole.name}/${id}: left-side water not rendered left`);
+      if (waterText && /(?:water|pond|creek|ocean|pacific|sea|bay).{0,24}(?:long|beyond)|(?:long|beyond).{0,24}(?:water|pond|creek|ocean|pacific|sea|bay)/.test(authored) && !spec.waterLong) failures.push(`${hole.name}/${id}: long water not rendered long`);
       if (!node.broadcast) failures.push(`${hole.name}/${id}: decision missing broadcast`);
       for (const choice of node.choices) {
         if (!nodes[choice.next]) failures.push(`${hole.name}/${id}: missing destination ${choice.next}`);
@@ -94,6 +117,21 @@ for (const hole of holes) {
   }
 }
 notes.push(`Play a Hole ${holes.length} holes; ${nodeCount} nodes; ${decisionCount} decisions; ${maps.size} maps`);
+notes.push(`Visual contracts tee ${sceneCounts.tee}; approach ${sceneCounts.approach}; recovery ${sceneCounts.recovery}; bunker ${sceneCounts.bunker}; putt ${sceneCounts.putt}`);
+
+for (const camera of ['player', 'broadcast', 'plan']) {
+  if (!html.includes(`data-camera="${camera}"`)) failures.push(`Missing ${camera} shot review`);
+}
+if ((html.match(/function simulatorSpec\(/g) || []).length !== 1) failures.push('simulatorSpec must have one implementation');
+if ((html.match(/function mountShotSimulator\(/g) || []).length !== 1) failures.push('mountShotSimulator must have one implementation');
+if ((html.match(/function simulatorReviewMarkup\(/g) || []).length !== 1) failures.push('simulatorReviewMarkup must have one implementation');
+if (!html.includes("setSimulatorCamera('broadcast', false)")) failures.push('Chosen shot does not cut automatically to broadcast flight');
+if (!/orientation:landscape/.test(html)) failures.push('Landscape simulator layout guard is missing');
+if (!/\.sim-camera-btn\s*\{[^}]*min-height:38px/s.test(html)) failures.push('Camera review controls are below the 38px mobile touch target');
+for (const cue of ['playerCue', 'broadcastCue', 'planCue']) {
+  if (!html.includes(`dataset.${cue}`)) failures.push(`Missing camera-specific ${cue}`);
+}
+notes.push('Shot reviews 3 cameras; single renderer/spec implementation; landscape guard present');
 
 const advanced = extractConst('ADV_ITEMS', 'let advState');
 for (const [index, item] of advanced.entries()) {
