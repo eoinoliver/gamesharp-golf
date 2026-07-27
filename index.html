@@ -676,6 +676,16 @@ svg { display:block; }
   overflow:hidden; min-height:160px;
   display:flex; align-items:center; justify-content:center;
 }
+.answer-truth {
+  width:100%; min-height:160px; padding:22px 20px; display:flex; flex-direction:column;
+  justify-content:center; background:radial-gradient(110% 130% at 10% 0%,rgba(200,168,75,.14),transparent 55%),#152019;
+  border:1px solid rgba(200,168,75,.24); border-radius:var(--radius-sm);
+}
+.answer-truth-kicker { color:var(--gold); font-size:10px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+.answer-truth-call { margin-top:10px; color:#fff; font-size:17px; font-weight:800; line-height:1.35; }
+.answer-truth-rule { margin-top:12px; color:rgba(255,255,255,.68); font-size:12.5px; line-height:1.5; }
+.answer-truth-line { width:44px; height:2px; margin-top:15px; background:var(--gold); transform-origin:left; animation:truthLine .65s var(--ease-standard) both; }
+@keyframes truthLine { from{transform:scaleX(0);opacity:.2} to{transform:scaleX(1);opacity:1} }
 .next-btn {
   margin:0 16px 20px; background:var(--pc); color:#111;
   border:none; border-radius:var(--radius);
@@ -2081,7 +2091,7 @@ const QUESTIONS = [
 {"id": "QE5_001", "pillar": "Course IQ", "module": "Tee-Shot Penalty Management", "difficulty": "Club", "handicap_band": "Club", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Penalty", "visual_must_show": false, "confidence_level": "High", "question": "Average 90-shooters have how many tee shots per round that leave no direct shot at the green?", "option_a": "1.8", "option_b": "3.3", "option_c": "4.9", "option_d": "6.7", "correct_answer": "C", "why_right": "Shot Scope data puts average 90-shooters at 4.9 troublesome tee shots per round, versus 3.3 for average 80-shooters.  — Source: 6 Ways To Consistently Break 90 (Proven By Data!)", "pro_insight": "", "common_pitfall": "", "action_tip": "Better players do not simply hit prettier tee shots; they choose lines and clubs that reduce recovery situations.", "tags": "tee-shot penalty management,guess_the_number", "tier": "Free"},
 {"id": "QE5_002", "pillar": "Score Smart", "module": "Blow-Up Avoidance", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "How many double bogeys per round does a scratch player average compared with a 15-handicap?", "option_a": "0.3 vs 4.7", "option_b": "0.8 vs 2.6", "option_c": "1.2 vs 3.1", "option_d": "2.0 vs 4.0", "correct_answer": "A", "why_right": "Shot Scope data cited by Golf Monthly shows scratch players averaging about 0.3 doubles per round versus 4.7 for a 15-handicap.  — Source: 6 Things ALL Scratch Golfers Do (That You Don't)", "pro_insight": "", "common_pitfall": "", "action_tip": "The elite gap is not birdie count; it is the refusal to turn one miss into three shots.", "tags": "blow-up avoidance,guess_the_number", "tier": "Free"},
 {"id": "QE5_003", "pillar": "Course IQ", "module": "Quality Of Miss", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Penalty", "visual_must_show": false, "confidence_level": "High", "question": "Scratch golfers and 15-handicappers hit a similar number of fairways. What is the real tee-shot gap?", "option_a": "Scratch hits 20% more fairways", "option_b": "15-handicap loses 30 yards", "option_c": "Scratch has 2.1 serious trouble tee shots vs 5.7", "option_d": "Scratch carries it 40 yards longer off the tee", "correct_answer": "C", "why_right": "The fairway percentage gap is small, but serious trouble is not: 2.1 per round for scratch versus 5.7 for 15-handicap players.  — Source: 6 Things ALL Scratch Golfers Do (That You Don't)", "pro_insight": "", "common_pitfall": "", "action_tip": "Aim to eliminate the expensive miss, not merely to hit more fairways.", "tags": "quality of miss,guess_the_number", "tier": "Free"},
-{"id": "QE5_004", "pillar": "Short Game", "module": "Lag-Putt Speed Control", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Three-putt", "visual_must_show": false, "confidence_level": "High", "question": "How often does a scratch golfer three-putt, on average?", "option_a": "Every 9.7 holes", "option_b": "Every 16.7 holes", "option_c": "Every 35.7 holes", "option_d": "Every 80 holes", "correct_answer": "C", "why_right": "Shot Scope data shows scratch golfers average a three-putt every 35.7 holes, while a 5-handicap falls to every 16.7 holes.  — Source: Data Reveals How Many 3-Putts Amateur Golfers Make Per Round", "pro_insight": "", "common_pitfall": "", "action_tip": "Elite putting is often invisible: it is pace control that leaves tap-ins, not miracle 30-foot makes.", "tags": "lag-putt speed control,guess_the_number", "tier": "Free"},
+{"id": "QE5_004", "pillar": "Short Game", "module": "Lag-Putt Speed Control", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Three-putt", "visual_must_show": false, "confidence_level": "High", "question": "How often does a scratch golfer three-putt, on average?", "option_a": "Every 9.7 holes", "option_b": "Every 20.9 holes", "option_c": "Every 39.2 holes", "option_d": "Every 80 holes", "correct_answer": "C", "why_right": "Shot Scope's current data booklet reports one three-putt every 39.2 holes for scratch players and every 20.9 holes for 5-handicappers.  — Source: Shot Scope Data Booklet, Section 7: Putting", "pro_insight": "", "common_pitfall": "", "action_tip": "Elite putting is often invisible: it is pace control that leaves tap-ins, not miracle 30-foot makes.", "tags": "lag-putt speed control,guess_the_number", "tier": "Free"},
 {"id": "QE5_005", "pillar": "Short Game", "module": "Short-Putt Expectation", "difficulty": "Club", "handicap_band": "Club", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Three-putt", "visual_must_show": false, "confidence_level": "High", "question": "From 3-6 feet, what percentage does a 10-handicap make?", "option_a": "41%", "option_b": "57%", "option_c": "65%", "option_d": "82%", "correct_answer": "C", "why_right": "Shot Scope data puts 10-handicappers at 65% from 3-6 feet; scratch players are 76%, and 25-handicappers are 48%.  — Source: Data Reveals How Many 3-Putts Amateur Golfers Make Per Round", "pro_insight": "", "common_pitfall": "", "action_tip": "A 4-footer is not a tap-in under pressure. The best lag putt is one that avoids asking the question.", "tags": "short-putt expectation,guess_the_number", "tier": "Free"},
 {"id": "QE5_006", "pillar": "Short Game", "module": "Putting Reality Check", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Three-putt", "visual_must_show": false, "confidence_level": "High", "question": "What is the average PGA TOUR one-putt percentage?", "option_a": "29.4%", "option_b": "34.0%", "option_c": "39.72%", "option_d": "51.5%", "correct_answer": "C", "why_right": "Golf Monthly's 2025 PGA TOUR/Shot Scope comparison reports an average PGA TOUR one-putt rate of 39.72%.  — Source: How Many 1-Putts Does The Average PGA Tour Player Make Per Round?", "pro_insight": "", "common_pitfall": "", "action_tip": "Even elite players do not one-putt half the greens. Better scoring comes from approach position and avoiding three-putts.", "tags": "putting reality check,guess_the_number", "tier": "Free"},
 {"id": "QE5_007", "pillar": "Score Smart", "module": "Approach Underclubbing", "difficulty": "Club", "handicap_band": "Club", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "From 150 yards, how often does a 20-handicap leave the approach short?", "option_a": "18%", "option_b": "29%", "option_c": "50%", "option_d": "71%", "correct_answer": "C", "why_right": "Shot Scope data cited by Golf Monthly says 20-handicappers leave half their 150-yard approaches short.  — Source: Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "pro_insight": "", "common_pitfall": "", "action_tip": "Most players choose the club for their best strike. Elite thinkers choose the club that prices the average strike.", "tags": "approach underclubbing,guess_the_number", "tier": "Free"},
@@ -2089,7 +2099,7 @@ const QUESTIONS = [
 {"id": "QE5_009", "pillar": "Course IQ", "module": "Tee Club Choice", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Penalty", "visual_must_show": false, "confidence_level": "High", "question": "For an average 15-handicap, what does finding a fairway bunker off the tee cost?", "option_a": "Almost nothing", "option_b": "About a tenth of a shot", "option_c": "About half a shot", "option_d": "Two full shots", "correct_answer": "C", "why_right": "Shot Scope data cited by Golf Monthly says a fairway bunker off the tee costs the average 15-handicapper about half a shot.  — Source: Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "pro_insight": "", "common_pitfall": "", "action_tip": "The safe tee club must be unable to reach the bunker even on your best strike.", "tags": "tee club choice,guess_the_number", "tier": "Free"},
 {"id": "QE5_010", "pillar": "Course IQ", "module": "Driver Versus Fairway Wood Myth", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Penalty", "visual_must_show": false, "confidence_level": "High", "question": "For a 10-handicap, how much more accurate is 3-wood than driver off the tee?", "option_a": "3 percentage points", "option_b": "9 percentage points", "option_c": "15 percentage points", "option_d": "It is less accurate", "correct_answer": "A", "why_right": "Shot Scope data: 10-handicap fairways hit are 49% with driver and 52% with 3-wood.  — Source: Are You More Likely To Hit The Fairway With A Driver Or 3-Wood?", "pro_insight": "", "common_pitfall": "", "action_tip": "Do not choose 3-wood because it sounds safe. Choose it only if it removes a specific hazard or suits your pattern.", "tags": "driver versus fairway wood myth,guess_the_number", "tier": "Free"},
 {"id": "QE5_011", "pillar": "Score Smart", "module": "Distance Reality", "difficulty": "Club", "handicap_band": "Club", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "How far does a scratch golfer average with driver in 2026 Shot Scope data?", "option_a": "246 yards", "option_b": "261 yards", "option_c": "285 yards", "option_d": "303 yards", "correct_answer": "C", "why_right": "Shot Scope's 2026 amateur data puts scratch driver average at 285 yards, around 18 yards short of PGA TOUR average.  — Source: How Far Does The Average Amateur Golfer Drive The Ball In 2026?", "pro_insight": "", "common_pitfall": "", "action_tip": "Length matters, but elite amateurs are not tour-long. Strategy should be built around your actual carry, not TV distances.", "tags": "distance reality,guess_the_number", "tier": "Free"},
-{"id": "QE5_012", "pillar": "Score Smart", "module": "Par-3 Expectations", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "On par 3s from 150-200 yards, what GIR rate does a 5-handicap average?", "option_a": "19%", "option_b": "28%", "option_c": "39%", "option_d": "53%", "correct_answer": "C", "why_right": "Shot Scope par-3 data puts 5-handicappers at 39% GIR from 150-200 yards; scratch players are 53%.  — Source: Do You Play Par-3s Better Than The Average Amateur Golfer?", "pro_insight": "", "common_pitfall": "", "action_tip": "On a long par 3, a safe four is not failure. The target is the miss that keeps four easy.", "tags": "par-3 expectations,guess_the_number", "tier": "Free"},
+{"id": "QE5_012", "pillar": "Score Smart", "module": "Par-3 Expectations", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "On par 3s from 150-200 yards, what GIR rate does a 5-handicap average?", "option_a": "19%", "option_b": "30%", "option_c": "41%", "option_d": "51%", "correct_answer": "C", "why_right": "Shot Scope's current data booklet reports 41% GIR for 5-handicappers from 150-200 yards; scratch players are 51%.  — Source: Shot Scope Data Booklet, Par 3 Tee Shots", "pro_insight": "", "common_pitfall": "", "action_tip": "On a long par 3, a safe four is not failure. The target is the miss that keeps four easy.", "tags": "par-3 expectations,guess_the_number", "tier": "Free"},
 {"id": "QE5_013", "pillar": "Score Smart", "module": "Long Approach Club Selection", "difficulty": "Club", "handicap_band": "Club", "format": "Scenario", "hook_type": "Guess the Number", "decision_type": "Risk", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "From 175 yards, what GIR boost does a 20-handicap get using hybrid instead of long iron?", "option_a": "8% to 14%", "option_b": "14% to 16%", "option_c": "22% to 25%", "option_d": "46% to 44%", "correct_answer": "A", "why_right": "Shot Scope data cited by Golf Monthly shows 20-handicappers going from 8% GIR with long iron to 14% with hybrid from 175.  — Source: I Ditched My Long Irons For Hybrids And Woods (And 2026 Shot Scope Data Proves I Was Right)", "pro_insight": "", "common_pitfall": "", "action_tip": "Better strategy sometimes means choosing the less impressive club that launches higher and misses shorter less often.", "tags": "long approach club selection,guess_the_number", "tier": "Free"},
 {"id": "QE5_014", "pillar": "Course IQ", "module": "Choose The Cheap Miss", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Tour Decision", "decision_type": "Target", "primary_score_leak": "Penalty", "visual_must_show": false, "confidence_level": "High", "question": "Par 4, 405 yards. OB left from tee to green. Right rough is thick but playable. Your driver pattern is a 25-yard fade window.  What would you do?", "option_a": "Aim centre fairway", "option_b": "Aim left edge and fade it", "option_c": "Aim at right rough and let the pattern work", "option_d": "Hit iron and leave 210", "correct_answer": "C", "why_right": "Elite players do not aim at perfection here. They aim so the whole dispersion avoids the scorecard-killer.  — Source: 6 Ways To Consistently Break 90 (Proven By Data!)", "pro_insight": "The fairway is not the target; the no-OB shot pattern is the target.", "common_pitfall": "", "action_tip": "On penalty holes, build the target backwards from the worst miss.", "tags": "choose the cheap miss,tour_decision", "tier": "Free"},
 {"id": "QE5_015", "pillar": "Course IQ", "module": "Hazard-Specific Tee Club", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Tour Decision", "decision_type": "Target", "primary_score_leak": "Penalty", "visual_must_show": false, "confidence_level": "High", "question": "Par 4, 390 yards. Fairway bunker begins at 245 carry. Your driver total is 260 on a good strike; 3-wood total is 238.  What would you do?", "option_a": "Driver, aim away from bunker", "option_b": "3-wood that cannot reach bunker", "option_c": "Hybrid to 190", "option_d": "Driver only if wind helps", "correct_answer": "B", "why_right": "If the bunker costs about half a shot, the correct safe club is the one that cannot reach it on your best strike.  — Source: Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "pro_insight": "A club that can reach the trouble is not a safety play.", "common_pitfall": "", "action_tip": "Before choosing a tee club, price your best strike, not just your average.", "tags": "hazard-specific tee club,tour_decision", "tier": "Free"},
@@ -2478,6 +2488,18 @@ const QUESTIONS = [
 {id:"Q394",pillar:"Score Smart",module:"Scoring Strategy",difficulty:"Club",handicap_band:"Club",format:"Scenario",hook_type:"Green Light",decision_type:"Mental",primary_score_leak:"Double bogey",visual_must_show:false,confidence_level:"High",question:"Reviewing your season: zero penalty strokes, but you also can't remember a single eagle putt or drivable-par-4 attempt. What does that pattern reveal?",option_a:"Over-protection leaks strokes too — caution isn't free",option_b:"Perfect discipline — zero penalties is the goal",option_c:"Nothing, scoring is about putting",option_d:"You need new equipment",correct_answer:"A",why_right:"Zero penalties with zero scoring chances means your risk dial is stuck on protect — and over-protection is a leak with no scorecard symptom. Every safe club off a harmless tee, every middle-green aim at an open pin quietly costs fractions of strokes that compound across a season. The goal was never zero risk; it was correctly priced risk. A season without a single green light taken means dozens of them were missed.",pro_insight:"Strokes-gained audits of amateur rounds find both leak types — but the over-protector's leak is invisible because it never makes a highlight reel of disasters. It just slowly pays out.",common_pitfall:"Measuring discipline by absence of disaster. The scorecard punishes unclaimed birdies exactly as hard as splashed drives — one stroke at a time.",action_tip:"Audit your rounds for green lights taken, not just blow-ups avoided. If the answer is 'none', your protection is costing you.",tags:"green-light,season-audit,over-protection",tier:"Free",techAnim:"approach_landing_zone",techAnimParams:{}},
 ];
 
+// Launch trust gate. The legacy bank contains useful material, but most items
+// do not yet carry enough provenance to be presented as verified learning.
+// Until the content audit adds a source record, those items remain in the
+// authoring bank but cannot enter a live quiz, daily, diagnostic or tip.
+const LAUNCH_QUESTIONS = QUESTIONS.filter(q => {
+  const key = String(q.correct_answer || '').toUpperCase();
+  const answer = q['option_' + key.toLowerCase()];
+  return /^[A-D]$/.test(key)
+    && typeof answer === 'string' && answer.trim()
+    && /— Source:/.test(String(q.why_right || ''));
+});
+
 // ── Near-twin similarity groups ────────────────────────
 // Scenario repetition is deliberate — re-meeting the same decision after a
 // gap is the spaced-repetition rep that beats novelty for retention. The rule
@@ -2744,7 +2766,7 @@ function renderHome(){
   if(ot){
     try{
       const n = parseInt(todayStr().replace(/-/g,''));
-      const tipQ = QUESTIONS[(n*31+7) % QUESTIONS.length];
+      const tipQ = LAUNCH_QUESTIONS[(n*31+7) % LAUNCH_QUESTIONS.length];
       const tip = (tipQ.action_tip || '').split(/(?<=[.!?])\s/)[0];
       ot.innerHTML = `<div class="ot-label">⛳ ONE THING TO REMEMBER</div><div class="ot-text">${tip}</div>`;
     }catch(e){ ot.innerHTML=''; }
@@ -2915,9 +2937,10 @@ function renderSharpen(){
   PILLARS.forEach((p, i) => {
     const stats = S.pillarStats[p.name] || {correct:0, total:0};
     const pct   = stats.total > 0 ? Math.round(stats.correct/stats.total*100) : 0;
-    const qCount= QUESTIONS.filter(q => q.pillar === p.name).length;
+    const qCount= LAUNCH_QUESTIONS.filter(q => q.pillar === p.name).length;
+    if(!qCount) return; // do not advertise an unverified or empty learning room
     const done  = Object.keys(S.completed).filter(id => {
-      const q = QUESTIONS.find(q=>q.id===id);
+      const q = LAUNCH_QUESTIONS.find(q=>q.id===id);
       return q && q.pillar === p.name;
     }).length;
     const card = document.createElement('div');
@@ -2999,7 +3022,8 @@ function renderSharpen(){
     });
     return best;
   })();
-  const withInsight = QUESTIONS.filter(q=>q.pro_insight);
+  const withInsight = LAUNCH_QUESTIONS.filter(q=>q.pro_insight_source && q.pro_insight);
+  if(scroll.parentElement) scroll.parentElement.style.display = withInsight.length ? '' : 'none';
   const strong = strongPillar ? withInsight.filter(q=>q.pillar===strongPillar) : [];
   const rest   = withInsight.filter(q=>q.pillar!==strongPillar).sort(()=>Math.random()-.5);
   const sample = [...strong.sort(()=>Math.random()-.5).slice(0,2), ...rest].slice(0,6);
@@ -3031,7 +3055,7 @@ function openPillar(pillar){
   document.getElementById('ph-name').textContent  = pillar.name;
   document.getElementById('ph-desc').textContent  = pillar.desc;
 
-  const qs    = QUESTIONS.filter(q => q.pillar === pillar.name);
+  const qs    = LAUNCH_QUESTIONS.filter(q => q.pillar === pillar.name);
   const done  = qs.filter(q => S.completed[q.id]).length;
   const stats = S.pillarStats[pillar.name] || {correct:0, total:0};
   const acc   = stats.total > 0 ? Math.round(stats.correct/stats.total*100)+'%' : '—';
@@ -3207,7 +3231,7 @@ function markSeen(qs){
   (qs||[]).forEach(q => { if(q && q.id){ set.add(q.id); at[q.id] = today; } });
   let ids = [...set];
   // when nearly everything has been seen, forget the oldest half so rotation continues
-  if(ids.length > QUESTIONS.length - 20) ids = ids.slice(Math.floor(ids.length/2));
+  if(ids.length > LAUNCH_QUESTIONS.length - 20) ids = ids.slice(Math.floor(ids.length/2));
   const keep = new Set(ids);
   Object.keys(at).forEach(id => { if(!keep.has(id)) delete at[id]; });
   LS.set(SEEN_KEY, { ids, at });
@@ -3302,7 +3326,7 @@ const DAILY_LEAKS = [
 // angle a coach adds ON TOP of the mechanism, so a SHOT CLINIC answer teaches
 // rather than just names the fix. Established ball-flight / short-game facts.
 const TECH_LENS = {
-  'The slice':"Amateurs blame the swing; a launch monitor blames the face. The clubface sets the great majority of where the ball starts and most of the curve — square it, and even a poor path barely bends the ball.",
+  'The slice':"The clubface strongly influences the start direction; the face-to-path relationship creates the curve. A face open to the path produces slice spin, so check both rather than blaming speed.",
   'The sky / pop-up':"Driver is the only club you swing UP on. A sky-mark is proof your low point was in front of the ball and you came down steeply into it — the opposite of every iron.",
   'The snap-hook':"A hook is a slicer's overcorrection: the face is now closed to the path. That's why classic 'anti-slice' feels are exactly what tip a good player into the left trees.",
   'The thin / blade':"You can't lift a golf ball — the loft does that for you. Thin shots come from trying to help it up; the pros trap it by hitting down, and the ball climbs because of it.",
@@ -3401,8 +3425,8 @@ function buildTodaysDaily(){
 
   // Theme pool, freshest first, deterministic seeded shuffle (true Fisher-Yates)
   const seededShuffle = arr => { const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-  let pool = preferUnseen(bandPrefer(seededShuffle(QUESTIONS.filter(q => q.primary_score_leak === leak.tag))));
-  if(pool.length < 6) pool = pool.concat(preferUnseen(bandPrefer(seededShuffle(QUESTIONS))));
+  let pool = preferUnseen(bandPrefer(seededShuffle(LAUNCH_QUESTIONS.filter(q => q.primary_score_leak === leak.tag))));
+  if(pool.length < 6) pool = pool.concat(preferUnseen(bandPrefer(seededShuffle(LAUNCH_QUESTIONS))));
 
   // Build the arc: one decision off the tee, one on the approach, one around the green
   const phases = ['tee','approach','short'];
@@ -3442,7 +3466,7 @@ function buildTodaysDaily(){
   if(daily.length >= 2 && new Set(daily.map(q => q.pillar)).size < 2){
     const have = new Set(daily.map(q => q.pillar));
     const alt = pool.find(q => !used.has(q.id) && !have.has(q.pillar) && !tooSimilar(q))
-             || QUESTIONS.find(q => !used.has(q.id) && !have.has(q.pillar) && q.pillar !== 'Technique' && !tooSimilar(q));
+             || LAUNCH_QUESTIONS.find(q => !used.has(q.id) && !have.has(q.pillar) && q.pillar !== 'Technique' && !tooSimilar(q));
     if(alt){ used.add(alt.id); daily[daily.length - 1] = alt; }
   }
 
@@ -3502,11 +3526,11 @@ function startCrashCourse(){
   if(!weakPillar) weakPillar = PILLARS[0];
 
   // Get unanswered questions from that pillar, up to 10
-  const pool = QUESTIONS.filter(q => q.pillar === weakPillar.name && !S.completed[q.id]);
+  const pool = LAUNCH_QUESTIONS.filter(q => q.pillar === weakPillar.name && !S.completed[q.id]);
   const qs = pickSpaced(shuffle(pool), 10);
   if(!qs.length){
     // All answered — reset completed for this pillar and retry
-    const all = QUESTIONS.filter(q => q.pillar === weakPillar.name);
+    const all = LAUNCH_QUESTIONS.filter(q => q.pillar === weakPillar.name);
     const qs2 = pickSpaced(shuffle(all), 10);
     S.quiz = { qs: qs2, idx:0, score:0, answers:[], pillar: weakPillar, module: 'Crash Course', mode: 'crash' };
   } else {
@@ -3544,7 +3568,7 @@ function weekNumber(){
 function startSaturdayCard(){
   const seed = weekNumber();
   const rng  = seededRng(seed);
-  const pool = [...QUESTIONS].sort(() => rng() - 0.5);
+  const pool = [...LAUNCH_QUESTIONS].sort(() => rng() - 0.5);
   const qs   = pickSpaced(pool, 3);
   S.quiz = {
     qs, idx:0, score:0, answers:[],
@@ -3699,8 +3723,8 @@ function launchLeakSession(){
   const leak   = S.leak;
   const pillar = (leak && PILLARS.find(p => p.name === leak.pillarName)) || PILLARS[0];
   // Primary pool: questions tagged with the diagnosed score-leak, freshest first
-  let pool = leak ? QUESTIONS.filter(q => leak.leakTags.includes(q.primary_score_leak)) : [];
-  if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
+  let pool = leak ? LAUNCH_QUESTIONS.filter(q => leak.leakTags.includes(q.primary_score_leak)) : [];
+  if(pool.length < 5) pool = pool.concat(LAUNCH_QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
   const qs = pickSpaced(preferUnseen(bandPrefer(shuffle(pool))), 5);
   S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Fix Your Leak', mode:'crash' };
   setPillarColor(pillar.color);
@@ -3961,13 +3985,17 @@ function showExplanation(q, isCorrect){
 
   // Pro Lens — always visible, it's the reward. Framed by type: a coach's
   // insight on a SHOT CLINIC fault, or the player's real philosophy on a scenario.
-  document.getElementById('exp-pro').textContent = q.pro_insight || '';
+  // Named-player claims and quotation-style passages stay hidden until they
+  // carry their own source record. A sourced answer does not automatically
+  // verify a separate celebrity attribution.
+  const verifiedProInsight = q.pro_insight_source ? (q.pro_insight || '') : '';
+  document.getElementById('exp-pro').textContent = verifiedProInsight;
   const proLabel = document.getElementById('exp-pro-label');
   const proDisc  = document.getElementById('exp-pro-disc');
   if(proLabel) proLabel.textContent = isClinic ? '🎯 The Insight' : '🏆 Pro Lens';
   if(proDisc)  proDisc.style.display = isClinic ? 'none' : '';
   const proBox = document.getElementById('exp-prolens');
-  if(proBox) proBox.style.display = (q.pro_insight && q.pro_insight.trim()) ? '' : 'none';
+  if(proBox) proBox.style.display = verifiedProInsight.trim() ? '' : 'none';
 
   // Pitfall + tip (tip relabelled for clinic range drills)
   document.getElementById('exp-pitfall').textContent = q.common_pitfall || '';
@@ -3979,7 +4007,7 @@ function showExplanation(q, isCorrect){
   });
 
   // Reset the expandable "deeper" section to collapsed for each new reveal
-  const _willAnim = (q.visual_must_show !== false) || q._techVis || q.techAnim;
+  const _willAnim = true; // every launch reveal carries an answer-grounded visual
   const _hasDeep = !!(_rest || (q.common_pitfall || '').trim() || (q.action_tip || '').trim() || _willAnim);
   const deeper = document.getElementById('exp-deeper');
   const tgl = document.getElementById('exp-toggle'), tglTxt = document.getElementById('exp-toggle-txt');
@@ -3997,18 +4025,19 @@ function showExplanation(q, isCorrect){
     // the reveal's FIX figure (with ghost) takes over from the question-phase miss
     const qw = document.getElementById('qTechWrap'); if(qw) qw.style.display = 'none';
     animCont.innerHTML = '<div style="width:100%"><div id="dailyTechStage"></div><div class="gsw-ctrl" id="dailyTechCtrl"></div></div>';
-    if(!(q._figKey && mountGolfSwing('dailyTechStage','dailyTechCtrl', q._figKey, isCorrect ? 'fix' : 'miss', true))){
-      animCont.innerHTML = techVisual(q._techVis, isCorrect);
+    if(q._figKey && mountGolfSwing('dailyTechStage','dailyTechCtrl', q._figKey, 'miss', false)){
+      gswSetMode('compare', true);
+    } else {
+      animCont.innerHTML = techVisual(q._techVis, true);
     }
     animCont.style.minHeight = '290px';
     animLabel.style.display = '';
-  } else if(showVisual && typeof renderGolfDecisionVisual === 'function'){
-    animCont.innerHTML = renderGolfDecisionVisual(q, isCorrect);
+  } else if(typeof renderAnswerTruthVisual === 'function'){
+    // Spatial diagrams are withheld until each question has an authored scene
+    // contract. Exact keyed-answer feedback cannot contradict its own text.
+    animCont.innerHTML = renderAnswerTruthVisual(q, isCorrect);
     animCont.style.minHeight = '160px';
-    animLabel.style.display = '';
-  } else if(q.techAnim && typeof renderAnimation === 'function'){
-    animCont.innerHTML = renderAnimation(q.techAnim, q.techAnimParams || {}, isCorrect);
-    animCont.style.minHeight = '160px';
+    animLabel.textContent = 'Sourced answer';
     animLabel.style.display = '';
   } else {
     animCont.innerHTML = '';
@@ -4258,7 +4287,7 @@ function finishQuiz(){
 // and twin-spaced, that does NOT affect the daily or streak but DOES feed the
 // Decision Index. Lets players keep going instead of dead-ending after one set.
 function startPractice(){
-  let pool = pickSpaced(preferUnseen(bandPrefer(shuffle(QUESTIONS.slice()))), 3);
+  let pool = pickSpaced(preferUnseen(bandPrefer(shuffle(LAUNCH_QUESTIONS.slice()))), 3);
   const techQ = techFaultAsQuestion(((Date.now()/1000)|0) % 997);
   const qs = (techQ ? pool.concat([techQ]) : pool).filter(Boolean);
   if(!qs.length){ return; }
@@ -4459,7 +4488,7 @@ function showProfile(){
   const list = document.getElementById('ppl-list');
   list.innerHTML = '';
   PILLARS.forEach(p => {
-    const qs   = QUESTIONS.filter(q => q.pillar === p.name);
+    const qs   = LAUNCH_QUESTIONS.filter(q => q.pillar === p.name);
     const done = qs.filter(q => S.completed[q.id]).length;
     const pct  = qs.length > 0 ? Math.round(done/qs.length*100) : 0;
     list.innerHTML += `
@@ -4780,7 +4809,7 @@ const GSW_BASES = {
 // Per-fault keyframe overrides + annotations + outcomes. Keys: strokeKey:faultIndex.
 const TECH_FIGS = {
  'driver:0':{base:'full',
-   miss:{i:{hands:[160,140]},faceOpen:true,note:'FACE OPEN TO PATH',out:['low','→ SLICED INTO TREES']},
+   miss:{i:{hands:[160,140]},faceOpen:true,note:'FACE OPEN TO PATH',out:['slice','→ SLICED INTO TREES']},
    fix:{note:'FACE SQUARE — SEE TWO KNUCKLES',out:['normal','→ FLUSH DOWN THE LINE']}},
  'driver:1':{base:'full',tee:true,
    miss:{i:{club:[154,203]},note:'STEEP — HITTING DOWN ON IT',out:['pop','→ SKY BALL, 120 YARDS']},
@@ -4795,7 +4824,7 @@ const TECH_FIGS = {
    miss:{i:{hip:[142,118],hands:[152,144],club:[150,203]},turfBehind:true,note:'GROUND FIRST — WEIGHT BACK',out:['dribble','→ CHUNKED, 30 SHORT']},
    fix:{i:{hip:[160,113],hands:[170,137]},divot:true,note:'PRESSURE INTO THE LEAD FOOT',out:['normal','→ CRISP CONTACT']}},
  'irons:2':{base:'full',
-   miss:{i:{hip:[166,120],hands:[160,144]},note:'BODY STALLS — ARMS STUCK BEHIND',out:['low','→ BLOCKED RIGHT']},
+   miss:{i:{hip:[166,120],hands:[160,144]},note:'BODY STALLS — ARMS STUCK BEHIND',out:['push','→ BLOCKED RIGHT']},
    fix:{note:'HOLD POSTURE, CHEST KEEPS TURNING',out:['normal','→ ON LINE']}},
  'wedges:0':{base:'full',
    miss:{t:{hands:[104,66],club:[68,28]},f:{hands:[178,120],club:[200,150]},note:'LONG BACK… THEN QUIT',out:['short','→ 15 YARDS SHORT']},
@@ -4868,6 +4897,8 @@ function gswFlight(kind, ball, p){
     case 'pop':    return Q(bx,by,178,30,196,178,p);
     case 'dribble':return Q(bx,by,185,188,206,193,p);
     case 'hook':   return Q(bx,by,150,140,108,182,p);
+    case 'slice':  return Q(bx,by,205,118,276,170,p);
+    case 'push':   return Q(bx,by,218,154,278,180,p);
     case 'short':  return Q(bx,by,205,118,238,168,p);
     case 'stub':   return Q(bx,by,176,188,184,194,p);
     case 'stay':   return Q(bx,by,170,184,173,192,p);
@@ -5649,9 +5680,9 @@ function submitPlayPrepReturn(id){
 
 function launchPlayPrepChallenge(leakTag){
   const pillar = ppPillarFor(leakTag);
-  let pool = QUESTIONS.filter(q => q.primary_score_leak === leakTag);
-  if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
-  if(pool.length < 5) pool = pool.concat(QUESTIONS.filter(q => !pool.includes(q)));
+  let pool = LAUNCH_QUESTIONS.filter(q => q.primary_score_leak === leakTag);
+  if(pool.length < 5) pool = pool.concat(LAUNCH_QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
+  if(pool.length < 5) pool = pool.concat(LAUNCH_QUESTIONS.filter(q => !pool.includes(q)));
   const qs = pickSpaced(preferUnseen(bandPrefer(shuffle(pool))), 5);
   S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Play Prep Challenge', mode:'crash' };
   setPillarColor(pillar.color);
@@ -5902,6 +5933,22 @@ document.getElementById('install-btn') && (document.getElementById('install-btn'
 { const _pb = document.getElementById('profile-btn'); if(_pb) _pb.onclick = showProfile; }
 
 // ── Animation Library ──────────────────────────────────
+function renderAnswerTruthVisual(q, isCorrect){
+  const safe = value => String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+  const key = String(q.correct_answer || '').toLowerCase();
+  const call = q['option_' + key] || 'Review the verified answer above.';
+  const why = String(q.why_right || '').split('— Source:')[0].trim();
+  const first = (why.match(/^.+?[.!?](?:\s|$)/) || [why])[0].trim();
+  return `<div class="answer-truth" role="img" aria-label="Sourced answer: ${safe(call)}">
+    <div class="answer-truth-kicker">${isCorrect ? '✓ Your call holds' : 'Reset the decision'}</div>
+    <div class="answer-truth-call">${safe(call)}</div>
+    ${first ? `<div class="answer-truth-rule">${safe(first)}</div>` : ''}
+    <div class="answer-truth-line"></div>
+  </div>`;
+}
+
 function renderAnimation(key, params, isCorrect){
   const fns = {
     hole_par3_wind:       animPar3Wind,
@@ -8348,7 +8395,12 @@ function showHoleOutcome(node){
   oc.classList.remove('reveal');
   document.getElementById('oc-result').textContent = node.result;
   document.getElementById('oc-consequence').textContent = node.consequence;
-  document.getElementById('oc-pro').innerHTML = `<span class="oc-pro-label">PRO LENS</span> ${node.pro}`;
+  const proRead = document.getElementById('oc-pro');
+  if(proRead){
+    const authoredRead = String(node.pro || '').replace(/^['"“”]+|['"“”]+$/g,'');
+    proRead.innerHTML = '<span class="oc-pro-label">GAMESHARP READ</span> ';
+    proRead.appendChild(document.createTextNode(authoredRead));
+  }
 
   // Tag the decision that led here with its outcome valence (for the end summary)
   const valence = outcomeValence(node.result);
@@ -9176,24 +9228,24 @@ const GOLF_COLD_OPENS = [
       { label: 'Bail to the open right', sub: 'Looks like all that room', target: { x: 144, y: 52 }, correct: false,
         verdict: "The trap. 'Open right' isn't open — the green sheds off into a collection area, and now you're chipping back UP the slope to a pin tucked behind the bunker. You just swapped one short-side for another." }
     ],
-    insight: "The amateur aims at space; the pro aims at the spot where every miss is survivable. 'Wide open' is the most expensive illusion in golf — read where the green sends a slightly-off shot, not where it looks roomy at address."
+    insight: "Training principle: aim so your normal miss remains playable, and account for where the green sheds the ball. This is an illustrative scenario, not a diagnosis of your game."
   },
   {
-    situation: "Par 5. 220 to carry the water and reach the green. Your reliable 3-wood carries 235, and you pull this shot off 8 times out of 10.",
+    situation: "Par 5. It is 220 yards to carry water all the way to the green. Your 3-wood carries 235 when struck well, but only 8 of your last 10 attempts carried the hazard.",
     question: "What's the call?",
     you: { x: 54, y: 128 },
     geo: `<rect x="20" y="62" width="160" height="26" rx="6" fill="#1a4a8a" opacity="0.92"/><text x="100" y="78" text-anchor="middle" font-size="7" fill="#64b5f6" font-family="DM Sans">WATER</text>
       <ellipse cx="150" cy="34" rx="28" ry="15" fill="#2d7a2d"/><ellipse cx="150" cy="34" rx="20" ry="10" fill="#3d9a3d"/>
       <line x1="150" y1="28" x2="150" y2="14" stroke="#ccc" stroke-width="1.3"/><polygon points="150,14 161,18 150,22" fill="#e05252"/>`,
     options: [
-      { label: 'Go for it', sub: '15 yards of margin, 8 of 10', target: { x: 148, y: 36 }, correct: true,
-        verdict: "Yes. This is a green light: your reliable carry beats the number by 15 yards AND you execute 8 of 10. Eagle looks are live and your rare miss still finishes near the green. Protecting here costs you strokes over a season." },
-      { label: 'Lay up to a full wedge', sub: 'The classic safe play', target: { x: 60, y: 96 }, correct: false,
-        verdict: "Usually wise — but you priced this one wrong. The lay-up rule exists for penalty risk you can't cover. With this much margin and reliability, the timid play is the expensive one." },
+      { label: 'Go for it', sub: '15 yards on a perfect strike', target: { x: 148, y: 36 }, correct: false,
+        verdict: "Not with this evidence. Two of the last 10 attempts failed to carry, and this miss is a penalty rather than useful ground short of the green. A best-strike carry is not the same thing as a safe carry number." },
+      { label: 'Lay up to a full wedge', sub: 'Remove the penalty miss', target: { x: 60, y: 96 }, correct: true,
+        verdict: "Right. The decision turns on the consequence of the miss: your observed pattern still puts roughly 2 in 10 into the hazard. Lay up until your normal dispersion—not just a perfect strike—clears the water." },
       { label: 'Smash driver off the deck', sub: 'Send absolutely everything', target: { x: 172, y: 40 }, correct: false,
         verdict: "Now you've left your reliable game. The 3-wood was the green light because it's repeatable — the hero version of the same shot turns a good gamble into a bad one." }
     ],
-    insight: "Modern strokes-gained analysis is symmetrical: it punishes false bravery and false caution equally. The skill GAMESHARP trains is knowing which one this shot is — before you pull a club."
+    insight: "Training principle: compare the whole shot pattern with the hazard, not a single best carry. This is an illustrative decision scenario, not a diagnosis of your game."
   },
   {
     situation: "Tight driving hole. Out of bounds all down the left. Thick rough — but only rough — on the right.",
@@ -9205,13 +9257,13 @@ const GOLF_COLD_OPENS = [
       <ellipse cx="100" cy="26" rx="22" ry="11" fill="#3d9a3d"/>`,
     options: [
       { label: 'Down the middle', sub: 'Split the difference', target: { x: 100, y: 60 }, correct: false,
-        verdict: "Feels safe — but the middle splits the difference between a one-shot miss and a THREE-shot miss. Half your dispersion pattern still hangs over the OB line. You're gambling without getting paid." },
+        verdict: "Feels neutral, but it gives the out-of-bounds side more room inside your shot pattern. Because stroke-and-distance is far more costly than rough, the target should favour the playable side." },
       { label: 'At the right rough', sub: 'Take OB out of play entirely', target: { x: 136, y: 58 }, correct: true,
         verdict: "Right. Aim where your WORST miss is rough — one shot at most — and your good shot finds fairway. The OB side of your pattern is now empty. That's how good players make big numbers impossible." },
       { label: 'Iron way back', sub: 'Refuse to play the hole', target: { x: 100, y: 96 }, correct: false,
         verdict: "Over-protection. You've left 200 yards in to dodge a miss that aiming right would have removed for free. The leak with no scorecard symptom — it just quietly pays out." }
     ],
-    insight: "Elite caddies walk a tight hole backwards: find the cheap miss first, then aim so the shot pattern leans into it. Steve Williams called that the whole job — the target is rarely the middle."
+    insight: "Training principle: identify the costly miss first, then choose a target that shifts your normal shot pattern toward the playable side. This is an illustrative scenario, not a diagnosis of your game."
   }
 ];
 let GOLF_COLD = GOLF_COLD_OPENS[0];
@@ -9273,7 +9325,7 @@ function showColdOpen(){
       <span class="wob-chev">›</span><span class="wob-cardtick">✓</span>
     </button>`).join('');
   inner.innerHTML = `
-    <div class="cold-eyebrow">Quick read · no setup needed</div>
+    <div class="cold-eyebrow">Illustrative training scenario · no setup needed</div>
     <div class="wob-headline" style="font-size:27px;">${GOLF_COLD.question}</div>
     <div class="wob-sub solo">${GOLF_COLD.situation}</div>
     <div id="coldCourse">${coldOpenScene(null)}</div>
