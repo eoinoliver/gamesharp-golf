@@ -19,7 +19,18 @@ for (const [index, match] of [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script
   catch (error) { failures.push(`Inline script ${index}: ${error.message}`); }
 }
 
-const questions = extractConst('QUESTIONS', 'const SIMILAR_GROUPS');
+const questionStart = html.indexOf('const QUESTIONS =');
+const questionEnd = html.indexOf('const SIMILAR_GROUPS', questionStart);
+const questionContext = {};
+vm.createContext(questionContext);
+vm.runInContext(`${html.slice(questionStart, questionEnd)}
+this.auditQuestions=QUESTIONS;
+this.auditLaunch=LAUNCH_QUESTIONS;
+this.auditQuarantine=QUESTION_QUARANTINE;
+this.auditDispositions=QUESTION_DISPOSITIONS;
+this.auditDispositionCounts=DISPOSITION_COUNTS;
+this.auditUnresolved=UNRESOLVED_QUESTION_IDS;`, questionContext);
+const questions = questionContext.auditQuestions;
 const ids = new Set();
 for (const q of questions) {
   if (!q.id || ids.has(q.id)) failures.push(`Duplicate/missing question id: ${q.id}`);
@@ -30,15 +41,20 @@ for (const q of questions) {
   if (!String(q.why_right || '').trim()) failures.push(`${q.id}: missing explanation`);
 }
 
-const launch = questions.filter(q => {
-  const key = String(q.correct_answer || '').toUpperCase();
-  return /^[A-D]$/.test(key)
-    && String(q[`option_${key.toLowerCase()}`] || '').trim()
-    && /— Source:/.test(String(q.why_right || ''));
-});
+const launch = questionContext.auditLaunch;
 if (!launch.length) failures.push('Launch question pool is empty');
 if (launch.some(q => !/— Source:/.test(q.why_right))) failures.push('Unsourced item entered launch pool');
-notes.push(`Question bank ${questions.length}; launch-gated ${launch.length}; quarantined ${questions.length - launch.length}`);
+if (questionContext.auditUnresolved.length) failures.push(`Unresolved question dispositions: ${questionContext.auditUnresolved.join(', ')}`);
+if (questionContext.auditDispositions.length !== questions.length) failures.push('Disposition count does not match question bank');
+for (const item of questionContext.auditDispositions.filter(x=>x.status==='merge')) {
+  if (!launch.some(q=>q.id===item.into)) failures.push(`${item.id}: merge target ${item.into} is not live`);
+}
+for (const q of launch) {
+  const disposition = questionContext.auditDispositions.find(x=>x.id===q.id);
+  if (disposition?.status !== 'launch') failures.push(`${q.id}: live question lacks launch disposition`);
+}
+notes.push(`Question bank ${questions.length}; launch-gated ${launch.length}; quarantined ${questionContext.auditQuarantine.length}`);
+notes.push(`Editorial dispositions launch ${questionContext.auditDispositionCounts.launch}; merge ${questionContext.auditDispositionCounts.merge}; retire ${questionContext.auditDispositionCounts.retire}; unresolved 0`);
 
 const coldOpens = extractConst('GOLF_COLD_OPENS', 'let GOLF_COLD =');
 for (const [index, item] of coldOpens.entries()) {

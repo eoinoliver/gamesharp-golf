@@ -1630,13 +1630,13 @@ svg { display:block; }
 
   <nav class="bottom-nav" id="bottom-nav">
     <div class="nav-item active" data-nav="home" onclick="navTo('home')">
-      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+      <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
     </div>
     <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
-      <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
+      <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
     </div>
     <div class="nav-item" data-nav="profile" onclick="showProfile()">
-      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+      <span class="nav-icon">↗</span><span class="nav-label">Review</span>
     </div>
   </nav>
 </div>
@@ -1683,7 +1683,7 @@ svg { display:block; }
   <div class="adv-entry-card" onclick="openAdvanced()">
     <div class="adv-entry-eyebrow">♟ Decisions · think like a pro</div>
     <div class="adv-entry-title">WHAT WOULD YOU DO?</div>
-    <div class="adv-entry-sub">Commit first — then see what tour and scratch players actually do, and why. Every number sourced.</div>
+    <div class="adv-entry-sub">Commit first — then see the reviewed reasoning. Sources are shown with every live item.</div>
     <div class="adv-entry-chips">
       <span class="adv-entry-chip">Tour Decisions</span>
       <span class="adv-entry-chip">Guess the Number</span>
@@ -1704,9 +1704,6 @@ svg { display:block; }
     <div class="pro-lens-scroll" id="pro-lens-scroll"></div>
   </div>
 
-  <!-- 3 · Your game: diagnose + train the leak -->
-  <div id="debrief-card-wrap" style="margin-top:8px"></div>
-
   <!-- 4 · Pre-Round Warm-Up -->
   <div id="saturday-card-wrap"></div>
 
@@ -1714,13 +1711,13 @@ svg { display:block; }
 
   <nav class="bottom-nav">
     <div class="nav-item" data-nav="home" onclick="navTo('home')">
-      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+      <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
     </div>
     <div class="nav-item active" data-nav="sharpen" onclick="navTo('sharpen')">
-      <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
+      <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
     </div>
     <div class="nav-item" data-nav="profile" onclick="showProfile()">
-      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+      <span class="nav-icon">↗</span><span class="nav-label">Review</span>
     </div>
   </nav>
 </div>
@@ -1849,10 +1846,10 @@ svg { display:block; }
     <div class="share-dots"   id="share-dots"></div>
   </div>
   <div class="archetype-reveal">
-    <div class="ar-icon"  id="ar-icon">🏆</div>
-    <div class="ar-label">Your Game Profile</div>
-    <div class="ar-name"  id="ar-name"></div>
-    <div class="ar-desc"  id="ar-desc"></div>
+    <div class="ar-icon">◈</div>
+    <div class="ar-label">Decision Rating</div>
+    <div class="ar-name" id="result-dr">Provisional</div>
+    <div class="ar-desc">Built only from decisions you make here. It is a learning signal, never a diagnosis of your golf swing or your round.</div>
   </div>
   <div class="result-actions">
     <button class="btn btn-gold"  onclick="startPractice()">Keep Sharpening — Another 4 →</button>
@@ -1865,30 +1862,35 @@ svg { display:block; }
 <div class="view" id="view-profile">
   <div class="profile-hero">
     <div class="profile-arch-row">
-      <div class="profile-arch-icon" id="pa-icon">🏆</div>
+      <div class="profile-arch-icon">◈</div>
       <div>
-        <div class="profile-arch-label">Your Profile</div>
-        <div class="profile-arch-name" id="pa-name">—</div>
+        <div class="profile-arch-label">Decision Rating</div>
+        <div class="profile-arch-name" id="pa-name">Provisional</div>
       </div>
     </div>
     <div class="profile-stats-row">
       <div class="psr-stat"><div class="psr-val" id="psr-answered">0</div><div class="psr-label">Answered</div></div>
       <div class="psr-stat"><div class="psr-val" id="psr-streak">0</div><div class="psr-label">Streak</div></div>
-      <div class="psr-stat"><div class="psr-val" id="psr-acc">—</div><div class="psr-label">Accuracy</div></div>
+      <div class="psr-stat"><div class="psr-val" id="psr-acc">—</div><div class="psr-label">Confidence</div></div>
     </div>
   </div>
   <div class="profile-body">
+    <div>
+      <p class="section-title">Review your golf</p>
+      <div class="profile-strength-line">Bring one real round back. We will suggest what to revisit, without pretending the scorecard can diagnose your swing.</div>
+      <div id="review-debrief-home"><div id="debrief-card-wrap" style="margin-top:8px"></div></div>
+    </div>
     <div>
       <p class="section-title">Pillar Progress</p>
       <div id="ppl-list"></div>
     </div>
     <div>
-      <p class="section-title">Your Edge</p>
+      <p class="section-title">Strongest learning area</p>
       <div class="tag-wrap" id="strength-tags"></div>
       <div class="profile-strength-line" id="strength-line"></div>
     </div>
     <div>
-      <p class="section-title">Biggest Opportunity</p>
+      <p class="section-title">Next learning opportunity</p>
       <div class="tag-wrap" id="leak-tags"></div>
     </div>
     <div id="crash-course-profile-wrap" style="margin-top:20px"></div>
@@ -1900,13 +1902,13 @@ svg { display:block; }
 
   <nav class="bottom-nav">
     <div class="nav-item" data-nav="home" onclick="navTo('home')">
-      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+      <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
     </div>
     <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
-      <span class="nav-icon">🎯</span><span class="nav-label">Sharpen</span>
+      <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
     </div>
     <div class="nav-item" data-nav="profile" onclick="showProfile()">
-      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+      <span class="nav-icon">↗</span><span class="nav-label">Review</span>
     </div>
   </nav>
 </div>
@@ -1931,32 +1933,40 @@ svg { display:block; }
       <div class="tss-block-label">⚡ TODAY'S EDGE</div>
       <div class="tss-block-body" id="tss-edge-body">—</div>
     </div>
-    <div class="tss-block tss-saved">
-      <div class="tss-block-label">🛡️ THE SHOT YOU SAVED</div>
-      <div class="tss-block-body" id="tss-saved-body">—</div>
-    </div>
-    <div class="tss-block tss-try">
-      <div class="tss-block-label">🎯 TRY THIS NEXT ROUND</div>
-      <div class="tss-block-body" id="tss-try-body">—</div>
-    </div>
-    <div class="tss-block tss-tomorrow">
-      <div class="tss-block-label">🌅 TOMORROW</div>
-      <div class="tss-block-body" id="tss-tomorrow-body">—</div>
-    </div>
+    <details class="dcc-more" style="margin:10px 0 0;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden">
+      <summary style="padding:14px 15px;cursor:pointer;font-size:12px;font-weight:800;color:rgba(255,255,255,.76)">Why this matters on the course</summary>
+      <div style="padding:0 10px 10px">
+        <div class="tss-block tss-saved">
+          <div class="tss-block-label">🛡️ THE SHOT YOU SAVED</div>
+          <div class="tss-block-body" id="tss-saved-body">—</div>
+        </div>
+        <div class="tss-block tss-try">
+          <div class="tss-block-label">🎯 TRY THIS NEXT ROUND</div>
+          <div class="tss-block-body" id="tss-try-body">—</div>
+        </div>
+        <div class="tss-block tss-tomorrow">
+          <div class="tss-block-label">🌅 TOMORROW</div>
+          <div class="tss-block-body" id="tss-tomorrow-body">—</div>
+        </div>
+      </div>
+    </details>
   </div>
 
   <!-- Discovery engine: today's questions name the rooms they came from — tap to explore -->
-  <div class="dcc-rooms" id="dcc-rooms" style="display:none">
+  <div class="dcc-rooms" id="dcc-rooms" style="display:none" hidden>
     <div class="dcc-rooms-label">TODAY'S QUESTIONS CAME FROM</div>
     <div class="dcc-rooms-row" id="dcc-rooms-row"></div>
   </div>
 
   <div class="dcc-actions" style="padding:0 16px 24px">
-    <button class="btn btn-gold"  onclick="startHole()">Keep Sharpening — Play a Hole →</button>
-    <button class="btn btn-dark"  onclick="startPractice()">🎯 Another 4 Questions →</button>
-    <button class="btn btn-dark"  onclick="shareChallenge()">⚔️ Challenge a Friend</button>
-    <button class="btn btn-dark"  onclick="renderHome();showView('home')">Back to Home</button>
-    <button class="btn btn-dark"  id="dcc-share-btn">Share Today's Edge</button>
+    <button class="btn btn-gold" onclick="startHole()">Use it now — Play a Hole →</button>
+    <details style="margin-top:10px;text-align:center">
+      <summary style="cursor:pointer;font-size:11px;font-weight:700;color:var(--muted);padding:8px">More options</summary>
+      <button class="btn btn-dark" onclick="startPractice()">Another 4 Questions</button>
+      <button class="btn btn-dark" onclick="shareChallenge()">Challenge a Friend</button>
+      <button class="btn btn-dark" id="dcc-share-btn">Share Today's Edge</button>
+      <button class="btn btn-dark" onclick="renderHome();showView('home')">Back to Today</button>
+    </details>
   </div>
 </div>
 
@@ -1985,7 +1995,11 @@ svg { display:block; }
     <div class="db-header-title">🏌️ 19TH HOLE DEBRIEF</div>
   </div>
   <div class="db-body" id="db-form-body">
-    <p class="db-intro">Four numbers. That's all it takes. Enter your stats and we'll tell you exactly where your round fell apart — and give you 5 questions to fix it before next week.</p>
+    <p class="db-intro">Take one calm minute after your round. These numbers suggest one useful area to review — they do not diagnose your swing, execution or ability.</p>
+
+    <div class="db-truth" style="margin:0 0 16px;padding:12px 13px;border:1px solid rgba(200,168,75,.24);border-radius:12px;background:rgba(200,168,75,.06);font-size:11.5px;line-height:1.5;color:rgba(255,255,255,.72)">
+      <strong style="color:var(--gold)">The GameSharp promise:</strong> we separate what your scorecard recorded from what it can actually prove.
+    </div>
 
     <div class="db-field">
       <label class="db-label">Fairways Hit <span style="font-size:10px;font-weight:400">(out of 14)</span></label>
@@ -2024,13 +2038,13 @@ svg { display:block; }
       </div>
     </div>
 
-    <button class="db-submit" onclick="submitDebrief()">ANALYSE MY ROUND →</button>
+    <button class="db-submit" onclick="submitDebrief()">REVIEW MY ROUND →</button>
   </div>
 
   <div class="db-result" id="db-result">
     <div class="db-stat-grid" id="db-stat-grid"></div>
     <div class="db-leak-card" id="db-leak-card"></div>
-    <button class="db-fix-btn" id="db-fix-btn">FIX IT — 5 TARGETED QUESTIONS →</button>
+    <button class="db-fix-btn" id="db-fix-btn">SHARPEN THIS AREA — 5 DECISIONS →</button>
     <div style="height:12px"></div>
     <button class="sc-again" onclick="resetDebrief()" style="margin-top:4px">Enter Another Round</button>
   </div>
@@ -2538,17 +2552,391 @@ const QUESTIONS = [
 {id:"Q394",pillar:"Score Smart",module:"Scoring Strategy",difficulty:"Club",handicap_band:"Club",format:"Scenario",hook_type:"Green Light",decision_type:"Mental",primary_score_leak:"Double bogey",visual_must_show:false,confidence_level:"High",question:"Reviewing your season: zero penalty strokes, but you also can't remember a single eagle putt or drivable-par-4 attempt. What does that pattern reveal?",option_a:"Over-protection leaks strokes too — caution isn't free",option_b:"Perfect discipline — zero penalties is the goal",option_c:"Nothing, scoring is about putting",option_d:"You need new equipment",correct_answer:"A",why_right:"Zero penalties with zero scoring chances means your risk dial is stuck on protect — and over-protection is a leak with no scorecard symptom. Every safe club off a harmless tee, every middle-green aim at an open pin quietly costs fractions of strokes that compound across a season. The goal was never zero risk; it was correctly priced risk. A season without a single green light taken means dozens of them were missed.",pro_insight:"Strokes-gained audits of amateur rounds find both leak types — but the over-protector's leak is invisible because it never makes a highlight reel of disasters. It just slowly pays out.",common_pitfall:"Measuring discipline by absence of disaster. The scorecard punishes unclaimed birdies exactly as hard as splashed drives — one stroke at a time.",action_tip:"Audit your rounds for green lights taken, not just blow-ups avoided. If the answer is 'none', your protection is costing you.",tags:"green-light,season-audit,over-protection",tier:"Free",techAnim:"approach_landing_zone",techAnimParams:{}},
 ];
 
-// Launch trust gate. The legacy bank contains useful material, but most items
-// do not yet carry enough provenance to be presented as verified learning.
-// Until the content audit adds a source record, those items remain in the
-// authoring bank but cannot enter a live quiz, daily, diagnostic or tip.
-const LAUNCH_QUESTIONS = QUESTIONS.filter(q => {
+// ── LEGACY RECOVERY · BATCH 1: RULES & PENALTY AVOIDANCE ─────────
+// Reviewed against the current R&A Rules of Golf on 29 July 2026.
+// These overrides repair the learning object in place, preserving stable IDs
+// and learner history. Near-duplicates and unsafe premises remain quarantined.
+const RECOVERY_BATCH_1 = Object.freeze({
+  reviewedAt:'2026-07-29',
+  authority:'The R&A Rules of Golf',
+  promoted:['Q035','Q067','Q068','Q071','Q075','Q078','Q147','Q220','Q350','Q351','Q352','Q358','Q360','Q362','Q366','Q368'],
+  merged:[
+    {id:'Q209',into:'Q035',reason:'Duplicate embedded-ball decision'},
+    {id:'Q355',into:'Q035',reason:'Duplicate embedded-ball decision'}
+  ],
+  retired:[
+    {id:'Q234',reason:'Invents free relief from ordinary rough without a Rules basis'}
+  ]
+});
+
+const RECOVERY_BATCH_1_OVERRIDES = {
+  Q035:{
+    question:"Your ball is embedded in its own pitch-mark in the fairway. What is the ruling?",
+    option_a:"Play it as it lies — fairway lies never get relief",
+    option_b:"Take free relief: drop within one club-length of the spot immediately behind the ball",
+    option_c:"Drop within two club-lengths with one penalty stroke",
+    option_d:"Place the ball beside its pitch-mark",
+    correct_answer:"B",
+    why_right:"Rule 16.3 allows free relief for a ball embedded in its own pitch-mark in the general area. The reference point is the spot immediately behind the embedded ball; drop within one club-length, in the general area and no nearer the hole. — Source: The R&A Rules of Golf, Rule 16.3",
+    action_tip:"Confirm that part of the ball is below ground level in its own pitch-mark, then use the spot immediately behind it as your reference point."
+  },
+  Q067:{
+    question:"Your ball is unplayable in a bush in the general area. Which set gives all three one-penalty-stroke options?",
+    option_a:"Stroke-and-distance, back-on-the-line, or lateral relief within two club-lengths",
+    option_b:"One club-length, nearest fairway point, or replay from the tee",
+    option_c:"A free lateral drop, back-on-the-line, or nearest point of relief",
+    option_d:"Two club-lengths from where it entered the bush, a free drop, or replay",
+    correct_answer:"A",
+    why_right:"Rule 19.2 gives three choices, each for one penalty stroke: stroke-and-distance; back-on-the-line relief keeping the ball's spot between the hole and the drop point; or lateral relief within two club-lengths of the ball, no nearer the hole. — Source: The R&A Rules of Golf, Rule 19.2",
+    action_tip:"Do not grab a club immediately. Compare all three relief locations and choose the one that makes the next shot simplest."
+  },
+  Q068:{
+    question:"Your tee shot may be lost outside a penalty area. What must you do before playing another ball as a provisional?",
+    option_a:"Say you are reloading after the search starts",
+    option_b:"Clearly announce a provisional before making the stroke",
+    option_c:"Ask your marker to declare the first ball lost",
+    option_d:"Nothing — any second ball is automatically provisional",
+    correct_answer:"B",
+    why_right:"Before making the stroke, Rule 18.3b requires you to announce that the second ball is provisional, using the word 'provisional' or otherwise making that intention clear. Without that announcement, it becomes the ball in play under stroke-and-distance. — Source: The R&A Rules of Golf, Rule 18.3b",
+    action_tip:"Say 'I am playing a provisional' before you hit. That short sentence preserves your options."
+  },
+  Q071:{
+    question:"Your ball is in a red penalty area. Which claimed relief is never free?",
+    option_a:"Play the ball as it lies",
+    option_b:"Lateral relief within two club-lengths of where it last crossed the edge",
+    option_c:"Back-on-the-line relief",
+    option_d:"Stroke-and-distance relief",
+    correct_answer:"B",
+    why_right:"Playing from the penalty area carries no extra penalty, but every Rule 17.1d relief option costs one penalty stroke. A red penalty area adds lateral relief within two club-lengths; that lateral drop is not free. — Source: The R&A Rules of Golf, Rule 17.1d",
+    action_tip:"Red gives you an extra lateral option, not a free option. Price one penalty stroke into every relief choice."
+  },
+  Q075:{
+    question:"Your ball lies on an artificially surfaced cart path in the general area. What starts the correct free-relief procedure?",
+    option_a:"Choose the nicest point within two club-lengths of the path",
+    option_b:"Find the nearest point of complete relief, then use a one-club-length relief area",
+    option_c:"Drop on whichever side of the path is nearer the fairway",
+    option_d:"Measure one club-length from the ball before finding relief",
+    correct_answer:"B",
+    why_right:"For an immovable obstruction in the general area, Rule 16.1b uses the nearest point of complete relief as the reference point. The relief area is one club-length, must be in the general area and cannot be nearer the hole. Nearest does not mean nicest. — Source: The R&A Rules of Golf, Rule 16.1b",
+    action_tip:"Find complete relief for lie, stance and intended swing first; only then measure the relief area."
+  },
+  Q078:{
+    question:"You accidentally nudge your ball while addressing it on the putting green. What now?",
+    option_a:"Add one stroke and replace it",
+    option_b:"No penalty; replace it on its original spot",
+    option_c:"No penalty; play it from the new spot",
+    option_d:"The movement counts as a stroke",
+    correct_answer:"B",
+    why_right:"There is no penalty for accidentally moving your ball or ball-marker on the putting green. The ball must be replaced on its original spot, estimated if necessary. — Source: The R&A Rules of Golf, Rule 13.1d(1)",
+    action_tip:"On the green: accidental movement means replace, not play from the new spot."
+  },
+  Q147:{
+    question:"Your ball is in a yellow penalty area and you choose relief. Which option is unavailable?",
+    option_a:"Stroke-and-distance for one penalty stroke",
+    option_b:"Back-on-the-line relief for one penalty stroke",
+    option_c:"Play the ball as it lies without a relief penalty",
+    option_d:"Lateral relief within two club-lengths of where it crossed the edge",
+    correct_answer:"D",
+    why_right:"A yellow penalty area allows stroke-and-distance and back-on-the-line relief, each for one penalty stroke. The two-club-length lateral option is available only for a red penalty area. Playing the ball as it lies remains an option. — Source: The R&A Rules of Golf, Rule 17.1d",
+    action_tip:"Yellow: play it, stroke-and-distance, or back-on-the-line. Red adds lateral relief."
+  },
+  Q220:{
+    question:"Temporary water does not touch your ball, but it physically interferes with your intended stance. Are you entitled to relief?",
+    option_a:"No — only the ball's lie can create interference",
+    option_b:"Yes — free relief from the nearest point of complete relief",
+    option_c:"Yes — lateral relief with one penalty stroke",
+    option_d:"Only if the water is on your line to the hole",
+    correct_answer:"B",
+    why_right:"Temporary water is an abnormal course condition. In the general area, physical interference with the ball, intended stance or intended swing allows free relief from the nearest point of complete relief, using a one-club-length relief area no nearer the hole. — Source: The R&A Rules of Golf, Rule 16.1a-b",
+    action_tip:"Away from the green, line-of-play interference alone is not enough; check lie, stance and intended swing."
+  },
+  Q350:{
+    question:"Your ball cannot be found beside a penalty area. When may you use penalty-area relief instead of treating it as lost?",
+    option_a:"Whenever the group thinks water is the likeliest outcome",
+    option_b:"Only when it is known or virtually certain the ball came to rest in the penalty area",
+    option_c:"Whenever the ball crossed the painted line in flight",
+    option_d:"Only after playing a provisional ball",
+    correct_answer:"B",
+    why_right:"Penalty-area relief for a ball not found is allowed only when it is known or virtually certain that the ball came to rest in that penalty area. Without that high level of certainty, the ball is lost and stroke-and-distance applies. — Source: The R&A Rules of Golf, Rule 17.1c and Rule 18.2",
+    action_tip:"Ask whether credible evidence leaves almost no doubt. If not, treat the ball as lost rather than assuming the penalty area."
+  },
+  Q351:{
+    question:"When taking relief, from what height must you drop the ball?",
+    option_a:"Shoulder height",
+    option_b:"Your knee height when standing",
+    option_c:"Waist height",
+    option_d:"Any height below the hip",
+    correct_answer:"B",
+    why_right:"The ball must be dropped straight down from knee height without throwing, spinning or rolling it, and it must not touch the player or equipment before hitting the ground. Knee height means the height of your knee when standing. — Source: The R&A Rules of Golf, Rule 14.3b",
+    action_tip:"Stand naturally, identify knee height, then release the ball straight down into the relief area."
+  },
+  Q352:{
+    question:"What extra relief option does a red penalty area provide compared with a yellow one?",
+    option_a:"Free relief on the opposite side",
+    option_b:"Lateral relief within two club-lengths of the last crossing point",
+    option_c:"A two-stroke drop on the fairway",
+    option_d:"A free back-on-the-line drop",
+    correct_answer:"B",
+    why_right:"Both colours allow stroke-and-distance and back-on-the-line relief for one penalty stroke. A red penalty area also allows lateral relief within two club-lengths of where the ball last crossed its edge, no nearer the hole. — Source: The R&A Rules of Golf, Rule 17.1d",
+    action_tip:"Remember the colour before lifting: red adds lateral; yellow does not."
+  },
+  Q358:{
+    question:"In stroke play, your playing partner is farther from the hole but not ready. May you play first to save time?",
+    option_a:"Yes, if you do so safely and responsibly",
+    option_b:"No, playing out of turn is always a penalty",
+    option_c:"Only after receiving a penalty",
+    option_d:"Only on the putting green",
+    correct_answer:"A",
+    why_right:"In stroke play there is normally no penalty for playing out of turn, and players are both allowed and encouraged to play 'ready golf' in a safe and responsible way. Match play has different order-of-play consequences. — Source: The R&A Rules of Golf, Rule 6.4b",
+    action_tip:"Use ready golf in stroke play when it is safe; never distract or endanger another player."
+  },
+  Q360:{
+    question:"Your drive finishes in an ordinary divot hole in the fairway. Do the Rules give free relief?",
+    option_a:"Yes, place it at the nearest grassed spot",
+    option_b:"No, play it as it lies unless a Local Rule or another Rule applies",
+    option_c:"Yes, drop within one club-length",
+    option_d:"Only if the divot is filled with sand",
+    correct_answer:"B",
+    why_right:"An ordinary divot hole is not an abnormal course condition, so the Rules provide no automatic free relief. The ball is played as it lies unless another Rule or a Local Rule applies. — Source: The R&A Rules of Golf, Rule 8.1 and Definitions: Abnormal Course Condition",
+    action_tip:"A bad fairway lie may feel unfair, but do not invent relief. Check the Local Rules, then play it as it lies."
+  },
+  Q362:{
+    question:"You make a stroke at another player's ball in competition. What is the general penalty?",
+    option_a:"One stroke in every format",
+    option_b:"Loss of hole in match play; two strokes in stroke play, where the mistake must also be corrected",
+    option_c:"Two strokes in match play; loss of hole in stroke play",
+    option_d:"No penalty if the balls are the same model",
+    correct_answer:"B",
+    why_right:"Making a stroke at a wrong ball brings the general penalty: loss of hole in match play, or two penalty strokes in stroke play. In stroke play, the player must correct the mistake by continuing with the original ball or taking permitted relief. — Source: The R&A Rules of Golf, Rule 6.3c",
+    action_tip:"Mark your ball distinctively and identify it before every recovery shot."
+  },
+  Q366:{
+    question:"In stroke play, no referee is available and you are genuinely unsure whether a sprinkler head gives free relief. How can you protect your score before playing?",
+    option_a:"Choose the favourable ruling and explain later",
+    option_b:"Ask your marker to make a binding ruling",
+    option_c:"Announce that you will play two balls, choose which should count, then report the facts to the Committee",
+    option_d:"Play two balls without telling anyone",
+    correct_answer:"C",
+    why_right:"When uncertain in stroke play, Rule 20.1c(3) allows a player to complete the hole with two balls. Before making a stroke, the player should announce the decision and which ball they want to count, then report the facts to the Committee before returning the scorecard. This procedure is not available in match play. — Source: The R&A Rules of Golf, Rule 20.1c(3)",
+    action_tip:"Decide before another stroke, announce both the two-ball procedure and your preferred ball, then report to the Committee."
+  },
+  Q368:{
+    question:"Temporary water interferes with your stance, but the nearest point of complete relief would leave a worse shot. Must you take relief?",
+    option_a:"Yes, abnormal course conditions require relief",
+    option_b:"Yes, unless your marker permits play as it lies",
+    option_c:"No, but you must take an unplayable-ball penalty",
+    option_d:"No — free relief is optional unless a no-play zone requires it",
+    correct_answer:"D",
+    why_right:"Rule 16.1 says a player may take free relief from an abnormal course condition; it is normally optional. If the relief location is worse, the player may play the original ball as it lies. Relief is mandatory only in specific cases such as interference from a no-play zone. — Source: The R&A Rules of Golf, Rule 16.1 and Rule 16.1f",
+    action_tip:"Before lifting, inspect the nearest point of complete relief. Free does not always mean beneficial."
+  }
+};
+
+QUESTIONS.forEach(q => {
+  if(RECOVERY_BATCH_1_OVERRIDES[q.id]) Object.assign(q, RECOVERY_BATCH_1_OVERRIDES[q.id]);
+});
+
+// ── LEGACY RECOVERY · BATCH 2: TEE LINES & FORCED CARRIES ────────
+// Strategy items must state enough player-specific information to support one
+// answer. Generic "driver or 3-wood?" doctrine is not launchable.
+const RECOVERY_BATCH_2 = Object.freeze({
+  reviewedAt:'2026-07-29',
+  authorities:[
+    'Broadie & Ko, A Simulation Model to Analyze the Impact of Distance and Direction on Golf Scores',
+    'Shot Scope, Driver or 3 Wood? What is better off the tee?',
+    'USGA Equipment Specifications Research'
+  ],
+  promoted:['Q002','Q006','Q008','Q011','Q021','Q094'],
+  merged:[
+    {id:'Q084',into:'Q006',reason:'Same front-left par-3 danger and centre-right decision'},
+    {id:'Q115',into:'Q006',reason:'Same water-short par-3 target decision with score-state decoration'},
+    {id:'Q151',into:'Q094',reason:'Same OB-side tee-club decision without measured dispersion'},
+    {id:'Q082',into:'Q011',reason:'Same forced-carry lay-up decision with weaker inputs'},
+    {id:'Q096',into:'Q011',reason:'Same forced-carry lay-up decision with no measured carry distribution'}
+  ],
+  retired:[
+    {id:'Q013',reason:'Declares laying up universally optimal on driveable par 4s without hole or player dispersion'},
+    {id:'Q024',reason:'Assumes fairway percentage alone proves 3-wood is optimal; conflicts with Shot Scope distance data'},
+    {id:'Q155',reason:'Invents exact expected-score figures not supported by its cited source'},
+    {id:'Q177',reason:'Invents a universal fastest route to improvement from score alone'},
+    {id:'Q217',reason:'Hole shape alone cannot prescribe a shot shape; start line and dispersion are missing'}
+  ]
+});
+
+const RECOVERY_BATCH_2_OVERRIDES = {
+  Q002:{
+    question:"Your stock tee pattern is a 25-yard fade. On this hole, out of bounds runs tight down the entire left while the right rough is playable. Which target best prices the miss?",
+    option_a:"The centre, splitting the visual fairway",
+    option_b:"The left centre, because the fade moves away from out of bounds",
+    option_c:"A target in the right half that keeps the normal pattern away from out of bounds",
+    option_d:"The left boundary, using the whole fairway for the fade",
+    correct_answer:"C",
+    why_right:"The target should account for both the player's dispersion and the cost of each miss. With stroke-and-distance left and playable rough right, shifting the pattern right reduces the expensive tail without pretending every ball finishes on the target line. — Source: Broadie & Ko, A Simulation Model to Analyze the Impact of Distance and Direction on Golf Scores",
+    action_tip:"Picture your whole shot pattern, not one perfect line. Move that pattern until its costly edge clears the boundary."
+  },
+  Q006:{
+    question:"Par 3, 165 yards. The pin is front-left behind a bunker, with a penalty area left. Your normal dispersion can cover most of the green. Where is the useful target?",
+    option_a:"Directly at the flag",
+    option_b:"Right-centre, keeping the pattern away from both left-side penalties",
+    option_c:"The bunker, planning to fade away from it",
+    option_d:"The back-left edge, ensuring enough club",
+    correct_answer:"B",
+    why_right:"Aiming right-centre moves more of the shot pattern over green while reducing the chance of the short-sided bunker and the still more expensive penalty area. The lesson is not 'never attack'; it is to place dispersion where the likely misses retain the lowest expected cost. — Source: Broadie & Ko, A Simulation Model to Analyze the Impact of Distance and Direction on Golf Scores",
+    action_tip:"Before choosing a flag line, identify the most expensive edge and move your normal pattern away from it."
+  },
+  Q008:{
+    question:"Dogleg-right par 4. The corner requires 235 yards of carry. Your verified stock carry is 248 with a normal low of 238; the safe line leaves 220 in. Which line is supported by your numbers?",
+    option_a:"Cut the corner because your longest drive clears it",
+    option_b:"Always take the safe line on a dogleg",
+    option_c:"Use the corner line only if the full normal pattern clears the trouble",
+    option_d:"Aim directly over the deepest part of the corner",
+    correct_answer:"C",
+    why_right:"A forced-carry decision should be based on the lower edge of a player's normal carry pattern, not an average or best strike. Here even the stated normal low clears by only three yards, so conditions and start-line dispersion still decide whether the full pattern fits. — Source: Broadie & Ko, A Simulation Model to Analyze the Impact of Distance and Direction on Golf Scores",
+    action_tip:"For a forced carry, compare the hazard number with your normal short result—not your best or your headline average.",
+    visualTruth:{animation:'hole_dogleg_right',mustShow:['tee view','dogleg corner','safe fairway line','corner carry line']}
+  },
+  Q011:{
+    question:"A par-5 second shot needs 220 yards of carry over water. Your performance average with 3-wood is 220, and your normal shots range from 205 to 230. What does that evidence support?",
+    option_a:"Go — the average equals the carry",
+    option_b:"Lay up — a large part of the normal pattern finishes short",
+    option_c:"Go only by aiming farther right",
+    option_d:"Swing harder to move the whole pattern",
+    correct_answer:"B",
+    why_right:"An average equal to the forced-carry number does not make the carry reliable; the stated range puts a material portion of ordinary shots in the water. A forced carry should clear with the player's normal pattern and current conditions, not merely with the mean. — Source: Broadie & Ko, A Simulation Model to Analyze the Impact of Distance and Direction on Golf Scores",
+    action_tip:"When water must be carried, ask what your ordinary short strike carries. An average is not a safety margin.",
+    visualTruth:{animation:'par5_layup_vs_go',mustShow:['par 5 carry over water','lay up landing zone','go line finishing short on a normal miss']}
+  },
+  Q021:{
+    question:"A strong left-to-right crosswind is moving full iron shots materially. On a par 3 with room left of the flag, what must the start line do?",
+    option_a:"Start at the flag and ignore the wind",
+    option_b:"Move left so the expected wind drift finishes over the target area",
+    option_c:"Move right because the wind adds lift",
+    option_d:"Stay fixed; only club selection changes in crosswind",
+    correct_answer:"B",
+    why_right:"Wind changes a golf ball's flight through aerodynamic forces, so a left-to-right crosswind shifts the expected landing pattern right. Moving the start line left is the directional correction; the exact amount depends on launch, spin, speed and gusts, so the app should not invent a universal yardage. — Source: USGA Equipment Specifications Research, Wind Response",
+    action_tip:"Move the expected landing pattern into the green, then add margin for gusts. Do not treat one wind number as exact.",
+    visualTruth:{animation:'wind_ball_flight',mustShow:['left-to-right wind','start line left of target','flight drifting right']}
+  },
+  Q094:{
+    question:"OB is tight right. Driver carries through the widest landing zone; your measured driver pattern reaches OB, while hybrid finishes short of it and leaves a playable approach. Which club removes the costly miss?",
+    option_a:"Driver at the centre because distance always wins",
+    option_b:"Hybrid, because its entire normal pattern finishes short of OB",
+    option_c:"Driver aimed at OB to use the wind",
+    option_d:"Any shorter club, regardless of where it finishes",
+    correct_answer:"B",
+    why_right:"Shot Scope finds only a small average accuracy gain from 3-wood and generally favours driver unless the shorter club removes a specific hazard. This scenario supplies that exception: the hybrid's normal finish cannot reach OB while the driver pattern can. — Source: Shot Scope, Driver or 3 Wood? What is better off the tee?",
+    action_tip:"Club down only when it genuinely removes a named hazard or bad zone—not because the shorter club merely feels safer."
+  }
+};
+
+QUESTIONS.forEach(q => {
+  if(RECOVERY_BATCH_2_OVERRIDES[q.id]) Object.assign(q, RECOVERY_BATCH_2_OVERRIDES[q.id]);
+});
+
+// ── LAUNCH TRUTH CONTRACT ─────────────────────────────────────────
+// A question is not live because it exists. It is live only when its answer,
+// explanation, source and (when present) visual all describe the same golf
+// truth. Anything uncertain remains in the authoring bank, never in a user's
+// learning path.
+const VISUAL_TRUTH_SCHEMA = Object.freeze({
+  hole_dogleg_right:      ['tee','driver','dogleg','corner','fairway'],
+  hole_par3_wind:         ['wind','breeze','crosswind','downwind','headwind'],
+  wind_ball_flight:       ['wind','flight','trajectory'],
+  par5_layup_vs_go:       ['par 5','lay up','layup','carry','reach'],
+  putt_break_read:        ['putt','green','break','pace'],
+  green_pin_positions:    ['green','pin','flag','landing'],
+  bunker_escape_angle:    ['bunker','sand','lip','flop'],
+  fairway_bunker_layup:   ['fairway bunker','sand','lip'],
+  approach_landing_zone:  ['approach','green','landing','target']
+});
+
+function questionContract(q){
   const key = String(q.correct_answer || '').toUpperCase();
   const answer = q['option_' + key.toLowerCase()];
-  return /^[A-D]$/.test(key)
-    && typeof answer === 'string' && answer.trim()
-    && /— Source:/.test(String(q.why_right || ''));
+  const options = ['a','b','c','d'].map(k => String(q['option_'+k] || '').trim());
+  const reasons = [];
+  if(!/^[A-D]$/.test(key) || !answer) reasons.push('missing-answer');
+  if(options.some(x => !x)) reasons.push('missing-option');
+  if(new Set(options.map(x => x.toLowerCase())).size !== 4) reasons.push('duplicate-option');
+  if(!/— Source:/.test(String(q.why_right || ''))) reasons.push('missing-source');
+  if(String(q.why_right || '').trim().length < 45) reasons.push('thin-explanation');
+
+  // Visuals are opt-in, never guessed. A visual-required item needs an
+  // explicit contract naming the facts the frame must show. Legacy generic
+  // animation assignments are therefore quarantined until reviewed.
+  if(q.visual_must_show){
+    const truth = q.visualTruth;
+    if(!truth || truth.animation !== q.techAnim || !Array.isArray(truth.mustShow) || !truth.mustShow.length){
+      reasons.push('unverified-visual');
+    } else {
+      const allowed = VISUAL_TRUTH_SCHEMA[q.techAnim] || [];
+      const semantic = [q.question, answer, q.why_right, ...(truth.mustShow||[])].join(' ').toLowerCase();
+      if(!allowed.some(term => semantic.includes(term))) reasons.push('visual-topic-mismatch');
+    }
+  }
+  return { ok:reasons.length === 0, reasons };
+}
+
+const QUESTION_QUARANTINE = [];
+const LAUNCH_APPROVED_IDS = new Set([
+  ...QUESTIONS.filter(q=>/^QE5_/.test(q.id)).map(q=>q.id),
+  ...RECOVERY_BATCH_1.promoted,
+  ...RECOVERY_BATCH_2.promoted
+]);
+const LAUNCH_QUESTIONS = QUESTIONS.filter(q => {
+  const verdict = questionContract(q);
+  if(!LAUNCH_APPROVED_IDS.has(q.id)) verdict.reasons.push('not-editorially-approved');
+  verdict.ok = verdict.reasons.length === 0;
+  if(!verdict.ok) QUESTION_QUARANTINE.push({ id:q.id, reasons:verdict.reasons });
+  return verdict.ok;
 });
+
+const TRUST_CONTRACT = Object.freeze({
+  version:'2026.07',
+  promise:'Question, accepted answer, explanation and visual must express one reviewed golf truth.',
+  live:LAUNCH_QUESTIONS.length,
+  quarantined:QUESTION_QUARANTINE.length
+});
+
+// Every authored item has a terminal editorial state. "Retire" means retained
+// only as historical authoring material; it can never enter a learner pool.
+// There is deliberately no open-ended "review later" state at launch.
+const CURATED_LEGACY_MERGES = Object.freeze({
+  Q071:'Q147', Q084:'Q006', Q115:'Q006', Q151:'Q094',
+  Q082:'Q011', Q096:'Q011', Q209:'Q035', Q355:'Q035'
+});
+
+const EXPLICIT_RETIREMENTS = Object.freeze([
+  ...(RECOVERY_BATCH_1.retired || []),
+  ...(RECOVERY_BATCH_2.retired || [])
+].reduce((out,item)=>(out[item.id]=item.reason,out),{}));
+
+const QUESTION_DISPOSITIONS = Object.freeze(QUESTIONS.map(q => {
+  if(LAUNCH_QUESTIONS.includes(q)){
+    return {id:q.id,status:'launch',reason:/^QE5_/.test(q.id)?'Sourced content pack passed launch contract':'Recovered legacy item passed launch contract'};
+  }
+  const mergedInto = CURATED_LEGACY_MERGES[q.id]
+    || RECOVERY_BATCH_1.merged.find(x=>x.id===q.id)?.into
+    || RECOVERY_BATCH_2.merged.find(x=>x.id===q.id)?.into;
+  if(mergedInto) return {id:q.id,status:'merge',into:mergedInto,reason:'A stronger learning object covers the same decision'};
+  return {
+    id:q.id,
+    status:'retire',
+    reason:EXPLICIT_RETIREMENTS[q.id] || 'Does not meet launch sourcing and truth-contract standard'
+  };
+}));
+
+const DISPOSITION_COUNTS = Object.freeze(QUESTION_DISPOSITIONS.reduce((out,item)=>{
+  out[item.status]=(out[item.status]||0)+1; return out;
+},{launch:0,merge:0,retire:0}));
+
+const UNRESOLVED_QUESTION_IDS = Object.freeze(QUESTIONS
+  .filter(q => !QUESTION_DISPOSITIONS.some(item=>item.id===q.id))
+  .map(q=>q.id));
+
+if(UNRESOLVED_QUESTION_IDS.length || QUESTION_DISPOSITIONS.length !== QUESTIONS.length){
+  throw new Error('GAMESHARP trust contract: unresolved question disposition');
+}
 
 // ── Near-twin similarity groups ────────────────────────
 // Scenario repetition is deliberate — re-meeting the same decision after a
@@ -2746,15 +3134,15 @@ function setPillarColor(color){
 
 // ── Home Screen ────────────────────────────────────────
 function renderHome(){
-  // Archetype greeting — subtle identity signal in header
+  // Warmth without inventing a golfer identity from a small answer sample.
   const greetEl = document.getElementById('home-arch-greeting');
   if(greetEl){
     const totalAnswered = Object.keys(S.completed).length;
-    if(totalAnswered >= 5){
-      const arch = deriveArchetype();
+    if(totalAnswered >= 8){
+      const dr = decisionRating();
       const hr = new Date().getHours();
       const tod = hr < 12 ? 'Morning' : hr < 17 ? 'Afternoon' : 'Evening';
-      greetEl.textContent = `${tod}, ${arch.name.toLowerCase().replace('the ','')}`;
+      greetEl.textContent = `${tod} · Decision Rating ${dr ? dr.cur : 'building'}`;
     } else {
       greetEl.textContent = '';
     }
@@ -2908,6 +3296,18 @@ function pillarSceneSvg(p){
 // ===== ADVANCED MODE (verified data pack v0.3) =====
 const ADV_ITEMS = [{"format": "TOUR_DECISION", "prompt": "165 yards. Front-right pin. Water short-right. 18mph left-to-right crosswind. Saturday medal. You are 3 over par.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Attack the pin"}, {"id": "B", "label": "Aim centre green"}, {"id": "C", "label": "Aim left edge and let wind move it"}, {"id": "D", "label": "Lay up short-left"}], "answer": "C", "reveal": {"headline": "The elite answer is not simply centre. It is a committed miss pattern.", "tourLens": "A tour-aligned target is left-edge/left-centre, using wind and dispersion so the bad miss finishes centre, not water-side.", "scratchLens": "Many scratch players say centre green but under-use wind as a safety rail.", "percentages": {"tourAttackPin": {"value": "15-25%", "quality": "modeled_estimate"}, "tourTargetSafeSideOrCentre": {"value": "70-80%", "quality": "modeled_estimate"}}, "lesson": "Elite players do not just pick safe targets. They pick targets where their normal shot pattern cannot create the expensive miss."}, "src": ["PGA TOUR Stats overview", "Secondary summary of Golf Digest green-zone analysis of Scottie Scheffler", "Do You Play Par-3s Better Than The Average Amateur Golfer?"]}, {"format": "TOUR_DECISION", "prompt": "150 yards. Pin middle. Bunker short. Back fringe is harmless. You are a 10-handicap and between 7-iron and 8-iron.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Smooth 8-iron at the flag"}, {"id": "B", "label": "Full 8-iron to middle"}, {"id": "C", "label": "Controlled 7-iron to back-middle"}, {"id": "D", "label": "Punch 7-iron short of the bunker"}], "answer": "C", "reveal": {"headline": "The better-player answer is often more club, not a better swing.", "stat": "Shot Scope/Golf Monthly reporting says golfers over 10-handicap are more likely to miss short than hit the green from 150 yards.", "lesson": "When short is the only bad miss and long is playable, take the club that reaches the back third on a normal strike."}, "src": ["Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages"]}, {"format": "TOUR_DECISION", "prompt": "Tight par 4. Driver brings a fairway bunker into play at 265 carry. 3-wood cannot reach it but leaves 185 in. Your driver carry is 260 average, 278 best. Your 3-wood leaves 185-195.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Driver, because distance beats accuracy"}, {"id": "B", "label": "3-wood, because the bunker is reachable on a good driver"}, {"id": "C", "label": "Driver aimed away from bunker"}, {"id": "D", "label": "Hybrid short of everything"}], "answer": "B", "reveal": {"headline": "This is the exception to the driver rule.", "stat": "Shot Scope says 3-wood is usually only 1-2% more accurate, so driver often wins. But if driver reaches a specific hazard and 3-wood cannot, the equation flips.", "lesson": "Do not choose 3-wood because it feels safer. Choose it only when it removes a real penalty from the shot pattern."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!", "Are You More Likely To Hit The Fairway With A Driver Or 3-Wood?"]}, {"format": "TOUR_DECISION", "prompt": "188 yards into the wind on Portmarnock's demanding 4th hole. The flag is pinned behind a deep, flat-bottomed greenside bunker. You are a 5-handicap standing over a traditional cavity-back 5-iron—a club you hit 190 yards max on the range.", "question": "What would YOU do?", "options": [{"id": "A", "label": "Smooth the 5-iron, taking a slightly wider stance to punch it under the wind"}, {"id": "B", "label": "Swap the 5-iron for a 4-hybrid, aiming for the fat back-tier of the green complex"}, {"id": "C", "label": "Choke down on a 3-wood and hit a half-swing slice away from the bunker line"}, {"id": "D", "label": "Aim directly at the flagstick with the 5-iron, trusting a perfect strike to clear the sand"}], "answer": "B", "reveal": {"headline": "The 5-iron is statistically costing you shots before you even swing.", "stat": "Shot Scope and Matt Fryer data arrays explicitly label the 5-iron as the worst club for Strokes Gained across all handicaps, bleeding up to 0.37 shots per use due to low launch and exaggerated curvature variance.", "lesson": "Advanced players don't let macho club choices dictate scorecards. Swapping a long iron for a high-launching hybrid instantly increases your green-in-regulation probability by dropping strike variance on tight links turf."}, "src": ["How To Hit The Club That Loses Every Golfer The Most Shots - Golf Monthly", "Portmarnock Red and Blue Course Review"]}, {"format": "GUESS_THE_NUMBER", "prompt": "Average amateur. Par 3 from 150-200 yards.", "question": "How often do they hit the green?", "options": [{"id": "A", "label": "12%"}, {"id": "B", "label": "27%"}, {"id": "C", "label": "43%"}, {"id": "D", "label": "58%"}], "answer": "B", "reveal": {"headline": "Par is already a win here.", "stat": "Shot Scope/Golf Monthly reports average amateurs hit par-3 greens 27% from 150-200 yards.", "lesson": "If you are above 10-handicap, your par-3 plan should often be: centre, enough club, accept 30-50 feet."}, "src": ["Do You Play Par-3s Better Than The Average Amateur Golfer?"]}, {"format": "GUESS_THE_NUMBER", "prompt": "A 20-handicap leaves a 4-5 footer after racing a birdie putt past.", "question": "Roughly how often does a typical 20-handicap make putts from 3-6 feet?", "options": [{"id": "A", "label": "89%"}, {"id": "B", "label": "72%"}, {"id": "C", "label": "48%"}, {"id": "D", "label": "25%"}], "answer": "C", "reveal": {"headline": "That comeback putt is a coin flip.", "stat": "Shot Scope/Golf Monthly reports 20-handicaps make about 48% from 3-6 feet, despite making 89% inside 3 feet.", "lesson": "Long-putt aggression has a hidden tax: it converts a low-make birdie try into a real bogey risk."}, "src": ["A 30 Pound Putter Grip Changed Everything - My Putting Stats Prove It"]}, {"format": "GUESS_THE_NUMBER", "prompt": "Scratch golfer. Flat-ish 10-footer.", "question": "How many should they expect to make?", "options": [{"id": "A", "label": "1 in 2"}, {"id": "B", "label": "1 in 3"}, {"id": "C", "label": "2 in 3"}, {"id": "D", "label": "3 in 4"}], "answer": "B", "reveal": {"headline": "Ten feet is not a must-make, even for very good players.", "stat": "Shot Scope/Golf Monthly strategy reporting says even scratch golfers make only about 1 in 3 from 10 feet.", "lesson": "Good putting strategy is not demanding makes. It is getting enough looks without creating three-putt stress."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!"]}, {"format": "GUESS_THE_NUMBER", "prompt": "A golfer swaps driver for 3-wood on a tight hole.", "question": "Across Shot Scope averages, how much more accurate is 3-wood than driver for many players?", "options": [{"id": "A", "label": "1-2 percentage points"}, {"id": "B", "label": "8-10 percentage points"}, {"id": "C", "label": "15-20 percentage points"}, {"id": "D", "label": "It is usually less accurate"}], "answer": "A", "reveal": {"headline": "The 'fairway finder' may be a comfort blanket.", "stat": "Shot Scope/Golf Monthly reports the accuracy gain is often only 1-2%, while the distance loss is meaningful.", "lesson": "Use less club to remove a specific hazard, not to soothe nerves."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!", "Are You More Likely To Hit The Fairway With A Driver Or 3-Wood?"]}, {"format": "GUESS_THE_NUMBER", "prompt": "You are playing Royal County Down's legendary, blind 4th hole from 215 yards. A scratch golfer hits an incredibly solid, committed long-iron shot directly over the gorse wall on their chosen skyline mountain line.", "question": "According to current tracking metrics, what is the average final proximity to the hole for a scratch player from this distance band?", "options": [{"id": "A", "label": "Under 25 feet"}, {"id": "B", "label": "30 to 40 feet"}, {"id": "C", "label": "56 feet"}, {"id": "D", "label": "Over 75 feet"}], "answer": "C", "reveal": {"headline": "56 feet is a spectacular result from 200+ yards.", "stat": "Shot Scope's formal par-3 index reveals that a 0-handicap's baseline proximity from 200+ yards is exactly 56 feet. For a 5-handicap, that number swells dramatically to 81 feet.", "lesson": "Stop judging your long-iron play by television standards. From past 200 yards over blind terrain, finding any part of the green complex is an elite strategic execution. Price your next shot for safety, not flag proximity."}, "src": ["Do You Play Par-3s Better Than The Average Amateur Golfer?", "Royal County Down Championship Course Review"]}, {"format": "GOLF_PUZZLE", "prompt": "You are an 8-handicap. Two holes remaining. Leading by 1. 172 yards into a strong wind. Pin tucked right behind a bunker. Long-left is safe. Short-right is dead.", "question": "What is your tournament strategy?", "options": [{"id": "A", "label": "Take normal 172 club and aim at pin"}, {"id": "B", "label": "Take one extra club, aim long-left"}, {"id": "C", "label": "Take two extra clubs, punch centre"}, {"id": "D", "label": "Lay up short of the bunker"}], "answer": "B", "reveal": {"headline": "Protect the lead by changing the cost of your worst shot.", "aggressiveGolfer": "Sees tucked pin and thinks birdie ends it.", "disciplinedGolfer": "Sees short-right as the only losing miss and removes it.", "tourLens": "Elite players rarely defend by making timid swings. They defend by choosing targets that make committed swings safe.", "lesson": "Under pressure, conservative target plus committed swing beats cautious swing at an aggressive target."}, "src": ["Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "PGA TOUR Stats overview"]}, {"format": "GOLF_PUZZLE", "prompt": "Par 5. You cannot reach the green. Fairway wood leaves 45 yards in light rough or fairway. 7-iron lays back to your favourite 105 yards. No water or bunkers between 45 and 105.", "question": "What is your strategy?", "options": [{"id": "A", "label": "Lay up to 105 because full wedge is comfortable"}, {"id": "B", "label": "Advance it as far as you can while keeping it playable"}, {"id": "C", "label": "Hit iron to 130 to avoid partial shots"}, {"id": "D", "label": "Lay up short of all trouble even though there is none"}], "answer": "B", "reveal": {"headline": "Favourite yardage is not a law. It is a tiebreaker.", "stat": "Shot Scope/Golf Monthly strategy reporting says players generally fare better closer to the green when no hazard punishes getting closer.", "lesson": "Lay up to a number when closeness is punished. If closeness is just grass, take the grass."}, "src": ["The Biggest Strategy Myths In Golf... Debunked By Data!"]}, {"format": "GOLF_PUZZLE", "prompt": "175 yards. 20-handicap. Slightly uphill. Green open in front. You carry a 5-iron and a 4-hybrid.", "question": "What is the higher-percentage play?", "options": [{"id": "A", "label": "5-iron because it is lower and safer"}, {"id": "B", "label": "4-hybrid because it launches higher and hits more greens"}, {"id": "C", "label": "Lay up because 175 is too far"}, {"id": "D", "label": "Punch 5-iron short and chase it"}], "answer": "B", "reveal": {"headline": "Sometimes the strategic upgrade is the tool.", "stat": "Shot Scope/Golf Monthly reports 20-handicaps hit greens from 175 yards 14% with hybrid vs 8% with long iron.", "lesson": "If your long iron produces low strike variance and short misses, a hybrid is not less skilled. It is better scoring architecture."}, "src": ["I Ditched My Long Irons For Hybrids And Woods"]}, {"format": "GOLF_PUZZLE", "prompt": "A 5-handicap player faces the exposed 15th at Portmarnock from 165 yards. A severe crosswind is blowing off the sea. The player underclubs, pulling an iron that matches their perfect range distance exactly to the flag yardage.", "question": "How likely is this shot to miss the green?", "options": [{"id": "A", "label": "Roughly 15%—an elite player should expect to hit this green easily"}, {"id": "B", "label": "More than 60%—because strike drop-off combined with crosswinds ensures the ball misses short or wide"}, {"id": "C", "label": "Exactly 30%—solely determined by the wind speed variable"}, {"id": "D", "label": "Zero percent—a single-figure handicapper will always carry the front fringe from 165 yards"}], "answer": "B", "reveal": {"headline": "Ego-driven yardage calculation is a scorecard killer.", "stat": "Shot Scope data lists that a 5-handicap player misses short 29% of the time from a stable 150 yards. When you scale that distance to 165 yards under coastal wind conditions, the probability of missing the green entirely scales past 60%.", "lesson": "Never select an approach club based on your perfect strike yardage. Select the club where a slight mishit still carries the front hazard and clears the danger zone."}, "src": ["Why You're Hitting The Wrong Club: 5 Ways To Find Your Real Yardages", "Portmarnock Red and Blue Course Review"]}];
 
+const ADV_QUARANTINE=[];
+const LIVE_ADV_ITEMS=ADV_ITEMS.filter((item,i)=>{
+  const ids=(item.options||[]).map(o=>o.id);
+  const revealText=JSON.stringify(item.reveal||{}).toLowerCase();
+  const reasons=[];
+  if(ids.length!==4 || new Set(ids).size!==4 || !ids.includes(item.answer)) reasons.push('answer-contract');
+  if(!Array.isArray(item.src) || !item.src.filter(Boolean).length) reasons.push('missing-source');
+  if(/modeled_estimate|scales past|probability.*scaled/.test(revealText)) reasons.push('modeled-as-fact');
+  if(reasons.length) ADV_QUARANTINE.push({index:i,reasons});
+  return !reasons.length;
+});
+
 let advState = { done:{}, scored:0, total:0 };
 function advFmtLabel(f){ return {TOUR_DECISION:'Tour Decision', GUESS_THE_NUMBER:'Guess the Number', GOLF_PUZZLE:'Golf Puzzle'}[f]||f; }
 function advPrettyKey(k){ return k.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase()).trim(); }
@@ -2915,12 +3315,12 @@ function advRow(lbl,val,cls){ return `<div class="adv-rev-row ${cls||''}"><div c
 // Date-seeded "decision of the day" index — same for everyone each day.
 function advDailyIndex(){
   const d=new Date(); const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
-  return ((doy % ADV_ITEMS.length)+ADV_ITEMS.length)%ADV_ITEMS.length;
+  return ((doy % LIVE_ADV_ITEMS.length)+LIVE_ADV_ITEMS.length)%LIVE_ADV_ITEMS.length;
 }
 function openAdvanced(focusIdx){
-  advState = { done:{}, scored:0, total:ADV_ITEMS.filter(x=>x.format==='GUESS_THE_NUMBER').length };
+  advState = { done:{}, scored:0, total:LIVE_ADV_ITEMS.filter(x=>x.format==='GUESS_THE_NUMBER').length };
   const app=document.getElementById('adv-app');
-  if(app) app.innerHTML = ADV_ITEMS.map((it,i)=>advCardHtml(it,i)).join('') + `<div style="height:30px"></div>`;
+  if(app) app.innerHTML = LIVE_ADV_ITEMS.map((it,i)=>advCardHtml(it,i)).join('') + `<div style="height:30px"></div>`;
   showView('advanced');
   const v=document.getElementById('view-advanced'); if(v) v.scrollTop=0;
   const els=document.querySelectorAll('#view-advanced .pp-reveal');
@@ -2935,8 +3335,8 @@ function openAdvanced(focusIdx){
 }
 function renderHomeDecision(){
   const wrap=document.getElementById('home-decision-wrap');
-  if(!wrap || typeof ADV_ITEMS==='undefined') return;
-  const i=advDailyIndex(), it=ADV_ITEMS[i];
+  if(!wrap || !LIVE_ADV_ITEMS.length) return;
+  const i=advDailyIndex(), it=LIVE_ADV_ITEMS[i];
   wrap.innerHTML = `<div class="home-decision" onclick="openAdvanced(${i})">
     <div class="hd-eyebrow">⛳ Today's Decision · ${advFmtLabel(it.format)}</div>
     <div class="hd-prompt">${it.prompt}</div>
@@ -2946,7 +3346,7 @@ function renderHomeDecision(){
 function advCardHtml(it,i){
   const opts=it.options.map(o=>`<button class="pp-dq-opt" id="adv-opt-${i}-${o.id}" onclick="advAnswer(${i},'${o.id}')"><span class="pp-dq-letter">${o.id}</span><span class="pp-dq-oplabel">${o.label}</span><span class="pp-dq-mark"></span></button>`).join('');
   return `<div class="pp-dq pp-reveal" id="adv-card-${i}">
-    <div class="pp-dq-eyebrow">${advFmtLabel(it.format)} · ${i+1} of ${ADV_ITEMS.length}</div>
+    <div class="pp-dq-eyebrow">${advFmtLabel(it.format)} · ${i+1} of ${LIVE_ADV_ITEMS.length}</div>
     <div class="adv-prompt">${it.prompt}</div>
     <div class="adv-question">${it.question}</div>
     <div class="pp-dq-opts">${opts}</div>
@@ -2955,7 +3355,7 @@ function advCardHtml(it,i){
 }
 function advAnswer(i,oid){
   if(advState.done[i]) return; advState.done[i]=true;
-  const it=ADV_ITEMS[i], ans=it.answer, r=it.reveal;
+  const it=LIVE_ADV_ITEMS[i], ans=it.answer, r=it.reveal;
   it.options.forEach(o=>{ const b=document.getElementById(`adv-opt-${i}-${o.id}`); if(!b)return;
     if(o.id===ans) b.classList.add('correct'); else if(o.id===oid) b.classList.add('wrong'); else b.classList.add('dim'); b.disabled=true; });
   const correct = oid===ans;
@@ -2979,6 +3379,26 @@ function advAnswer(i,oid){
   if(typeof wobHaptic==='function') wobHaptic();
 }
 
+
+function renderDebriefEntry(){
+  const debriefWrap = document.getElementById('debrief-card-wrap');
+  if(!debriefWrap) return;
+  debriefWrap.innerHTML = S.leak ? `<div class="debrief-entry" onclick="launchLeakSession()">
+    <div class="debrief-left">
+      <div class="debrief-eyebrow">↗ ${S.leak.provisional ? 'STARTING REVIEW AREA' : 'FROM YOUR LAST DEBRIEF'}</div>
+      <div class="debrief-title">${S.leak.icon} ${S.leak.label}</div>
+      <div class="debrief-sub">5 decisions for this review area · <span style="text-decoration:underline" onclick="event.stopPropagation();showDebrief()">review again</span></div>
+    </div>
+    <button class="debrief-btn">TRAIN →</button>
+  </div>` : `<div class="debrief-entry" onclick="showDebrief()">
+    <div class="debrief-left">
+      <div class="debrief-eyebrow">📊 After Your Round</div>
+      <div class="debrief-title">19th Hole Debrief</div>
+      <div class="debrief-sub">One minute → one useful review area</div>
+    </div>
+    <button class="debrief-btn">REVIEW →</button>
+  </div>`;
+}
 
 function renderSharpen(){
   // Pillar grid
@@ -3038,30 +3458,11 @@ function renderSharpen(){
     </div>`;
   }
 
-  // 19th Hole Debrief card
-  const debriefWrap = document.getElementById('debrief-card-wrap');
-  if(debriefWrap){
-    debriefWrap.innerHTML = S.leak ? `<div class="debrief-entry" onclick="launchLeakSession()">
-      <div class="debrief-left">
-        <div class="debrief-eyebrow">⚠ ${S.leak.provisional ? 'YOUR LIKELY LEAK' : 'YOUR DIAGNOSED LEAK'}</div>
-        <div class="debrief-title">${S.leak.icon} ${S.leak.label}</div>
-        <div class="debrief-sub">5 decisions targeting your leak · <span style="text-decoration:underline" onclick="event.stopPropagation();showDebrief()">re-analyse</span></div>
-      </div>
-      <button class="debrief-btn">TRAIN →</button>
-    </div>` : `<div class="debrief-entry" onclick="showDebrief()">
-      <div class="debrief-left">
-        <div class="debrief-eyebrow">📊 After Your Round</div>
-        <div class="debrief-title">19th Hole Debrief</div>
-        <div class="debrief-sub">4 numbers → find your biggest leak</div>
-      </div>
-      <button class="debrief-btn">ANALYSE →</button>
-    </div>`;
-  }
+  renderDebriefEntry();
 
   // Pro Lens strip — bias toward player's strongest pillar
   const scroll = document.getElementById('pro-lens-scroll');
   scroll.innerHTML = '';
-  const arch = deriveArchetype();
   const strongPillar = (() => {
     let best = null, bestPct = -1;
     PILLARS.forEach(p => {
@@ -3164,10 +3565,11 @@ function bandPrefer(pool){
   return [...pool].sort((x,y) => dist(x) - dist(y));
 }
 
-// ── DECISION INDEX ── the "am I getting smarter?" answer: difficulty-weighted
+// ── DECISION RATING ── the "am I getting smarter?" answer: difficulty-weighted
 // accuracy over the last 30 graded answers, compared to the 30 before them.
-// Returns null until 8 answers exist — the index is earned, never invented.
-function decisionIndex(){
+// Returns null until 8 answers exist — the rating is earned, never seeded
+// from handicap and never presented as a diagnosis of real-world execution.
+function decisionRating(){
   const r = S.recent || [];
   if(r.length < 8) return null;
   const W = { 'Beginner':0.85, 'Club':1, 'Competitor':1.15, 'Low Handicap':1.3 };
@@ -3177,6 +3579,8 @@ function decisionIndex(){
   const prev = prevArr.length >= 8 ? idx(prevArr) : null;
   return { cur, prev, delta: prev === null ? null : cur - prev, n: win.length };
 }
+// Temporary internal alias while legacy call sites are migrated.
+function decisionIndex(){ return decisionRating(); }
 
 // ── DI NARRATIVE ── one sentence of story under the number: strongest and
 // weakest pillar over the last 30 graded answers. Sample-gated (>=4 each,
@@ -3635,14 +4039,13 @@ function startSaturdayCard(){
 }
 
 function showSaturdayComplete(score, total){
-  const arch = deriveArchetype();
   const wn   = weekNumber();
   const weekLabel = `Week ${wn % 100} · Pre-Round Warm-Up`;
 
   document.getElementById('sc-week').textContent    = weekLabel;
   document.getElementById('sc-score').textContent   = score;
-  document.getElementById('sc-arch-icon').textContent = arch.icon;
-  document.getElementById('sc-arch-name').textContent = arch.name;
+  document.getElementById('sc-arch-icon').textContent = '⛳';
+  document.getElementById('sc-arch-name').textContent = 'READY FOR THE FIRST TEE';
   document.getElementById('sc-cue').textContent     = SATURDAY_CUES[arch.name] || SATURDAY_CUES['THE VETERAN'];
 
   // Dots
@@ -3697,36 +4100,54 @@ function resetDebrief(){
 }
 
 function submitDebrief(){
-  const fairways = parseInt(document.getElementById('db-fairways').value) || 7;
-  const gir      = parseInt(document.getElementById('db-gir').value)      || 5;
-  const putts    = parseInt(document.getElementById('db-putts').value)    || 34;
-  const scoreMag = parseInt(document.getElementById('db-score').value)    || 0;
+  const raw = ['db-fairways','db-gir','db-putts','db-score'].map(id => document.getElementById(id).value.trim());
+  if(raw.some(v => v === '')){
+    alert('Add all four scorecard numbers so the review does not guess.');
+    return;
+  }
+  const fairways = parseInt(raw[0]);
+  const gir      = parseInt(raw[1]);
+  const putts    = parseInt(raw[2]);
+  const scoreMag = parseInt(raw[3]);
+  if(fairways < 0 || fairways > 14 || gir < 0 || gir > 18 || putts < 18 || putts > 72 || scoreMag < 0 || scoreMag > 72){
+    alert('One number is outside its scorecard range. Check it and try again.');
+    return;
+  }
   const scorePar = _debriefSign === 0 ? 0 : _debriefSign * scoreMag;
 
-  // Benchmarks (typical 18-handicap): 7/14 FW, 5/18 GIR, 34 putts, +18
-  const fwGap    = (7 - fairways);            // positive = below avg
-  const girGap   = (5 - gir);                 // positive = below avg
-  const puttGap  = (putts - 34);              // positive = too many
-  const scoreDelta = scorePar - 18;           // vs +18 benchmark (positive = worse than avg)
+  // Broad calibration bands keep the reflection relevant without pretending
+  // four aggregate numbers can diagnose a golfer or a swing.
+  const band = userBand() || 'Club';
+  const BENCH = {
+    'Beginner':     { fw:5, gir:3, putts:38, score:30 },
+    'Club':         { fw:7, gir:5, putts:35, score:22 },
+    'Competitor':   { fw:8, gir:7, putts:33, score:14 },
+    'Low Handicap': { fw:9, gir:10,putts:31, score:7 }
+  };
+  const b = BENCH[band] || BENCH.Club;
+  const fwGap    = (b.fw - fairways);
+  const girGap   = (b.gir - gir);
+  const puttGap  = (putts - b.putts);
+  const scoreDelta = scorePar - b.score;
 
   // Weighted gaps → identify biggest leak
   const gaps = [
     { key:'tee',     score: fwGap * 1.2,   pillarName:'Score Smart',  label:'Tee Shot Strategy',      icon:'🏌️', leakTags:['Penalty','Double bogey'],
-      desc: fairways < 7
-        ? `You hit ${fairways}/14 fairways. Tour average is 11. Every missed fairway costs you half a shot before your approach even starts.`
-        : `Your driving is solid. The gap is elsewhere.` },
+      desc: fairways < b.fw
+        ? `You recorded ${fairways}/14 fairways. That makes tee-shot decision patterns worth reviewing; this number alone cannot tell us whether the cause was strategy or execution.`
+        : `Your fairways figure does not stand out as the first review priority for your calibration band.` },
     { key:'approach',score: girGap * 1.5,   pillarName:'Course IQ',    label:'Approach & Positioning', icon:'🎯', leakTags:['Double bogey','Short-sided'],
-      desc: gir < 5
-        ? `${gir}/18 greens in regulation. From inside 150 yards, the average Tour player hits 70% of greens. Most amateurs miss because they aim at flags, not fat of greens.`
-        : `You're finding greens well. The gap is elsewhere.` },
+      desc: gir < b.gir
+        ? `You recorded ${gir}/18 greens. We will review club and target decisions without assuming those misses came from poor judgment.`
+        : `Your greens figure does not stand out as the first review priority for your calibration band.` },
     { key:'putting', score: puttGap * 1.4,  pillarName:'Short Game',   label:'Putting & Green Reading',icon:'⛳', leakTags:['Three-putt'],
-      desc: putts > 34
-        ? `${putts} putts. The benchmark is 34 for a club player. You're leaving shots on the greens — pace control and break reading are where rounds are won.`
-        : `Your putting numbers are solid for your level.` },
+      desc: putts > b.putts
+        ? `You recorded ${putts} putts. Pace and leave decisions are useful to revisit, while remembering that total putts depends heavily on how many greens you hit.`
+        : `Your total-putts figure does not stand out as the first review priority for your calibration band.` },
     { key:'mental',  score: Math.max(0, scoreDelta * 0.6), pillarName:'Mental Game', label:'Scoring & Pressure', icon:'🧠', leakTags:['Double bogey','Failed recovery'],
-      desc: scorePar > 20
-        ? `Shooting ${scorePar > 0 ? '+' : ''}${scorePar} with your ball-striking stats suggests shots are leaking through poor decisions under pressure or double-bogey holes.`
-        : `Your scoring is tracking your ball-striking well.` }
+      desc: scorePar > b.score
+        ? `Your score relative to the three recorded stats makes blow-up-hole and pressure decisions useful to review. It does not prove that decision-making caused the score.`
+        : `Your score and recorded stats do not make pressure decisions the first review priority today.` }
   ];
 
   // Sort by gap score descending
@@ -3754,7 +4175,7 @@ function submitDebrief(){
     </div>`;
 
   document.getElementById('db-leak-card').innerHTML = `
-    <div class="db-leak-eyebrow">⚠ BIGGEST LEAK</div>
+    <div class="db-leak-eyebrow">ONE USEFUL REVIEW AREA</div>
     <div class="db-leak-name">${leak.icon} ${leak.label}</div>
     <div class="db-leak-desc">${leak.desc}</div>`;
 
@@ -3776,9 +4197,9 @@ function launchLeakSession(){
   let pool = leak ? LAUNCH_QUESTIONS.filter(q => leak.leakTags.includes(q.primary_score_leak)) : [];
   if(pool.length < 5) pool = pool.concat(LAUNCH_QUESTIONS.filter(q => q.pillar === pillar.name && !pool.includes(q)));
   const qs = pickSpaced(preferUnseen(bandPrefer(shuffle(pool))), 5);
-  S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Fix Your Leak', mode:'crash' };
+  S.quiz = { qs, idx:0, score:0, answers:[], pillar, module:'Review Practice', mode:'crash' };
   setPillarColor(pillar.color);
-  document.getElementById('qt-pillar').textContent = leak ? ('Fix Your Leak · ' + leak.label) : 'Fix Your Leak';
+  document.getElementById('qt-pillar').textContent = leak ? ('Review Practice · ' + leak.label) : 'Review Practice';
   document.getElementById('qt-pillar').style.color  = pillar.color;
   document.getElementById('quiz-prog').style.background = pillar.color;
   loadQuestion();
@@ -4198,17 +4619,17 @@ function dailyEndState(score, total, qs, streak){
 
   const elig = [];
   if(score === total && total > 0)
-    elig.push({ icon:'🏆', title:'FLAWLESS CARD', color:'var(--gold)',
-      sub:`${total} for ${total}. Not one leak — that's a round-winning mindset, not a lucky day.` });
+    elig.push({ icon:'🏆', title:'FLAWLESS REP', color:'var(--gold)',
+      sub:`${total} for ${total}. Four decisions read clearly today.` });
   if(landmark)
     elig.push({ icon:'🔥', title:`${streak}-DAY STREAK`, color:'#ff8f00',
-      sub:`This isn't a phase anymore — it's how you read the course now. Don't break the chain.` });
+      sub:`You have kept the learning appointment ${streak} days running. One small edge tomorrow keeps it alive.` });
   if(clutchSave)
-    elig.push({ icon:'🛡️', title:'SHOT SAVED', color:'#4caf50',
-      sub:`You read the danger hole right — that's the ${leakWord} that never made it onto your card.` });
+    elig.push({ icon:'🛡️', title:'HIGH-STAKES READ REHEARSED', color:'#4caf50',
+      sub:`You correctly rehearsed the decision that avoids a ${leakWord}. That is learning—not evidence about a round you played.` });
   if(comeback)
-    elig.push({ icon:'↩️', title:'THE BOUNCE-BACK', color:'#5b9bd5',
-      sub:`Dropped the opener, closed it out. That's exactly how good players stop a card from sliding.` });
+    elig.push({ icon:'↩️', title:'THE BOUNCE-BACK REP', color:'#5b9bd5',
+      sub:`Missed the opener, then finished with a clear read. Learning recovered immediately.` });
 
   // Mutually exclusive fallbacks by score band — only used when nothing above fired.
   let chosen;
@@ -4217,11 +4638,11 @@ function dailyEndState(score, total, qs, streak){
     const seed = parseInt(todayStr().replace(/-/g,'')) || 0;
     chosen = elig[seed % elig.length];
   } else if(score >= need && score < total){
-    chosen = { icon:'🧠', title:'COURSE MANAGER', color:'var(--gold)',
-      sub:`${score}/${total}, and the ones you missed were the close calls. Steady reads beat hero swings over 18.` };
+    chosen = { icon:'🧠', title:'STRONG REP', color:'var(--gold)',
+      sub:`${score}/${total}. Keep the clearest idea and take it to the next scenario.` };
   } else if(score > 0){
-    chosen = { icon:'📈', title:'EDGE BANKED', color:'#26a69a',
-      sub:`${score}/${total} — but you just saw exactly where the strokes leak. That's the rep that changes your scores.` };
+    chosen = { icon:'📈', title:'LEARNING EDGE BANKED', color:'#26a69a',
+      sub:`${score}/${total}. The misses have now become examples you can recognise next time.` };
   } else {
     chosen = { icon:'🌱', title:'FRESH CARD TOMORROW', color:'#7cb37c',
       sub:`Tough set — but every miss you just walked through is one you'll spot coming on the course.` };
@@ -4314,7 +4735,7 @@ function finishQuiz(){
         const d = di.delta;
         const story = diNarrative();
         diEl.style.display = '';
-        diEl.innerHTML = `DECISION INDEX <b>${di.cur}</b>` +
+        diEl.innerHTML = `DECISION RATING <b>${di.cur}</b>` +
           (d !== null && d !== 0 ? ` <span style="color:${d > 0 ? '#4caf50' : '#e05252'}">${d > 0 ? '▲' : '▼'}${Math.abs(d)}</span>` : '') +
           ` <span class="dcc-di-sub">· last ${di.n} calls</span>` +
           (story ? `<div class="dcc-di-story">${story}</div>` : '');
@@ -4379,11 +4800,8 @@ function renderResult(score, total, pillar){
     `<div class="share-dot" title="${a.qid}">${a.isCorrect ? '🟢' : '🔴'}</div>`
   ).join('');
 
-  // Archetype
-  const arch = deriveArchetype();
-  document.getElementById('ar-icon').textContent = arch.icon;
-  document.getElementById('ar-name').textContent = arch.name;
-  document.getElementById('ar-desc').textContent = arch.desc;
+  const dr = decisionRating();
+  document.getElementById('result-dr').textContent = dr ? String(dr.cur) : 'Provisional';
 
   // Share button
   document.getElementById('result-share-btn').onclick = () => shareResult(score, total, S.quiz.mode);
@@ -4505,8 +4923,8 @@ function shareDaily(){
 function shareResult(score, total, mode){
   const pct  = Math.round(score/total*100);
   const dots = (S.quiz.answers || []).map(a => a.isCorrect ? '🟢' : '🔴').join('');
-  const arch = deriveArchetype();
-  const text = `GAMESHARP Golf ⛳\n${dots}\n${score}/${total} · ${pct}%\n${arch.name}\ngamesharpgolf.com`;
+  const dr = decisionRating();
+  const text = `GAMESHARP Golf ⛳\n${dots}\n${score}/${total} · ${pct}%${dr ? `\nDecision Rating ${dr.cur}` : ''}\ngamesharpgolf.com`;
   if(navigator.share){
     navigator.share({ title:'GAMESHARP Golf', text }).catch(()=>{});
   } else {
@@ -4518,23 +4936,22 @@ function shareResult(score, total, mode){
 
 // ── Profile Screen ─────────────────────────────────────
 function showProfile(){
+  const reviewHome = document.getElementById('review-debrief-home');
+  const debriefCard = document.getElementById('debrief-card-wrap');
+  if(reviewHome && debriefCard && debriefCard.parentElement !== reviewHome) reviewHome.appendChild(debriefCard);
+  renderDebriefEntry();
   const totalAnswered = Object.keys(S.completed).length;
-  const arch = deriveArchetype();
-  // Don't crown an archetype before they've played — welcome them instead.
-  if(totalAnswered === 0){
-    document.getElementById('pa-icon').textContent = '🎯';
-    document.getElementById('pa-name').textContent = 'Find Your Game';
-  } else {
-    document.getElementById('pa-icon').textContent = arch.icon;
-    document.getElementById('pa-name').textContent = arch.name;
-  }
+  const dr = decisionRating();
+  document.getElementById('pa-name').textContent = dr ? String(dr.cur) : 'Provisional';
 
   // Stats
   const totalCorrect  = Object.values(S.completed).filter(v => v === 'correct').length;
-  const acc = totalAnswered > 0 ? Math.round(totalCorrect/totalAnswered*100)+'%' : '—';
+  const confidence = totalAnswered < 8 ? 'Building'
+    : totalAnswered < 30 ? 'Developing'
+    : 'Established';
   document.getElementById('psr-answered').textContent = totalAnswered;
   document.getElementById('psr-streak').textContent   = S.streak;
-  document.getElementById('psr-acc').textContent      = acc;
+  document.getElementById('psr-acc').textContent      = confidence;
 
   // Pillar progress
   const list = document.getElementById('ppl-list');
@@ -4915,6 +5332,37 @@ const TECH_FIGS = {
    miss:{b:{hands:[150,149],club:[148,195]},f:{hands:[168,149],club:[184,193]},note:'EYES ON THE LINE, NOT THE DISTANCE',out:['puttShort','→ SIX FEET SHORT']},
    fix:{b:{hands:[140,147],club:[124,192]},f:{hands:[182,147],club:[212,189]},note:'LOOK AT THE HOLE — FEEL THE PACE',out:['puttIn','→ TAP-IN RANGE']}}
 };
+
+// Shot Clinic contract: the diagnosis prompt, accepted culprit, miss animation
+// and fix animation are one indexed record. If any member is absent—or their
+// reviewed truth token disappears—the fault is removed from the live clinic.
+const TECHNIQUE_TRUTH = Object.freeze({
+  'driver:0':['face'], 'driver:1':['steep'], 'driver:2':['hands'],
+  'irons:0':['low point'], 'irons:1':['low point'], 'irons:2':['body'],
+  'wedges:0':['decelerat'], 'wedges:1':['wrist'], 'wedges:2':['low point'],
+  'chipping:0':['weight'], 'chipping:1':['wrist'], 'chipping:2':['steep'],
+  'bunker:0':['dig'], 'bunker:1':['ball first'], 'bunker:2':['behind'],
+  'putting:0':['face'], 'putting:1':['decelerat'], 'putting:2':['distance']
+});
+const TECHNIQUE_QUARANTINE=[];
+GOLF_TECHNIQUE.forEach(g=>{
+  g.faults.forEach((fault,i)=>{
+    const key=g.key+':'+i, fig=TECH_FIGS[key], required=TECHNIQUE_TRUTH[key]||[];
+    const correct=fault.options.filter(o=>o.correct);
+    const words=[
+      fault.situation, fault.why, correct[0]&&correct[0].label,
+      fig&&fig.miss&&fig.miss.note, fig&&fig.miss&&fig.miss.out&&fig.miss.out.join(' '),
+      fig&&fig.fix&&fig.fix.note, fig&&fig.fix&&fig.fix.out&&fig.fix.out.join(' ')
+    ].join(' ').toLowerCase();
+    const reasons=[];
+    if(correct.length!==1) reasons.push('accepted-answer-count');
+    if(!fig || !fig.miss || !fig.fix) reasons.push('missing-comparison-animation');
+    if(!fault.vis) reasons.push('missing-fallback-visual');
+    if(required.length && !required.every(token=>words.includes(token))) reasons.push('semantic-drift');
+    if(reasons.length) TECHNIQUE_QUARANTINE.push({key,reasons});
+  });
+});
+const TECHNIQUE_CONTRACT_OK = TECHNIQUE_QUARANTINE.length === 0;
 
 let _gsw = null;
 function gswLerp(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]; }
@@ -5748,6 +6196,10 @@ function launchPlayPrepChallenge(leakTag){
 let techState = { strokeIdx:-1, faultIdx:0, answered:false };
 
 function openTechnique(){
+  if(!TECHNIQUE_CONTRACT_OK){
+    alert('Shot Clinic is temporarily unavailable while one learning sequence is re-checked.');
+    return;
+  }
   techState = { strokeIdx:-1, faultIdx:0, answered:false };
   techRenderHome();
   showView('technique');
@@ -6647,7 +7099,7 @@ const ALL_HOLES = [
       shot: 1,
       situation: "Par 4, 420. The fairway bends right around a nest of bunkers at 280. Carry them and it's a short iron in — but water hugs the front-left of the green. Lay back and you're left a long shot over that same water.",
       mapState: 'tee',
-      broadcast: "Tee · 420 yds · Wind off the right, hurting · Bunker nest at 280",
+      broadcast: "Tee · 420 yds · Bunker nest at 280 · Water front-left at the green",
       choices: [
         { badge:'AGG',   label:'Driver — carry the bunkers', sub:'Clear 280 and it’s a short iron in.', next:'tee_driver', type:'agg' },
         { badge:'SMART', label:'3-wood — short of the sand', sub:'Safe, but ~195 left over water.', next:'tee_3wood', type:'smart' },
@@ -6693,7 +7145,7 @@ const ALL_HOLES = [
     approach_195: {
       shot:2,
       situation:"195 over the water to a front pin on a firm green. You can take it on with a long iron, or lay back to a full wedge.",
-      mapState:'approach', broadcast:"Approach · 195 yds · Long iron over water · Front pin, firm green",
+      mapState:'approach', broadcast:"Approach · 195 yds · Water short, bunker long · Front pin, firm green",
       choices:[
         { badge:'AGG', label:'Go for it — long iron over water', sub:'All carry. Bunker lurks beyond.', next:'approach_195_go', type:'agg' },
         { badge:'EXEC',label:'Lay up to a full wedge', sub:'~72 yds in, dry, your number.', next:'approach_195_layup', type:'exec' },
@@ -6832,7 +7284,7 @@ const ALL_HOLES = [
       pro:"'Bailing out is fine insurance, but know the premium: a short-sided chip is its own kind of hard. Respect both misses.'",
       mapState:'greenside', ballTo:[842,196], broadcast:"Short-right apron · 15 yds · Chip to a pin over water · Dry but fiddly", next:'chip_15' },
     chip_15:{ shot:2, situation:"15-yard chip from the apron to the tight Sunday pin, the water lurking just beyond. Flop it close, or bump to the fat and take two putts?", mapState:'greenside',
-      broadcast:"Chip · 15 yds · Pin over the water · Tight Sunday pin",
+      broadcast:"Chip · 15 yds · Bunker between ball and pin · Water beyond",
       choices:[
         { badge:'AGG', label:'Flop it close to the pin', sub:'High risk over sand.', next:'chip_flop', type:'agg' },
         { badge:'SMART', label:'Bump to the fat, two-putt', sub:'Safe, take bogey.', next:'chip_safe', type:'smart' },
@@ -6905,7 +7357,7 @@ const ALL_HOLES = [
       pro:"'The disciplined lay-up to a full number is the highest-percentage birdie play on most reachable par 5s. It just isn’t the loud one.'",
       mapState:'second', ballTo:[702,288], broadcast:"Fairway · 90 yds · Full wedge · Birdie alive, no risk", next:'wedge_90' },
     layup:{ shot:2, situation:"275 out, laying up. Pick your wedge number for the third over the water.", mapState:'second',
-      broadcast:"Layup · 275 yds · Three-shot hole · Pick your wedge number",
+      broadcast:"Layup · 275 yds · Water guards the front · Pick your wedge number",
       choices:[
         { badge:'EXEC', label:'Lay to 90 — full wedge', sub:'Your number, over water next.', next:'layup_90', type:'exec' },
         { badge:'SAFE', label:'Lay to 130 — short and safe', sub:'In-between, but dry.', next:'layup_130', type:'safe' },
@@ -7004,7 +7456,7 @@ const ALL_HOLES = [
     zones:{ tee:[0,0,1000,470], approach:[485,69,470,221], greenside:[555,112,330,155], putt:[615,136,250,118], drop:[405,89,470,221] } },
   nodes:{
     tee:{ shot:1, situation:"The most famous par 3 in golf — about 137 yards to a Pete Dye island green with no bail-out anywhere. Today's flag is the Sunday pin: front-right, a few paces from the water and the lone bunker. The wind is swirling off the lake.", mapState:'tee',
-      broadcast:"Tee · 137 yds · Pete Dye island green · Wind off the water is everything",
+      broadcast:"Tee · 137 yds · Water surrounds the island · Bunker front-right",
       choices:[
         { badge:'AGG', label:'Fire at the Sunday pin', sub:'Front-right, flirting the water.', next:'tee_pin', type:'agg' },
         { badge:'SMART', label:'Centre of the green', sub:'The whole island to land on.', next:'tee_center', type:'smart' },
@@ -7075,7 +7527,7 @@ const ALL_HOLES = [
     zones:{ tee:[0,0,1000,470], approach:[405,85,470,221], greenside:[495,117,330,155], putt:[555,131,250,118], drop:[285,139,470,221] } },
   nodes:{
     tee:{ shot:1, situation:"Augusta's 12th — the soul of Amen Corner. 155 yards over Rae's Creek to a green barely a few paces deep. The Sunday pin sits back-right, tight to the bunker, over the tongue of the creek. And the wind here swirls — it has fooled the very best.", mapState:'tee',
-      broadcast:"Tee · 155 yds · Over Rae's Creek · Amen Corner — the wind swirls and lies",
+      broadcast:"Tee · 155 yds · Rae's Creek short · Bunker guards back-right",
       choices:[
         { badge:'AGG', label:'At the Sunday flag — back-right', sub:'The shallowest, meanest corner.', next:'tee_flag', type:'agg' },
         { badge:'SMART', label:'Left-centre — the widest part', sub:'Ignore the pin. Trust the heart.', next:'tee_center', type:'smart' },
@@ -7166,7 +7618,7 @@ const ALL_HOLES = [
     zones:{ tee:[0,0,1000,470], approach:[445,90,470,221], greenside:[515,122,330,155], putt:[575,141,250,118], drop:[355,120,470,221] } },
   nodes:{
     tee:{ shot:1, situation:"Pebble's 7th — a tiny green jutting into Carmel Bay, barely 106 yards but ringed by bunkers with the Pacific waiting long. In a calm it's a flick; in a gale it has been played with a 6-iron. Today the wind is up, off the ocean and into your face.", mapState:'tee',
-      broadcast:"Tee · 106 yds · Smallest green in golf · The Pacific long, wind decides everything",
+      broadcast:"Tee · 106 yds · Bunkers ring the green · Pacific long, wind decides everything",
       choices:[
         { badge:'AGG', label:'Big club at the flag', sub:'Over-club the gale and fire.', next:'tee_full', type:'agg' },
         { badge:'SMART', label:'Punch it low to the centre', sub:'Knife it under the wind.', next:'tee_punch', type:'smart' },
@@ -7219,7 +7671,7 @@ const ALL_HOLES = [
         { badge:'PAR', label:'Lag to a tap-in par', sub:'Take the postcard par.', next:'finish_par', type:'smart' },
       ] },
     putt_7:{ shot:3, situation:"7 feet to save par after the bunker splash.", mapState:'putt',
-      broadcast:"Putt · 7 ft · For par",
+      broadcast:"Putt · 7 ft · For par · Pacific beyond the green",
       choices:[
         { badge:'PAR', label:'Knock it in for par', sub:'Reward the splash.', next:'finish_par', type:'agg' },
         { badge:'BOGEY', label:'Miss, tap in bogey', sub:'It happens by the sea.', next:'finish_bogey', type:'safe' },
@@ -7237,7 +7689,7 @@ const ALL_HOLES = [
         { badge:'DOUBLE', label:'Two-putt for double', sub:'Take the 5.', next:'finish_double', type:'smart' },
       ] },
     putt_short:{ shot:3, situation:"9 feet to save bogey after going back at the flag.", mapState:'putt',
-      broadcast:"Putt · 9 ft · For bogey",
+      broadcast:"Putt · 9 ft · For bogey · Pacific beyond the green",
       choices:[
         { badge:'BOGEY', label:'Knock it in for bogey', sub:'Reward the nerve.', next:'finish_bogey', type:'agg' },
         { badge:'DOUBLE', label:'Miss, tap in double', sub:'The sea exacts its price.', next:'finish_double', type:'safe' },
@@ -7285,7 +7737,7 @@ const ALL_HOLES = [
       pro:"'The lay-up at 13 isn't a retreat — it's a 90-yard wedge for birdie with zero chance of the creek. The smart play is loud here too.'",
       mapState:'second', ballTo:[700,288], broadcast:"Fairway · 90 yds · Full wedge · Birdie alive, no risk", next:'wedge_in' },
     layup:{ shot:2, situation:"250 out, laying up around the corner. Pick your wedge number for the third over Rae's Creek.", mapState:'second',
-      broadcast:"Layup · 250 yds · Three-shot hole · Pick your wedge number",
+      broadcast:"Layup · 250 yds · Rae's Creek guards the next shot · Pick your wedge number",
       choices:[
         { badge:'EXEC', label:'Lay to 90 — full wedge', sub:'Your number, over the creek next.', next:'layup_90', type:'exec' },
         { badge:'SAFE', label:'Lay to 120 — short and safe', sub:'In-between, but dry.', next:'layup_120', type:'safe' },
@@ -8060,6 +8512,42 @@ function todaysBroadcastIndex(){
   const seed = parseInt(todayStr().replace(/-/g,''));
   return (seed % 3 === 0) ? (Math.floor(seed/3) % BROADCAST.length) : -1;
 }
+
+// ── PLAY-A-HOLE CONTRACT ─────────────────────────────────────────
+// A live hole must be a closed decision graph. Camera holes additionally
+// require an authored broadcast truth for every decision frame; directional
+// hazards mentioned in the question must survive into that visual contract.
+function holeContract(hole){
+  const reasons=[];
+  if(!hole || !hole.nodes || !hole.nodes.tee) reasons.push('missing-tee');
+  const nodes=(hole && hole.nodes) || {};
+  Object.entries(nodes).forEach(([id,node])=>{
+    if(node.choices){
+      if(!node.situation || node.choices.length < 2) reasons.push(id+':thin-decision');
+      node.choices.forEach(c=>{ if(!c.next || !nodes[c.next]) reasons.push(id+':broken-branch'); });
+      if(hole.mapType === 'camera'){
+        if(!node.broadcast) reasons.push(id+':missing-broadcast-truth');
+        // Only hazards that materially distinguish the offered choices must
+        // be in this frame. A tee description may preview water at the green;
+        // forcing that future hazard into the tee camera would itself lie.
+        const q=(node.choices||[]).map(c=>`${c.label||''} ${c.sub||''}`).join(' ').toLowerCase().replace(/right there/g,'nearby');
+        const b=String(node.broadcast||'').toLowerCase();
+        [
+          ['water',/water|pond|creek|lake|pacific|ocean|sea/],
+          ['trees',/tree|branch|trunk/],
+          ['bunker',/bunker|sand/]
+        ].forEach(([label,re])=>{ if(re.test(q) && !re.test(b)) reasons.push(id+':visual-omits-'+label.replace(' ','-')); });
+      }
+    }
+    if(node.outcome && (!node.result || !node.consequence || !node.pro)) reasons.push(id+':thin-outcome');
+  });
+  return {ok:reasons.length===0,reasons};
+}
+const HOLE_QUARANTINE=[];
+const LIVE_HOLE_INDEXES=ALL_HOLES.map((h,i)=>({h,i,v:holeContract(h)}))
+  .filter(x=>{ if(!x.v.ok) HOLE_QUARANTINE.push({index:x.i,name:x.h.name,reasons:x.v.reasons}); return x.v.ok; })
+  .map(x=>x.i);
+
 // ── Played-today rotation: re-entering Play a Hole must never serve a hole
 // you already completed today (the deterministic hole-of-the-day did exactly
 // that). Completions are recorded in finishHole; the entry point and NEXT
@@ -8074,10 +8562,12 @@ function recordHolePlayed(index){
     localStorage.setItem('gs_holes_played', JSON.stringify({ d: todayStr(), ids })); } catch(e){}
 }
 function nextUnplayedHoleIndex(from){
-  const played = holesPlayedToday(), n = ALL_HOLES.length;
+  const played = holesPlayedToday(), live = LIVE_HOLE_INDEXES, n = live.length;
+  if(!n) throw new Error('No Play a Hole content passed the launch contract');
   const start = (typeof from === 'number') ? from : holeOfTheDayIndex();
-  for(let k = 0; k < n; k++){ const c = (start + k) % n; if(!played.includes(c)) return c; }
-  return start % n;  // everything played today — cycle from the start point
+  const startPos=Math.max(0,live.indexOf(start));
+  for(let k = 0; k < n; k++){ const c = live[(startPos+k)%n]; if(!played.includes(c)) return c; }
+  return live[startPos % n];  // everything played today — cycle from the start point
 }
 
 function holeEntryIndex(){
@@ -8086,7 +8576,7 @@ function holeEntryIndex(){
   let firstEver = false;
   try { firstEver = !localStorage.getItem('gs_first_hole_done'); } catch(e) {}
   if(firstEver){
-    const fi = ALL_HOLES.findIndex(h => h.cam && h.cam.mapId === 'reachable_risk');
+    const fi = ALL_HOLES.findIndex((h,i) => LIVE_HOLE_INDEXES.includes(i) && h.cam && h.cam.mapId === 'reachable_risk');
     if(fi >= 0) return fi;
   }
   return nextUnplayedHoleIndex();
@@ -8108,13 +8598,16 @@ function browseHoles(){
 // Continuous play: straight into the next hole — the "one more hole" loop
 function nextHole(){
   const i = ALL_HOLES.indexOf(HOLE);
+  const p = LIVE_HOLE_INDEXES.indexOf(i);
+  const candidate = LIVE_HOLE_INDEXES[(Math.max(0,p)+1) % LIVE_HOLE_INDEXES.length];
   showView('hole');
-  beginHole(nextUnplayedHoleIndex(i + 1));
+  beginHole(nextUnplayedHoleIndex(candidate));
 }
 
 // Hole of the day: date-rotating featured hole for one-tap tee off
 function holeOfTheDayIndex(){
-  return parseInt(todayStr().replace(/-/g,'')) % ALL_HOLES.length;
+  if(!LIVE_HOLE_INDEXES.length) throw new Error('No Play a Hole content passed the launch contract');
+  return LIVE_HOLE_INDEXES[parseInt(todayStr().replace(/-/g,'')) % LIVE_HOLE_INDEXES.length];
 }
 
 function showHolePicker(){
@@ -8140,9 +8633,10 @@ function showHolePicker(){
     <button class="hpc-btn famous" onclick="beginHole(${hodIdx})">TEE OFF NOW →</button>`;
   cards.appendChild(hodCard);
 
-  const famous    = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.famous && h.mapType!=='camera');
-  const broadcast = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>h.mapType==='camera');
-  const practice  = ALL_HOLES.map((h,i)=>({h,i})).filter(({h})=>!h.famous && h.mapType!=='camera');
+  const liveHoles = ALL_HOLES.map((h,i)=>({h,i})).filter(({i})=>LIVE_HOLE_INDEXES.includes(i));
+  const famous    = liveHoles.filter(({h})=>h.famous && h.mapType!=='camera');
+  const broadcast = liveHoles.filter(({h})=>h.mapType==='camera');
+  const practice  = liveHoles.filter(({h})=>!h.famous && h.mapType!=='camera');
 
   // Broadcast (Next-Shot Camera) holes — the cinematic, camera-driven decisions
   if(broadcast.length){
@@ -8255,23 +8749,55 @@ function renderHoleNode(nodeId){
 
   // Situation
   const sitBox = document.getElementById('situation-box');
-  sitBox.innerHTML = `<div class="sit-shot">${node.context ? 'Match situation' : `Shot ${node.shot || HS.shotCount + 1}`}</div><div class="sit-text">${node.situation}</div>`;
+  sitBox.innerHTML = `<div class="sit-shot">${node.context ? 'Match situation' : `Shot ${node.shot || HS.shotCount + 1}`}</div><div class="sit-text">${neutralHoleSituation(node.situation)}</div>`;
 
   // Decision cards
   const decs = document.getElementById('decisions');
   decs.innerHTML = '';
   (node.choices || []).forEach((c, i) => {
+    const neutral = neutralHoleChoice(c);
     const card = document.createElement('div');
     card.className = 'decision-card';
     card.innerHTML = `<div class="dc-letter">${String.fromCharCode(65+i)}</div>
       <div class="dc-body">
-        <div class="dc-label">${c.label}</div>
-        <div class="dc-sub">${c.sub}</div>
+        <div class="dc-label">${neutral.label}</div>
+        <div class="dc-sub">${neutral.sub}</div>
       </div>`;
     card.onclick = () => selectHoleChoice(c, node, card);
     decs.appendChild(card);
   });
   mountShotSimulator(nodeId, node);
+}
+
+// Choice copy must describe the shot, never grade it before commitment.
+// Authored badges and evaluative adjectives remain available for the reveal,
+// but cannot leak the intended answer on the decision surface.
+function neutralHoleChoice(c){
+  const clean = value => String(value || '')
+    .replace(/\b(smart|safe|safer|safely|aggressive|bold|brave|hero|disciplined|correct|right call)\b/gi, '')
+    .replace(/\bfat\b/gi,'large')
+    .replace(/\b(two-putt|tap-in|birdie|par|bogey|eagle)\b/gi,'')
+    .replace(/\b(no risk|protect the card|reward the|take the postcard)\b/gi,'')
+    .replace(/chase the green light/gi,'take on the longer line')
+    .replace(/fairway first/gi,'short of the trouble')
+    .replace(/position over power/gi,'leaves a longer approach')
+    .replace(/go get it/gi,'firmer pace')
+    .replace(/\btake your medicine\b/gi, 'play to the open area')
+    .replace(/^[,;:–—-]+\s*/,'')
+    .replace(/^but\s+/i,'')
+    .replace(/\s+[—-]\s*$/,'')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+  return {
+    label:clean(c.label) || 'Play this shot',
+    sub:clean(c.sub) || 'Commit to this target and flight.'
+  };
+}
+function neutralHoleSituation(value){
+  return String(value||'')
+    .replace(/for the brave/gi,'when the carry is available')
+    .replace(/\bthe brave\b/gi,'the direct option')
+    .replace(/\bthe smart play\b/gi,'the lower-cost option');
 }
 
 function simulatorSpec(nodeId, node){
@@ -8315,7 +8841,7 @@ function simulatorSpec(nodeId, node){
     approach ? 'Fairway' : 'Tee';
   let condition = facts.slice(2,4).join(' · ') || (putt?'Read pace first':'Play the full picture');
   if(condition.length > 42) condition = condition.slice(0,39).trim()+'…';
-  let trend = HOLE && HOLE.name === 'The Reachable Risk' && nodeId === 'tee' ? 'Hook window left' : '';
+  let trend = /\bhook\b/.test(copy) ? 'Hook window left' : '';
   let caption = putt ? 'See the start line. Feel the pace. Choose one intention.' :
     bunker ? 'Read the face, lip and landing shelf before choosing the escape.' :
     treeRecovery ? 'See the exit window first. The branches—not the flag—decide the shot.' :
@@ -9402,9 +9928,14 @@ const WELCOME_QUESTIONS = [
   }
 ];
 
+// Earn the right to ask for more. The cold decision demonstrates value; one
+// calibration question tunes difficulty. Goals, frustrations and play style
+// are learned later from behaviour or requested only when they unlock value.
+const ACTIVE_WELCOME_QUESTIONS = WELCOME_QUESTIONS.slice(0, 1);
+
 const WOB_KEY_LABEL = { player_level:'Level', frustration:'Fix First', play_style:'Format', sharpen_focus:'Focus', progress_goal:'30-Day Goal' };
 function wobLabelFor(key, tag){
-  const q = WELCOME_QUESTIONS.find(x => x.key === key);
+  const q = ACTIVE_WELCOME_QUESTIONS.find(x => x.key === key);
   const o = q && q.opts.find(x => x.tag === tag);
   return o ? o.label : tag;
 }
@@ -9425,11 +9956,11 @@ const GOLF_COLD_OPENS = [
       <text x="166" y="80" text-anchor="middle" font-size="5.2" fill="#7cb37c" font-family="DM Sans">RUN-OFF</text>
       <line x1="66" y1="36" x2="66" y2="20" stroke="#ccc" stroke-width="1.3"/><polygon points="66,20 77,24 66,28" fill="#e05252"/>`,
     options: [
-      { label: 'At the pin', sub: 'That is what it is there for', target: { x: 66, y: 40 }, correct: false,
+      { label: 'At the pin', sub: 'Direct line to the flag', target: { x: 66, y: 40 }, correct: false,
         verdict: "This is the miss that wrecks cards. A slight pull and you're in the bunker, short-sided to a tucked pin — the hardest up-and-down in golf. The flag is information, not an instruction." },
-      { label: 'Dead centre', sub: 'Take both dangers out', target: { x: 100, y: 40 }, correct: true,
+      { label: 'Dead centre', sub: 'Middle of the putting surface', target: { x: 100, y: 40 }, correct: true,
         verdict: "Right. The centre is the only target that takes BOTH dangers out — the bunker left and the run-off right. Your dispersion still covers the pin, and your worst result is a long putt, not an up-and-down." },
-      { label: 'Bail to the open right', sub: 'Looks like all that room', target: { x: 144, y: 52 }, correct: false,
+      { label: 'Aim into the open right', sub: 'Right-side landing area', target: { x: 144, y: 52 }, correct: false,
         verdict: "The trap. 'Open right' isn't open — the green sheds off into a collection area, and now you're chipping back UP the slope to a pin tucked behind the bunker. You just swapped one short-side for another." }
     ],
     insight: "Training principle: aim so your normal miss remains playable, and account for where the green sheds the ball. This is an illustrative scenario, not a diagnosis of your game."
@@ -9442,11 +9973,11 @@ const GOLF_COLD_OPENS = [
       <ellipse cx="150" cy="34" rx="28" ry="15" fill="#2d7a2d"/><ellipse cx="150" cy="34" rx="20" ry="10" fill="#3d9a3d"/>
       <line x1="150" y1="28" x2="150" y2="14" stroke="#ccc" stroke-width="1.3"/><polygon points="150,14 161,18 150,22" fill="#e05252"/>`,
     options: [
-      { label: 'Go for it', sub: '15 yards on a perfect strike', target: { x: 148, y: 36 }, correct: false,
+      { label: '3-wood at the green', sub: '235 carry when struck well', target: { x: 148, y: 36 }, correct: false,
         verdict: "Not with this evidence. Two of the last 10 attempts failed to carry, and this miss is a penalty rather than useful ground short of the green. A best-strike carry is not the same thing as a safe carry number." },
-      { label: 'Lay up to a full wedge', sub: 'Remove the penalty miss', target: { x: 60, y: 96 }, correct: true,
+      { label: 'Lay up to a full wedge', sub: 'One full approach remains', target: { x: 60, y: 96 }, correct: true,
         verdict: "Right. The decision turns on the consequence of the miss: your observed pattern still puts roughly 2 in 10 into the hazard. Lay up until your normal dispersion—not just a perfect strike—clears the water." },
-      { label: 'Smash driver off the deck', sub: 'Send absolutely everything', target: { x: 172, y: 40 }, correct: false,
+      { label: 'Hybrid short of the water', sub: 'Longer approach remains', target: { x: 82, y: 88 }, correct: false,
         verdict: "Now you've left your reliable game. The 3-wood was the green light because it's repeatable — the hero version of the same shot turns a good gamble into a bad one." }
     ],
     insight: "Training principle: compare the whole shot pattern with the hazard, not a single best carry. This is an illustrative decision scenario, not a diagnosis of your game."
@@ -9462,15 +9993,24 @@ const GOLF_COLD_OPENS = [
     options: [
       { label: 'Down the middle', sub: 'Split the difference', target: { x: 100, y: 60 }, correct: false,
         verdict: "Feels neutral, but it gives the out-of-bounds side more room inside your shot pattern. Because stroke-and-distance is far more costly than rough, the target should favour the playable side." },
-      { label: 'At the right rough', sub: 'Take OB out of play entirely', target: { x: 136, y: 58 }, correct: true,
+      { label: 'At the right rough', sub: 'Shift the whole pattern right', target: { x: 136, y: 58 }, correct: true,
         verdict: "Right. Aim where your WORST miss is rough — one shot at most — and your good shot finds fairway. The OB side of your pattern is now empty. That's how good players make big numbers impossible." },
-      { label: 'Iron way back', sub: 'Refuse to play the hole', target: { x: 100, y: 96 }, correct: false,
+      { label: 'Iron to the wide section', sub: 'About 200 yards remains', target: { x: 100, y: 96 }, correct: false,
         verdict: "Over-protection. You've left 200 yards in to dodge a miss that aiming right would have removed for free. The leak with no scorecard symptom — it just quietly pays out." }
     ],
     insight: "Training principle: identify the costly miss first, then choose a target that shifts your normal shot pattern toward the playable side. This is an illustrative scenario, not a diagnosis of your game."
   }
 ];
-let GOLF_COLD = GOLF_COLD_OPENS[0];
+const COLD_OPEN_QUARANTINE=[];
+const LIVE_GOLF_COLD_OPENS=GOLF_COLD_OPENS.filter((item,i)=>{
+  const reasons=[];
+  if(!item.question || !item.insight || !/illustrative.*scenario/i.test(item.insight)) reasons.push('missing-truth-boundary');
+  if(!Array.isArray(item.options) || item.options.length!==3 || item.options.filter(o=>o.correct).length!==1) reasons.push('answer-contract');
+  if((item.options||[]).some(o=>!o.target || o.target.x<0 || o.target.x>200 || o.target.y<0 || o.target.y>150)) reasons.push('visual-target-contract');
+  if(reasons.length) COLD_OPEN_QUARANTINE.push({index:i,reasons});
+  return !reasons.length;
+});
+let GOLF_COLD = LIVE_GOLF_COLD_OPENS[0];
 
 function coldOpenScene(chosenIdx){
   const co = GOLF_COLD, you = co.you, opts = co.options;
@@ -9519,7 +10059,7 @@ function showWelcomeOnboarding(){
 
 function showColdOpen(){
   wObState.stage='cold'; wObState.coldAnswered=false;
-  GOLF_COLD = GOLF_COLD_OPENS[Math.floor(Math.random()*GOLF_COLD_OPENS.length)];
+  GOLF_COLD = LIVE_GOLF_COLD_OPENS[Math.floor(Math.random()*LIVE_GOLF_COLD_OPENS.length)];
   const inner = document.getElementById('wObInner'); if(!inner) return;
   const step = document.getElementById('wObStep'); if(step) step.textContent='';
   const opts = GOLF_COLD.options.map((o,i)=>
@@ -9578,7 +10118,7 @@ function coldContinue(){
 function wobHaptic(){ gsHaptic('micro'); }
 
 function wobTrack(activeIdx){
-  const total = WELCOME_QUESTIONS.length;
+  const total = ACTIVE_WELCOME_QUESTIONS.length;
   let dots='';
   for(let i=0;i<total;i++){
     dots += `<div class="wob-dot ${i<activeIdx?'done':(i===activeIdx?'now':'')}"></div>`;
@@ -9590,7 +10130,7 @@ function wobTrack(activeIdx){
 function moveWobBall(idx){
   const ball=document.getElementById('wobBall'); if(!ball) return;
   ball.classList.add('glide');
-  ball.style.left = Math.min(100, ((idx+0.5)/WELCOME_QUESTIONS.length)*100)+'%';
+  ball.style.left = Math.min(100, ((idx+0.5)/ACTIVE_WELCOME_QUESTIONS.length)*100)+'%';
 }
 
 // Cinematic hero — dusk fairway, silhouetted finish, tracer to the flag.
@@ -9607,10 +10147,10 @@ function wobGolfHero(){
 }
 
 function renderWelcomeQuestion(){
-  const q = WELCOME_QUESTIONS[wObState.idx];
+  const q = ACTIVE_WELCOME_QUESTIONS[wObState.idx];
   const inner = document.getElementById('wObInner'); if(!inner) return;
   const step = document.getElementById('wObStep');
-  if(step) step.textContent = (wObState.idx+1)+' / '+WELCOME_QUESTIONS.length;
+  if(step) step.textContent = (wObState.idx+1)+' / '+ACTIVE_WELCOME_QUESTIONS.length;
   const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='block';
   const subSm = q.subtextSm ? `<div class="wob-sub-sm">${q.subtextSm}</div>` : '';
   const subCls = q.subtextSm ? 'wob-sub' : 'wob-sub solo';
@@ -9642,7 +10182,7 @@ function selectWelcomeAnswer(key, tag){
 }
 
 function renderWelcomeSelection(tag){
-  const q = WELCOME_QUESTIONS[wObState.idx];
+  const q = ACTIVE_WELCOME_QUESTIONS[wObState.idx];
   const opt = q.opts.find(o=>o.tag===tag);
   const skip = document.getElementById('wObSkip'); if(skip) skip.style.display='none';
   document.querySelectorAll('#wobOpts .wob-card').forEach(c=>{
@@ -9659,8 +10199,8 @@ function renderWelcomeSelection(tag){
   if(cc) cc.innerHTML = msg ? `<div class="wob-confirm show"><span class="ck">✓</span><span>${msg}</span></div>` : '';
   const nx = document.getElementById('wobNext');
   if(nx){
-    const last = wObState.idx >= WELCOME_QUESTIONS.length-1;
-    nx.innerHTML = `<button class="wob-cta wob-next" onclick="advanceWelcome()">${last?'Build my profile':'Continue'} →</button>`;
+    const last = wObState.idx >= ACTIVE_WELCOME_QUESTIONS.length-1;
+    nx.innerHTML = `<button class="wob-cta wob-next" onclick="advanceWelcome()">${last?'Start sharpening':'Continue'} →</button>`;
   }
   gsAfter(80,()=>gsScrollTo(document.getElementById('wobConfirm'),'center'));
 }
@@ -9669,7 +10209,7 @@ function advanceWelcome(){
   moveWobBall(wObState.idx+1);
   gsAfter(260,()=>{
     wObState.idx++;
-    if(wObState.idx >= WELCOME_QUESTIONS.length) completeWelcomeOnboarding();
+    if(wObState.idx >= ACTIVE_WELCOME_QUESTIONS.length) completeWelcomeOnboarding();
     else renderWelcomeQuestion();
   });
 }
@@ -9705,7 +10245,26 @@ function completeWelcomeOnboarding(){
   S.leak = null;
   provisionalLeak();
   saveState();
-  showBuildingProfile();
+  showWelcomeReady();
+}
+
+function showWelcomeReady(){
+  const inner=document.getElementById('wObInner');
+  const skip=document.getElementById('wObSkip'); if(skip) skip.style.display='none';
+  const step=document.getElementById('wObStep'); if(step) step.textContent='';
+  if(!inner) return;
+  inner.innerHTML = `
+    <div class="cold-eyebrow">YOU'RE IN</div>
+    <div class="wob-headline">One useful edge today.<br>Another tomorrow.</div>
+    <div class="wob-sub solo">Your level tunes the situations—not our opinion of you. Your Decision Rating begins only after eight real calls.</div>
+    <div class="wob-ready show" style="margin-top:20px">
+      <div class="wob-diag">
+        <div class="wob-diag-eyebrow">The promise</div>
+        <div class="wob-diag-text">Every live question, answer and visual must teach the same reviewed golf truth.</div>
+      </div>
+      <button class="wob-cta" onclick="finishWelcome()">See today's edge →</button>
+    </div>`;
+  inner.scrollTop=0;
 }
 
 function showBuildingProfile(){
@@ -9722,7 +10281,7 @@ function showBuildingProfile(){
       <div><div class="wob-build-k">${WOB_KEY_LABEL[k]}</div><div class="wob-build-v">${wobLabelFor(k,wObState.answers[k])}</div></div>
     </div>`).join('');
   inner.innerHTML = `
-    ${wobTrack(WELCOME_QUESTIONS.length)}
+    ${wobTrack(ACTIVE_WELCOME_QUESTIONS.length)}
     <div class="wob-headline">Building your Golfer Profile…</div>
     <div class="wob-sub solo">You can change this anytime under Profile.</div>
     <div id="wobRows" style="margin-top:6px;">${rows}</div>
@@ -9844,7 +10403,8 @@ function init(){
       } else {
         setPillarColor('#c8a84b');
         renderHome();
-        showView('home');
+        if(new URLSearchParams(location.search).get('review') === '1') showProfile();
+        else showView('home');
         // A live same-day challenge routes straight into the arena
         if(getChallenge()){ S.dailyDone ? showDailyReview() : startDaily(); }
       }
@@ -9855,6 +10415,29 @@ function init(){
     }
   });
 }
+
+// Read-only launch evidence for QA. No authoring bank content is exposed;
+// only counts and quarantine reasons are made inspectable.
+window.GS_TRUST_AUDIT = {
+  contract:TRUST_CONTRACT,
+  dispositions:DISPOSITION_COUNTS,
+  unresolvedQuestions:UNRESOLVED_QUESTION_IDS,
+  mergeTargetsValid:QUESTION_DISPOSITIONS
+    .filter(item=>item.status==='merge')
+    .every(item=>LAUNCH_QUESTIONS.some(q=>q.id===item.into)),
+  questionReasons:QUESTION_QUARANTINE.reduce((out,item)=>{
+    item.reasons.forEach(reason=>out[reason]=(out[reason]||0)+1); return out;
+  },{}),
+  liveTechniqueFaults:GOLF_TECHNIQUE.reduce((n,g)=>n+g.faults.length,0),
+  quarantinedTechniqueFaults:TECHNIQUE_QUARANTINE,
+  liveAdvancedItems:LIVE_ADV_ITEMS.length,
+  quarantinedAdvancedItems:ADV_QUARANTINE,
+  liveColdOpens:LIVE_GOLF_COLD_OPENS.length,
+  quarantinedColdOpens:COLD_OPEN_QUARANTINE,
+  liveHoleCount:LIVE_HOLE_INDEXES.length,
+  quarantinedHoles:HOLE_QUARANTINE.map(x=>({name:x.name,reasons:x.reasons}))
+};
+document.documentElement.setAttribute('data-gs-trust-audit', JSON.stringify(window.GS_TRUST_AUDIT));
 
 init();
 
