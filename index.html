@@ -1626,6 +1626,7 @@ svg { display:block; }
     </div>
   </div>
   <button class="btn btn-dark" onclick="startDecisionRun()" style="width:100%;margin-top:10px">PLAY A 3-HOLE DECISION RUN →</button>
+  <button class="btn btn-dark" onclick="startDecisionRun(9)" style="width:100%;margin-top:8px">PLAY A 9-HOLE DECISION RUN →</button>
 
   <!-- Free value, zero taps: today's pocket cue (tennis "one thing to remember") -->
   <div class="one-thing" id="one-thing"></div>
@@ -3610,7 +3611,10 @@ function diNarrative(){
 // Master toggle persisted; volumes deliberately low. iOS/Android require a
 // user gesture before audio, so the context is created/resumed on pointerdown.
 let _ac = null;
-function gsReducedMotion(){ return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+function gsReducedMotion(){
+  return new URLSearchParams(location.search).get('motion')==='reduce' ||
+    !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
 function gsMotionMs(ms){ return gsReducedMotion() ? 0 : ms; }
 function gsAfter(ms, fn){ return setTimeout(fn, gsMotionMs(ms)); }
 function gsScrollTo(el, block){
@@ -8264,16 +8268,64 @@ const ALL_HOLES = [
 }
 ];
 let HOLE = null;
+let HOLE_CONDITION='stroke';
+let HOLE_SEED='';
+let LAST_HOLE_RESULT=null;
 
 // ── Hole game state ───────────────────────────────────────────────
 let HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
 const HOLE_SESSION_KEY='gs_hole_session_v2';
+const PAUSED_HOLE_SESSION_KEY='gs_paused_hole_session_v1';
 const DECISION_RUN_KEY='gs_decision_run_v1';
 let DECISION_RUN=null;
 
+function hashSeed(value){let h=2166136261;for(const c of String(value)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function seededUnit(value){return hashSeed(value)/4294967296;}
+function newHoleSeed(index){return new URLSearchParams(location.search).get('holeSeed')||`${todayStr()}-${index}-${Date.now().toString(36)}`;}
+function simulationCandidates(node){
+  return (!node||!node.choices)?[]:node.choices.map(c=>({choice:c,node:HOLE.nodes[c.next]}))
+    .filter(x=>x.node&&((x.node.outcome&&x.node.ballTo&&x.node.mapState)||x.node.final));
+}
+function simulatedValence(node){
+  if(node.outcome)return outcomeValence(node.result);
+  if(node.final&&typeof node.score==='number')return node.score<=HOLE.par?'good':node.score>HOLE.par+1?'bad':'neutral';
+  return 'neutral';
+}
+function resolveSimulatedOutcome(choice,node){
+  const authored=HOLE.nodes[choice.next],pool=simulationCandidates(node);
+  if(!authored||pool.length<2)return {node:authored,mode:'authored'};
+  const good=pool.filter(x=>simulatedValence(x.node)==='good');
+  const neutral=pool.filter(x=>simulatedValence(x.node)==='neutral');
+  const bad=pool.filter(x=>simulatedValence(x.node)==='bad');
+  const roll=seededUnit(`${HOLE_SEED}|${HS.currentNode}|${HS.decisions.length}|execution`);
+  const bands=choice.type==='agg'?[.48,.80]:choice.type==='exec'?[.58,.88]:[.72,.95];
+  const bucket=roll<bands[0]?good:roll<bands[1]?neutral:bad;
+  const candidates=bucket.length?bucket:[{choice,node:authored}];
+  const selected=candidates[hashSeed(`${HOLE_SEED}|${HS.currentNode}|pick`)%candidates.length];
+  return {node:selected.node,mode:selected.node===authored?'authored':'illustrative'};
+}
+function conditionLabel(){
+  return HOLE_CONDITION==='must_win'?'MATCH PLAY · MUST WIN THE HOLE':
+    HOLE_CONDITION==='protect'?'MATCH PLAY · OPPONENT IN TROUBLE':'STROKE PLAY';
+}
+function challengeRunFromURL(){
+  const p=new URLSearchParams(location.search),raw=p.get('holeChallenge');
+  if(!raw||raw.length>1200)return null;
+  try{
+    const x=JSON.parse(atob(raw.replace(/-/g,'+').replace(/_/g,'/')));
+    const signed={target:x.target,holes:x.holes,seed:x.seed,score:x.score};
+    if(x.sig!==hashSeed(JSON.stringify(signed)))return null;
+    if(![3,9].includes(x.target)||!Array.isArray(x.holes)||x.holes.length!==x.target)return null;
+    if(new Set(x.holes).size!==x.holes.length||!x.holes.every(i=>LIVE_HOLE_INDEXES.includes(i))||typeof x.seed!=='string'||x.seed.length>80)return null;
+    const hostScore=Number.isFinite(x.score)&&x.score>=0&&x.score<=100?x.score:null;
+    return {completed:[],strong:0,total:0,nextIndex:x.holes[0],target:x.target,seed:x.seed,holeSequence:x.holes,hostScore,challenge:true};
+  }catch(e){return null;}
+}
+
 function stableHoleState(){
   return {stateVersion:3,holeIndex:ALL_HOLES.indexOf(HOLE),currentNode:HS.currentNode,shotCount:HS.shotCount,
-    pendingNext:HS.pendingNext,decisions:HS.decisions,ballPos:HS.ballPos,date:todayStr(),run:DECISION_RUN};
+    pendingNext:HS.pendingNext,decisions:HS.decisions,ballPos:HS.ballPos,date:todayStr(),run:DECISION_RUN,
+    condition:HOLE_CONDITION,seed:HOLE_SEED};
 }
 function saveHoleSession(){
   if(!HOLE || !HOLE.nodes[HS.currentNode]) return;
@@ -8291,7 +8343,7 @@ function loadHoleSession(){
 function updateHoleLearningBar(){
   const strong=(HS.decisions||[]).filter(d=>d.decisionGrade==='strong').length;
   const mode=document.getElementById('hlb-mode'),score=document.getElementById('hlb-score');
-  if(mode) mode.textContent=DECISION_RUN?`DECISION RUN · ${Math.min(DECISION_RUN.completed.length+1,3)}/3`:'DECISION HOLE';
+  if(mode) mode.textContent=DECISION_RUN?`DECISION RUN · ${Math.min(DECISION_RUN.completed.length+1,DECISION_RUN.target||3)}/${DECISION_RUN.target||3}`:'DECISION HOLE';
   if(score) score.textContent=`${strong} strong call${strong===1?'':'s'}`;
 }
 
@@ -8621,11 +8673,19 @@ function startHole(){
   // Product contract: this entry point always starts a complete, authored hole.
   // Never substitute Decision Broadcast or another one-decision format here.
   showView('hole');
-  const saved=loadHoleSession();
+  const saved=loadHoleSession(),challenge=challengeRunFromURL();
+  if(challenge){
+    if(saved&&saved.run&&saved.run.challenge&&saved.run.seed===challenge.seed)return resumeHole(saved);
+    if(saved)try{localStorage.setItem(PAUSED_HOLE_SESSION_KEY,JSON.stringify(saved));}catch(e){}
+    clearHoleSession();
+      DECISION_RUN=challenge;
+      try{localStorage.setItem(DECISION_RUN_KEY,JSON.stringify(DECISION_RUN));}catch(e){}
+      return beginHole(challenge.nextIndex);
+  }
   if(saved) resumeHole(saved);
   else {
     try{DECISION_RUN=JSON.parse(localStorage.getItem(DECISION_RUN_KEY)||'null');}catch(e){DECISION_RUN=null;}
-    if(DECISION_RUN&&DECISION_RUN.completed&&DECISION_RUN.completed.length>=3){
+    if(DECISION_RUN&&DECISION_RUN.completed&&DECISION_RUN.completed.length>=(DECISION_RUN.target||3)){
       document.getElementById('hole-picker').style.display='none';
       document.getElementById('hole-game').style.display='';
       renderDecisionRunSummary();
@@ -8634,15 +8694,19 @@ function startHole(){
   }
 }
 
-function startDecisionRun(){
+function startDecisionRun(target){
   const first=nextUnplayedHoleIndex();
-  DECISION_RUN={completed:[],strong:0,total:0,nextIndex:first};
+  const runTarget=target===9?9:3,sequence=[];
+  let cursor=first;
+  while(sequence.length<runTarget){sequence.push(cursor);cursor=LIVE_HOLE_INDEXES[(LIVE_HOLE_INDEXES.indexOf(cursor)+1)%LIVE_HOLE_INDEXES.length];}
+  DECISION_RUN={completed:[],strong:0,total:0,nextIndex:first,target:runTarget,seed:`run-${todayStr()}-${Date.now().toString(36)}`,holeSequence:sequence};
   try{localStorage.setItem(DECISION_RUN_KEY,JSON.stringify(DECISION_RUN));}catch(e){}
   showView('hole'); beginHole(first);
 }
 
 function resumeHole(saved){
   HOLE=ALL_HOLES[saved.holeIndex]; DECISION_RUN=saved.run||null;
+  HOLE_CONDITION=saved.condition||'stroke'; HOLE_SEED=saved.seed||newHoleSeed(saved.holeIndex);
   HS={currentNode:saved.currentNode,shotCount:saved.shotCount||0,pendingNext:saved.pendingNext||null,
     decisions:Array.isArray(saved.decisions)?saved.decisions:[],ballPos:saved.ballPos||null};
   document.getElementById('hole-picker').style.display='none';
@@ -8781,9 +8845,11 @@ function showHolePicker(){
   }
 }
 
-function beginHole(index){
+function beginHole(index,preserveCondition){
   try { localStorage.setItem('gs_first_hole_done', '1'); } catch(e) {}
+  if(!preserveCondition){HOLE_CONDITION='stroke';HOLE_SEED='';}
   HOLE = ALL_HOLES[index];
+  if(!HOLE_SEED) HOLE_SEED=DECISION_RUN?`${DECISION_RUN.seed}|${index}`:newHoleSeed(index);
   HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [], ballPos: null };
   document.getElementById('hole-picker').style.display = 'none';
   document.getElementById('hole-game').style.display = '';
@@ -8821,7 +8887,8 @@ function renderHoleNode(nodeId){
 
   // Situation
   const sitBox = document.getElementById('situation-box');
-  sitBox.innerHTML = `<div class="sit-shot">${node.context ? 'Match situation' : `Shot ${node.shot || HS.shotCount + 1}`}</div><div class="sit-text">${neutralHoleSituation(node.situation)}</div>`;
+  const conditionCopy=HOLE_CONDITION==='must_win'?'You must win this hole; a halve is no use. ':HOLE_CONDITION==='protect'?'Your opponent is already in trouble; make them produce the recovery. ':'';
+  sitBox.innerHTML = `<div class="sit-shot">${conditionLabel()} · ${node.context ? 'Match situation' : `Shot ${node.shot || HS.shotCount + 1}`}</div><div class="sit-text">${conditionCopy}${neutralHoleSituation(node.situation)}</div>`;
 
   // Decision cards
   const decs = document.getElementById('decisions');
@@ -8848,10 +8915,18 @@ function renderHoleNode(nodeId){
 // but cannot leak the intended answer on the decision surface.
 function neutralHoleChoice(c){
   const clean = value => String(value || '')
-    .replace(/\b(smart|safe|safer|safely|aggressive|bold|brave|hero|disciplined|correct|right call)\b/gi, '')
-    .replace(/\bfat\b/gi,'large')
-    .replace(/\b(two-putt|tap-in|birdie|par|bogey|eagle)\b/gi,'')
-    .replace(/\b(no risk|protect the card|reward the|take the postcard)\b/gi,'')
+    .replace(/\bsmart\b/gi,'measured')
+    .replace(/\bsafer?\b/gi,'lower-risk')
+    .replace(/\bsafely\b/gi,'to safety')
+    .replace(/\baggressive\b/gi,'attacking')
+    .replace(/\b(bold|brave|hero)\b/gi,'direct')
+    .replace(/\bdisciplined\b/gi,'controlled')
+    .replace(/\b(correct|right call)\b/gi,'intended')
+    .replace(/\bfat(?:\s+of\s+the\s+green)?\b/gi,'widest part of the green')
+    .replace(/\bno risk\b/gi,'without bringing the hazard into play')
+    .replace(/\bprotect the card\b/gi,'limit the damage')
+    .replace(/\breward the\b/gi,'favour the')
+    .replace(/\btake the postcard\b/gi,'accept the view')
     .replace(/chase the green light/gi,'take on the longer line')
     .replace(/fairway first/gi,'short of the trouble')
     .replace(/position over power/gi,'leaves a longer approach')
@@ -8864,7 +8939,8 @@ function neutralHoleChoice(c){
     .replace(/,\s*[.?!]/g,'.')
     .replace(/\s*,\s*$/,'')
     .replace(/\s{2,}/g,' ')
-    .trim();
+    .trim()
+    .replace(/^[a-z]/,m=>m.toUpperCase());
   return {
     label:clean(c.label) || 'Play this shot',
     sub:clean(c.sub) || 'Commit to this target and flight.'
@@ -9135,12 +9211,21 @@ function selectHoleChoice(choice, node, tappedCard){
   HS.decisions.push({ shot: node.shot, label: choice.label, badge: choice.badge, type: choice.type, sub: choice.sub });
   HS.pendingNext = choice.next;
 
-  const nextNode = HOLE.nodes[choice.next];
+  const sim=resolveSimulatedOutcome(choice,node);
+  const nextNode = sim.node;
   if(!nextNode) return;
+  const resolvedId=Object.keys(HOLE.nodes).find(k=>HOLE.nodes[k]===nextNode)||choice.next;
+  HS.pendingNext=resolvedId;
+  const committed=HS.decisions[HS.decisions.length-1];
+  if(committed){committed.authoredNext=choice.next;committed.resolvedNext=resolvedId;committed.simulationMode=sim.mode;}
   if(nextNode.final){
     const lastDec=HS.decisions[HS.decisions.length-1],dg=assessDecision(choice,nextNode);
     lastDec.decisionGrade=dg.grade; lastDec.decisionLabel=dg.label;
     lastDec.executionGrade='unscored'; lastDec.executionLabel='Resolved in score';
+    if(sim.mode==='illustrative'){
+      lastDec.executionLabel=nextNode.score<=HOLE.par?'Favourable putting draw':'Costly putting draw';
+      lastDec.simulationNote=`${choice.label} resolved as ${nextNode.label}. The score changed through the seeded execution draw; the decision grade did not.`;
+    }
   }
 
   const simulatorMs = node.context ? 0 : playShotSimulator();
@@ -9154,7 +9239,7 @@ function selectHoleChoice(choice, node, tappedCard){
       finishHole(nextNode);
     } else {
       renderHoleMap(nextNode.mapState || 'tee');
-      renderHoleNode(choice.next);
+      renderHoleNode(resolvedId);
     }
   });
 }
@@ -9171,6 +9256,15 @@ function outcomeValence(result){
 // this training decision, never the player's swing, dispersion or handicap.
 function assessDecision(choice, outcomeNode){
   const v=outcomeNode&&outcomeNode.outcome?outcomeValence(outcomeNode.result):'neutral';
+  const conditionDecision=/putt|match|context/i.test(HS.currentNode||'');
+  if(HOLE_CONDITION==='must_win'&&conditionDecision){
+    if(choice.type==='agg')return {grade:'strong',label:'Pressure-fit call',color:'#4caf50'};
+    return {grade:'costly',label:'Too passive for the match',color:'#e05252'};
+  }
+  if(HOLE_CONDITION==='protect'&&conditionDecision){
+    if(choice.type==='smart'||choice.type==='safe')return {grade:'strong',label:'Match-aware call',color:'#4caf50'};
+    if(choice.type==='agg')return {grade:'costly',label:'Returned the opening',color:'#e05252'};
+  }
   if(choice.type==='smart'||choice.type==='safe'||choice.type==='exec')
     return {grade:'strong',label:'Disciplined call',color:'#4caf50'};
   if(choice.type==='agg'&&v==='bad') return {grade:'costly',label:'High cost exposed',color:'#e05252'};
@@ -9210,6 +9304,8 @@ function buildShotLesson(node, valence, lastDec){
 }
 
 function showHoleOutcome(node){
+  const lastDec = HS.decisions[HS.decisions.length - 1];
+  const illustrative=!!(lastDec&&lastDec.simulationMode==='illustrative');
   // Valence haptic — crisp double-tap on a good outcome, dull buzz on a bad one
   // (Android/Chrome only; degrades silently on iOS).
   const _v = outcomeValence(node.result);
@@ -9224,22 +9320,27 @@ function showHoleOutcome(node){
   document.getElementById('shot-panel').style.display = 'none';
   oc.style.display = 'none';           // hidden until the ball lands — the shot is the event
   oc.classList.remove('reveal');
-  document.getElementById('oc-result').textContent = node.result;
-  document.getElementById('oc-consequence').textContent = node.consequence;
+  const lieRead=String(node.broadcast||node.mapState||'next lie').split('·')[0].trim();
+  document.getElementById('oc-result').textContent = illustrative?`EXECUTION DRAW · ${lieRead.toUpperCase()}`:node.result;
+  document.getElementById('oc-consequence').textContent = illustrative
+    ? `${lastDec.label} finished in this authored next lie. The draw changes the result, not the quality of your original decision.`
+    : node.consequence;
   const proRead = document.getElementById('oc-pro');
   if(proRead){
-    const authoredRead = String(node.pro || '').replace(/^['"“”]+|['"“”]+$/g,'');
+    const authoredRead = illustrative
+      ? 'Good decisions and good outcomes are different skills. Judge the target first; then respond to the lie you actually receive.'
+      : String(node.pro || '').replace(/^['"“”]+|['"“”]+$/g,'');
     proRead.innerHTML = '<span class="oc-pro-label">GAMESHARP READ</span> ';
     proRead.appendChild(document.createTextNode(authoredRead));
   }
 
   // Tag the decision that led here with its outcome valence (for the end summary)
   const valence = outcomeValence(node.result);
-  const lastDec = HS.decisions[HS.decisions.length - 1];
   if(lastDec){
     const dg=assessDecision(lastDec,node),ex=assessExecution(node);
     lastDec.valence=valence; lastDec.decisionGrade=dg.grade; lastDec.decisionLabel=dg.label;
-    lastDec.executionGrade=ex.grade; lastDec.executionLabel=ex.label;
+    lastDec.executionGrade=illustrative?(valence==='good'?'clean':valence==='bad'?'miss':'playable'):ex.grade;
+    lastDec.executionLabel=illustrative?(valence==='good'?'Favourable execution draw':valence==='bad'?'Costly execution draw':'Playable execution draw'):ex.label;
   }
 
   // Consequence strip: risk taken · where it leaves you · score pace
@@ -9255,12 +9356,18 @@ function showHoleOutcome(node){
       <div class="oc-effect"><div class="oc-effect-label">Execution</div><div class="oc-effect-val" style="color:${executionCol}">${executionRead}</div></div>
       <div class="oc-effect"><div class="oc-effect-label">Hole</div><div class="oc-effect-val">${scorePace}</div></div>`;
     effects.insertAdjacentHTML('afterend','<div class="oc-trust-note">Training scenario, not a diagnosis of your swing or personal dispersion.</div>');
+    if(lastDec&&lastDec.simulationMode==='illustrative')effects.insertAdjacentHTML('afterend','<div class="oc-trust-note">Illustrative execution draw. The result and next lie are authored; the draw is not a real-world probability estimate.</div>');
   }
 
   // The lesson: connect this decision -> consequence -> rule, in one line.
   const lessonEl = document.getElementById('oc-lesson');
-  if(lessonEl) lessonEl.innerHTML = '<span class="oc-lesson-label">THE LESSON</span>' + buildShotLesson(node, valence, lastDec);
-  renderClinicCallback(node, valence);
+  const lesson=illustrative
+    ? (valence==='bad'?'A sound decision can still receive a costly result. Reset, accept it and solve the next lie.':
+       valence==='good'?'The execution draw helped. Keep the decision grade separate from the reward.':
+       'The margin held. Continue from the authored lie without rewriting the original decision.')
+    : buildShotLesson(node,valence,lastDec);
+  if(lessonEl) lessonEl.innerHTML = '<span class="oc-lesson-label">THE LESSON</span>' + lesson;
+  if(!illustrative)renderClinicCallback(node, valence);
 
   const btn = document.getElementById('hole-next-btn');
   const nextNode = HOLE.nodes[node.next];
@@ -9325,13 +9432,15 @@ function advanceHole(){
 }
 
 function finishHole(finalNode){
+  LAST_HOLE_RESULT={index:ALL_HOLES.indexOf(HOLE),score:finalNode.score,condition:HOLE_CONDITION,seed:HOLE_SEED};
   if(DECISION_RUN){
     const hi=ALL_HOLES.indexOf(HOLE);
     if(!DECISION_RUN.completed.some(x=>x.hole===hi)){
       const strong=HS.decisions.filter(d=>d.decisionGrade==='strong').length;
       DECISION_RUN.completed.push({hole:hi,strong,total:HS.decisions.length});
       DECISION_RUN.strong+=strong; DECISION_RUN.total+=HS.decisions.length;
-      DECISION_RUN.nextIndex=nextUnplayedHoleIndex(hi+1);
+      const sequenceNext=DECISION_RUN.holeSequence&&DECISION_RUN.holeSequence[DECISION_RUN.completed.length];
+      DECISION_RUN.nextIndex=typeof sequenceNext==='number'?sequenceNext:nextUnplayedHoleIndex(hi+1);
       try{localStorage.setItem(DECISION_RUN_KEY,JSON.stringify(DECISION_RUN));}catch(e){}
     }
   }
@@ -9355,6 +9464,7 @@ function renderScorecard(finalNode){
     `<div class="sc-decision"><span class="sc-shot-num">Shot ${d.shot}</span><span class="dc-badge ${d.decisionGrade==='strong'?'smart':d.decisionGrade==='costly'?'agg':'exec'} sc-badge">${d.decisionLabel||'Recorded'}</span><span class="sc-dec-label">${d.label}</span></div>`
   ).join('');
   const strongCount=HS.decisions.filter(d=>d.decisionGrade==='strong').length;
+  const simulationNotes=HS.decisions.filter(d=>d.simulationNote).map(d=>`<div class="sc-take rule"><div class="sc-take-label">SEEDED EXECUTION DRAW</div><div class="sc-take-body">${d.simulationNote}</div></div>`).join('');
 
   const takeaways = buildHoleTakeaways(finalNode, scoreToPar);
 
@@ -9382,10 +9492,12 @@ function renderScorecard(finalNode){
          the score (0.35s), not after a 1.4s stagger below three cards. -->
     <div class="sc-actions" style="animation-delay:0.35s">
       <button class="btn btn-gold" onclick="${DECISION_RUN?'continueDecisionRun()':'nextHole()'}">${DECISION_RUN?'CONTINUE RUN →':'PLAY A NEW CONDITION →'}</button>
+      ${DECISION_RUN?'':`<button class="btn btn-dark" onclick="replayChangedCondition()">REPLAY · MUST WIN THE HOLE</button>`}
       <button class="btn btn-dark" onclick="browseHoles()">CHOOSE A HOLE</button>
       <button class="btn btn-dark" onclick="renderHome();showView('home')">HOME</button>
     </div>
     <div class="sc-takeaways">
+      ${simulationNotes}
       <div class="sc-take smart" style="animation-delay:0.6s"><div class="sc-take-label">🏆 Smartest Decision</div><div class="sc-take-body">${takeaways.smartest}</div></div>
       <div class="sc-take costly" style="animation-delay:0.68s"><div class="sc-take-label">💸 Costliest Decision</div><div class="sc-take-body">${takeaways.costliest}</div></div>
       <div class="sc-take rule" style="animation-delay:0.76s"><div class="sc-take-label">📌 One Rule for Your Next Round</div><div class="sc-take-body">${takeaways.rule}</div></div>
@@ -9425,7 +9537,7 @@ function buildHoleTakeaways(finalNode, scoreToPar){
 
 function continueDecisionRun(){
   if(!DECISION_RUN) return nextHole();
-  if(DECISION_RUN.completed.length>=3){
+  if(DECISION_RUN.completed.length>=(DECISION_RUN.target||3)){
     return renderDecisionRunSummary();
   }
   beginHole(DECISION_RUN.nextIndex);
@@ -9434,19 +9546,48 @@ function renderDecisionRunSummary(){
   const overlay=document.getElementById('scorecard-overlay'),box=document.getElementById('scorecard-box');
   overlay.style.display='';
   const pct=DECISION_RUN.total?Math.round(100*DECISION_RUN.strong/DECISION_RUN.total):0;
-  box.innerHTML=`<div class="sc-hole-name">3-HOLE DECISION RUN</div><div class="sc-result" style="color:var(--gold)">RUN COMPLETE</div>
+  const compare=Number.isFinite(DECISION_RUN.hostScore)
+    ? `<div class="sc-take ${pct>DECISION_RUN.hostScore?'smart':pct<DECISION_RUN.hostScore?'costly':'rule'}"><div class="sc-take-label">HEAD TO HEAD · SAME HOLES · SAME DRAW</div><div class="sc-take-body">You ${pct>DECISION_RUN.hostScore?'won':pct<DECISION_RUN.hostScore?'finished behind':'tied'}: ${pct} to ${DECISION_RUN.hostScore}. Decision score only; golf execution is not inferred. Link comparison—not a verified leaderboard.</div></div>`
+    : '';
+  box.innerHTML=`<div class="sc-hole-name">${DECISION_RUN.target||3}-HOLE DECISION RUN</div><div class="sc-result" style="color:var(--gold)">RUN COMPLETE</div>
     <div class="sc-ring"><div class="sc-ring-center"><div class="sc-ring-score" style="color:var(--gold)">${pct}</div><div class="sc-ring-par">decision score</div></div></div>
-    <div class="sc-take rule"><div class="sc-take-label">WHAT THIS MEANS</div><div class="sc-take-body">${DECISION_RUN.strong} of ${DECISION_RUN.total} calls protected the next shot. This measures scenario decisions, not your on-course handicap.</div></div>
+    <div class="sc-take rule"><div class="sc-take-label">WHAT THIS MEANS</div><div class="sc-take-body">${DECISION_RUN.strong} of ${DECISION_RUN.total} calls protected the next shot. This measures scenario decisions, not your on-course handicap.</div></div>${compare}
+    <div class="sc-take"><div class="sc-take-label">FIELD BENCHMARK</div><div class="sc-take-body">Locked until this exact seeded run has enough verified completions. GameSharp will not invent a percentile.</div></div>
     <div class="sc-actions"><button class="btn btn-gold" onclick="shareDecisionRun()">SHARE MY RUN →</button><button class="btn btn-dark" onclick="finishDecisionRun()">DONE</button></div>`;
 }
-function finishDecisionRun(){DECISION_RUN=null;clearHoleSession();renderHome();showView('home');}
+function finishDecisionRun(){
+  const wasChallenge=!!(DECISION_RUN&&DECISION_RUN.challenge);
+  DECISION_RUN=null;clearHoleSession();
+  try{
+    localStorage.removeItem(DECISION_RUN_KEY);
+    if(wasChallenge){
+      const paused=localStorage.getItem(PAUSED_HOLE_SESSION_KEY);
+      if(paused)localStorage.setItem(HOLE_SESSION_KEY,paused);
+      localStorage.removeItem(PAUSED_HOLE_SESSION_KEY);
+      const u=new URL(location.href);u.searchParams.delete('holeChallenge');history.replaceState({},'',u.pathname+(u.searchParams.toString()?`?${u.searchParams}`:''));
+    }
+  }catch(e){}
+  renderHome();showView('home');
+}
+function replayChangedCondition(){
+  if(!LAST_HOLE_RESULT)return;
+  const index=LAST_HOLE_RESULT.index;
+  HOLE_CONDITION=LAST_HOLE_RESULT.condition==='must_win'?'protect':'must_win';
+  HOLE_SEED=`${LAST_HOLE_RESULT.seed}|${HOLE_CONDITION}`;
+  document.getElementById('scorecard-overlay').style.display='none';
+  beginHole(index,true);
+}
 async function shareDecisionRun(){
   if(!DECISION_RUN) return;
   const pct=DECISION_RUN.total?Math.round(100*DECISION_RUN.strong/DECISION_RUN.total):0;
-  const text=`GameSharp 3-Hole Decision Run: ${pct} (${DECISION_RUN.strong}/${DECISION_RUN.total} strong scenario decisions). Can you beat the same format?`;
+  const signed={target:DECISION_RUN.target||3,holes:DECISION_RUN.holeSequence,seed:DECISION_RUN.seed,score:pct};
+  const payload={...signed,sig:hashSeed(JSON.stringify(signed))};
+  const token=btoa(JSON.stringify(payload)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const url=`${location.origin}${location.pathname}?holeChallenge=${token}`;
+  const text=`GameSharp ${DECISION_RUN.target||3}-Hole Decision Run: ${pct} (${DECISION_RUN.strong}/${DECISION_RUN.total} strong scenario decisions). Same holes, same execution draw—can you beat it?`;
   try{
-    if(navigator.share) await navigator.share({title:'GameSharp Decision Run',text,url:location.origin});
-    else if(navigator.clipboard){await navigator.clipboard.writeText(`${text} ${location.origin}`);alert('Run summary copied.');}
+    if(navigator.share) await navigator.share({title:'GameSharp Decision Run',text,url});
+    else if(navigator.clipboard){await navigator.clipboard.writeText(`${text} ${url}`);alert('Challenge link copied.');}
   }catch(e){}
 }
 
@@ -9502,7 +9643,7 @@ function animateCamFlight(svg, establish, target, ms){
   svg.setAttribute('viewBox',to);
   try{ const a=svg.querySelector('#camVBAnim'); if(a&&a.beginElement)a.beginElement(); }catch(e){}
 }
-function previewCameraShot(node){
+function previewCameraShot(node,choice){
   if(!HOLE || HOLE.mapType!=='camera' || !node) return;
   const svg=document.querySelector('#hole-map-wrap svg.cam-svg'); if(!svg) return;
   svg.querySelectorAll('.cam-preview').forEach(n=>n.remove());
@@ -9511,8 +9652,10 @@ function previewCameraShot(node){
   const sx=start[0],sy=start[1],ex=end[0],ey=end[1];
   const span=Math.hypot(ex-sx,ey-sy)||1;
   const arcH=/putt/.test(node.mapState||'')?6:Math.min(180,span*.34+44);
+  const putt=/putt/.test(node.mapState||'');
+  const spread=putt?[18,10]:choice&&choice.type==='agg'?[34,20]:choice&&choice.type==='exec'?[29,17]:[24,14];
   const path=`M${sx},${sy} Q${((sx+ex)/2).toFixed(0)},${(Math.min(sy,ey)-arcH).toFixed(0)} ${ex},${ey}`;
-  svg.insertAdjacentHTML('beforeend',`<g class="cam-preview"><path d="${path}" fill="none" stroke="#c8a84b" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 9" opacity=".5"/><circle cx="${ex}" cy="${ey}" r="18" fill="none" stroke="#c8a84b" stroke-width="2" stroke-dasharray="5 4" opacity=".55"/></g>`);
+  svg.insertAdjacentHTML('beforeend',`<g class="cam-preview" aria-label="Illustrative shot window"><path d="${path}" fill="none" stroke="#c8a84b" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 9" opacity=".5"/><ellipse cx="${ex}" cy="${ey}" rx="${spread[0]}" ry="${spread[1]}" fill="rgba(200,168,75,.08)" stroke="#c8a84b" stroke-width="2" stroke-dasharray="5 4" opacity=".65"/></g>`);
 }
 function setCamBall(svg, pos){
   let b=svg.querySelector('#camBall');
@@ -9574,6 +9717,7 @@ function animateCameraBall(node, valence, lastDec){
   const sand=/bunker|sand/.test(txt);
   const rough=/rough|thick|deep grass|heather|gorse/.test(txt);
   const trees=/tree|branches|blocked|stymied/.test(txt);
+  const nearMiss=valence==='neutral'&&/fringe|bunker|short|edge|rough|apron/.test(txt);
   const isPutt=/putt/.test(node.mapState||'');
   const col= valence==='bad' ? '#e05252' : (valence==='good' ? '#4caf50' : '#c8a84b');
   const sx=start[0], sy=start[1], ex=end[0], ey=end[1];
@@ -9606,6 +9750,7 @@ function animateCameraBall(node, valence, lastDec){
     ${rough?`<circle cx="${ex}" cy="${ey}" r="5" fill="none" stroke="#9ccc65" stroke-width="2" opacity="0"><animate attributeName="r" values="5;17" dur=".32s" begin="${landAt.toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values=".8;0" dur=".32s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
     ${trees?`<path d="M${ex-16},${ey-14} L${ex+15},${ey+13} M${ex+15},${ey-14} L${ex-16},${ey+13}" stroke="#e05252" stroke-width="3" opacity="0"><animate attributeName="opacity" values="0;.9;.45" dur=".48s" begin="${landAt.toFixed(2)}s" fill="freeze"/></path>`:''}
     ${(valence==='good'&&!isPutt)?`<circle cx="${ex}" cy="${ey}" r="0" fill="none" stroke="#4caf50" stroke-width="3" opacity="0.9"><animate attributeName="r" values="0;24;19" dur="0.55s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
+    ${nearMiss?`<circle cx="${ex}" cy="${ey}" r="5" fill="none" stroke="#c8a84b" stroke-width="2.4" opacity="0"><animate attributeName="r" values="5;26" dur=".5s" begin="${landAt.toFixed(2)}s" fill="freeze"/><animate attributeName="opacity" values=".9;0" dur=".5s" begin="${landAt.toFixed(2)}s" fill="freeze"/></circle>`:''}
   </g>`);
   animateCamFlight(svg, establishing, camZone(node.mapState), landAt*1000+320);
   HS.ballPos = end;

@@ -88,9 +88,15 @@ if (figures['irons:2']?.miss?.out?.[0] !== 'push') failures.push('Block clinic i
 notes.push(`Shot Clinic ${faults.length} faults; miss/fix bindings complete`);
 
 const holes = extractConst('ALL_HOLES', 'let HOLE = null;');
+const neutralStart=html.indexOf('function neutralHoleChoice(');
+const neutralEnd=html.indexOf('function neutralHoleSituation(',neutralStart);
+const neutralCtx={};
+vm.createContext(neutralCtx);
+vm.runInContext(`${html.slice(neutralStart,neutralEnd)};this.cleanChoice=neutralHoleChoice;`,neutralCtx);
 const maps = new Set([...html.matchAll(/CAM_MAPS\.([A-Za-z0-9_]+)\s*=/g)].map(m => m[1]));
 let nodeCount = 0;
 let decisionCount = 0;
+let variableDecisionCount = 0;
 const sceneCounts = {tee:0, approach:0, recovery:0, bunker:0, putt:0};
 const specStart = html.indexOf('function simulatorSpec(');
 const specEnd = html.indexOf('function simulatorReviewMarkup(', specStart);
@@ -106,6 +112,9 @@ for (const hole of holes) {
     if (node.mapState && !hole.cam?.zones?.[node.mapState]) failures.push(`${hole.name}/${id}: missing camera zone ${node.mapState}`);
     if (node.choices) {
       decisionCount++;
+      const simulationPool=node.choices.map(choice=>nodes[choice.next])
+        .filter(next=>next&&((next.outcome&&next.ballTo&&next.mapState)||next.final));
+      if(simulationPool.length>=2) variableDecisionCount++;
       specContext.HOLE = hole;
       const spec = specContext.auditSimulatorSpec(id, node);
       sceneCounts[spec.scene] = (sceneCounts[spec.scene] || 0) + 1;
@@ -125,6 +134,11 @@ for (const hole of holes) {
       if (waterText && /(?:water|pond|creek|ocean|pacific|sea|bay).{0,24}(?:long|beyond)|(?:long|beyond).{0,24}(?:water|pond|creek|ocean|pacific|sea|bay)/.test(authored) && !spec.waterLong) failures.push(`${hole.name}/${id}: long water not rendered long`);
       if (!node.broadcast) failures.push(`${hole.name}/${id}: decision missing broadcast`);
       for (const choice of node.choices) {
+        const cleaned=neutralCtx.cleanChoice(choice);
+        for(const [field,value] of Object.entries(cleaned)){
+          if(String(value).length<5||/\b(the|to|and|or|a)\.?$/i.test(value)||/[,;:]\s*[.?!]$/.test(value))
+            failures.push(`${hole.name}/${id}: malformed neutral ${field}: ${value}`);
+        }
         if (!nodes[choice.next]) failures.push(`${hole.name}/${id}: missing destination ${choice.next}`);
         const next = nodes[choice.next];
         if (next?.outcome && next.next && nodes[next.next]?.outcome) failures.push(`${hole.name}/${id}: outcome-to-outcome chain`);
@@ -133,6 +147,20 @@ for (const hole of holes) {
   }
 }
 notes.push(`Play a Hole ${holes.length} holes; ${nodeCount} nodes; ${decisionCount} decisions; ${maps.size} maps`);
+notes.push(`Neutral decision copy ${holes.reduce((n,h)=>n+Object.values(h.nodes).reduce((m,x)=>m+(x.choices?.length||0)*2,0),0)} outputs; no fragments`);
+if(variableDecisionCount < decisionCount-1) failures.push(`Variable execution coverage ${variableDecisionCount}/${decisionCount}; only explicit context routing may be exempt`);
+if(!html.includes("mode:selected.node===authored?'authored':'illustrative'")) failures.push('Execution draw does not distinguish authored and illustrative paths');
+if(!/Illustrative execution draw[^<]+not a real-world probability estimate/.test(html)) failures.push('Execution draw disclosure missing');
+if(!/The draw changes the result, not the quality of your original decision/.test(html)) failures.push('Decision/outcome separation copy missing');
+if(!html.includes("conditionDecision=/putt|match|context/i")) failures.push('Match-state grading is not constrained to material decisions');
+if(!html.includes("startDecisionRun(9)")) failures.push('Nine-hole Decision Run entry missing');
+if(!html.includes('holeChallenge=')) failures.push('Same-seed challenge link missing');
+if(!html.includes("x.sig!==hashSeed(JSON.stringify(signed))")) failures.push('Challenge payload integrity check missing');
+if(!html.includes('Link comparison—not a verified leaderboard.')) failures.push('Challenge comparison overclaims verification');
+if(!html.includes('PAUSED_HOLE_SESSION_KEY')) failures.push('Challenge entry cannot preserve an interrupted solo hole');
+if(!/Locked until this exact seeded run has enough verified completions/.test(html)) failures.push('Evidence gate for field benchmark missing');
+if(!html.includes('if(gsReducedMotion()){')||!html.includes('setCamBall(svg,end); HS.ballPos=end; HS._suppressCam=false;')) failures.push('Reduced motion does not bypass camera flight');
+notes.push(`Simulation contract ${variableDecisionCount}/${decisionCount} decision nodes; remaining node is explicit match-context routing`);
 notes.push(`Visual contracts tee ${sceneCounts.tee}; approach ${sceneCounts.approach}; recovery ${sceneCounts.recovery}; bunker ${sceneCounts.bunker}; putt ${sceneCounts.putt}`);
 
 for (const camera of ['player', 'broadcast', 'plan']) {
