@@ -1299,6 +1299,12 @@ svg { display:block; }
 .ib-text strong { color:var(--gold); }
 .ib-btn  { background:var(--gold); color:#111; border-radius:var(--radius-sm); padding:8px 16px; font-weight:700; font-size:13px; white-space:nowrap; border:none; cursor:pointer; }
 .ib-close { color:var(--muted); font-size:20px; cursor:pointer; flex-shrink:0; background:none; border:none; }
+.ig-profile-card{margin-top:18px;padding:15px;border:1px solid rgba(200,168,75,.28);border-radius:14px;background:rgba(200,168,75,.07);cursor:pointer}.ig-profile-title{font-size:14px;font-weight:800;color:#fff}.ig-profile-sub{margin-top:4px;font-size:12px;line-height:1.45;color:rgba(255,255,255,.58)}
+.install-guide{position:fixed;inset:0;z-index:2600;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.78);backdrop-filter:blur(9px)}.install-guide.open{display:flex}.ig-panel{width:100%;max-width:460px;max-height:94vh;overflow:auto;padding:18px 18px calc(20px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:#101711;border:1px solid rgba(200,168,75,.3);box-shadow:0 -18px 60px rgba(0,0,0,.55)}
+.ig-head{display:flex;align-items:center;justify-content:space-between}.ig-eyebrow{font-size:9px;font-weight:900;letter-spacing:.18em;color:var(--gold)}.ig-close{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:18px}.ig-title{margin-top:9px;font-size:23px;font-weight:900;line-height:1.08;color:#fff}.ig-copy{margin-top:8px;font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.68)}
+.ig-stage{position:relative;height:224px;margin:17px 0 14px;overflow:hidden;border-radius:19px;border:1px solid rgba(255,255,255,.11);background:linear-gradient(180deg,#e9edf0 0 32%,#172319 32%)}.ig-browser{height:72px;padding:18px 14px 0}.ig-address{height:42px;border-radius:23px;background:#fff;display:flex;align-items:center;padding:0 12px;color:#20252a;font-size:12px;font-weight:700}.ig-url{flex:1;text-align:center}.ig-share-symbol{position:relative;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:21px;color:#616970}.ig-step.is-active .ig-share-symbol{animation:igPulse 1.15s ease-in-out infinite}.ig-callout{position:absolute;right:15px;top:77px;padding:7px 10px;border-radius:9px;background:var(--gold);color:#101410;font-size:10px;font-weight:900;opacity:0;transform:translateY(-7px)}.ig-step.is-active .ig-callout{animation:igAppear .4s .35s both}.ig-app-share{position:absolute;left:22px;right:22px;bottom:20px;padding:13px;border:1px solid rgba(255,255,255,.12);border-radius:13px;color:rgba(255,255,255,.48);font-size:11px;text-align:center}.ig-app-share s{color:#e07070}
+.ig-sheet{position:absolute;left:18px;right:18px;top:18px;bottom:-45px;padding:15px;border-radius:22px 22px 0 0;background:#f5f5f4;color:#111;transform:translateY(100%)}.ig-step.is-active .ig-sheet{animation:igSheet .5s .12s cubic-bezier(.2,.8,.2,1) forwards}.ig-sheet-row{display:flex;align-items:center;gap:11px;padding:11px 8px;border-bottom:1px solid #ddd;font-size:12px;font-weight:700}.ig-sheet-row.target{margin-top:5px;border-radius:10px;background:#e9f4e9;color:#176a31}.ig-sheet-icon{font-size:20px}.ig-home-stage{position:absolute;inset:0;padding:32px 28px;background:linear-gradient(145deg,#13351a,#061108);color:#fff}.ig-home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px 14px;margin-top:24px}.ig-app{aspect-ratio:1;border-radius:17px;background:rgba(255,255,255,.12)}.ig-gs-app{display:grid;place-items:center;background:linear-gradient(145deg,#183f20,#0a190d);border:2px solid var(--gold);color:var(--gold);font-size:22px;font-weight:900;transform:scale(.25);opacity:0}.ig-step.is-active .ig-gs-app{animation:igLand .55s .28s cubic-bezier(.34,1.55,.64,1) forwards}.ig-benefit{margin-top:7px;font-size:11px;color:rgba(255,255,255,.65)}.ig-dots{display:flex;justify-content:center;gap:7px;margin:8px 0 14px}.ig-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18)}.ig-dot.on{width:22px;border-radius:6px;background:var(--gold)}.ig-actions{display:flex;gap:9px}.ig-next{flex:1;border:0;border-radius:13px;background:var(--gold);color:#111;padding:14px;font:900 14px 'DM Sans',sans-serif}.ig-secondary{border:1px solid rgba(255,255,255,.14);border-radius:13px;background:none;color:rgba(255,255,255,.7);padding:12px 14px;font-weight:800}
+@keyframes igPulse{50%{background:rgba(200,168,75,.34);box-shadow:0 0 0 9px rgba(200,168,75,.16)}}@keyframes igAppear{to{opacity:1;transform:none}}@keyframes igSheet{to{transform:translateY(0)}}@keyframes igLand{to{transform:scale(1);opacity:1}}
 
 /* ════════════════ PLAY PREP ════════════════ */
 .playprep-card { position:relative; overflow:hidden; cursor:pointer; margin:14px 16px 12px; padding:0;
@@ -1886,6 +1892,10 @@ svg { display:block; }
       <div class="tag-wrap" id="leak-tags"></div>
     </div>
     <div id="crash-course-profile-wrap" style="margin-top:20px"></div>
+    <div class="ig-profile-card" onclick="gsOpenInstallGuide()">
+      <div class="ig-profile-title">▣ Put GameSharp on your Home Screen</div>
+      <div class="ig-profile-sub">One-tap access makes the daily rep easier to remember. Show me how →</div>
+    </div>
   </div>
 
   <nav class="bottom-nav">
@@ -2106,9 +2116,15 @@ svg { display:block; }
 
 <!-- Install Prompt -->
 <div id="install-bar">
-  <span class="ib-text"><strong>Add to Home Screen</strong><br>Play offline, anytime.</span>
-  <button class="ib-btn" id="install-btn">Install</button>
+  <span class="ib-text"><strong>Make GameSharp a daily habit</strong><br>One-tap access makes today’s challenge easier to remember.</span>
+  <button class="ib-btn" id="install-btn">Show me how</button>
   <button class="ib-close" onclick="dismissInstall()">✕</button>
+</div>
+<div class="install-guide" id="gsInstallGuide" role="dialog" aria-modal="true" aria-labelledby="igTitle">
+  <div class="ig-panel">
+    <div class="ig-head"><div class="ig-eyebrow">ONE TAP · EVERY DAY</div><button class="ig-close" onclick="gsCloseInstallGuide()" aria-label="Close">×</button></div>
+    <div id="gsInstallGuideBody"></div>
+  </div>
 </div>
 
 <script>
@@ -4309,6 +4325,7 @@ function finishQuiz(){
     const shareBtn = document.getElementById('dcc-share-btn');
     shareBtn.onclick = shareEdgeCard;
     showView('daily-complete');
+    maybeShowInstallPrompt();
     return;
   }
 
@@ -4370,6 +4387,7 @@ function renderResult(score, total, pillar){
 
   // Share button
   document.getElementById('result-share-btn').onclick = () => shareResult(score, total, S.quiz.mode);
+  maybeShowInstallPrompt();
 }
 
 function deriveArchetype(){
@@ -5954,13 +5972,44 @@ window.addEventListener('beforeinstallprompt', e => {
     gsAfter(3000, () => document.getElementById('install-bar').classList.add('show'));
   }
 });
+let gsInstallGuideStep = 0;
+function gsInstallBrowser(){
+  const ua=navigator.userAgent||'';
+  if(/CriOS/i.test(ua)) return 'Chrome';
+  if(/EdgiOS/i.test(ua)) return 'Edge';
+  if(/FxiOS/i.test(ua)) return 'Firefox';
+  if(/Safari/i.test(ua)&&!/CriOS|EdgiOS|FxiOS/i.test(ua)) return 'Safari';
+  return 'your browser';
+}
+function gsInstallGuideMarkup(step){
+  const browser=gsInstallBrowser();
+  const frames=[
+    {title:'Make GameSharp a daily habit',copy:"Add GameSharp to your Home Screen for one-tap access—no searching, no browser tabs, just today’s challenge when you’re ready.",demo:`<div class="ig-home-stage"><b>Less friction. More consistency.</b><div class="ig-benefit">A small daily rep is easier when GameSharp is always one tap away.</div><div class="ig-home-grid"><div class="ig-app"></div><div class="ig-app"></div><div class="ig-app"></div><div class="ig-app"></div><div class="ig-app"></div><div class="ig-gs-app">GS</div><div class="ig-app"></div><div class="ig-app"></div></div></div>`},
+    {title:`Use ${browser}’s Share button`,copy:'Tap the Share icon beside the address bar—not a Share button inside GameSharp.',demo:`<div class="ig-browser"><div class="ig-address"><span>◈</span><span class="ig-url">gamesharpgolf.com</span><span class="ig-share-symbol">⇧</span></div></div><div class="ig-callout">TAP THIS BROWSER BUTTON</div><div class="ig-app-share"><s>Not “Share result” inside GameSharp</s></div>`},
+    {title:'Choose “Add to Home Screen”',copy:'Scroll down in the browser share sheet, tap Add to Home Screen, then confirm Add.',demo:`<div class="ig-sheet"><div class="ig-sheet-row"><span class="ig-sheet-icon">□</span>Copy</div><div class="ig-sheet-row"><span class="ig-sheet-icon">⌑</span>Find on Page</div><div class="ig-sheet-row target"><span class="ig-sheet-icon">＋</span>Add to Home Screen</div></div>`},
+    {title:'GameSharp is one tap away',copy:'A small daily rep. Smarter golf over time.',demo:`<div class="ig-home-stage"><b>Your daily golf edge</b><div class="ig-benefit">Open. Make the call. Get sharper.</div><div class="ig-home-grid"><div class="ig-app"></div><div class="ig-app"></div><div class="ig-gs-app">GS</div><div class="ig-app"></div></div></div>`}
+  ];
+  const f=frames[Math.max(0,Math.min(step,frames.length-1))],last=step===frames.length-1;
+  return `<div class="ig-title" id="igTitle">${f.title}</div><div class="ig-copy">${f.copy}</div><div class="ig-stage"><div class="ig-step is-active">${f.demo}</div></div><div class="ig-dots">${frames.map((_,i)=>`<span class="ig-dot${i===step?' on':''}"></span>`).join('')}</div><div class="ig-actions">${step?'<button class="ig-secondary" onclick="gsInstallGuideBack()">Back</button>':''}<button class="ig-next" onclick="${last?(deferredInstall?'gsInstallApp()':'gsCloseInstallGuide()'):'gsInstallGuideNext()'}">${last?(deferredInstall?'Add now':'Done'):(step?'Next':'Show me how')} →</button></div>`;
+}
+function gsRenderInstallGuide(){const b=document.getElementById('gsInstallGuideBody');if(b)b.innerHTML=gsInstallGuideMarkup(gsInstallGuideStep)}
+function gsOpenInstallGuide(){gsInstallGuideStep=0;gsRenderInstallGuide();const e=document.getElementById('gsInstallGuide');if(e)e.classList.add('open');document.body.style.overflow='hidden'}
+function gsCloseInstallGuide(){const e=document.getElementById('gsInstallGuide');if(e)e.classList.remove('open');document.body.style.overflow=''}
+function gsInstallGuideNext(){gsInstallGuideStep=Math.min(3,gsInstallGuideStep+1);gsRenderInstallGuide()}
+function gsInstallGuideBack(){gsInstallGuideStep=Math.max(0,gsInstallGuideStep-1);gsRenderInstallGuide()}
+function gsInstallApp(){if(deferredInstall){deferredInstall.prompt();deferredInstall=null}gsCloseInstallGuide();dismissInstall()}
+function maybeShowInstallPrompt(){
+  const installed=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(installed||(!deferredInstall&&!isIOS)||LS.get('installDismissed')) return;
+  gsAfter(450,()=>{const bar=document.getElementById('install-bar');if(bar)bar.classList.add('show')});
+}
 function dismissInstall(){
   document.getElementById('install-bar').classList.remove('show');
   LS.set('installDismissed', true);
 }
 document.getElementById('install-btn') && (document.getElementById('install-btn').onclick = () => {
-  if(deferredInstall){ deferredInstall.prompt(); deferredInstall = null; }
-  dismissInstall();
+  gsOpenInstallGuide();
 });
 
 // profile button
