@@ -7586,7 +7586,7 @@ const ALL_HOLES = [
       pro:"'On a green that sheds toward water, the safe chip that stays below the hole is the smart miss. Bogey here is a fine score.'",
       mapState:'greenside', ballTo:[650,196], broadcast:"On the green · 16 ft · Below the hole · For par", next:'putt_16' },
     putt_20:{ shot:2, situation:"20 feet for birdie on the shallow 12th green — slick, with a subtle fall toward the creek.", mapState:'putt',
-      broadcast:"Putt · 20 ft · For birdie",
+      broadcast:"Putt · 20 ft · Slick · Fall toward Rae's Creek",
       choices:[
         { badge:'BIRDIE', label:'Roll it in — a birdie at Amen Corner', sub:'A roar down the corner.', next:'finish_birdie', type:'agg' },
         { badge:'PAR', label:'Lag to a tap-in par', sub:'Take the priceless par.', next:'finish_par', type:'smart' },
@@ -7677,7 +7677,7 @@ const ALL_HOLES = [
       pro:"'Below the hole on a green that falls to the ocean is the only place to be. Bogey here is a perfectly good number.'",
       mapState:'greenside', ballTo:[672,206], broadcast:"On the green · 16 ft · Below the hole · For par", next:'putt_16' },
     putt_15:{ shot:2, situation:"15 feet for birdie on the smallest green in golf — quick, falling toward the sea.", mapState:'putt',
-      broadcast:"Putt · 15 ft · For birdie",
+      broadcast:"Putt · 15 ft · Quick · Green falls toward the Pacific",
       choices:[
         { badge:'BIRDIE', label:'Roll it in — birdie at the 7th', sub:'A roar over Carmel Bay.', next:'finish_birdie', type:'agg' },
         { badge:'PAR', label:'Lag to a tap-in par', sub:'Take the postcard par.', next:'finish_par', type:'smart' },
@@ -7735,7 +7735,7 @@ const ALL_HOLES = [
       pro:"'Laying back off the 13th tee takes the eagle off the table but also the disaster. A safe par-or-birdie is a fine play here.'",
       mapState:'drive', ballTo:[505,360], broadcast:"Fairway · 250 yds · Three-shot hole · Lay up smart", next:'layup' },
     second:{ shot:2, situation:"215 over Rae's Creek to a severely sloping green, bunkers behind. Eagle's on if it carries — the creek if you flinch.", mapState:'second',
-      broadcast:"Second · 215 yds · Over Rae's Creek · Eagle look if it carries",
+      broadcast:"Second · 215 yds · Rae's Creek short · Bunkers behind the green",
       choices:[
         { badge:'AGG', label:'Go for it — over the creek', sub:'Eagle on, the creek if you flinch.', next:'second_go', type:'agg' },
         { badge:'EXEC', label:'Lay up to a full wedge', sub:'~90 in, no risk.', next:'second_lay', type:'exec' },
@@ -7830,7 +7830,7 @@ const ALL_HOLES = [
     zones:{ tee:[0,0,1000,470], drive:[220,200,480,226], approach:[560,40,470,221], greenside:[650,73,330,155], putt:[690,91,250,118] } },
   nodes:{
     tee:{ shot:1, situation:"The Road Hole — 495 yards, the most feared par 4 in golf. A blind drive over the corner of the Old Course Hotel: bite off more and you earn the angle, but the hotel and the wall are out of bounds, hard right. Then a brutal second to a shallow green guarded by the Road Hole Bunker short-left and the road and stone wall directly behind.", mapState:'tee',
-      broadcast:"Tee · 495 yds · Blind drive over the hotel · OB right, the wall waits",
+      broadcast:"Tee · 495 yds · Hotel and OB hard right · Road Hole Bunker short-left at the green",
       choices:[
         { badge:'AGG', label:'Over the corner — bite it all off', sub:'Best angle, but OB is right there.', next:'tee_bold', type:'agg' },
         { badge:'SMART', label:'Over the corner of the sign', sub:'Longer in, but dry and in play.', next:'tee_safe', type:'smart' },
@@ -7935,7 +7935,7 @@ const ALL_HOLES = [
     zones:{ tee:[0,0,1000,470], fairway:[380,180,470,221], approach:[560,40,470,221], greenside:[650,73,330,155], putt:[690,91,250,118] } },
   nodes:{
     tee:{ shot:1, situation:"Riviera's 10th — barely 315 yards and driveable, yet maybe the most strategic hole in golf. The tiny green sits at an angle behind a deep bunker: from the LEFT it plays deep and holdable; from the right it's a sliver running away. Drive it and a small miss is a nightmare; lay up to the correct side and it's a wedge for birdie.", mapState:'tee',
-      broadcast:"Tee · 315 yds · Driveable · Tiny angled green — angle beats distance",
+      broadcast:"Tee · 315 yds · Deep bunker fronts the angled green · Best approach is from the left",
       choices:[
         { badge:'AGG', label:'Driver at the green', sub:'Eagle on, but a miss is brutal.', next:'tee_drive', type:'agg' },
         { badge:'SMART', label:'Lay up LEFT — open the angle', sub:'A full wedge from the best side.', next:'tee_left', type:'smart' },
@@ -8021,7 +8021,7 @@ const ALL_HOLES = [
     zones:{ tee:[0,0,1000,470], drive:[220,200,480,226], approach:[580,40,470,221], greenside:[675,73,330,155], putt:[715,91,250,118], drop:[430,120,470,221] } },
   nodes:{
     tee:{ shot:1, situation:"The 11th, 'White Dogwood' — the start of Amen Corner and the hardest par on the course. A long downhill drive through the trees, then a brutal second to a green with a pond hard on its left. The whole hole asks one question: how brave do you need to be? Hogan said if you ever saw him on this green in two, he'd missed his shot.", mapState:'tee',
-      broadcast:"Tee · 520 yds · Downhill drive · Pond left of the green — par is a great score",
+      broadcast:"Tee · 520 yds · Downhill tree chute · Pond left of the green",
       choices:[
         { badge:'AGG', label:'Bomb it down the chute', sub:'A shorter, but still long, second.', next:'tee_bomb', type:'agg' },
         { badge:'SMART', label:'Fairway first, take what comes', sub:'Position over a few extra yards.', next:'tee_safe', type:'smart' },
@@ -8273,7 +8273,10 @@ let HOLE_SEED='';
 let LAST_HOLE_RESULT=null;
 
 // ── Hole game state ───────────────────────────────────────────────
-let HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [] };
+// Play a Hole is a stateful learning journey, not a chain of loosely related
+// screens. `phase` is persisted so interruption/resume and the full-screen
+// decision theatre always agree about what the golfer is doing.
+let HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [], phase:'study' };
 const HOLE_SESSION_KEY='gs_hole_session_v2';
 const PAUSED_HOLE_SESSION_KEY='gs_paused_hole_session_v1';
 const DECISION_RUN_KEY='gs_decision_run_v1';
@@ -8325,7 +8328,7 @@ function challengeRunFromURL(){
 function stableHoleState(){
   return {stateVersion:3,holeIndex:ALL_HOLES.indexOf(HOLE),currentNode:HS.currentNode,shotCount:HS.shotCount,
     pendingNext:HS.pendingNext,decisions:HS.decisions,ballPos:HS.ballPos,date:todayStr(),run:DECISION_RUN,
-    condition:HOLE_CONDITION,seed:HOLE_SEED};
+    condition:HOLE_CONDITION,seed:HOLE_SEED,phase:HS.phase||'study'};
 }
 function saveHoleSession(){
   if(!HOLE || !HOLE.nodes[HS.currentNode]) return;
@@ -8611,19 +8614,32 @@ function holeContract(hole){
   Object.entries(nodes).forEach(([id,node])=>{
     if(node.choices){
       if(!node.situation || node.choices.length < 2) reasons.push(id+':thin-decision');
-      node.choices.forEach(c=>{ if(!c.next || !nodes[c.next]) reasons.push(id+':broken-branch'); });
+      node.choices.forEach((c,choiceIndex)=>{
+        if(!c.label || !c.sub) reasons.push(id+`:choice-${choiceIndex+1}-missing-copy`);
+        if(!c.next || !nodes[c.next]) reasons.push(id+':broken-branch');
+      });
       if(hole.mapType === 'camera'){
         if(!node.broadcast) reasons.push(id+':missing-broadcast-truth');
         // Only hazards that materially distinguish the offered choices must
         // be in this frame. A tee description may preview water at the green;
         // forcing that future hazard into the tee camera would itself lie.
-        const q=(node.choices||[]).map(c=>`${c.label||''} ${c.sub||''}`).join(' ').toLowerCase().replace(/right there/g,'nearby');
+        const choiceTruth=(node.choices||[]).map(c=>`${c.label||''} ${c.sub||''}`).join(' ').toLowerCase().replace(/right there/g,'nearby');
+        const situationTruth=String(node.situation||'').toLowerCase();
         const b=String(node.broadcast||'').toLowerCase();
         [
           ['water',/water|pond|creek|lake|pacific|ocean|sea/],
           ['trees',/tree|branch|trunk/],
           ['bunker',/bunker|sand/]
-        ].forEach(([label,re])=>{ if(re.test(q) && !re.test(b)) reasons.push(id+':visual-omits-'+label.replace(' ','-')); });
+        ].forEach(([label,re])=>{
+          // A hazard must be shown when it distinguishes a choice, or when the
+          // current situation locates it relative to this shot. Historical
+          // phrases ("after the bunker save") must not contaminate the next
+          // camera frame.
+          const located=/right|left|front|short|long|behind|beyond|toward|across|over|guards|hugs|blocked|hanging|in the way/.test(situationTruth);
+          const historical=new RegExp(`after.{0,24}(?:${label==='water'?'water|pond|creek|lake|ocean|sea':label==='trees'?'tree|branch|trunk':'bunker|sand'})`).test(situationTruth);
+          const material=re.test(choiceTruth)||(re.test(situationTruth)&&located&&!historical);
+          if(material&&!re.test(b)) reasons.push(id+':visual-omits-'+label.replace(' ','-'));
+        });
       }
     }
     if(node.outcome && (!node.result || !node.consequence || !node.pro)) reasons.push(id+':thin-outcome');
@@ -8634,6 +8650,20 @@ const HOLE_QUARANTINE=[];
 const LIVE_HOLE_INDEXES=ALL_HOLES.map((h,i)=>({h,i,v:holeContract(h)}))
   .filter(x=>{ if(!x.v.ok) HOLE_QUARANTINE.push({index:x.i,name:x.h.name,reasons:x.v.reasons}); return x.v.ok; })
   .map(x=>x.i);
+// Read-only production evidence for release audits. This deliberately exposes
+// counts and rejection reasons, never mutable content or private user state.
+window.GameSharpLaunchContract=Object.freeze({
+  total:ALL_HOLES.length,
+  live:LIVE_HOLE_INDEXES.length,
+  quarantined:Object.freeze(HOLE_QUARANTINE.map(x=>Object.freeze({index:x.index,name:x.name,reasons:Object.freeze([...x.reasons])})))
+});
+document.documentElement.dataset.gsHoleInventory=`${LIVE_HOLE_INDEXES.length}/${ALL_HOLES.length}`;
+document.documentElement.dataset.gsHoleQuarantine=String(HOLE_QUARANTINE.length);
+const holeContractReport=document.createElement('script');
+holeContractReport.type='application/json';
+holeContractReport.id='gs-hole-contract-report';
+holeContractReport.textContent=JSON.stringify(window.GameSharpLaunchContract);
+document.head.appendChild(holeContractReport);
 
 // ── Played-today rotation: re-entering Play a Hole must never serve a hole
 // you already completed today (the deterministic hole-of-the-day did exactly
@@ -8708,13 +8738,22 @@ function resumeHole(saved){
   HOLE=ALL_HOLES[saved.holeIndex]; DECISION_RUN=saved.run||null;
   HOLE_CONDITION=saved.condition||'stroke'; HOLE_SEED=saved.seed||newHoleSeed(saved.holeIndex);
   HS={currentNode:saved.currentNode,shotCount:saved.shotCount||0,pendingNext:saved.pendingNext||null,
-    decisions:Array.isArray(saved.decisions)?saved.decisions:[],ballPos:saved.ballPos||null};
+    decisions:Array.isArray(saved.decisions)?saved.decisions:[],ballPos:saved.ballPos||null,phase:saved.phase||'study'};
   document.getElementById('hole-picker').style.display='none';
   document.getElementById('hole-game').style.display='';
   document.getElementById('hvh-name').textContent=HOLE.name;
   document.getElementById('hvh-yardage').textContent=(HOLE.course?HOLE.course+' · ':'')+`Par ${HOLE.par} · ${HOLE.yardage} yds`;
   renderHoleMap(HOLE.nodes[HS.currentNode].mapState||'tee');
   renderHoleNode(HS.currentNode);
+  // If the app was interrupted after commitment, never ask for the same
+  // decision twice. Reconstruct the authored landing/reveal from the persisted
+  // next node; penalty strokes were already represented in the saved state.
+  if((saved.phase==='flight'||saved.phase==='result')&&saved.pendingNext&&HOLE.nodes[saved.pendingNext]){
+    const pending=HOLE.nodes[saved.pendingNext];
+    HS.phase='flight';
+    if(pending.outcome) gsAfter(80,()=>showHoleOutcome(pending,{resuming:true,resumePhase:saved.phase}));
+    else if(pending.final) gsAfter(80,()=>finishHole(pending));
+  }
 }
 
 // Browsing is still available, just demoted off the front door
@@ -8850,7 +8889,7 @@ function beginHole(index,preserveCondition){
   if(!preserveCondition){HOLE_CONDITION='stroke';HOLE_SEED='';}
   HOLE = ALL_HOLES[index];
   if(!HOLE_SEED) HOLE_SEED=DECISION_RUN?`${DECISION_RUN.seed}|${index}`:newHoleSeed(index);
-  HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [], ballPos: null };
+  HS = { currentNode: 'tee', shotCount: 0, pendingNext: null, decisions: [], ballPos: null, phase:'study' };
   document.getElementById('hole-picker').style.display = 'none';
   document.getElementById('hole-game').style.display = '';
   document.getElementById('hvh-name').textContent = HOLE.name;
@@ -8874,6 +8913,8 @@ function renderHoleNode(nodeId){
   const node = HOLE.nodes[nodeId];
   if(!node) return;
   HS.currentNode = nodeId;
+  HS.phase = 'study';
+  if(window.GameSharpHoleTheatre) window.GameSharpHoleTheatre.phase('study');
   HS._decidedNode = null;   // fresh decision surface (incl. water-loop revisits)
   if(HOLE.mapType === 'camera'){ HS._suppressCam = false; updateCamBroadcast(node); }
 
@@ -9053,6 +9094,7 @@ function simulatorReviewMarkup(s){
   const broadcastScene = s.scene === 'putt'
     ? `<rect width="390" height="310" fill="#4a9a4d"/>
        <path d="M0 230Q180 200 390 226M0 170Q180 142 390 166" fill="none" stroke="rgba(225,255,220,.2)" stroke-width="3"/>
+       ${s.water?`<path d="M0 0H390V50Q195 66 0 48Z" fill="#277fa1"/><text class="sim-review-label" x="195" y="29" text-anchor="middle">WATER BEYOND · PACE MATTERS</text>`:''}
        <circle cx="330" cy="174" r="9" fill="#173a19"/><line x1="330" y1="174" x2="330" y2="90" stroke="#fff" stroke-width="2"/>
        <circle cx="52" cy="248" r="8" fill="#fff"/><path class="sim-flight" d="M52 248Q186 ${s.downhill?'194':'222'} 330 174" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="320" stroke-dashoffset="320"/>
        <ellipse cx="330" cy="174" rx="48" ry="34" fill="none" stroke="#f0d77f" stroke-width="2" stroke-dasharray="6 5"/>
@@ -9065,6 +9107,7 @@ function simulatorReviewMarkup(s){
        <text class="sim-review-label" x="326" y="204" text-anchor="middle">LAND HERE</text>`;
   const planScene = s.scene === 'putt'
     ? `<rect width="390" height="310" fill="#347e3d"/><ellipse cx="195" cy="158" rx="154" ry="126" fill="#4a9a4d"/>
+       ${s.water?`<path d="M18 14H372V54Q195 70 18 52Z" fill="#277fa1"/><text class="sim-review-label" x="195" y="38" text-anchor="middle">CREEK / SEA SIDE</text>`:''}
        <circle cx="218" cy="58" r="9" fill="#173a19"/><circle cx="195" cy="274" r="8" fill="#fff"/>
        <path d="M195 274Q${s.downhill?'246':'170'} 176 218 64" fill="none" stroke="#f0d77f" stroke-width="3" stroke-dasharray="7 6"/>
        <ellipse class="sim-safe" cx="218" cy="58" rx="48" ry="32"/><path d="M75 155h34m-17-17v34M282 195h34m-17-17v34" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
@@ -9138,6 +9181,7 @@ function mountShotSimulator(nodeId, node){
       <rect width="390" height="104" fill="${green?'#b7d1dc':'#9fc7dd'}"/>
       ${green
         ? `<path d="M0 82 Q195 55 390 84V310H0Z" fill="#4a9a4d"/>
+           ${s.water?`<path d="M0 82Q195 55 390 84V111Q195 85 0 110Z" fill="#277fa1"/><text x="195" y="87" text-anchor="middle" font-size="9" fill="#d9f4ff" font-family="DM Sans,sans-serif" font-weight="700" letter-spacing="1">WATER BEYOND THE HOLE</text>`:''}
            <path d="M24 125Q130 100 365 132M5 181Q180 143 387 175M0 240Q190 196 390 222" fill="none" stroke="rgba(220,255,210,.2)" stroke-width="2"/>
            <ellipse cx="198" cy="105" rx="12" ry="4" fill="#173a19"/><line x1="198" y1="105" x2="198" y2="54" stroke="#fff" stroke-width="2"/><path d="M198 54l25 8-25 9z" fill="#e05252"/>
            <path d="M194 276 Q${s.downhill?'224':'176'} 205 198 109" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-dasharray="5 7"/>
@@ -9193,6 +9237,11 @@ function selectHoleChoice(choice, node, tappedCard){
   // double-count strokes or double-advance the tree.
   if(HS._decidedNode === HS.currentNode) return;
   HS._decidedNode = HS.currentNode;
+  HS.phase = 'flight';
+  if(window.GameSharpHoleTheatre){
+    window.GameSharpHoleTheatre.commit(choice.label, choice.sub);
+    window.GameSharpHoleTheatre.phase('flight');
+  }
   // Visual lock: preserve the user's call long enough to connect choice → line → result.
   // Only the selected card is emphasised; alternatives recede without disappearing.
   try{
@@ -9218,6 +9267,7 @@ function selectHoleChoice(choice, node, tappedCard){
   HS.pendingNext=resolvedId;
   const committed=HS.decisions[HS.decisions.length-1];
   if(committed){committed.authoredNext=choice.next;committed.resolvedNext=resolvedId;committed.simulationMode=sim.mode;}
+  saveHoleSession();
   if(nextNode.final){
     const lastDec=HS.decisions[HS.decisions.length-1],dg=assessDecision(choice,nextNode);
     lastDec.decisionGrade=dg.grade; lastDec.decisionLabel=dg.label;
@@ -9303,7 +9353,8 @@ function buildShotLesson(node, valence, lastDec){
   return 'Live with the outcome, then play the next shot well.';
 }
 
-function showHoleOutcome(node){
+function showHoleOutcome(node,opts={}){
+  HS.phase = 'flight';
   const lastDec = HS.decisions[HS.decisions.length - 1];
   const illustrative=!!(lastDec&&lastDec.simulationMode==='illustrative');
   // Valence haptic — crisp double-tap on a good outcome, dull buzz on a bad one
@@ -9313,7 +9364,7 @@ function showHoleOutcome(node){
   gsSound('strike');                                            // contact at the tap
   if(_v !== 'neutral') gsAfter(820, () => gsSound(_v === 'good' ? 'good' : 'bad'));  // verdict at landing
   if(HOLE && HOLE.mapType === 'camera'){ HS._suppressCam = true; updateCamBroadcast(node); }
-  if(node.penalty){ HS.shotCount += node.penalty; }  // count the dropped stroke(s) live
+  if(node.penalty&&!(opts.resuming&&opts.resumePhase==='result')){ HS.shotCount += node.penalty; }  // count the dropped stroke(s) live
   const oc = document.getElementById('outcome-card');
   document.querySelectorAll('#outcome-card .clinic-callback').forEach(el => el.remove());
   document.querySelectorAll('#outcome-card .oc-trust-note').forEach(el => el.remove());
@@ -9391,6 +9442,9 @@ function showHoleOutcome(node){
     oc.style.display = '';
     void oc.offsetWidth;
     oc.classList.add('reveal');
+    HS.phase='result';
+    if(window.GameSharpHoleTheatre) window.GameSharpHoleTheatre.phase('result');
+    saveHoleSession();
     updateHoleLearningBar();
   });
 }
@@ -9432,6 +9486,8 @@ function advanceHole(){
 }
 
 function finishHole(finalNode){
+  HS.phase = 'complete';
+  if(window.GameSharpHoleTheatre) window.GameSharpHoleTheatre.phase('complete');
   LAST_HOLE_RESULT={index:ALL_HOLES.indexOf(HOLE),score:finalNode.score,condition:HOLE_CONDITION,seed:HOLE_SEED};
   if(DECISION_RUN){
     const hi=ALL_HOLES.indexOf(HOLE);
@@ -10756,7 +10812,7 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gs-focus-stage{min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px 0}
 .gs-focus-stage>.gs-focus-subject{display:block!important;width:min(100%,980px)!important;max-width:980px!important;max-height:100%!important;margin:0!important;flex:0 1 auto!important}
 .gs-focus-stage .gs-focus-trigger{display:none!important}
-.gs-focus-stage>.anim-container,.gs-focus-stage>.tech-visual,.gs-focus-stage>#qTechWrap,.gs-focus-stage>.hole-map-wrap{height:min(72vh,720px)!important;min-height:300px!important;background:radial-gradient(120% 90% at 50% 35%,#285d29 0%,#123317 62%,#07160a 100%);border-radius:18px;overflow:auto}
+.gs-focus-stage>.anim-container,.gs-focus-stage>.tech-visual,.gs-focus-stage>#qTechWrap{height:min(72vh,720px)!important;min-height:300px!important;background:radial-gradient(120% 90% at 50% 35%,#285d29 0%,#123317 62%,#07160a 100%);border-radius:18px;overflow:auto}
 .gs-focus-stage svg{display:block;width:100%!important;height:auto!important;max-height:calc(100% - 54px)!important}
 .gs-focus-stage .gsw-btn{min-height:44px;padding-left:14px;padding-right:14px}.gs-focus-stage .gsw-scrub{min-height:44px}
 .gs-focus-stage>.tech-visual{height:min(76vh,760px)!important;overscroll-behavior:contain}
@@ -10766,18 +10822,83 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gs-focus-foot{min-height:52px;padding:8px 4px 2px;text-align:center}
 .gs-focus-cue{font-size:13px;line-height:1.45;color:rgba(255,255,255,.74);max-width:720px;margin:auto}
 .gs-focus-hint{font-size:9px;letter-spacing:1.2px;color:rgba(200,168,75,.72);margin-top:5px;text-transform:uppercase}
-@media(max-width:600px) and (orientation:portrait){.gs-focus-stage>.anim-container,.gs-focus-stage>#qTechWrap,.gs-focus-stage>.hole-map-wrap{height:min(66vh,580px)!important}.gs-focus-stage>.tech-visual{height:68vh!important}.gs-focus-stage .gsl-note{font-size:11px}.gs-focus-title{font-size:17px}}
+/* Play a Hole has its own synchronized decision theatre. It deliberately
+   contains the visual, the choices and the reveal; the generic Focus View
+   must never separate those states again. */
+.gs-hole-theatre{position:fixed;inset:0;z-index:100100;display:none;grid-template-rows:auto minmax(0,1fr);box-sizing:border-box;background:#070b08;color:#fff;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+.gs-hole-theatre.open{display:grid;animation:gsFocusIn .24s cubic-bezier(.2,.8,.3,1)}
+.gs-hole-theatre-bar{display:flex;align-items:center;gap:10px;min-height:54px;padding:0 2px 7px}
+.gs-hole-theatre-copy{min-width:0;flex:1}.gs-hole-theatre-kicker{color:var(--gold);font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+.gs-hole-theatre-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.gs-hole-theatre-phase{flex:0 0 auto;border:1px solid rgba(200,168,75,.42);border-radius:999px;padding:6px 9px;color:#e7cf82;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.gs-hole-theatre-close{width:44px;height:44px;flex:0 0 44px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(255,255,255,.07);color:#fff;font-size:21px}
+.gs-hole-theatre-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;border-radius:16px;background:#0c110d;border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.gs-hole-theatre-body>.hole-map-wrap{height:clamp(270px,45vh,430px)!important;min-height:270px;margin:0!important;border-radius:0!important}
+.gs-hole-theatre .gs-focus-trigger{display:none!important}
+.gs-hole-theatre-body>.hole-map-wrap>svg{width:100%!important;height:100%!important;max-height:none!important}
+.gs-hole-theatre-body>.shot-panel{padding:12px!important;background:#0c110d}
+.gs-hole-theatre-body .situation-box{margin-bottom:10px;padding:11px 12px}
+.gs-hole-theatre-body .decisions{gap:8px}.gs-hole-theatre-body .decision-card{padding:11px 12px;min-height:52px}
+.gs-hole-theatre-choice{display:none;position:sticky;top:0;z-index:20;margin:0;padding:10px 12px;background:rgba(22,29,23,.96);border-bottom:1px solid rgba(200,168,75,.45);box-shadow:0 7px 20px rgba(0,0,0,.28)}
+.gs-hole-theatre-choice.show{display:flex;align-items:center;gap:10px}.gs-hole-theatre-choice-mark{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--gold);color:#111;font-weight:900}
+.gs-hole-theatre-choice-copy{min-width:0}.gs-hole-theatre-choice-label{font-size:12px;font-weight:800}.gs-hole-theatre-choice-sub{font-size:10px;color:rgba(255,255,255,.62);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs-hole-theatre-body>.outcome-card{margin:12px!important}.gs-hole-theatre-body>.scorecard-overlay{min-height:0!important}
+@media(max-width:600px) and (orientation:portrait){.gs-focus-stage>.anim-container,.gs-focus-stage>#qTechWrap{height:min(66vh,580px)!important}.gs-focus-stage>.tech-visual{height:68vh!important}.gs-focus-stage .gsl-note{font-size:11px}.gs-focus-title{font-size:17px}.gs-hole-theatre-body>.hole-map-wrap{height:clamp(280px,43vh,390px)!important}.gs-hole-theatre-title{font-size:17px}}
+@media(orientation:landscape) and (max-height:540px){.gs-hole-theatre{grid-template-rows:48px minmax(0,1fr)}.gs-hole-theatre-bar{min-height:46px}.gs-hole-theatre-body{display:grid;grid-template-columns:minmax(0,58%) minmax(270px,42%);overflow:hidden}.gs-hole-theatre-body>.hole-map-wrap{height:100%!important;min-height:0}.gs-hole-theatre-body>.shot-panel,.gs-hole-theatre-body>.outcome-card,.gs-hole-theatre-body>.scorecard-overlay{grid-column:2;overflow-y:auto;margin:0!important}.gs-hole-theatre-choice{grid-column:2}.gs-hole-theatre-body>.hole-map-wrap{grid-column:1;grid-row:1/5}.gs-hole-theatre-phase{display:none}}
 @media(prefers-reduced-motion:reduce){.gs-focus-overlay.open{animation:none}}
 </style>
 <script id="gs-focus-view">
 (()=> {
-  const SELECTORS=['#qTechWrap','.anim-container','.tech-visual','.hole-map-wrap'];
+  const SELECTORS=['#qTechWrap','.anim-container','.tech-visual','#hole-map-wrap'];
   let active=null,parent=null,next=null,opener=null,scrollY=0;
+  let theatreRecords=[],theatreOpener=null;
   const overlay=document.createElement('div');
   overlay.className='gs-focus-overlay'; overlay.setAttribute('role','dialog'); overlay.setAttribute('aria-modal','true'); overlay.setAttribute('aria-label','GameSharp Focus View');
   overlay.innerHTML=`<div class="gs-focus-bar"><div class="gs-focus-brand"><div class="gs-focus-kicker">◉ GAMESHARP FOCUS VIEW</div><div class="gs-focus-title" id="gsFocusTitle">Study the shot</div></div><button class="gs-focus-screen" type="button" aria-label="Use device fullscreen" title="Use device fullscreen">⛶</button><button class="gs-focus-close" type="button" aria-label="Close Focus View">×</button></div><div class="gs-focus-stage"></div><div class="gs-focus-foot"><div class="gs-focus-cue" id="gsFocusCue"></div><div class="gs-focus-hint">Replay · study · close to continue</div></div>`;
   document.body.appendChild(overlay);
   const stage=overlay.querySelector('.gs-focus-stage'),close=overlay.querySelector('.gs-focus-close');
+  const theatre=document.createElement('div');
+  theatre.className='gs-hole-theatre';theatre.setAttribute('role','dialog');theatre.setAttribute('aria-modal','true');theatre.setAttribute('aria-label','Play a Hole decision theatre');
+  theatre.innerHTML=`<div class="gs-hole-theatre-bar"><div class="gs-hole-theatre-copy"><div class="gs-hole-theatre-kicker">Play a Hole · Decision Theatre</div><div class="gs-hole-theatre-title">Study the shot</div></div><div class="gs-hole-theatre-phase">Study</div><button class="gs-hole-theatre-close" type="button" aria-label="Close decision theatre">×</button></div><div class="gs-hole-theatre-body"><div class="gs-hole-theatre-choice" aria-live="polite"><span class="gs-hole-theatre-choice-mark">✓</span><span class="gs-hole-theatre-choice-copy"><div class="gs-hole-theatre-choice-label"></div><div class="gs-hole-theatre-choice-sub"></div></span></div></div>`;
+  document.body.appendChild(theatre);
+  const theatreBody=theatre.querySelector('.gs-hole-theatre-body');
+  const phaseLabels={study:'Study',flight:'Watch the shot',result:'Read the result',complete:'Hole complete'};
+  function setTheatrePhase(value){
+    const phase=phaseLabels[value]||phaseLabels.study;
+    theatre.dataset.phase=value||'study';
+    theatre.querySelector('.gs-hole-theatre-phase').textContent=phase;
+    if(value==='study') theatre.querySelector('.gs-hole-theatre-choice').classList.remove('show');
+  }
+  function openHoleTheatre(button){
+    if(theatre.classList.contains('open'))return;
+    const map=document.getElementById('hole-map-wrap'),panel=document.getElementById('shot-panel'),outcome=document.getElementById('outcome-card'),score=document.getElementById('scorecard-overlay');
+    const subjects=[map,panel,outcome,score].filter(Boolean);
+    if(!map||!panel)return;
+    theatreOpener=button||map;scrollY=window.scrollY;
+    theatreRecords=subjects.map(el=>({el,parent:el.parentNode,next:el.nextSibling}));
+    subjects.forEach(el=>theatreBody.appendChild(el));
+    theatre.querySelector('.gs-hole-theatre-title').textContent=(document.getElementById('hvh-name')?.textContent||'Study the shot')+' · '+(document.getElementById('hvh-yardage')?.textContent||'');
+    const currentPhase=(typeof HS!=='undefined'&&HS.phase)||'study';
+    setTheatrePhase(currentPhase);
+    if(currentPhase!=='study'&&typeof HS!=='undefined'&&HS.decisions&&HS.decisions.length){
+      const committed=HS.decisions[HS.decisions.length-1];
+      commitTheatreChoice(committed.label,committed.sub);
+    }
+    theatre.classList.add('open');document.body.classList.add('gs-focus-open');
+    theatre.querySelector('.gs-hole-theatre-close').focus({preventScroll:true});
+  }
+  function closeHoleTheatre(){
+    if(!theatre.classList.contains('open'))return;
+    theatreRecords.forEach(({el,parent,next})=>{if(parent&&parent.isConnected)parent.insertBefore(el,next&&next.parentNode===parent?next:null)});
+    theatreRecords=[];theatre.classList.remove('open');document.body.classList.remove('gs-focus-open');window.scrollTo(0,scrollY);
+    const restore=theatreOpener;theatreOpener=null;if(restore&&restore.isConnected)restore.focus({preventScroll:true});
+  }
+  function commitTheatreChoice(label,sub){
+    const chip=theatre.querySelector('.gs-hole-theatre-choice');
+    chip.querySelector('.gs-hole-theatre-choice-label').textContent=label||'Call committed';
+    chip.querySelector('.gs-hole-theatre-choice-sub').textContent=sub||'Watch what this decision creates.';
+    chip.classList.add('show');
+  }
   function copyFor(el){
     const card=el.closest('.explanation-card,.quiz-body,.hole-play-view,.technique-card,.view')||el.parentElement;
     const title=card&&card.querySelector('.question-text,.hole-title,.tech-title,.result-title,h1,h2,h3');
@@ -10786,6 +10907,7 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
   }
   function openFocus(el,button){
     if(active||!el.isConnected)return;
+    if(el.id==='hole-map-wrap'){openHoleTheatre(button);return;}
     active=el;opener=button||el;parent=el.parentNode;next=el.nextSibling;scrollY=window.scrollY;
     const copy=copyFor(el);overlay.querySelector('#gsFocusTitle').textContent=copy.title;overlay.querySelector('#gsFocusCue').textContent=copy.cue;
     el.classList.add('gs-focus-subject');stage.appendChild(el);overlay.classList.add('open');document.body.classList.add('gs-focus-open');close.focus({preventScroll:true});
@@ -10808,10 +10930,13 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
     });
   }
   close.addEventListener('click',closeFocus);
+  theatre.querySelector('.gs-hole-theatre-close').addEventListener('click',closeHoleTheatre);
   overlay.querySelector('.gs-focus-screen').addEventListener('click',()=>{if(!document.fullscreenElement&&overlay.requestFullscreen)overlay.requestFullscreen().catch(()=>{});else if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active)closeFocus()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(theatre.classList.contains('open'))closeHoleTheatre();else if(active)closeFocus()}});
   new MutationObserver(ms=>ms.forEach(m=>{if(m.target&&m.target.nodeType===1)enhance(m.target);m.addedNodes.forEach(n=>{if(n.nodeType===1)enhance(n)})})).observe(document.body,{childList:true,subtree:true});
-  enhance();window.GameSharpFocusView={open:openFocus,close:closeFocus,refresh:enhance};
+  enhance();
+  window.GameSharpFocusView={open:openFocus,close:closeFocus,refresh:enhance};
+  window.GameSharpHoleTheatre={open:openHoleTheatre,close:closeHoleTheatre,phase:setTheatrePhase,commit:commitTheatreChoice};
 })();
 </script>
 </body>
