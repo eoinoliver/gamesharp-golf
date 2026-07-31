@@ -197,6 +197,37 @@ svg { display:block; }
 .home-hero-tag .t1 { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:3px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.7); }
 .home-hero-tag .t1 span { color:var(--gold); }
 .home-hero-tag .t2 { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:.6px; color:#fff; line-height:1.0; margin-top:1px; text-shadow:0 3px 14px rgba(0,0,0,.75); }
+
+/* ── DAILY HERO CONTRACT — full emotion once, compact utility thereafter ──
+   This is presentation state only; challenge, streak and profile truth remain
+   owned by renderHome() and the existing state model. */
+@media(max-width:767px){
+  #view-home .home-hero,
+  #view-home .daily-card{transition:max-height .62s cubic-bezier(.22,1,.36,1),height .62s cubic-bezier(.22,1,.36,1),margin .62s cubic-bezier(.22,1,.36,1),padding .62s cubic-bezier(.22,1,.36,1),border-radius .62s cubic-bezier(.22,1,.36,1),filter .62s ease;}
+  #view-home .home-hero{overflow-anchor:none;}
+  #view-home.gs-home-hero-collapsed .home-hero{height:92px;max-height:92px;aspect-ratio:auto;margin-bottom:9px;border-radius:0 0 16px 16px;filter:brightness(.74) saturate(.88);}
+  #view-home.gs-home-hero-collapsed .home-hero-img{object-position:center 42%;filter:brightness(.68) contrast(1.08) saturate(.92);}
+  #view-home.gs-home-hero-collapsed .home-hero-veil{background:linear-gradient(90deg,rgba(4,10,6,.25),rgba(4,10,6,.72));}
+  #view-home.gs-home-hero-collapsed .hero-topbar{padding:max(9px,env(safe-area-inset-top)) 12px 0;align-items:flex-start;}
+  #view-home.gs-home-hero-collapsed .hero-topbar .logo-wordmark{font-size:27px;}
+  #view-home.gs-home-hero-collapsed .brand-beside{font-size:8px;}
+  #view-home.gs-home-hero-collapsed .brand-under{display:none;}
+  #view-home.gs-home-hero-collapsed .profile-btn{width:44px;height:44px;}
+  #view-home.gs-home-hero-collapsed .daily-card{margin:0 14px 10px;padding:13px 18px 14px;}
+  #view-home.gs-home-hero-collapsed .daily-card .dc-title{font-size:25px;}
+  #view-home.gs-home-hero-collapsed .daily-card .dc-hook{margin:5px 0 8px;line-height:1.34;}
+  #view-home.gs-home-hero-collapsed .daily-card .dc-streak{margin-bottom:9px;}
+  #view-home.gs-home-hero-collapsed .daily-btn{min-height:44px;padding:10px 20px;}
+  #view-home.gs-home-hero-image-failed .home-hero{background:radial-gradient(120% 100% at 70% 10%,#355c31 0%,#152619 52%,#080d09 100%);}
+  #view-home.gs-home-hero-image-failed .home-hero-img{visibility:hidden;}
+}
+@media(max-width:360px){
+  #view-home.gs-home-hero-collapsed .brand-beside{display:none;}
+  #view-home.gs-home-hero-collapsed .hero-streak{padding:5px 8px;}
+}
+@media(prefers-reduced-motion:reduce){
+  #view-home .home-hero,#view-home .daily-card{transition:none!important;}
+}
 #view-home > * { flex-shrink:0; }
 #view-sharpen { background:var(--dark); padding-bottom:90px; }
 #view-sharpen > * { flex-shrink:0; }
@@ -3142,7 +3173,55 @@ function setPillarColor(color){
 }
 
 // ── Home Screen ────────────────────────────────────────
+const GS_HOME_HERO_KEY = 'gsg_home_hero_seen';
+let gsHomeHeroDayMemory = '';
+let gsHomeHeroTimer = 0;
+function gsHomeHeroSeen(day){
+  try { return localStorage.getItem(GS_HOME_HERO_KEY) === day; }
+  catch(e){ return gsHomeHeroDayMemory === day; }
+}
+function gsMarkHomeHeroSeen(day){
+  gsHomeHeroDayMemory = day;
+  try { localStorage.setItem(GS_HOME_HERO_KEY, day); } catch(e){}
+}
+function gsCollapseHomeHero(){
+  const home = document.getElementById('view-home');
+  if(!home || home.classList.contains('gs-home-hero-collapsed')) return;
+  window.clearTimeout(gsHomeHeroTimer);
+  home.classList.remove('gs-home-hero-expanded');
+  home.classList.add('gs-home-hero-collapsed');
+}
+function gsPrepareHomeHero(){
+  const home = document.getElementById('view-home');
+  if(!home || window.innerWidth >= 768) return;
+  const day = todayStr();
+  window.clearTimeout(gsHomeHeroTimer);
+  if(gsHomeHeroSeen(day)){
+    home.classList.remove('gs-home-hero-expanded');
+    home.classList.add('gs-home-hero-collapsed');
+    return;
+  }
+  gsMarkHomeHeroSeen(day);
+  home.classList.remove('gs-home-hero-collapsed');
+  home.classList.add('gs-home-hero-expanded');
+  gsHomeHeroTimer = window.setTimeout(gsCollapseHomeHero, 1800);
+  if(!home.dataset.heroCollapseBound){
+    home.dataset.heroCollapseBound = '1';
+    home.addEventListener('pointerdown', gsCollapseHomeHero, {passive:true});
+    home.addEventListener('scroll', gsCollapseHomeHero, {passive:true});
+    home.addEventListener('touchmove', gsCollapseHomeHero, {passive:true});
+  }
+}
+function gsGuardHomeHeroImage(){
+  const home = document.getElementById('view-home');
+  const img = home && home.querySelector('.home-hero-img');
+  if(!home || !img || img.dataset.heroGuarded) return;
+  img.dataset.heroGuarded = '1';
+  img.addEventListener('error', () => home.classList.add('gs-home-hero-image-failed'), {once:true});
+  if(img.complete && !img.naturalWidth) home.classList.add('gs-home-hero-image-failed');
+}
 function renderHome(){
+  gsPrepareHomeHero();
   // Warmth without inventing a golfer identity from a small answer sample.
   const greetEl = document.getElementById('home-arch-greeting');
   if(greetEl){
@@ -3177,6 +3256,7 @@ function renderHome(){
   }
   const sc = document.getElementById('streak-count');
   if(sc) sc.textContent = S.streak;
+  gsGuardHomeHeroImage();
 
   // Today's hook — the actual first decision, a curiosity gap, not a label
   const themeEl = document.getElementById('dc-theme');
