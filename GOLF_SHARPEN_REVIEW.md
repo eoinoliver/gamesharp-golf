@@ -14,6 +14,10 @@ The authoritative graph contains seven diagnostic navigation regions, 28 observa
 | Putting | 4 | start-line, pace and three-putt comparisons |
 | Routine & Commitment | 4 | focused decision rep, 19th Hole reflection |
 
+## High-leverage legacy integration
+
+The highest-frequency tee-flight, putting, Course IQ, approach-contact and short-game routes now use individually authored Coach's Lens explanations. Every linked legacy asset receives the current focus and a route-specific observation instruction, keeps that context visible during the asset, and offers an exact one-tap return to the originating Sharpen result. This turns Shot Clinic, Play a Hole, Play a Course and decision content into continuations of the lesson rather than generic destinations.
+
 ## Claim boundary
 
 Every result is labelled guided-hypothesis, uses observable user-reported distinctions, states that multiple mechanisms can produce the outcome, and supplies one focus and one course cue. No result claims swing capture, diagnosis, measured improvement, probability or strokes gained.

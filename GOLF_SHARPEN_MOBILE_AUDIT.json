@@ -113,6 +113,11 @@
         ],
         "boundary": "This is one useful hypothesis to test, not a diagnosis of your swing."
       },
+      "legacyBridge": {
+        "assetView": "technique",
+        "bridge": "SHARPEN FOCUS · Start. Curve. Corridor.\nTrack start line first, then curve; test whether the curve window is playable.\nWatch for: Watch only the opening start line, then the direction of curve.\n↩",
+        "returned": true
+      },
       "restored": true
     },
     {

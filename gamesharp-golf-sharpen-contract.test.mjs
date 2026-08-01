@@ -18,7 +18,7 @@ for(const [rid,r] of Object.entries(R)){
 }
 for(const [qid,q] of Object.entries(Q)) for(const answer of q.answers) assert(Z[answer.resultId],qid+' has missing result');
 for(const [id,r] of Object.entries(Z)){
- for(const key of ['read','coachLens','focus','cue']) assert(r[key],id+' missing '+key);
+ for(const key of ['read','coachLens','watchFor','focus','cue']) assert(r[key],id+' missing '+key);
  assert(r.assetIds.length>=1&&r.assetIds.length<=3,id+' must route to 1-3 assets');
  assert.equal(r.confidence,'guided-hypothesis',id+' crosses claim boundary');
  assert.equal(r.reviewStatus,'launch-reviewed',id+' lacks review');assert(r.sources.length,id+' lacks source support');
@@ -34,5 +34,6 @@ assert(/prefers-reduced-motion:reduce/.test(html),'Reduced-motion treatment miss
 assert(/classList\.add\('fallback'\)/.test(html),'Image failure fallback missing');
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');
 assert(/returnPending/.test(html)&&/returnFromAsset/.test(html),'Asset return context missing');
+assert(/SHARPEN FOCUS/.test(html)&&/During this rep:/.test(html),'Legacy asset does not carry Sharpen learning context');
 assert(/\.gss-hotspot\{[^}]*width:48px;height:48px/.test(html),'48px hotspot target missing');
 console.log(JSON.stringify({ok:true,regions:Object.keys(R).length,routes:Object.keys(Q).length,results:Object.keys(Z).length,assets:Object.keys(A).length},null,2));
