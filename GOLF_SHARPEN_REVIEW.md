@@ -2,7 +2,7 @@
 
 ## Coverage
 
-The authoritative graph contains seven diagnostic navigation regions, 28 observable issues, 28 discriminating routes, 56 cautious results and 14 exact existing-asset definitions. These navigation regions do not replace the app's five educational pillars.
+The authoritative graph contains seven diagnostic navigation regions, 28 observable issues, 28 discriminating routes, 56 cautious results and 23 reviewed asset definitions. These navigation regions do not replace the app's five educational pillars.
 
 | Region | Issues | Existing content pulled through |
 |---|---:|---|
@@ -17,6 +17,8 @@ The authoritative graph contains seven diagnostic navigation regions, 28 observa
 ## High-leverage legacy integration
 
 The highest-frequency tee-flight, putting, Course IQ, approach-contact and short-game routes now use individually authored Coach's Lens explanations. Every linked legacy asset receives the current focus and a route-specific observation instruction, keeps that context visible during the asset, and offers an exact one-tap return to the originating Sharpen result. This turns Shot Clinic, Play a Hole, Play a Course and decision content into continuations of the lesson rather than generic destinations.
+
+Six focused mini-sessions each contain exactly three named launch-approved questions. Four high-value routes enter an exact authored Play-a-Hole scenario: Reachable Risk, White Dogwood, Match-Play Closer and Recovery. Generic Play-a-Hole routing is not reachable from Sharpen. Both the coaching-strip return and each destination's normal exit restore the originating result.
 
 ## Claim boundary
 

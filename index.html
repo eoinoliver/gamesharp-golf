@@ -1763,7 +1763,7 @@ svg { display:block; }
   <div class="pp-topbar">
     <button class="pp-back" onclick="ppBack()">‹ Back</button>
     <div class="pp-topbar-title">PLAY A COURSE</div>
-    <button class="pp-close" onclick="renderHome();showView('home')">✕</button>
+    <button class="pp-close" onclick="if(!GameSharpGolfSharpen.returnFromAsset()){renderHome();showView('home')}">✕</button>
   </div>
   <div id="pp-app"><!-- rendered by JS --></div>
 </div>
@@ -1771,9 +1771,9 @@ svg { display:block; }
 <!-- ============================== ADVANCED ============================== -->
 <div class="view" id="view-advanced">
   <div class="pp-topbar">
-    <button class="pp-back" onclick="renderSharpen();showView('sharpen')">‹ Sharpen</button>
+    <button class="pp-back" onclick="if(!GameSharpGolfSharpen.returnFromAsset()){renderSharpen();showView('sharpen')}">‹ Sharpen</button>
     <div class="pp-topbar-title">ADVANCED</div>
-    <button class="pp-close" onclick="renderSharpen();showView('sharpen')">✕</button>
+    <button class="pp-close" onclick="if(!GameSharpGolfSharpen.returnFromAsset()){renderSharpen();showView('sharpen')}">✕</button>
   </div>
   <div class="pp-section" style="padding-top:18px;padding-bottom:2px">
     <div class="pp-eyebrow">For players who know the basics</div>
@@ -2092,7 +2092,7 @@ svg { display:block; }
   <!-- Hole picker (shown first) -->
   <div id="hole-picker">
     <div class="hp-header">
-      <button class="hvh-back" onclick="showView('home')">✕</button>
+      <button class="hvh-back" onclick="if(!GameSharpGolfSharpen.returnFromAsset())showView('home')">✕</button>
       <div class="hp-title">CHOOSE YOUR HOLE</div>
     </div>
     <div id="hp-cards"></div>
@@ -2101,7 +2101,7 @@ svg { display:block; }
   <!-- Game UI (hidden until hole chosen) -->
   <div id="hole-game" style="display:none">
   <div class="hole-view-header">
-    <button class="hvh-back" onclick="showView('home')">✕</button>
+    <button class="hvh-back" onclick="if(!GameSharpGolfSharpen.returnFromAsset())showView('home')">✕</button>
     <div class="hvh-info">
       <div class="hvh-name" id="hvh-name">—</div>
       <div class="hvh-yardage" id="hvh-yardage">—</div>
@@ -4650,6 +4650,7 @@ function nextQuestion(){
 }
 
 function exitQuiz(){
+  if(window.GameSharpGolfSharpen&&GameSharpGolfSharpen.returnFromAsset()) return;
   showView('home');
   renderHome();
 }
@@ -6168,7 +6169,7 @@ function openPlayPrep(id){
 let ppNavState = 'picker';
 function ppBack(){
   if(ppNavState === 'brief' && Object.keys(PLAY_PREP_COURSES).length > 1){ openCoursePicker(); }
-  else { renderHome(); showView('home'); }
+  else if(!(window.GameSharpGolfSharpen&&GameSharpGolfSharpen.returnFromAsset())) { renderHome(); showView('home'); }
 }
 function openCoursePicker(){
   ppNavState = 'picker';
@@ -11072,10 +11073,19 @@ const GOLF_SHARPEN_ASSETS=Object.freeze({
   putt_line:{type:'clinic',title:'Test the start-line window',description:'Shot Clinic · Push or pull',destination:'openClinicFault',routeParams:[5,0],launchStatus:'approved'},
   putt_pace:{type:'clinic',title:'Train pace without guessing',description:'Shot Clinic · Pace control',destination:'openClinicFault',routeParams:[5,1],launchStatus:'approved'},
   three_putt:{type:'clinic',title:'Separate first-putt pace from cleanup',description:'Shot Clinic · Three-putt pattern',destination:'openClinicFault',routeParams:[5,2],launchStatus:'approved'},
-  hole:{type:'hole',title:'Test the decision in Play a Hole',description:'A live consequence, then a debrief',destination:'startHole',routeParams:[],launchStatus:'approved'},
   course:{type:'course',title:'Test course decisions',description:'Play a Course scenarios',destination:'openCoursePicker',routeParams:[],launchStatus:'approved'},
   advanced:{type:'advanced',title:'Try a focused decision rep',description:'What Would You Do?',destination:'openAdvanced',routeParams:[],launchStatus:'approved'},
   debrief:{type:'debrief',title:'Take it to the 19th Hole',description:'Reflect after a real practice or round',destination:'showProfile',routeParams:[],launchStatus:'approved'}
+  ,mini_tee:{type:'mini',title:'Test tee-shot decisions',description:'Three approved reps · corridor, hazard and club',destination:'startSharpenMiniSession',routeParams:['Tee-shot decisions',['QE5_014','QE5_015','QE5_016'],1],launchStatus:'approved'}
+  ,mini_putting:{type:'mini',title:'Test pace under consequence',description:'Three approved reps · lag pace and pressure',destination:'startSharpenMiniSession',routeParams:['Putting pace',['QE5_004','QE5_026','QE5_032'],2],launchStatus:'approved'}
+  ,mini_course:{type:'mini',title:'Read conditions before choosing',description:'Three approved reps · wind, lie and target',destination:'startSharpenMiniSession',routeParams:['Conditions and lies',['QE5_036','Q021','QE5_027'],1],launchStatus:'approved'}
+  ,mini_approach:{type:'mini',title:'Test the approach window',description:'Three approved reps · carry, club and safe target',destination:'startSharpenMiniSession',routeParams:['Approach window',['QE5_007','QE5_017','QE5_021'],0],launchStatus:'approved'}
+  ,mini_short:{type:'mini',title:'Choose the short-game window',description:'Three approved reps · flight, landing and reliability',destination:'startSharpenMiniSession',routeParams:['Short-game selection',['QE5_018','QE5_023','QE5_035'],2],launchStatus:'approved'}
+  ,mini_mental:{type:'mini',title:'Protect the next decision',description:'Three approved reps · reset, expectation and pressure',destination:'startSharpenMiniSession',routeParams:['Pressure and reset',['QE5_030','QE5_037','QE5_039'],3],launchStatus:'approved'}
+  ,hole_target:{type:'hole',title:'Play the Reachable Risk',description:'Exact hole · corridor and club choice',destination:'startSharpenHole',routeParams:[0],launchStatus:'approved'}
+  ,hole_hazard:{type:'hole',title:'Play White Dogwood',description:'Exact hole · hazard shapes the target',destination:'startSharpenHole',routeParams:[9],launchStatus:'approved'}
+  ,hole_pressure:{type:'hole',title:'Play the Match-Play Closer',description:'Exact hole · score changes the decision',destination:'startSharpenHole',routeParams:[10],launchStatus:'approved'}
+  ,hole_recovery:{type:'hole',title:'Play the Recovery',description:'Exact hole · trees and disciplined escape',destination:'startSharpenHole',routeParams:[11],launchStatus:'approved'}
 });
 const GSS_BLUEPRINTS=Object.freeze({
  mental:{label:'Mental Game',description:'Pressure, confidence and staying present',pos:[50,19,'left',180],issues:[
@@ -11115,7 +11125,7 @@ const GSS_BLUEPRINTS=Object.freeze({
   ['blank','I had no clear cue','What would help more?','one external target','one tempo word']]}
 });
 const GOLF_SHARPEN_REGIONS={}; const GOLF_SHARPEN_ROUTES={}; const GOLF_SHARPEN_RESULTS={};
-const GSS_ASSET_BY_REGION={mental:['advanced','debrief'],course:['course','hole'],tee:['hole','driver_slice'],approach:['hole','iron_contact'],short:['chip_contact','bunker'],putting:['putt_pace','putt_line'],routine:['advanced','debrief']};
+const GSS_ASSET_BY_REGION={mental:['mini_mental','debrief'],course:['mini_course','course'],tee:['mini_tee','driver_slice'],approach:['mini_approach','iron_contact'],short:['mini_short','chip_contact'],putting:['mini_putting','putt_line'],routine:['mini_mental','debrief']};
 const GSS_FOCUS_BY_ISSUE=Object.freeze({
  mental_pressure:['Keep the shot choice unchanged and slow only the start of your routine.','Make the choice before the pressure conversation starts.'],
  mental_reset:['Use a physical finish line: one breath, name the next target, then walk on.','Describe the miss once, then return attention to the next target.'],
@@ -11181,16 +11191,30 @@ Object.entries(GSS_BLUEPRINTS).forEach(([rid,b])=>{
       const decisionFirst=/mental|course|routine/.test(rid);
       const focus=GSS_FOCUS_BY_ISSUE[issueId][idx];
       let assets=GSS_ASSET_BY_REGION[rid].slice(0,2);
-      if(rid==='tee'&&iid==='curve') assets=idx?['driver_slice','hole']:['driver_hook','hole'];
-      if(rid==='tee'&&iid==='strike') assets=['driver_strike','hole'];
+      if(rid==='tee'&&iid==='curve') assets=idx?['driver_slice','mini_tee']:['driver_hook','mini_tee'];
+      if(rid==='tee'&&iid==='strike') assets=['driver_strike','mini_tee'];
       if(rid==='putting'&&iid==='pace') assets=['putt_pace','three_putt'];
-      if(rid==='short'&&iid==='bunker') assets=['bunker','hole'];
+      if(rid==='short'&&iid==='bunker') assets=['bunker','mini_short'];
+      if(rid==='tee'&&iid==='choice') assets=['mini_tee','hole_target'];
+      if(rid==='course'&&iid==='hazard') assets=['mini_course','hole_hazard'];
+      if(rid==='mental'&&iid==='pressure') assets=['mini_mental','hole_pressure'];
+      if(rid==='course'&&iid==='lie') assets=['mini_course','hole_recovery'];
       const cue=rid==='putting'?'Line. Pace. Roll.':rid==='tee'?'Start. Curve. Corridor.':rid==='short'?'Land it there.':rid==='approach'?'Window, then target.':decisionFirst?'Choose it. See it. Go.':'Name the window.';
       GOLF_SHARPEN_RESULTS[issueId+'_'+idx]={regionId:rid,issue:label,distinction:answer,read:'You reported that '+observable+' and that “'+answer+'” felt closest. That observation narrows where to look, but more than one mechanism can produce the same result.',coachLens:GSS_LENS_BY_ISSUE[issueId]||(decisionFirst?'The useful gain is often clarity before execution: choose the constraint, name the intended shot, then notice whether commitment survives.':'The final outcome is the symptom. Observe the earliest difference you can verify before changing technique.'),watchFor:GSS_WATCH_BY_ISSUE[issueId]||'Notice whether the selected focus changes what you can observe.',focus,cue,assetIds:assets,confidence:'guided-hypothesis',reviewStatus:'launch-reviewed',sources:rid==='putting'?[GSS_SOURCE.pgaPutting,GSS_SOURCE.pgaRoutine]:rid==='routine'?[GSS_SOURCE.usgaPace]:[GSS_SOURCE.pgaPractice]};
     });
   });
 });
 Object.freeze(GOLF_SHARPEN_REGIONS);Object.freeze(GOLF_SHARPEN_ROUTES);Object.freeze(GOLF_SHARPEN_RESULTS);
+function startSharpenMiniSession(title,ids,pillarIndex){
+ const qs=ids.map(id=>LAUNCH_QUESTIONS.find(q=>q.id===id)).filter(Boolean);
+ if(qs.length!==ids.length||new Set(qs.map(q=>q.id)).size!==ids.length){alert('This focused session is temporarily unavailable while its content mapping is re-checked.');return}
+ startQuiz(PILLARS[pillarIndex], 'Sharpen · '+title, qs);
+}
+function startSharpenHole(index){
+ if(!Number.isInteger(index)||!ALL_HOLES[index]||!LIVE_HOLE_INDEXES.includes(index)){alert('This focused hole is temporarily unavailable while its scenario is re-checked.');return}
+ const saved=loadHoleSession();if(saved)try{localStorage.setItem(PAUSED_HOLE_SESSION_KEY,JSON.stringify(saved))}catch(e){}
+ clearHoleSession();showView('hole');beginHole(index);
+}
 (function(){
  const VERSION=1,KEY='gsg_sharpen_state_v1',el=document.getElementById('gss'),main=document.getElementById('gss-main'),back=document.getElementById('gss-back'),close=document.getElementById('gss-close'),stageLabel=document.getElementById('gss-stage-label'),bridge=document.getElementById('gss-asset-bridge');
  let opener=null,state={version:VERSION,stage:'regions',regionId:null,issueId:null,routeId:null,resultId:null,returnPending:false,saved:null,checkbacks:[]};
@@ -11229,7 +11253,7 @@ Object.freeze(GOLF_SHARPEN_REGIONS);Object.freeze(GOLF_SHARPEN_ROUTES);Object.fr
  function renderState(){if(state.stage==='issues'&&state.regionId)issues(state.regionId);else if(state.stage==='route'&&state.issueId)route(state.issueId);else if(state.stage==='result'&&state.resultId)result(state.resultId);else if(state.stage==='observe')observation();else regions()}
  function closeSharpen(){el.classList.remove('open');el.hidden=true;document.body.style.overflow='';persist();if(opener&&opener.focus)opener.focus({preventScroll:true})}
  function returnFromAsset(){if(!state.returnPending)return false;bridge.hidden=true;showView('home');open();return true}
- function showBridge(){const r=GOLF_SHARPEN_RESULTS[state.resultId],v=document.querySelector('.view.active');if(!r||!v)return;const top=v.querySelector('.tech-topbar,.pp-topbar,.hole-topbar,.adv-topbar');if(top)top.after(bridge);else v.prepend(bridge);bridge.innerHTML=`<div class="gss-bridge-kicker">SHARPEN FOCUS · ${esc(r.cue)}</div><div class="gss-bridge-focus">${esc(r.focus)}</div><div class="gss-bridge-watch"><strong>During this rep:</strong> ${esc(r.watchFor)}</div><button class="gss-bridge-back" type="button" aria-label="Return to your Sharpen focus">↩</button>`;bridge.hidden=false;bridge.querySelector('button').addEventListener('click',returnFromAsset)}
+ function showBridge(){const r=GOLF_SHARPEN_RESULTS[state.resultId],v=document.querySelector('.view.active');if(!r||!v)return;const top=v.querySelector('.tech-topbar,.quiz-top,.pp-topbar,.hole-view-header,.hole-topbar,.adv-topbar');if(top)top.after(bridge);else v.prepend(bridge);bridge.innerHTML=`<div class="gss-bridge-kicker">SHARPEN FOCUS · ${esc(r.cue)}</div><div class="gss-bridge-focus">${esc(r.focus)}</div><div class="gss-bridge-watch"><strong>During this rep:</strong> ${esc(r.watchFor)}</div><button class="gss-bridge-back" type="button" aria-label="Return to your Sharpen focus">↩</button>`;bridge.hidden=false;bridge.querySelector('button').addEventListener('click',returnFromAsset)}
  function launchAsset(id){const a=GOLF_SHARPEN_ASSETS[id];if(!a||a.launchStatus!=='approved')return;state.returnPending=true;persist();closeSharpen();const fn=window[a.destination];if(typeof fn==='function'){fn(...a.routeParams);showBridge()}else{state.returnPending=false;open()}}
  main.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.region)issues(b.dataset.region);else if(b.dataset.issue)route(b.dataset.issue);else if(b.dataset.result)result(b.dataset.result);else if(b.dataset.asset)launchAsset(b.dataset.asset);else if(b.hasAttribute('data-library')){closeSharpen();renderSharpen();showView('sharpen')}else if(b.hasAttribute('data-observe')||b.hasAttribute('data-unsure')||b.hasAttribute('data-unsure-region'))observation();else if(b.hasAttribute('data-restart'))regions();else if(b.hasAttribute('data-recent'))recent();else if(b.hasAttribute('data-show-result'))result(state.saved.resultId);else if(b.hasAttribute('data-save')){state.saved={resultId:state.resultId,savedAt:new Date().toISOString()};persist();main.querySelector('.gss-status').textContent='Saved. Test it in your next practice or round.'}else if(b.dataset.check){state.checkbacks.push({resultId:state.saved.resultId,answer:b.dataset.check,at:new Date().toISOString()});persist();b.parentElement.querySelectorAll('button').forEach(x=>x.disabled=true);b.closest('.gss-check').querySelector('.gss-boundary').textContent='Reflection saved. No performance claim has been inferred.'}else if(b.hasAttribute('data-copy')){const r=GOLF_SHARPEN_RESULTS[state.resultId],txt='GameSharp Golf focus: '+r.focus+' Cue: '+r.cue;(navigator.clipboard?.writeText(txt)||Promise.resolve()).then(()=>main.querySelector('.gss-status').textContent='Focus copied.')}});
  back.addEventListener('click',()=>{if(state.stage==='result')route(state.issueId);else if(state.stage==='route')issues(state.regionId);else if(state.stage==='issues'||state.stage==='observe')regions();else closeSharpen()});close.addEventListener('click',closeSharpen);
@@ -11239,6 +11263,7 @@ Object.freeze(GOLF_SHARPEN_REGIONS);Object.freeze(GOLF_SHARPEN_ROUTES);Object.fr
   required.forEach(id=>{const r=GOLF_SHARPEN_REGIONS[id];if(!r)errors.push('missing-region:'+id);else{if(r.issues.length<3||r.issues.length>5)errors.push('issue-count:'+id);r.hotspots.forEach(h=>{if(h.x<0||h.x>100||h.y<0||h.y>100)errors.push('hotspot:'+id);if(!h.ariaLabel||names.has(h.ariaLabel))errors.push('aria:'+id);names.add(h.ariaLabel)})}});
   Object.values(GOLF_SHARPEN_ROUTES).forEach(r=>r.answers.forEach(a=>{if(!GOLF_SHARPEN_RESULTS[a.resultId])errors.push('result:'+a.resultId)}));
   Object.entries(GOLF_SHARPEN_RESULTS).forEach(([id,r])=>{if(!r.read||!r.coachLens||!r.focus||!r.cue)errors.push('copy:'+id);if(r.assetIds.length<1||r.assetIds.length>3)errors.push('assets:'+id);r.assetIds.forEach(a=>{if(!GOLF_SHARPEN_ASSETS[a]||GOLF_SHARPEN_ASSETS[a].launchStatus!=='approved')errors.push('asset:'+id+':'+a)});if(!r.reviewStatus||!r.sources.length)errors.push('review:'+id)});
+  Object.entries(GOLF_SHARPEN_ASSETS).forEach(([id,a])=>{if(a.type==='mini'){const ids=a.routeParams[1]||[];if(ids.length!==3||ids.some(qid=>!LAUNCH_QUESTIONS.some(q=>q.id===qid)))errors.push('mini:'+id)}if(a.destination==='startSharpenHole'){const hi=a.routeParams[0];if(!Number.isInteger(hi)||!ALL_HOLES[hi]||!LIVE_HOLE_INDEXES.includes(hi))errors.push('hole:'+id)}});
   return {version:'1.0.0',ok:!errors.length,regions:Object.keys(GOLF_SHARPEN_REGIONS).length,routes:Object.keys(GOLF_SHARPEN_ROUTES).length,results:Object.keys(GOLF_SHARPEN_RESULTS).length,assets:Object.keys(GOLF_SHARPEN_ASSETS).length,errors};
  })();
  document.documentElement.dataset.gsgSharpenIntegrity=integrity.ok?'pass':'fail';document.documentElement.dataset.gsgSharpenReport=JSON.stringify(integrity);

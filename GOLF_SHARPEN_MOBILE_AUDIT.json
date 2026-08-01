@@ -109,14 +109,25 @@
         "title": "Most likely place to look",
         "assets": [
           "Compare the left-curve patternShot Clinic · Snap hook",
-          "Test the decision in Play a HoleA live consequence, then a debrief"
+          "Test tee-shot decisionsThree approved reps · corridor, hazard and club"
         ],
         "boundary": "This is one useful hypothesis to test, not a diagnosis of your swing."
       },
       "legacyBridge": {
         "assetView": "technique",
-        "bridge": "SHARPEN FOCUS · Start. Curve. Corridor.\nTrack start line first, then curve; test whether the curve window is playable.\nWatch for: Watch only the opening start line, then the direction of curve.\n↩",
+        "bridge": "SHARPEN FOCUS · Start. Curve. Corridor.\nTrack start line first, then curve; test whether the curve window is playable.\nDuring this rep: Watch only the opening start line, then the direction of curve.\n↩",
         "returned": true
+      },
+      "mini": {
+        "view": "quiz",
+        "ids": [
+          "QE5_014",
+          "QE5_015",
+          "QE5_016"
+        ],
+        "module": "Sharpen · Tee-shot decisions",
+        "bridge": true,
+        "nativeExitReturned": true
       },
       "restored": true
     },
@@ -218,10 +229,6 @@
           "exists": true
         },
         {
-          "id": "hole",
-          "exists": true
-        },
-        {
           "id": "course",
           "exists": true
         },
@@ -232,6 +239,46 @@
         {
           "id": "debrief",
           "exists": true
+        },
+        {
+          "id": "mini_tee",
+          "exists": true
+        },
+        {
+          "id": "mini_putting",
+          "exists": true
+        },
+        {
+          "id": "mini_course",
+          "exists": true
+        },
+        {
+          "id": "mini_approach",
+          "exists": true
+        },
+        {
+          "id": "mini_short",
+          "exists": true
+        },
+        {
+          "id": "mini_mental",
+          "exists": true
+        },
+        {
+          "id": "hole_target",
+          "exists": true
+        },
+        {
+          "id": "hole_hazard",
+          "exists": true
+        },
+        {
+          "id": "hole_pressure",
+          "exists": true
+        },
+        {
+          "id": "hole_recovery",
+          "exists": true
         }
       ]
     },
@@ -241,6 +288,15 @@
       "routeResume": "route",
       "checkbackPrompt": true,
       "checks": 1
+    },
+    {
+      "journey": "exact-hole-entry",
+      "view": "hole",
+      "holeName": "The Reachable Risk",
+      "index": 0,
+      "bridge": true,
+      "returnPending": true,
+      "nativeExitReturned": true
     }
   ],
   "errors": []

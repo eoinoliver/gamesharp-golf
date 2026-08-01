@@ -28,6 +28,11 @@ for(const [id,r] of Object.entries(Z)){
  if(id.startsWith('mental_')) assert(!/swing fix|clubface path/i.test(r.focus),'mental route invents mechanical diagnosis');
 }
 for(const [id,a] of Object.entries(A)){assert(a.destination&&Array.isArray(a.routeParams),id+' lacks exact destination');assert(!/generic|todo|later/i.test(a.title+a.description),id+' is generic/deferred')}
+const mini=Object.entries(A).filter(([,a])=>a.type==='mini');
+assert(mini.length>=6,'focused legacy mini-session coverage is incomplete');
+for(const [id,a] of mini) assert.equal(a.routeParams[1].length,3,id+' must contain exactly three approved question IDs');
+assert(!Object.values(A).some(a=>a.destination==='startHole'),'generic Play a Hole destination remains reachable');
+assert(Object.values(A).filter(a=>a.destination==='startSharpenHole').length>=4,'exact authored hole mappings incomplete');
 assert(/else if\(id === 'sharpen'\)\{ GameSharpGolfSharpen\.open\(\); \}/.test(html),'Practice must open golfer directly');
 assert(!/else if\(id === 'sharpen'\)\{ renderSharpen\(\)/.test(html),'Legacy lobby remains primary');
 assert(/prefers-reduced-motion:reduce/.test(html),'Reduced-motion treatment missing');
@@ -35,5 +40,7 @@ assert(/classList\.add\('fallback'\)/.test(html),'Image failure fallback missing
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');
 assert(/returnPending/.test(html)&&/returnFromAsset/.test(html),'Asset return context missing');
 assert(/SHARPEN FOCUS/.test(html)&&/During this rep:/.test(html),'Legacy asset does not carry Sharpen learning context');
+assert(/function exitQuiz\(\)\{\s*if\(window\.GameSharpGolfSharpen&&GameSharpGolfSharpen\.returnFromAsset\(\)\) return;/.test(html),'focused mini-session native exit loses Sharpen context');
+assert((html.match(/hvh-back" onclick="if\(!GameSharpGolfSharpen\.returnFromAsset\(\)\)/g)||[]).length>=2,'focused hole native exit loses Sharpen context');
 assert(/\.gss-hotspot\{[^}]*width:48px;height:48px/.test(html),'48px hotspot target missing');
 console.log(JSON.stringify({ok:true,regions:Object.keys(R).length,routes:Object.keys(Q).length,results:Object.keys(Z).length,assets:Object.keys(A).length},null,2));
