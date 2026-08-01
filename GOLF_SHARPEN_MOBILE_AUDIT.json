@@ -106,17 +106,21 @@
       "name": "tee-reference",
       "tee": {
         "stage": "result",
-        "title": "Most likely place to look",
+        "title": "Your Sharpen focus",
         "assets": [
-          "Compare the left-curve patternShot Clinic · Snap hook",
+          "Find the Culprit · left curveShot Clinic · Snap hook",
           "Test tee-shot decisionsThree approved reps · corridor, hazard and club"
         ],
-        "boundary": "This is one useful hypothesis to test, not a diagnosis of your swing."
+        "hasRead": false,
+        "compact": false,
+        "focusSize": "25px",
+        "boundary": "One hypothesis to test—not a diagnosis."
       },
       "legacyBridge": {
         "assetView": "technique",
         "bridge": "SHARPEN FOCUS · Start. Curve. Corridor.\nTrack start line first, then curve; test whether the curve window is playable.\nDuring this rep: Watch only the opening start line, then the direction of curve.\n↩",
-        "returned": true
+        "returned": true,
+        "returnCompact": true
       },
       "mini": {
         "view": "quiz",
@@ -148,43 +152,57 @@
           "region": "mental",
           "stage": "result",
           "assets": 2,
-          "focus": "Keep the shot choice unchanged and slow only the start of your routine."
+          "focus": "Keep the shot choice unchanged and slow only the start of your routine.",
+          "mentor": "Feel the moment. Keep the decision and routine recognisably yours.",
+          "mentorLink": 0
         },
         {
           "region": "course",
           "stage": "result",
           "assets": 2,
-          "focus": "Choose a start corridor that leaves room for the expected curve."
+          "focus": "Choose a start corridor that leaves room for the expected curve.",
+          "mentor": "See the expensive miss once. Build the shot toward the playable side.",
+          "mentorLink": 0
         },
         {
           "region": "tee",
           "stage": "result",
           "assets": 2,
-          "focus": "Track start line first, then curve; test whether the curve window is playable."
+          "focus": "Track start line first, then curve; test whether the curve window is playable.",
+          "mentor": "Own a corridor. A committed stock shot beats a perfect line you cannot repeat.",
+          "mentorLink": 0
         },
         {
           "region": "approach",
           "stage": "result",
           "assets": 2,
-          "focus": "Use a front-to-back landing window and record carry, not total result."
+          "focus": "Use a front-to-back landing window and record carry, not total result.",
+          "mentor": "Front number. Back number. Safe miss. Then choose.",
+          "mentorLink": 0
         },
         {
           "region": "short",
           "stage": "result",
           "assets": 2,
-          "focus": "Use one landing spot and record strike before judging the finish."
+          "focus": "Use one landing spot and record strike before judging the finish.",
+          "mentor": "See the shot the lie allows—not the shot you hoped to have.",
+          "mentorLink": 1
         },
         {
           "region": "putting",
           "stage": "result",
           "assets": 2,
-          "focus": "Putt to a finish zone and record only short or long."
+          "focus": "Putt to a finish zone and record only short or long.",
+          "mentor": "Choose one line at one pace—then let the stroke be boring.",
+          "mentorLink": 0
         },
         {
           "region": "routine",
           "stage": "result",
           "assets": 2,
-          "focus": "Step away when the decision changes; restart with one picture."
+          "focus": "Step away when the decision changes; restart with one picture.",
+          "mentor": "Decide behind the ball. Over it, only see and go.",
+          "mentorLink": 0
         }
       ],
       "destinations": [

@@ -40,6 +40,10 @@ assert(/classList\.add\('fallback'\)/.test(html),'Image failure fallback missing
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');
 assert(/returnPending/.test(html)&&/returnFromAsset/.test(html),'Asset return context missing');
 assert(/SHARPEN FOCUS/.test(html)&&/During this rep:/.test(html),'Legacy asset does not carry Sharpen learning context');
+assert(!/<h3>The Read<\/h3>/.test(html),'duplicated Read section remains visible');
+assert(/resultViews/.test(html)&&/gss-result\$\{compact\?' compact'/.test(html),'return-player progressive disclosure missing');
+assert(/PLAY WITH SEVE’S IMAGINATION/.test(html)&&/europeantour\.com\/dpworld-tour\/news\/video\/the-best-of-seve-ballesteros/.test(html),'sourced Seve identity moment missing');
+assert((html.match(/Find the Culprit ·/g)||[]).length>=8,'Shot Clinic is not explicitly wired as Find the Culprit');
 assert(/function exitQuiz\(\)\{\s*if\(window\.GameSharpGolfSharpen&&GameSharpGolfSharpen\.returnFromAsset\(\)\) return;/.test(html),'focused mini-session native exit loses Sharpen context');
 assert((html.match(/hvh-back" onclick="if\(!GameSharpGolfSharpen\.returnFromAsset\(\)\)/g)||[]).length>=2,'focused hole native exit loses Sharpen context');
 assert(/\.gss-hotspot\{[^}]*width:48px;height:48px/.test(html),'48px hotspot target missing');
