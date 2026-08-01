@@ -1,0 +1,242 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "height": 568,
+      "integrity": "pass",
+      "viewport": 320,
+      "docWidth": 320,
+      "dialogWidth": 320,
+      "minTargets": 48,
+      "player": {
+        "x": 10,
+        "y": 220.75,
+        "width": 300,
+        "height": 400,
+        "top": 220.75,
+        "right": 310,
+        "bottom": 620.75,
+        "left": 10
+      },
+      "errors": []
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "integrity": "pass",
+      "viewport": 375,
+      "docWidth": 375,
+      "dialogWidth": 375,
+      "minTargets": 48,
+      "player": {
+        "x": 16,
+        "y": 229.375,
+        "width": 343,
+        "height": 457.328125,
+        "top": 229.375,
+        "right": 359,
+        "bottom": 686.703125,
+        "left": 16
+      },
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "integrity": "pass",
+      "viewport": 390,
+      "docWidth": 390,
+      "dialogWidth": 390,
+      "minTargets": 48,
+      "player": {
+        "x": 16,
+        "y": 229.375,
+        "width": 358,
+        "height": 477.328125,
+        "top": 229.375,
+        "right": 374,
+        "bottom": 706.703125,
+        "left": 16
+      },
+      "errors": []
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "integrity": "pass",
+      "viewport": 430,
+      "docWidth": 430,
+      "dialogWidth": 430,
+      "minTargets": 48,
+      "player": {
+        "x": 16,
+        "y": 229.375,
+        "width": 398,
+        "height": 530.65625,
+        "top": 229.375,
+        "right": 414,
+        "bottom": 760.03125,
+        "left": 16
+      },
+      "errors": []
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "integrity": "pass",
+      "viewport": 844,
+      "docWidth": 844,
+      "dialogWidth": 844,
+      "minTargets": 48,
+      "player": {
+        "x": 16,
+        "y": 121.296875,
+        "width": 812,
+        "height": 205,
+        "top": 121.296875,
+        "right": 828,
+        "bottom": 326.296875,
+        "left": 16
+      },
+      "errors": []
+    }
+  ],
+  "journeys": [
+    {
+      "name": "tee-reference",
+      "tee": {
+        "stage": "result",
+        "title": "Most likely place to look",
+        "assets": [
+          "Compare the left-curve patternShot Clinic · Snap hook",
+          "Test the decision in Play a HoleA live consequence, then a debrief"
+        ],
+        "boundary": "This is one useful hypothesis to test, not a diagnosis of your swing."
+      },
+      "restored": true
+    },
+    {
+      "name": "image-failure",
+      "fallback": true,
+      "buttons": 7
+    },
+    {
+      "name": "reduced-motion",
+      "matches": true,
+      "stage": "regions"
+    },
+    {
+      "name": "seven-region-sweep",
+      "coverage": [
+        {
+          "region": "mental",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Keep the shot choice unchanged and slow only the start of your routine."
+        },
+        {
+          "region": "course",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Choose a start corridor that leaves room for the expected curve."
+        },
+        {
+          "region": "tee",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Track start line first, then curve; test whether the curve window is playable."
+        },
+        {
+          "region": "approach",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Use a front-to-back landing window and record carry, not total result."
+        },
+        {
+          "region": "short",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Use one landing spot and record strike before judging the finish."
+        },
+        {
+          "region": "putting",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Putt to a finish zone and record only short or long."
+        },
+        {
+          "region": "routine",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Step away when the decision changes; restart with one picture."
+        }
+      ],
+      "destinations": [
+        {
+          "id": "driver_slice",
+          "exists": true
+        },
+        {
+          "id": "driver_hook",
+          "exists": true
+        },
+        {
+          "id": "driver_strike",
+          "exists": true
+        },
+        {
+          "id": "iron_contact",
+          "exists": true
+        },
+        {
+          "id": "wedge_distance",
+          "exists": true
+        },
+        {
+          "id": "chip_contact",
+          "exists": true
+        },
+        {
+          "id": "bunker",
+          "exists": true
+        },
+        {
+          "id": "putt_line",
+          "exists": true
+        },
+        {
+          "id": "putt_pace",
+          "exists": true
+        },
+        {
+          "id": "three_putt",
+          "exists": true
+        },
+        {
+          "id": "hole",
+          "exists": true
+        },
+        {
+          "id": "course",
+          "exists": true
+        },
+        {
+          "id": "advanced",
+          "exists": true
+        },
+        {
+          "id": "debrief",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "name": "interruption-and-checkback",
+      "regionResume": "issues",
+      "routeResume": "route",
+      "checkbackPrompt": true,
+      "checks": 1
+    }
+  ],
+  "errors": []
+}
