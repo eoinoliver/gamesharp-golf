@@ -34,5 +34,5 @@ assert(/prefers-reduced-motion:reduce/.test(html),'Reduced-motion treatment miss
 assert(/classList\.add\('fallback'\)/.test(html),'Image failure fallback missing');
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');
 assert(/returnPending/.test(html)&&/returnFromAsset/.test(html),'Asset return context missing');
-assert(/min-width:48px;min-height:48px/.test(html),'48px hotspot target missing');
+assert(/\.gss-hotspot\{[^}]*width:48px;height:48px/.test(html),'48px hotspot target missing');
 console.log(JSON.stringify({ok:true,regions:Object.keys(R).length,routes:Object.keys(Q).length,results:Object.keys(Z).length,assets:Object.keys(A).length},null,2));

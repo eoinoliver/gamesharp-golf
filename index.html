@@ -11026,19 +11026,24 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gss-top{display:flex;align-items:center;justify-content:space-between;min-height:52px}.gss-icon{width:48px;height:48px;border:1px solid #ffffff25;border-radius:50%;background:#ffffff08;color:#fff;font-size:22px}
 .gss-brand{font-size:11px;letter-spacing:2px;color:#b9cf78;font-weight:800;text-align:center}.gss-brand span{display:block;color:#a8ada9;letter-spacing:.4px;font-weight:500;margin-top:4px}
 .gss-intro{text-align:center;margin:10px 4px 14px}.gss-kicker{font-size:11px;letter-spacing:2px;color:#c8a84b;font-weight:800}.gss h1{font-size:30px;line-height:1.08;margin:8px 0}.gss-intro p,.gss-boundary{color:#aeb6b1;font-size:14px;line-height:1.45;margin:0}
-.gss-player{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;border:1px solid #c8a84b33;background:radial-gradient(circle at 50% 40%,#174d2d,#07150e 72%);box-shadow:0 20px 60px #0008}
-.gss-player img{width:100%;height:100%;object-fit:cover;display:block}.gss-player.fallback img{display:none}.gss-fallback{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:32px;color:#dfe7e0}.gss-player.fallback .gss-fallback{display:grid}
-.gss-hotspot{position:absolute;min-width:48px;min-height:48px;border:1px solid #b8d46c88;border-radius:18px;background:#07150edb;color:white;padding:7px 9px;line-height:1.05;font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;box-shadow:0 0 22px #89b94222}
-.gss-hotspot small{display:block;color:#aab5ae;font-size:8px;text-transform:none;letter-spacing:0;margin-top:4px}.gss-hotspot:hover,.gss-hotspot:focus-visible,.gss-hotspot.selected{border-color:#c8e566;outline:3px solid #c8e56655;background:#153923}
+.gss-player{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:visible;border:1px solid #c8a84b33;background:radial-gradient(circle at 50% 40%,#174d2d,#07150e 72%);box-shadow:0 20px 60px #0008}
+.gss-player img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}.gss-player.fallback img{display:none}.gss-fallback{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:32px;color:#dfe7e0}.gss-player.fallback .gss-fallback{display:grid}
+.gss-hotspot{--line-angle:0deg;position:absolute;width:48px;height:48px;transform:translate(-50%,-50%);border:0;border-radius:50%;background:transparent;color:white;padding:0;font:inherit;z-index:2}
+.gss-hotspot::before{content:"";position:absolute;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);border:1px solid #8ee69f88;border-radius:50%;background:#06130db8;box-shadow:0 0 0 4px #5bdc7412,0 0 18px #5bdc7442}
+.gss-hotspot::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;transform:translate(-50%,-50%);border:2px solid #bdf5c8;border-radius:50%;background:#56cf70;box-shadow:0 0 0 1px #fff7,0 0 14px #67e77e;animation:gssPulse 2.8s ease-in-out infinite}
+.gss-hotspot-line{position:absolute;left:50%;top:50%;width:30px;height:1px;transform-origin:0 50%;transform:rotate(var(--line-angle)) translateX(24px);background:linear-gradient(90deg,#81dd9299,#81dd9222);pointer-events:none}
+.gss-hotspot-label{position:absolute;top:50%;width:95px;pointer-events:none;text-shadow:0 2px 7px #000;line-height:1.1}.gss-hotspot-label.right{left:calc(100% + 31px);transform:translateY(-50%);text-align:left}.gss-hotspot-label.left{right:calc(100% + 31px);transform:translateY(-50%);text-align:right}
+.gss-hotspot-label b{display:block;font-size:9px;letter-spacing:.55px;text-transform:uppercase}.gss-hotspot-label small{display:block;color:#aab5ae;font-size:7px;line-height:1.2;margin-top:3px}.gss-hotspot:hover,.gss-hotspot:focus-visible{outline:none;filter:brightness(1.18)}.gss-hotspot:focus-visible::before{box-shadow:0 0 0 3px #c8a84b,0 0 22px #c8a84b66}
+@keyframes gssPulse{0%,100%{transform:translate(-50%,-50%) scale(.78);opacity:.72}50%{transform:translate(-50%,-50%) scale(1.16);opacity:1}}
 .gss-recent,.gss-unsure{width:100%;min-height:48px;margin-top:12px;border:1px solid #ffffff18;border-radius:14px;background:#ffffff08;color:#fff;padding:12px;font-weight:700}.gss-recent{text-align:left;color:#d9e4db}
 .gss-panel{margin-top:12px;border:1px solid #ffffff17;border-radius:22px;background:#0c1b14;padding:18px}.gss-context{color:#c8a84b;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800}.gss h2{font-size:25px;line-height:1.16;margin:7px 0 8px}.gss-options{display:grid;gap:10px;margin-top:16px}.gss-option{min-height:56px;text-align:left;border:1px solid #ffffff18;border-radius:15px;background:#12251a;color:#f7f7f3;padding:13px 14px;font-size:15px;font-weight:650}.gss-option:hover,.gss-option:focus-visible{border-color:#c8a84b;outline:3px solid #c8a84b33}.gss-boundary{font-size:12px;margin-top:14px}
 .gss-result section{border-top:1px solid #ffffff13;padding:15px 0}.gss-result h3{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#c8a84b;margin:0 0 6px}.gss-result p{margin:0;color:#dfe5e1;line-height:1.5}.gss-focus{font-size:22px!important;color:white!important;font-weight:750}.gss-cue{border-left:3px solid #c8a84b;padding-left:12px;font-size:18px!important}
 .gss-assets{display:grid;gap:9px}.gss-asset{min-height:54px;border:1px solid #63804966;border-radius:14px;background:#14291d;color:#fff;text-align:left;padding:11px 13px}.gss-asset small{display:block;color:#aeb6b1;margin-top:3px}
 .gss-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}.gss-primary,.gss-secondary{min-height:48px;border-radius:14px;font-weight:800;padding:10px}.gss-primary{background:#c8a84b;color:#07150e;border:0}.gss-secondary{background:transparent;color:#fff;border:1px solid #ffffff25}.gss-wide{grid-column:1/-1}.gss-status{min-height:20px;color:#b9cf78;font-size:13px;margin-top:10px}
 .gss-check{border:1px solid #c8a84b55;background:#142419;border-radius:18px;padding:16px;margin:12px 0}.gss-check p{margin:0 0 10px}.gss-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gss-check button{min-height:48px;border:1px solid #ffffff22;border-radius:12px;background:#ffffff08;color:#fff}
-@media(max-width:350px){.gss-shell{padding-left:10px;padding-right:10px}.gss h1{font-size:26px}.gss-hotspot{font-size:9px;padding:6px}.gss-hotspot small{display:none}}
-@media(orientation:landscape) and (max-height:500px){.gss-shell{width:min(100%,850px);padding-top:4px}.gss-top{min-height:46px}.gss-intro{margin:0 0 6px}.gss-intro p{font-size:12px}.gss-player{aspect-ratio:auto;height:205px}.gss-player img{object-fit:contain;background:#07150e}.gss h1{font-size:24px;margin:3px 0}.gss-hotspot small{font-size:7px}.gss-unsure{margin-top:6px}}
-@media(prefers-reduced-motion:reduce){.gss,.gss *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media(max-width:350px){.gss-shell{padding-left:10px;padding-right:10px}.gss h1{font-size:26px}.gss-hotspot-label{width:76px}.gss-hotspot-label b{font-size:8px}.gss-hotspot-label small{display:none}.gss-hotspot-label.right{left:calc(100% + 25px)}.gss-hotspot-label.left{right:calc(100% + 25px)}.gss-hotspot-line{width:24px}}
+@media(orientation:landscape) and (max-height:500px){.gss-shell{width:min(100%,850px);padding-top:4px}.gss-top{min-height:46px}.gss-intro{margin:0 0 6px}.gss-intro p{font-size:12px}.gss-player{aspect-ratio:auto;height:205px}.gss-player img{object-fit:contain;background:#07150e}.gss h1{font-size:24px;margin:3px 0}.gss-hotspot-label{width:145px}.gss-hotspot-label small{font-size:7px}.gss-unsure{margin-top:6px}}
+@media(prefers-reduced-motion:reduce){.gss,.gss *{scroll-behavior:auto!important;animation:none!important;transition:none!important}.gss-hotspot::after{opacity:1;transform:translate(-50%,-50%)}}
 </style>
 <div class="gss" id="gss" role="dialog" aria-modal="true" aria-labelledby="gss-title" hidden>
   <div class="gss-shell">
@@ -11071,37 +11076,37 @@ const GOLF_SHARPEN_ASSETS=Object.freeze({
   debrief:{type:'debrief',title:'Take it to the 19th Hole',description:'Reflect after a real practice or round',destination:'showProfile',routeParams:[],launchStatus:'approved'}
 });
 const GSS_BLUEPRINTS=Object.freeze({
- mental:{label:'Mental Game',description:'Pressure, frustration and staying present',pos:[4,12],issues:[
+ mental:{label:'Mental Game',description:'Pressure, confidence and staying present',pos:[50,19,'left',180],issues:[
   ['pressure','Failed mainly under pressure','Did the decision change, or did execution feel rushed?','decision stayed clear','decision changed'],
   ['reset','One bad shot carried into the next','What lingered most?','the outcome','the mechanics'],
   ['confidence','Commitment disappeared','When did doubt arrive?','before choosing','over the ball'],
   ['attention','Focus drifted during the shot','What was missing?','a clear external target','a repeatable start cue']]},
- course:{label:'Course IQ',description:'Conditions, lies, hazards and targets',pos:[70,12],issues:[
+ course:{label:'Course IQ',description:'Reading conditions, lies and danger',pos:[58,23,'right',0],issues:[
   ['wind','Wind changed the shot','Which uncertainty mattered most?','start line or curvature','carry or landing'],
   ['lie','The lie changed the shot','What did you fail to account for?','contact or launch','distance or rollout'],
   ['hazard','Trouble dominated the decision','Was the miss corridor clear?','yes, but execution failed','no, the target was vague'],
   ['club','Club or target choice felt wrong','What was uncertain?','the club window','the safe target']]},
- tee:{label:'Tee Shots',description:'Penalty patterns and usable shape',pos:[3,40],issues:[
+ tee:{label:'Tee Shots',description:'Start line, curve, strike and commitment',pos:[43,49,'left',180],issues:[
   ['curve','Curved into trouble','Where did it begin relative to your intended line?','started near the line, then curved','started offline immediately'],
   ['start','Started offline','Did it stay there or curve farther?','mostly stayed there','curved farther away'],
   ['strike','Strike or height was inconsistent','What changed most?','contact location','launch height'],
   ['choice','Target or club choice felt wrong','Did the chosen corridor fit your usual shot?','yes','no']]},
- approach:{label:'Approach Play',description:'Distance, target and flight choice',pos:[70,40],issues:[
+ approach:{label:'Approach Play',description:'Distance, target and flight choice',pos:[57,49,'right',0],issues:[
   ['distance','Distance control broke down','Was the pattern directional or long-short?','long-short','directional'],
   ['contact','Strike changed from the lie','Which changed first?','contact quality','launch or spin'],
   ['target','Attack versus protect felt unclear','What was missing?','a safe miss','a confident carry number'],
   ['flight','The required flight felt unclear','What constrained the shot?','wind or trajectory','lie or obstacle']]},
- short:{label:'Short Game',description:'Selection, landing spot and contact',pos:[3,67],issues:[
+ short:{label:'Short Game',description:'Selection, landing spot and contact',pos:[40,70,'left',180],issues:[
   ['contact','Contact was inconsistent','Which miss appeared?','heavy or short','thin or long'],
   ['landing','Landing spot control was poor','Was the problem before or after landing?','carry to the spot','rollout prediction'],
   ['selection','Shot choice felt uncertain','What was available?','a simple low route','only a higher route'],
   ['bunker','Bunker play cost shots','What failed?','getting out reliably','distance after escape']]},
- putting:{label:'Putting',description:'Pace, start line, read and commitment',pos:[70,67],issues:[
+ putting:{label:'Putting',description:'Pace, start line, read and commitment',pos:[57,87,'right',0],issues:[
   ['pace','Pace left long second putts','Was your first-putt pattern mostly short or long?','mostly short','mostly long'],
   ['line','Started off line','Did the roll begin on your chosen line?','no','yes, then missed'],
   ['read','The read felt unclear','What was less certain?','start line','pace and break together'],
   ['short','Short putts lacked commitment','What changed?','routine or aim','stroke tempo']]},
- routine:{label:'Routine & Commitment',description:'Clarity, focus and consistency',pos:[36,83],issues:[
+ routine:{label:'Routine & Commitment',description:'Clarity, focus and consistency',pos:[46,34,'left',180],issues:[
   ['indecision','I changed my mind over the ball','When did the second choice appear?','after setup','during the swing'],
   ['inconsistent','My routine changed shot to shot','Which part was least stable?','decision and picture','breath and trigger'],
   ['rushed','I felt rushed','What disappeared first?','target clarity','physical readiness'],
@@ -11140,7 +11145,7 @@ const GSS_FOCUS_BY_ISSUE=Object.freeze({
  routine_blank:['Use one external start or landing target.','Use one neutral tempo word—nothing else.']
 });
 Object.entries(GSS_BLUEPRINTS).forEach(([rid,b])=>{
-  GOLF_SHARPEN_REGIONS[rid]={label:b.label,description:b.description,aha:'Separate the visible outcome from the earliest useful decision or observation.',hotspots:[{x:b.pos[0],y:b.pos[1],labelSide:b.pos[0]<35?'right':b.pos[0]>60?'left':'center',lineAngle:0,ariaLabel:b.label+': '+b.description}],issues:[]};
+  GOLF_SHARPEN_REGIONS[rid]={label:b.label,description:b.description,aha:'Separate the visible outcome from the earliest useful decision or observation.',hotspots:[{x:b.pos[0],y:b.pos[1],labelSide:b.pos[2],lineAngle:b.pos[3],ariaLabel:b.label+': '+b.description}],issues:[]};
   b.issues.forEach(([iid,label,q,a,bAnswer])=>{
     const issueId=rid+'_'+iid, routeId=issueId+'_route';
     GOLF_SHARPEN_REGIONS[rid].issues.push({id:issueId,label,route:routeId});
@@ -11169,9 +11174,9 @@ Object.freeze(GOLF_SHARPEN_REGIONS);Object.freeze(GOLF_SHARPEN_ROUTES);Object.fr
  function set(html,label){main.innerHTML=html;stageLabel.textContent=label;persist();requestAnimationFrame(()=>main.focus({preventScroll:true}))}
  function regions(){
   state.stage='regions';state.regionId=state.issueId=state.routeId=state.resultId=null;
-  const hs=Object.entries(GOLF_SHARPEN_REGIONS).map(([id,r])=>`<button class="gss-hotspot" style="left:${r.hotspots[0].x}%;top:${r.hotspots[0].y}%;width:27%" data-region="${id}" aria-label="${esc(r.hotspots[0].ariaLabel)}">${esc(r.label)}<small>${esc(r.description)}</small></button>`).join('');
+  const hs=Object.entries(GOLF_SHARPEN_REGIONS).map(([id,r])=>{const h=r.hotspots[0];return `<button class="gss-hotspot" style="left:${h.x}%;top:${h.y}%;--line-angle:${h.lineAngle}deg" data-region="${id}" aria-label="${esc(h.ariaLabel)}"><span class="gss-hotspot-line" aria-hidden="true"></span><span class="gss-hotspot-label ${h.labelSide}"><b>${esc(r.label)}</b><small>${esc(r.description)}</small></span></button>`}).join('');
   const saved=state.saved?`<button class="gss-recent" data-recent>Current focus · ${esc(GOLF_SHARPEN_RESULTS[state.saved.resultId]?.cue||'Review your saved focus')}</button>`:'';
-  set(`<div class="gss-intro"><div class="gss-kicker">SEE CLEARLY. FIX WHAT’S COSTING YOU.</div><h1 id="gss-title">Where are you leaking shots?</h1><p>Start with the part of your game that’s hurting most right now.</p></div>${saved}<div class="gss-player" id="gss-player"><img src="gamesharp-golf-sharpen-player-v1.png" alt="Golfer at address, ready to choose an area to sharpen"><div class="gss-fallback"><div><strong>Choose an area to sharpen</strong><br><span>The complete text route remains available.</span></div></div>${hs}</div><button class="gss-unsure" data-unsure>I’m not sure what went wrong</button><button class="gss-secondary gss-wide" style="width:100%;margin-top:8px" data-library>Browse the complete practice library</button>`,'Choose one area');
+  set(`<div class="gss-intro"><div class="gss-kicker">SEE CLEARER. THINK SHARPER.</div><h1 id="gss-title">What do you want to sharpen?</h1><p>Start with where you’re hurting or leaking shots most.</p></div>${saved}<div class="gss-player" id="gss-player"><img src="gamesharp-golf-sharpen-player-v1.png" alt="Golfer at address, ready to choose an area to sharpen"><div class="gss-fallback"><div><strong>Choose an area to sharpen</strong><br><span>The complete text route remains available.</span></div></div>${hs}</div><button class="gss-unsure" data-unsure>I’m not sure what went wrong</button><button class="gss-secondary gss-wide" style="width:100%;margin-top:8px" data-library>Browse the complete practice library</button>`,'Choose one area');
   document.getElementById('gss-player').querySelector('img').addEventListener('error',()=>document.getElementById('gss-player').classList.add('fallback'),{once:true});
  }
  function issues(rid){
