@@ -8,16 +8,17 @@
       "docWidth": 320,
       "dialogWidth": 320,
       "minTargets": 48,
-      "player": {
+      "round": {
         "x": 10,
         "y": 220.75,
         "width": 300,
-        "height": 400,
+        "height": 586.546875,
         "top": 220.75,
         "right": 310,
-        "bottom": 620.75,
+        "bottom": 807.296875,
         "left": 10
       },
+      "moments": 8,
       "errors": []
     },
     {
@@ -28,16 +29,17 @@
       "docWidth": 375,
       "dialogWidth": 375,
       "minTargets": 48,
-      "player": {
+      "round": {
         "x": 16,
-        "y": 229.375,
+        "y": 209.078125,
         "width": 343,
-        "height": 457.328125,
-        "top": 229.375,
+        "height": 615.84375,
+        "top": 209.078125,
         "right": 359,
-        "bottom": 686.703125,
+        "bottom": 824.921875,
         "left": 16
       },
+      "moments": 8,
       "errors": []
     },
     {
@@ -48,16 +50,17 @@
       "docWidth": 390,
       "dialogWidth": 390,
       "minTargets": 48,
-      "player": {
+      "round": {
         "x": 16,
         "y": 209.078125,
         "width": 358,
-        "height": 477.328125,
+        "height": 615.84375,
         "top": 209.078125,
         "right": 374,
-        "bottom": 686.40625,
+        "bottom": 824.921875,
         "left": 16
       },
+      "moments": 8,
       "errors": []
     },
     {
@@ -68,16 +71,17 @@
       "docWidth": 430,
       "dialogWidth": 430,
       "minTargets": 48,
-      "player": {
+      "round": {
         "x": 16,
         "y": 209.078125,
         "width": 398,
-        "height": 530.65625,
+        "height": 615.84375,
         "top": 209.078125,
         "right": 414,
-        "bottom": 739.734375,
+        "bottom": 824.921875,
         "left": 16
       },
+      "moments": 8,
       "errors": []
     },
     {
@@ -88,16 +92,17 @@
       "docWidth": 844,
       "dialogWidth": 844,
       "minTargets": 48,
-      "player": {
+      "round": {
         "x": 16,
-        "y": 121.296875,
+        "y": 127.296875,
         "width": 812,
-        "height": 205,
-        "top": 121.296875,
+        "height": 293.84375,
+        "top": 127.296875,
         "right": 828,
-        "bottom": 326.296875,
+        "bottom": 421.140625,
         "left": 16
       },
+      "moments": 8,
       "errors": []
     }
   ],
@@ -136,9 +141,9 @@
       "restored": true
     },
     {
-      "name": "image-failure",
-      "fallback": true,
-      "buttons": 7
+      "name": "no-image-dependency",
+      "moments": 8,
+      "imageCount": 0
     },
     {
       "name": "reduced-motion",
@@ -146,22 +151,22 @@
       "stage": "regions"
     },
     {
-      "name": "seven-region-sweep",
+      "name": "eight-moment-sweep",
       "coverage": [
         {
-          "region": "mental",
+          "region": "before",
           "stage": "result",
           "assets": 2,
-          "focus": "Keep the shot choice unchanged and slow only the start of your routine.",
-          "mentor": "Feel the moment. Keep the decision and routine recognisably yours.",
+          "focus": "Step away when the decision changes; restart with one picture.",
+          "mentor": "Know the day’s conditions, your safe targets and the game you brought.",
           "mentorLink": 0
         },
         {
-          "region": "course",
+          "region": "first",
           "stage": "result",
           "assets": 2,
-          "focus": "Choose a start corridor that leaves room for the expected curve.",
-          "mentor": "See the expensive miss once. Build the shot toward the playable side.",
+          "focus": "Keep the shot choice unchanged and slow only the start of your routine.",
+          "mentor": "One clear picture. One committed start. Let the round come to you.",
           "mentorLink": 0
         },
         {
@@ -181,7 +186,7 @@
           "mentorLink": 0
         },
         {
-          "region": "short",
+          "region": "green",
           "stage": "result",
           "assets": 2,
           "focus": "Use one landing spot and record strike before judging the finish.",
@@ -197,11 +202,19 @@
           "mentorLink": 0
         },
         {
-          "region": "routine",
+          "region": "pressure",
           "stage": "result",
           "assets": 2,
-          "focus": "Step away when the decision changes; restart with one picture.",
-          "mentor": "Decide behind the ball. Over it, only see and go.",
+          "focus": "Keep the shot choice unchanged and slow only the start of your routine.",
+          "mentor": "Feel the moment. Keep the decision and routine recognisably yours.",
+          "mentorLink": 0
+        },
+        {
+          "region": "nineteenth",
+          "stage": "result",
+          "assets": 2,
+          "focus": "Replay the expensive decision before judging the swing.",
+          "mentor": "Keep what travelled. Learn from what repeated. Choose one thing for tomorrow.",
           "mentorLink": 0
         }
       ],

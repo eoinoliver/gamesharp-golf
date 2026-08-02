@@ -11027,15 +11027,9 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gss-top{display:flex;align-items:center;justify-content:space-between;min-height:52px}.gss-icon{width:48px;height:48px;border:1px solid #ffffff25;border-radius:50%;background:#ffffff08;color:#fff;font-size:22px}
 .gss-brand{font-size:11px;letter-spacing:2px;color:#b9cf78;font-weight:800;text-align:center}.gss-brand span{display:block;color:#a8ada9;letter-spacing:.4px;font-weight:500;margin-top:4px}
 .gss-intro{text-align:center;margin:10px 4px 14px}.gss-kicker{font-size:11px;letter-spacing:2px;color:#c8a84b;font-weight:800}.gss h1{font-size:30px;line-height:1.08;margin:8px 0}.gss-intro p,.gss-boundary{color:#aeb6b1;font-size:14px;line-height:1.45;margin:0}
-.gss-player{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:visible;border:1px solid #c8a84b33;background:radial-gradient(circle at 50% 40%,#174d2d,#07150e 72%);box-shadow:0 20px 60px #0008}
-.gss-player img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}.gss-player.fallback img{display:none}.gss-fallback{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:32px;color:#dfe7e0}.gss-player.fallback .gss-fallback{display:grid}
-.gss-hotspot{--line-angle:0deg;position:absolute;width:48px;height:48px;transform:translate(-50%,-50%);border:0;border-radius:50%;background:transparent;color:white;padding:0;font:inherit;z-index:2}
-.gss-hotspot::before{content:"";position:absolute;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);border:1px solid #8ee69f88;border-radius:50%;background:#06130db8;box-shadow:0 0 0 4px #5bdc7412,0 0 18px #5bdc7442}
-.gss-hotspot::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;transform:translate(-50%,-50%);border:2px solid #bdf5c8;border-radius:50%;background:#56cf70;box-shadow:0 0 0 1px #fff7,0 0 14px #67e77e;animation:gssPulse 2.8s ease-in-out infinite}
-.gss-hotspot-line{position:absolute;left:50%;top:50%;width:30px;height:1px;transform-origin:0 50%;transform:rotate(var(--line-angle)) translateX(24px);background:linear-gradient(90deg,#81dd9299,#81dd9222);pointer-events:none}
-.gss-hotspot-label{position:absolute;top:50%;width:95px;pointer-events:none;text-shadow:0 2px 7px #000;line-height:1.1}.gss-hotspot-label.right{left:calc(100% + 31px);transform:translateY(-50%);text-align:left}.gss-hotspot-label.left{right:calc(100% + 31px);transform:translateY(-50%);text-align:right}
-.gss-hotspot-label b{display:block;font-size:9px;letter-spacing:.55px;text-transform:uppercase}.gss-hotspot-label small{display:block;color:#aab5ae;font-size:7px;line-height:1.2;margin-top:3px}.gss-hotspot:hover,.gss-hotspot:focus-visible{outline:none;filter:brightness(1.18)}.gss-hotspot:focus-visible::before{box-shadow:0 0 0 3px #c8a84b,0 0 22px #c8a84b66}
-@keyframes gssPulse{0%,100%{transform:translate(-50%,-50%) scale(.78);opacity:.72}50%{transform:translate(-50%,-50%) scale(1.16);opacity:1}}
+.gss-round{position:relative;display:grid;gap:8px;margin-top:12px;padding:4px 0}.gss-round::before{content:"";position:absolute;left:23px;top:28px;bottom:28px;width:2px;background:linear-gradient(#c8a84b,#759168 82%,#c8a84b);opacity:.7}
+.gss-moment{position:relative;display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:11px;width:100%;min-height:68px;padding:8px 12px 8px 0;border:1px solid #ffffff13;border-radius:17px;background:linear-gradient(110deg,#102219,#0a1710);color:#fff;text-align:left;font:inherit}.gss-moment:hover,.gss-moment:focus-visible{border-color:#c8a84b;outline:3px solid #c8a84b2e}.gss-moment-num{position:relative;z-index:1;display:grid;place-items:center;width:38px;height:38px;margin-left:4px;border:2px solid #c8a84b;border-radius:50%;background:#082016;color:#f6e7aa;font-family:Georgia,serif;font-size:19px;box-shadow:0 0 0 5px #06130d}.gss-moment-copy b{display:block;font-size:15px;line-height:1.15}.gss-moment-copy small{display:block;color:#aeb8b1;font-size:12px;line-height:1.3;margin-top:4px}.gss-moment-arrow{color:#c8a84b;font-size:20px}.gss-moment.recommended{border-color:#6ba87766;background:linear-gradient(110deg,#163321,#0b1b12)}.gss-moment.recommended .gss-moment-num{animation:gssMomentPulse 2.8s ease-in-out infinite}.gss-moment-tag{display:inline-block;margin-top:5px;color:#89d89a;font-size:9px;font-weight:850;letter-spacing:1.3px;text-transform:uppercase}
+@keyframes gssMomentPulse{0%,100%{box-shadow:0 0 0 5px #06130d,0 0 0 6px #69dc7e22}50%{box-shadow:0 0 0 5px #06130d,0 0 18px 5px #69dc7e55}}
 .gss-recent,.gss-unsure{width:100%;min-height:48px;margin-top:12px;border:1px solid #ffffff18;border-radius:14px;background:#ffffff08;color:#fff;padding:12px;font-weight:700}.gss-recent{text-align:left;color:#d9e4db}
 .gss-panel{margin-top:12px;border:1px solid #ffffff17;border-radius:22px;background:#0c1b14;padding:18px}.gss-context{color:#c8a84b;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800}.gss h2{font-size:25px;line-height:1.16;margin:7px 0 8px}.gss-options{display:grid;gap:10px;margin-top:16px}.gss-option{min-height:56px;text-align:left;border:1px solid #ffffff18;border-radius:15px;background:#12251a;color:#f7f7f3;padding:13px 14px;font-size:15px;font-weight:650}.gss-option:hover,.gss-option:focus-visible{border-color:#c8a84b;outline:3px solid #c8a84b33}.gss-boundary{font-size:12px;margin-top:14px}
 .gss-result section{border-top:1px solid #ffffff13;padding:14px 0}.gss-result h3{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#c8a84b;margin:0 0 6px}.gss-result p{margin:0;color:#dfe5e1;line-height:1.42}.gss-mentor{position:relative;margin:10px 0 4px;padding:14px;border:1px solid #c8a84b44;border-radius:17px;background:linear-gradient(135deg,#182a1d,#0c1710)}.gss-mentor-kicker{font-size:9px;letter-spacing:1.7px;color:#d1b85d;font-weight:850}.gss-mentor-line{font-family:Georgia,serif;font-size:19px;line-height:1.24;margin-top:5px;color:#fff}.gss-mentor a{display:inline-block;color:#9be2a8;font-size:11px;font-weight:800;margin-top:9px;text-decoration:none}.gss-focus-wrap{padding:16px 0!important}.gss-focus{font-size:25px!important;line-height:1.15!important;letter-spacing:-.25px;color:white!important;font-weight:780}.gss-cue{color:#c8a84b!important;font-size:12px!important;font-weight:850;letter-spacing:1.1px;text-transform:uppercase;margin-top:9px!important}.gss-result.compact .gss-context{opacity:.75}.gss-result.compact .gss-mentor{padding:10px 12px}.gss-result.compact .gss-mentor-line{font-family:inherit;font-size:13px;font-weight:750}.gss-result.compact .gss-mentor a,.gss-result.compact .gss-mentor-kicker{display:none}.gss-result.compact .gss-focus-wrap{border-top:0;padding-top:8px!important}.gss-result.compact .gss-coach{padding:10px 0}.gss-result.compact .gss-coach p{font-size:12px;color:#aeb6b1}
@@ -11044,9 +11038,9 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gss-more{margin-top:10px;border-top:1px solid #ffffff12;padding-top:8px}.gss-more summary{min-height:44px;display:flex;align-items:center;justify-content:center;color:#929b95;font-size:12px;cursor:pointer}.gss-more-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gss-more-actions button{min-height:48px}
 .gss-bridge{position:sticky;z-index:8;top:58px;flex-shrink:0;max-width:500px;margin:8px 10px;border:1px solid #7fd59066;border-radius:14px;background:#07160ff2;color:#fff;box-shadow:0 12px 34px #0009;padding:10px 48px 10px 12px;backdrop-filter:blur(14px)}.gss-bridge[hidden]{display:none}.gss-bridge-kicker{color:#83df96;font-size:9px;letter-spacing:1.4px;font-weight:800}.gss-bridge-focus{font-size:13px;font-weight:750;line-height:1.25;margin-top:3px}.gss-bridge-watch{color:#b9c3bc;font-size:11px;line-height:1.3;margin-top:3px}.gss-bridge-back{position:absolute;right:5px;top:5px;width:40px;height:40px;border:0;border-radius:50%;background:#ffffff0d;color:#fff;font-size:20px}
 .gss-check{border:1px solid #c8a84b55;background:#142419;border-radius:18px;padding:16px;margin:12px 0}.gss-check p{margin:0 0 10px}.gss-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.gss-check button{min-height:48px;border:1px solid #ffffff22;border-radius:12px;background:#ffffff08;color:#fff}
-@media(max-width:350px){.gss-shell{padding-left:10px;padding-right:10px}.gss h1{font-size:26px}.gss-hotspot-label{width:76px}.gss-hotspot-label b{font-size:8px}.gss-hotspot-label small{display:none}.gss-hotspot-label.right{left:calc(100% + 25px)}.gss-hotspot-label.left{right:calc(100% + 25px)}.gss-hotspot-line{width:24px}}
-@media(orientation:landscape) and (max-height:500px){.gss-shell{width:min(100%,850px);padding-top:4px}.gss-top{min-height:46px}.gss-intro{margin:0 0 6px}.gss-intro p{font-size:12px}.gss-player{aspect-ratio:auto;height:205px}.gss-player img{object-fit:contain;background:#07150e}.gss h1{font-size:24px;margin:3px 0}.gss-hotspot-label{width:145px}.gss-hotspot-label small{font-size:7px}.gss-unsure{margin-top:6px}}
-@media(prefers-reduced-motion:reduce){.gss,.gss *{scroll-behavior:auto!important;animation:none!important;transition:none!important}.gss-hotspot::after{opacity:1;transform:translate(-50%,-50%)}}
+@media(max-width:350px){.gss-shell{padding-left:10px;padding-right:10px}.gss h1{font-size:26px}.gss-moment{min-height:64px}.gss-moment-copy small{font-size:11px}}
+@media(orientation:landscape) and (max-height:500px){.gss-shell{width:min(100%,850px);padding-top:4px}.gss-top{min-height:46px}.gss-intro{margin:0 0 6px}.gss-intro p{font-size:12px}.gss h1{font-size:24px;margin:3px 0}.gss-round{grid-template-columns:1fr 1fr}.gss-round::before{display:none}.gss-moment{min-height:62px}}
+@media(prefers-reduced-motion:reduce){.gss,.gss *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style>
 <div class="gss" id="gss" role="dialog" aria-modal="true" aria-labelledby="gss-title" hidden>
   <div class="gss-shell">
@@ -11123,10 +11117,25 @@ const GSS_BLUEPRINTS=Object.freeze({
   ['indecision','I changed my mind over the ball','When did the second choice appear?','after setup','during the swing'],
   ['inconsistent','My routine changed shot to shot','Which part was least stable?','decision and picture','breath and trigger'],
   ['rushed','I felt rushed','What disappeared first?','target clarity','physical readiness'],
-  ['blank','I had no clear cue','What would help more?','one external target','one tempo word']]}
+  ['blank','I had no clear cue','What would help more?','one external target','one tempo word']]},
+ nineteenth:{label:'19th Hole',description:'Review, learn and choose tomorrow’s focus',issues:[
+  ['cost','I’m not sure what cost me most','Which evidence is clearer?','one expensive decision','one repeated execution pattern'],
+  ['pattern','The same mistake kept returning','Where did it repeat?','in the decision','after I addressed the ball'],
+  ['strength','I want to keep what worked','What held up best?','the shot choice','the routine and commitment'],
+  ['next','Tomorrow’s focus is unclear','What would help more?','replay one decision','observe one shot pattern']]}
 });
 const GOLF_SHARPEN_REGIONS={}; const GOLF_SHARPEN_ROUTES={}; const GOLF_SHARPEN_RESULTS={};
-const GSS_ASSET_BY_REGION={mental:['mini_mental','debrief'],course:['mini_course','course'],tee:['mini_tee','driver_slice'],approach:['mini_approach','iron_contact'],short:['mini_short','chip_contact'],putting:['mini_putting','putt_line'],routine:['mini_mental','debrief']};
+const GSS_ROUND_STAGES=Object.freeze({
+ before:{number:1,label:'Before the Round',description:'Plan with purpose',source:'routine'},
+ first:{number:2,label:'First Tee',description:'Start with clarity',source:'mental'},
+ tee:{number:3,label:'Off the Tee',description:'Find more fairways',source:'tee'},
+ approach:{number:4,label:'Approach',description:'Choose the right window',source:'approach'},
+ green:{number:5,label:'Around the Green',description:'Assess, choose, execute',source:'short'},
+ putting:{number:6,label:'Putting',description:'Read it, pace it, roll it',source:'putting'},
+ pressure:{number:7,label:'Pressure Moments',description:'Play your game when it matters',source:'mental'},
+ nineteenth:{number:8,label:'19th Hole',description:'Review, learn, sharpen tomorrow',source:'nineteenth'}
+});
+const GSS_ASSET_BY_REGION={mental:['mini_mental','debrief'],course:['mini_course','course'],tee:['mini_tee','driver_slice'],approach:['mini_approach','iron_contact'],short:['mini_short','chip_contact'],putting:['mini_putting','putt_line'],routine:['mini_mental','debrief'],nineteenth:['debrief','advanced']};
 const GSS_FOCUS_BY_ISSUE=Object.freeze({
  mental_pressure:['Keep the shot choice unchanged and slow only the start of your routine.','Make the choice before the pressure conversation starts.'],
  mental_reset:['Use a physical finish line: one breath, name the next target, then walk on.','Describe the miss once, then return attention to the next target.'],
@@ -11156,6 +11165,10 @@ const GSS_FOCUS_BY_ISSUE=Object.freeze({
  routine_inconsistent:['Keep the decision-picture sequence identical for five shots.','Use the same breath and physical trigger for five shots.'],
  routine_rushed:['Name the target corridor before approaching the ball.','Do not start until balance and readiness are present.'],
  routine_blank:['Use one external start or landing target.','Use one neutral tempo word—nothing else.']
+ ,nineteenth_cost:['Replay the expensive decision before judging the swing.','Track the repeated observable pattern, not the worst result.']
+ ,nineteenth_pattern:['Name the decision that repeated and choose one safer default.','Observe the earliest repeatable change after address.']
+ ,nineteenth_strength:['Save the choice that travelled well and use it as tomorrow’s baseline.','Keep the routine sequence that survived the round.']
+ ,nineteenth_next:['Replay one decision and write the choice you would make now.','Collect one clean observation before choosing a fix.']
 });
 const GSS_LENS_BY_ISSUE=Object.freeze({
  tee_curve:'A ball can begin near the intended line and still curve out of the corridor. An immediately offline start demands a different first look.',
@@ -11182,35 +11195,35 @@ const GSS_WATCH_BY_ISSUE=Object.freeze({
  approach_distance:'Track carry separately from total finish.',approach_contact:'Watch contact and launch before distance.',short_contact:'Watch strike, landing spot and rollout in that order.',short_landing:'Watch first bounce and rollout after the landing spot.'
 });
 const GSS_MENTORS=Object.freeze({
- short:{kicker:'PLAY WITH SEVE’S IMAGINATION',line:'See the shot the lie allows—not the shot you hoped to have.',href:'https://www.europeantour.com/dpworld-tour/news/video/the-best-of-seve-ballesteros/',cta:'Watch Seve create from trouble →'},
- course:{kicker:'CADDIE MODE',line:'See the expensive miss once. Build the shot toward the playable side.'},
- tee:{kicker:'THE COMMITTED DRIVER',line:'Own a corridor. A committed stock shot beats a perfect line you cannot repeat.'},
- approach:{kicker:'CADDIE MODE',line:'Front number. Back number. Safe miss. Then choose.'},
- putting:{kicker:'THE PUTTER’S IDENTITY',line:'Choose one line at one pace—then let the stroke be boring.'},
- mental:{kicker:'THE CLOSER',line:'Feel the moment. Keep the decision and routine recognisably yours.'},
- routine:{kicker:'YOUR COACH’S VOICE',line:'Decide behind the ball. Over it, only see and go.'}
+ before:{kicker:'ARRIVE WITH A PLAN',line:'Know the day’s conditions, your safe targets and the game you brought.'},
+ first:{kicker:'THE FIRST-TEE PLAYER',line:'One clear picture. One committed start. Let the round come to you.'},
+  tee:{kicker:'THE COMMITTED DRIVER',line:'Own a corridor. A committed stock shot beats a perfect line you cannot repeat.'},
+  approach:{kicker:'CADDIE MODE',line:'Front number. Back number. Safe miss. Then choose.'},
+ green:{kicker:'PLAY WITH SEVE’S IMAGINATION',line:'See the shot the lie allows—not the shot you hoped to have.',href:'https://www.europeantour.com/dpworld-tour/news/video/the-best-of-seve-ballesteros/',cta:'Watch Seve create from trouble →'},
+  putting:{kicker:'THE PUTTER’S IDENTITY',line:'Choose one line at one pace—then let the stroke be boring.'},
+ pressure:{kicker:'THE CLOSER',line:'Feel the moment. Keep the decision and routine recognisably yours.'},
+ nineteenth:{kicker:'THE HONEST REVIEW',line:'Keep what travelled. Learn from what repeated. Choose one thing for tomorrow.'}
 });
-Object.entries(GSS_BLUEPRINTS).forEach(([rid,b])=>{
-  GOLF_SHARPEN_REGIONS[rid]={label:b.label,description:b.description,aha:'Separate the visible outcome from the earliest useful decision or observation.',hotspots:[{x:b.pos[0],y:b.pos[1],labelSide:b.pos[2],lineAngle:b.pos[3],ariaLabel:b.label+': '+b.description}],issues:[]};
+Object.entries(GSS_ROUND_STAGES).forEach(([rid,stage])=>{
+  const source=stage.source,b=GSS_BLUEPRINTS[source];
+  GOLF_SHARPEN_REGIONS[rid]={number:stage.number,label:stage.label,description:stage.description,source,aha:'Separate the visible outcome from the earliest useful decision or observation.',issues:[]};
   b.issues.forEach(([iid,label,q,a,bAnswer])=>{
     const issueId=rid+'_'+iid, routeId=issueId+'_route';
     GOLF_SHARPEN_REGIONS[rid].issues.push({id:issueId,label,route:routeId});
     GOLF_SHARPEN_ROUTES[routeId]={question:q,boundaryCopy:'Choose what felt closest. This creates a useful hypothesis—not a diagnosis of your swing.',answers:[a,bAnswer].map((answer,idx)=>({label:answer,resultId:issueId+'_'+idx}))};
     [a,bAnswer].forEach((answer,idx)=>{
       const observable=label.toLowerCase();
-      const decisionFirst=/mental|course|routine/.test(rid);
-      const focus=GSS_FOCUS_BY_ISSUE[issueId][idx];
-      let assets=GSS_ASSET_BY_REGION[rid].slice(0,2);
-      if(rid==='tee'&&iid==='curve') assets=idx?['driver_slice','mini_tee']:['driver_hook','mini_tee'];
-      if(rid==='tee'&&iid==='strike') assets=['driver_strike','mini_tee'];
-      if(rid==='putting'&&iid==='pace') assets=['putt_pace','three_putt'];
-      if(rid==='short'&&iid==='bunker') assets=['bunker','mini_short'];
-      if(rid==='tee'&&iid==='choice') assets=['mini_tee','hole_target'];
-      if(rid==='course'&&iid==='hazard') assets=['mini_course','hole_hazard'];
-      if(rid==='mental'&&iid==='pressure') assets=['mini_mental','hole_pressure'];
-      if(rid==='course'&&iid==='lie') assets=['mini_course','hole_recovery'];
-      const cue=rid==='putting'?'Line. Pace. Roll.':rid==='tee'?'Start. Curve. Corridor.':rid==='short'?'Land it there.':rid==='approach'?'Window, then target.':decisionFirst?'Choose it. See it. Go.':'Name the window.';
-      GOLF_SHARPEN_RESULTS[issueId+'_'+idx]={regionId:rid,issue:label,distinction:answer,read:'You reported that '+observable+' and that “'+answer+'” felt closest. That observation narrows where to look, but more than one mechanism can produce the same result.',coachLens:GSS_LENS_BY_ISSUE[issueId]||(decisionFirst?'The useful gain is often clarity before execution: choose the constraint, name the intended shot, then notice whether commitment survives.':'The final outcome is the symptom. Observe the earliest difference you can verify before changing technique.'),watchFor:GSS_WATCH_BY_ISSUE[issueId]||'Notice whether the selected focus changes what you can observe.',focus,cue,assetIds:assets,confidence:'guided-hypothesis',reviewStatus:'launch-reviewed',sources:rid==='putting'?[GSS_SOURCE.pgaPutting,GSS_SOURCE.pgaRoutine]:rid==='routine'?[GSS_SOURCE.usgaPace]:[GSS_SOURCE.pgaPractice]};
+      const sourceIssue=source+'_'+iid,decisionFirst=/mental|course|routine|nineteenth/.test(source);
+      const focus=GSS_FOCUS_BY_ISSUE[sourceIssue][idx];
+      let assets=GSS_ASSET_BY_REGION[source].slice(0,2);
+      if(source==='tee'&&iid==='curve') assets=idx?['driver_slice','mini_tee']:['driver_hook','mini_tee'];
+      if(source==='tee'&&iid==='strike') assets=['driver_strike','mini_tee'];
+      if(source==='putting'&&iid==='pace') assets=['putt_pace','three_putt'];
+      if(source==='short'&&iid==='bunker') assets=['bunker','mini_short'];
+      if(source==='tee'&&iid==='choice') assets=['mini_tee','hole_target'];
+      if((rid==='first'||rid==='pressure')&&iid==='pressure') assets=['mini_mental','hole_pressure'];
+      const cue=source==='putting'?'Line. Pace. Roll.':source==='tee'?'Start. Curve. Corridor.':source==='short'?'Land it there.':source==='approach'?'Window, then target.':rid==='nineteenth'?'Keep one. Learn one. Choose one.':decisionFirst?'Choose it. See it. Go.':'Name the window.';
+      GOLF_SHARPEN_RESULTS[issueId+'_'+idx]={regionId:rid,issue:label,distinction:answer,read:'You reported that '+observable+' and that “'+answer+'” felt closest. That observation narrows where to look, but more than one mechanism can produce the same result.',coachLens:GSS_LENS_BY_ISSUE[sourceIssue]||(decisionFirst?'The useful gain is often clarity before execution: choose the constraint, name the intended shot, then notice whether commitment survives.':'The final outcome is the symptom. Observe the earliest difference you can verify before changing technique.'),watchFor:GSS_WATCH_BY_ISSUE[sourceIssue]||'Notice whether the selected focus changes what you can observe.',focus,cue,assetIds:assets,confidence:'guided-hypothesis',reviewStatus:'launch-reviewed',sources:source==='putting'?[GSS_SOURCE.pgaPutting,GSS_SOURCE.pgaRoutine]:source==='routine'?[GSS_SOURCE.usgaPace]:[GSS_SOURCE.pgaPractice]};
     });
   });
 });
@@ -11226,7 +11239,7 @@ function startSharpenHole(index){
  clearHoleSession();showView('hole');beginHole(index);
 }
 (function(){
- const VERSION=1,KEY='gsg_sharpen_state_v1',el=document.getElementById('gss'),main=document.getElementById('gss-main'),back=document.getElementById('gss-back'),close=document.getElementById('gss-close'),stageLabel=document.getElementById('gss-stage-label'),bridge=document.getElementById('gss-asset-bridge');
+ const VERSION=2,KEY='gsg_sharpen_state_v2',el=document.getElementById('gss'),main=document.getElementById('gss-main'),back=document.getElementById('gss-back'),close=document.getElementById('gss-close'),stageLabel=document.getElementById('gss-stage-label'),bridge=document.getElementById('gss-asset-bridge');
  let opener=null,state={version:VERSION,stage:'regions',regionId:null,issueId:null,routeId:null,resultId:null,returnPending:false,saved:null,checkbacks:[],resultViews:{}};
  const safeLoad=()=>{try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&x.version===VERSION)state={...state,...x}}catch(e){}};
  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
@@ -11234,10 +11247,9 @@ function startSharpenHole(index){
  function set(html,label){main.innerHTML=html;stageLabel.textContent=label;persist();requestAnimationFrame(()=>main.focus({preventScroll:true}))}
  function regions(){
   state.stage='regions';state.regionId=state.issueId=state.routeId=state.resultId=null;
-  const hs=Object.entries(GOLF_SHARPEN_REGIONS).map(([id,r])=>{const h=r.hotspots[0];return `<button class="gss-hotspot" style="left:${h.x}%;top:${h.y}%;--line-angle:${h.lineAngle}deg" data-region="${id}" aria-label="${esc(h.ariaLabel)}"><span class="gss-hotspot-line" aria-hidden="true"></span><span class="gss-hotspot-label ${h.labelSide}"><b>${esc(r.label)}</b><small>${esc(r.description)}</small></span></button>`}).join('');
+  const moments=Object.entries(GOLF_SHARPEN_REGIONS).map(([id,r])=>`<button class="gss-moment${id==='nineteenth'?' recommended':''}" data-region="${id}" aria-label="${esc(r.label)}: ${esc(r.description)}"><span class="gss-moment-num" aria-hidden="true">${r.number}</span><span class="gss-moment-copy"><b>${esc(r.label)}</b><small>${esc(r.description)}</small>${id==='nineteenth'?'<span class="gss-moment-tag">Best after a round</span>':''}</span><span class="gss-moment-arrow" aria-hidden="true">›</span></button>`).join('');
   const saved=state.saved?`<button class="gss-recent" data-recent>Current focus · ${esc(GOLF_SHARPEN_RESULTS[state.saved.resultId]?.cue||'Review your saved focus')}</button>`:'';
-  set(`<div class="gss-intro"><div class="gss-kicker">SEE CLEARER. THINK SHARPER.</div><h1 id="gss-title">What do you want to sharpen?</h1><p>Start with where you’re hurting or leaking shots most.</p></div>${saved}<div class="gss-player" id="gss-player"><img src="gamesharp-golf-sharpen-player-v1.png" alt="Golfer at address, ready to choose an area to sharpen"><div class="gss-fallback"><div><strong>Choose an area to sharpen</strong><br><span>The complete text route remains available.</span></div></div>${hs}</div><button class="gss-unsure" data-unsure>I’m not sure what went wrong</button><button class="gss-secondary gss-wide" style="width:100%;margin-top:8px" data-library>Browse the complete practice library</button>`,'Choose one area');
-  document.getElementById('gss-player').querySelector('img').addEventListener('error',()=>document.getElementById('gss-player').classList.add('fallback'),{once:true});
+  set(`<div class="gss-intro"><div class="gss-kicker">YOUR ROUND · SHARPENED</div><h1 id="gss-title">Where did your round need you most?</h1><p>Choose the moment. Leave with one thing to test.</p></div>${saved}<div class="gss-round" aria-label="Eight moments in a round">${moments}</div><button class="gss-unsure" data-unsure>I’m not sure where shots leaked</button><button class="gss-secondary gss-wide" style="width:100%;margin-top:8px" data-library>Browse the complete practice library</button>`,'Choose a round moment');
  }
  function issues(rid){
   state.stage='issues';state.regionId=rid;state.issueId=state.routeId=state.resultId=null;const r=GOLF_SHARPEN_REGIONS[rid];
@@ -11274,12 +11286,12 @@ function startSharpenHole(index){
  back.addEventListener('click',()=>{if(state.stage==='result')route(state.issueId);else if(state.stage==='route')issues(state.regionId);else if(state.stage==='issues'||state.stage==='observe')regions();else closeSharpen()});close.addEventListener('click',closeSharpen);
  el.addEventListener('keydown',e=>{if(e.key==='Escape')closeSharpen();if(e.key==='Tab'){const f=[...el.querySelectorAll('button:not([disabled]),[tabindex="0"]')].filter(x=>x.offsetParent!==null);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
  const integrity=(()=>{
-  const errors=[],names=new Set;const required=['mental','course','tee','approach','short','putting','routine'];
-  required.forEach(id=>{const r=GOLF_SHARPEN_REGIONS[id];if(!r)errors.push('missing-region:'+id);else{if(r.issues.length<3||r.issues.length>5)errors.push('issue-count:'+id);r.hotspots.forEach(h=>{if(h.x<0||h.x>100||h.y<0||h.y>100)errors.push('hotspot:'+id);if(!h.ariaLabel||names.has(h.ariaLabel))errors.push('aria:'+id);names.add(h.ariaLabel)})}});
+  const errors=[];const required=['before','first','tee','approach','green','putting','pressure','nineteenth'];
+  required.forEach((id,index)=>{const r=GOLF_SHARPEN_REGIONS[id];if(!r)errors.push('missing-region:'+id);else{if(r.number!==index+1)errors.push('round-order:'+id);if(r.issues.length<3||r.issues.length>5)errors.push('issue-count:'+id)}});
   Object.values(GOLF_SHARPEN_ROUTES).forEach(r=>r.answers.forEach(a=>{if(!GOLF_SHARPEN_RESULTS[a.resultId])errors.push('result:'+a.resultId)}));
   Object.entries(GOLF_SHARPEN_RESULTS).forEach(([id,r])=>{if(!r.read||!r.coachLens||!r.focus||!r.cue)errors.push('copy:'+id);if(r.assetIds.length<1||r.assetIds.length>3)errors.push('assets:'+id);r.assetIds.forEach(a=>{if(!GOLF_SHARPEN_ASSETS[a]||GOLF_SHARPEN_ASSETS[a].launchStatus!=='approved')errors.push('asset:'+id+':'+a)});if(!r.reviewStatus||!r.sources.length)errors.push('review:'+id)});
   Object.entries(GOLF_SHARPEN_ASSETS).forEach(([id,a])=>{if(a.type==='mini'){const ids=a.routeParams[1]||[];if(ids.length!==3||ids.some(qid=>!LAUNCH_QUESTIONS.some(q=>q.id===qid)))errors.push('mini:'+id)}if(a.destination==='startSharpenHole'){const hi=a.routeParams[0];if(!Number.isInteger(hi)||!ALL_HOLES[hi]||!LIVE_HOLE_INDEXES.includes(hi))errors.push('hole:'+id)}});
-  return {version:'1.0.0',ok:!errors.length,regions:Object.keys(GOLF_SHARPEN_REGIONS).length,routes:Object.keys(GOLF_SHARPEN_ROUTES).length,results:Object.keys(GOLF_SHARPEN_RESULTS).length,assets:Object.keys(GOLF_SHARPEN_ASSETS).length,errors};
+  return {version:'2.0.0',model:'round-journey',ok:!errors.length,regions:Object.keys(GOLF_SHARPEN_REGIONS).length,routes:Object.keys(GOLF_SHARPEN_ROUTES).length,results:Object.keys(GOLF_SHARPEN_RESULTS).length,assets:Object.keys(GOLF_SHARPEN_ASSETS).length,errors};
  })();
  document.documentElement.dataset.gsgSharpenIntegrity=integrity.ok?'pass':'fail';document.documentElement.dataset.gsgSharpenReport=JSON.stringify(integrity);
  window.GameSharpGolfSharpen={open,close:closeSharpen,returnFromAsset,openLibrary(){closeSharpen();renderSharpen();showView('sharpen')},integrity,state:()=>JSON.parse(JSON.stringify(state)),definitions:{regions:GOLF_SHARPEN_REGIONS,routes:GOLF_SHARPEN_ROUTES,results:GOLF_SHARPEN_RESULTS,assets:GOLF_SHARPEN_ASSETS}};

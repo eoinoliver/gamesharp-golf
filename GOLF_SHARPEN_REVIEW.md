@@ -2,17 +2,22 @@
 
 ## Coverage
 
-The authoritative graph contains seven diagnostic navigation regions, 28 observable issues, 28 discriminating routes, 56 cautious results and 23 reviewed asset definitions. These navigation regions do not replace the app's five educational pillars.
+The authoritative graph contains eight ordered round moments, 32 observable issues, 32 discriminating routes, 64 cautious results and 23 reviewed asset definitions. These round moments are the Sharpen navigation model; they do not replace the app's five educational pillars.
 
 | Region | Issues | Existing content pulled through |
 |---|---:|---|
-| Mental Game | 4 | focused decision rep, 19th Hole reflection |
-| Course IQ | 4 | Play a Course, Play a Hole |
-| Tee Shots | 4 | exact driver fault comparisons, Play a Hole |
-| Approach Play | 4 | iron contact, Play a Hole |
-| Short Game | 4 | chipping, bunker and Play a Hole |
+| Before the Round | 4 | focused routine rep, 19th Hole reflection |
+| First Tee | 4 | focused pressure rep, exact pressure hole |
+| Off the Tee | 4 | exact driver fault comparisons, Play a Hole |
+| Approach | 4 | iron contact, focused approach session |
+| Around the Green | 4 | chipping, bunker and focused short-game session |
 | Putting | 4 | start-line, pace and three-putt comparisons |
-| Routine & Commitment | 4 | focused decision rep, 19th Hole reflection |
+| Pressure Moments | 4 | focused pressure rep, exact pressure hole |
+| 19th Hole | 4 | post-round debrief, focused decision replay |
+
+## Golf-native entry model
+
+Sharpen now begins with the chronological journey of a round: Before the Round, First Tee, Off the Tee, Approach, Around the Green, Putting, Pressure Moments and 19th Hole. The former illustrated golfer/body-hotspot entry has been removed from the reachable UI. The supplied `Your Round` artwork informed the sequence and tone, but is not shipped as an unreadable mobile image; the production UI renders the stages as semantic, accessible controls with no image dependency.
 
 ## High-leverage legacy integration
 
@@ -40,4 +45,4 @@ No weak Sharpen route is reachable. "I'm not sure" deliberately returns an evide
 
 ## Current release state
 
-The production golfer artwork is integrated and has a complete text fallback. This result-page simplification is locally audited and intentionally awaits explicit production approval.
+The round-journey replacement and result-page simplification are locally audited. Production publication is approved by the user for this batch.
