@@ -2027,7 +2027,7 @@ svg { display:block; }
 <!-- ============================== 19TH HOLE DEBRIEF ============================== -->
 <div class="view" id="view-debrief">
   <div class="db-header">
-    <button class="hvh-back" onclick="showView('home');renderHome()">✕</button>
+    <button class="hvh-back" onclick="if(!GameSharpGolfSharpen.returnFromAsset()){showView('home');renderHome()}">✕</button>
     <div class="db-header-title">🏌️ 19TH HOLE DEBRIEF</div>
   </div>
   <div class="db-body" id="db-form-body">
@@ -2231,6 +2231,12 @@ const QUESTIONS = [
 {"id": "QE5_037", "pillar": "Mental Game", "module": "Putting Expectation And Variance", "difficulty": "Low Handicap", "handicap_band": "Low Handicap", "format": "Scenario", "hook_type": "Golf Puzzle", "decision_type": "Risk", "primary_score_leak": "Three-putt", "visual_must_show": false, "confidence_level": "High", "question": "You missed three 8-footers in a row despite good starts. You are tempted to change stroke mid-round.  What should you do?", "option_a": "Change grip immediately", "option_b": "Stay with read-speed-start line process", "option_c": "Hit next one firmer", "option_d": "Stop reading break", "correct_answer": "B", "why_right": "Putting has high short-term noise. Elite players separate process quality from small-sample outcomes.  — Source: Putting Skill as Nearly Indistinguishable from Noise: An Empirical Bayes Analysis of PGA Tour Performance", "pro_insight": "You resist a mid-round technical fix that may create a worse stroke.", "common_pitfall": "", "action_tip": "Judge putts by start line and speed, not only make/miss.", "tags": "putting expectation and variance,golf_puzzle", "tier": "Free"},
 {"id": "QE5_038", "pillar": "Course IQ", "module": "Famous-Hole Elite Read", "difficulty": "Low Handicap", "handicap_band": "Low Handicap", "format": "Scenario", "hook_type": "Course IQ", "decision_type": "Target", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "On Calamity Corner, why do elite players often favour the left bailout?", "option_a": "It leaves the easiest birdie", "option_b": "It avoids the ravine miss right", "option_c": "It shortens the hole", "option_d": "It removes wind", "correct_answer": "B", "why_right": "Calamity Corner is a 236-yard par 3 with a deep ravine right; in 2019 only 41% of players hit the green.  — Source: Calamity Corner: All You Need To Know About Royal Portrush's Famous Par 3", "pro_insight": "On holes named Calamity, par is a strategy, not a consolation.", "common_pitfall": "", "action_tip": "", "tags": "famous-hole elite read,course_iq", "tier": "Free"},
 {"id": "QE5_039", "pillar": "Mental Game", "module": "First-Hole Pressure", "difficulty": "Competitor", "handicap_band": "Competitor", "format": "Scenario", "hook_type": "Course IQ", "decision_type": "Target", "primary_score_leak": "Double bogey", "visual_must_show": false, "confidence_level": "High", "question": "What is the elite lesson from a major venue opening hole with OB and crowd pressure?", "option_a": "Hit driver hard — commit fully and trust it", "option_b": "Pick the shot that removes the disaster side", "option_c": "Aim at the widest visual space", "option_d": "Aim at the centre and accept whatever happens", "correct_answer": "B", "why_right": "Royal Portrush has shown how an opening-hole miss can wreck a championship before rhythm arrives. Elite strategy starts with eliminating the first-card-wrecker.  — Source: Royal Portrush Course Guide", "pro_insight": "The first hole is not for proving form. It is for entering the round.", "common_pitfall": "", "action_tip": "", "tags": "first-hole pressure,course_iq", "tier": "Free"},
+{"id":"QE5_040","pillar":"Course IQ","module":"Pre-Round Conditions Plan","difficulty":"Club","handicap_band":"Club","format":"Scenario","hook_type":"Course IQ","decision_type":"Target","primary_score_leak":"Double bogey","visual_must_show":false,"confidence_level":"High","question":"Ten minutes before teeing off, the wind has strengthened and the course is playing firm. What is the most useful final preparation?","option_a":"Find a swing change that launches every club lower","option_b":"Name where wind and firm ground change the expensive miss on the opening holes","option_c":"Ignore conditions until the first shot finishes","option_d":"Hit only drivers so the opening swing feels fast","correct_answer":"B","why_right":"Preparation should convert conditions into decisions: expected carry, bounce and the side where a normal miss stays playable. It should not become a last-minute swing rebuild. — Source: PGA of America, The Simple Keys to Preparing for an Important Round of Golf","pro_insight":"A plan does not predict the round. It gives the first decisions a stable starting point.","common_pitfall":"Using the last ten minutes to chase technique instead of learning today’s conditions.","action_tip":"Before leaving the range, name the wind, firmness and expensive miss.","tags":"pre-round,conditions,plan","tier":"Free"},
+{"id":"QE5_041","pillar":"Mental Game","module":"Warm-Up Evidence","difficulty":"Club","handicap_band":"Club","format":"Scenario","hook_type":"Coach's Lens","decision_type":"Mental","primary_score_leak":"Double bogey","visual_must_show":false,"confidence_level":"High","question":"Your warm-up ball flight is a small fade although you hoped to draw it. What should you take to the course?","option_a":"Rebuild the release until the draw returns","option_b":"Play the reliable fade and choose corridors that contain it","option_c":"Alternate draw and fade thoughts on every hole","option_d":"Assume the fade disappears under pressure","correct_answer":"B","why_right":"A pre-round warm-up is useful when it reveals the playable shot available today. PGA coaching guidance emphasizes purposeful targets and course simulation rather than unfocused ball beating. — Source: PGA of America, Range Session: Game Planning","pro_insight":"The range reports today’s pattern; it does not issue a demand for a perfect pattern.","common_pitfall":"Taking a fragile last-minute correction to the first tee.","action_tip":"Leave with one stock flight you can target honestly.","tags":"pre-round,warm-up,stock-shot","tier":"Free"},
+{"id":"QE5_042","pillar":"Course IQ","module":"Warm-Up Transfer","difficulty":"Competitor","handicap_band":"Competitor","format":"Scenario","hook_type":"Course IQ","decision_type":"Target","primary_score_leak":"Penalty","visual_must_show":false,"confidence_level":"High","question":"You have six warm-up balls left before a tight opening hole. What is the highest-value use of them?","option_a":"Hit six drivers as hard as possible","option_b":"Rehearse the opening shot with its actual target corridor and full routine","option_c":"Hit six different shapes to feel creative","option_d":"Search for the longest shot of the session","correct_answer":"B","why_right":"PGA game-planning guidance recommends simulating course shots with a designated target and the normal routine. The transfer task is decision plus execution, not volume. — Source: PGA of America, Range Session: Game Planning","pro_insight":"Rehearse the situation you are about to enter, not the swing you wish you owned.","common_pitfall":"Finishing the warm-up with speed or variety unrelated to the first-hole demand.","action_tip":"Play the first hole once before walking to it.","tags":"pre-round,warm-up,first-hole","tier":"Free"},
+{"id":"QE5_043","pillar":"Mental Game","module":"First-Tee Nerves","difficulty":"Club","handicap_band":"Club","format":"Scenario","hook_type":"Coach's Lens","decision_type":"Mental","primary_score_leak":"Penalty","visual_must_show":false,"confidence_level":"High","question":"On the first tee your heart rate rises, but your club and target still make sense. What should change?","option_a":"Change to a safer club automatically","option_b":"Keep the decision, make a full exhale and begin the familiar routine","option_c":"Add a mechanical swing thought for control","option_d":"Wait until you no longer feel nervous","correct_answer":"B","why_right":"First-tee nerves are common and do not by themselves invalidate the shot choice. PGA coaching recommends visualizing the setting, retaining a set routine and using the breath to settle the start. — Source: PGA of America, 3 Keys to Open Your Round with a Successful First Tee Shot","pro_insight":"Calm is not the absence of nerves; it is an organized response to them.","common_pitfall":"Mistaking normal activation for evidence that the swing or club must change.","action_tip":"Keep the choice. Lengthen the exhale. Start the routine.","tags":"first-tee,nerves,routine","tier":"Free"},
+{"id":"QE5_044","pillar":"Course IQ","module":"Opening Club Choice","difficulty":"Competitor","handicap_band":"Competitor","format":"Scenario","hook_type":"Tour Decision","decision_type":"Club","primary_score_leak":"Penalty","visual_must_show":false,"confidence_level":"High","question":"Opening par 4: fairway bunker begins at your best driver carry, while 3-wood finishes short and leaves a comfortable approach. What is the disciplined opening club?","option_a":"Driver because commitment means choosing the longest club","option_b":"3-wood because its whole window removes the bunker","option_c":"Iron even though it leaves an unusually long approach","option_d":"Driver aimed at the bunker so the miss avoids it","correct_answer":"B","why_right":"The useful safety club is the one whose normal and best outcomes remove the specific penalty rather than merely sounding conservative. — Source: PGA of America, 3 Keys to Open Your Round with a Successful First Tee Shot","pro_insight":"The opening club should buy a normal second shot without keeping the card-wrecker in range.","common_pitfall":"Choosing less than driver while still allowing the same hazard to remain reachable.","action_tip":"Remove the disaster; preserve a normal next shot.","tags":"first-tee,club-choice,hazard","tier":"Free"},
+{"id":"QE5_045","pillar":"Course IQ","module":"Opening Corridor","difficulty":"Competitor","handicap_band":"Competitor","format":"Scenario","hook_type":"Tour Decision","decision_type":"Target","primary_score_leak":"Penalty","visual_must_show":false,"confidence_level":"High","question":"Your stock tee shot starts slightly left and fades. The opening hole has playable rough right and trees tight left. What is the best target picture?","option_a":"A point in the centre for a perfectly straight shot","option_b":"A start corridor that lets the expected fade finish in playable space","option_c":"The left trees so the fade returns to centre","option_d":"The right rough because the miss is playable","correct_answer":"B","why_right":"A useful target contains the expected start and curve window rather than requiring a different shot on the first swing of the day. — Source: PGA of America, 3 Keys to Open Your Round with a Successful First Tee Shot","pro_insight":"The target is space for the shot you own, not a point for the shot you hope appears.","common_pitfall":"Aiming a normal curve at trouble because the final centre line looks visually reassuring.","action_tip":"Fit the whole shape inside playable ground.","tags":"first-tee,corridor,stock-shot","tier":"Free"},
 {id:"Q001",pillar:"Score Smart",module:"Lay Up vs Attack",difficulty:"Club",handicap_band:"Club",format:"Scenario",hook_type:"Lay Up or Attack",decision_type:"Club",primary_score_leak:"Penalty",visual_must_show:true,confidence_level:"Medium",question:"Par 5, 230 yards to carry water and reach the green in two. Perfect lie, wind behind you. Do you go for it?",option_a:"Yes — with wind behind, the carry is manageable",option_b:"Lay up to your favourite wedge distance — then attack the pin with a full wedge",option_c:"Yes — a perfect lie and helping wind is a green light",option_d:"Lay up as close to the water as you can for a short pitch",correct_answer:"B",why_right:"Even with a helping wind, 230-yard carries over water require near-perfect contact. Tour pros lay up unless the carry is comfortably within their reliable range. The expected score from a controlled wedge to 80–100 yards is nearly identical to attempting a low-percentage carry.",pro_insight:"Phil Mickelson — golf's most famous gambler — is precise about one thing: the number he gambles with. His carry numbers are his repeatable ones, not his best-ever. The psychology matters more than the maths: standing on a par 5 with a chance to reach, adrenaline quietly adds 15 yards to your self-estimate at the exact moment you need it least. Pros pre-commit to the honest number on the range, so the decision on the course is already made.",common_pitfall:"Golfers inflate carry distance in their head when adrenaline is flowing. Your reliable carry is typically 15–25 yards less than your best.",action_tip:"Before any water carry decision, ask: can I hit this shot 8 out of 10 times? If not, lay up.",tags:"lay-up,par-5,risk-reward,water",tier:"Free",techAnim:"par5_layup_vs_go",techAnimParams:{correct:"layup"}},
 {id:"Q002",pillar:"Score Smart",module:"Tee Shot Strategy",difficulty:"Club",handicap_band:"Club",format:"Scenario",hook_type:"Golf IQ",decision_type:"Rules",primary_score_leak:"Penalty",visual_must_show:false,confidence_level:"Medium",question:"Tight driving hole — OB left, rough right. Where do you aim?",option_a:"Down the middle — balanced risk",option_b:"Left-centre — avoids the rough",option_c:"At the right rough — taking OB completely out of play",option_d:"Just inside the right rough — mostly fairway, a little safety",correct_answer:"C",why_right:"OB is a 2-shot penalty. Missing into the rough costs one shot at most. On tight holes, elite caddies position players to miss into the safer side — not the ideal line.",pro_insight:"Elite caddies walk a tight hole backwards: they find the cheap miss first, then aim so the shot pattern leans into it. Steve Williams described his job with Tiger Woods as exactly this — the target was rarely the fairway centre, it was the line that made the expensive miss impossible. Centre-line aiming feels safe but splits the difference between two punishments; aiming at the safe rough makes one of them disappear.",common_pitfall:"Aiming at the middle splits the difference between two hazards — it's the riskiest aim point of all on a tight driving hole.",action_tip:"On tight holes, identify the worst miss (OB, water) and aim so your miss goes the other way.",tags:"tee-shot,OB,risk-management",tier:"Free",techAnim:"hole_dogleg_right",techAnimParams:{correct:"right_rough"}},
 {id:"Q003",pillar:"Score Smart",module:"Wind Adjustments",difficulty:"Club",handicap_band:"Club",format:"Scenario",hook_type:"Wind & Conditions",decision_type:"Risk",primary_score_leak:"Penalty",visual_must_show:true,confidence_level:"Medium",question:"185 yards out, dead into the wind, water guards the front of the green. What's your play?",option_a:"Same club you'd normally hit 185 yards",option_b:"Two clubs more, aim at the fat of the green",option_c:"Lay up short of the water and pitch on",option_d:"High cut starting right to avoid the water",correct_answer:"B",why_right:"Into wind, a ball struck well travels significantly shorter. Two clubs more puts you in the right range, and aiming at the fat of the green removes water from play. Attacking the flag with water short is the most common mistake.",pro_insight:"Rory McIlroy's headwind routine never changes: more club, softer swing, flag out of his head. The physics is the part amateurs miss — swinging harder adds backspin, and into wind backspin is a parachute. The ball balloons, stalls, and lands shorter than the smooth swing would have. Into the wind, effort and distance move in opposite directions.",common_pitfall:"Trying to hit harder with the same club creates more spin — which makes the ball balloon and travel even shorter.",action_tip:"In a true headwind, add 1–2 clubs and swing within yourself. A smooth 6-iron goes further than a forced 8.",tags:"wind,headwind,club-selection,water",tier:"Free",techAnim:"hole_par3_wind",techAnimParams:{wind:"into"}},
@@ -4271,7 +4277,7 @@ function submitDebrief(){
     <div class="db-leak-name">${leak.icon} ${leak.label}</div>
     <div class="db-leak-desc">${leak.desc}</div>`;
 
-  // Persist the diagnosis so home + training can target this leak
+  // Persist the review area so home + training can route reflection without claiming diagnosis
   S.leak = { key:leak.key, label:leak.label, icon:leak.icon, pillarName:leak.pillarName, leakTags:leak.leakTags, date:todayStr() };
   saveState();
 
@@ -11055,34 +11061,60 @@ const GSS_SOURCE = Object.freeze({
   pgaPutting:'https://www.pga.com/story/separate-line-and-speed-in-your-putting-routine',
   pgaPractice:'https://www.pga.com/story/3-fun-drills-to-dial-in-your-driving-chipping-and-putting',
   pgaRoutine:'https://www.pga.com/story/nelly-korda-putting-lesson-how-early-round-focus-and-speed-control-can-save-your-score',
-  usgaPace:'https://www.usga.org/content/usga/home-page/pace-of-play-resource-center/tips-and-suggestions-for-improving-pace-of-play.html'
+  usgaPace:'https://www.usga.org/content/usga/home-page/pace-of-play-resource-center/tips-and-suggestions-for-improving-pace-of-play.html',
+  pgaPrepare:'https://www.pga.com/story/the-simple-keys-to-preparing-for-an-important-round-of-golf',
+  pgaWarmup:'https://www.pga.com/story/five-steps-to-warm-up-before-your-round',
+  pgaFirstTee:'https://www.pga.com/story/3-keys-to-open-your-round-with-a-successful-first-tee-shot',
+  pgaPressure:'https://www.pga.com/story/nelly-kordas-winning-mindset-how-to-protect-a-great-golf-round-under-pressure',
+  pgaGamePlan:'https://www.pga.com/story/range-session-game-planning',
+  pgaReview:'https://www.pga.com/story/analyze-your-golf-game-and-tell-the-story-beyond-the-scorecard'
 });
 const GOLF_SHARPEN_ASSETS=Object.freeze({
-  driver_slice:{type:'clinic',title:'Find the Culprit · curve',description:'Shot Clinic · Driver slice',destination:'openClinicFault',routeParams:[0,0],launchStatus:'approved'},
-  driver_hook:{type:'clinic',title:'Find the Culprit · left curve',description:'Shot Clinic · Snap hook',destination:'openClinicFault',routeParams:[0,2],launchStatus:'approved'},
-  driver_strike:{type:'clinic',title:'Find the Culprit · strike',description:'Shot Clinic · Driver contact',destination:'openClinicFault',routeParams:[0,1],launchStatus:'approved'},
-  iron_contact:{type:'clinic',title:'Find the Culprit · iron contact',description:'Shot Clinic · Thin and heavy',destination:'openClinicFault',routeParams:[1,0],launchStatus:'approved'},
-  wedge_distance:{type:'clinic',title:'Find the Culprit · wedge distance',description:'Shot Clinic · Wedge distance',destination:'openClinicFault',routeParams:[2,0],launchStatus:'approved'},
-  chip_contact:{type:'clinic',title:'Find the Culprit · contact',description:'Shot Clinic · Chipping',destination:'openClinicFault',routeParams:[3,0],launchStatus:'approved'},
-  bunker:{type:'clinic',title:'Find the Culprit · bunker',description:'Shot Clinic · Bunker play',destination:'openClinicFault',routeParams:[4,0],launchStatus:'approved'},
-  putt_line:{type:'clinic',title:'Find the Culprit · start line',description:'Shot Clinic · Push or pull',destination:'openClinicFault',routeParams:[5,0],launchStatus:'approved'},
-  putt_pace:{type:'clinic',title:'Find the Culprit · pace',description:'Shot Clinic · Pace control',destination:'openClinicFault',routeParams:[5,1],launchStatus:'approved'},
-  three_putt:{type:'clinic',title:'Find the Culprit · three-putt',description:'Shot Clinic · Three-putt pattern',destination:'openClinicFault',routeParams:[5,2],launchStatus:'approved'},
-  course:{type:'course',title:'Test course decisions',description:'Play a Course scenarios',destination:'openCoursePicker',routeParams:[],launchStatus:'approved'},
-  advanced:{type:'advanced',title:'Try a focused decision rep',description:'What Would You Do?',destination:'openAdvanced',routeParams:[],launchStatus:'approved'},
-  debrief:{type:'debrief',title:'Take it to the 19th Hole',description:'Reflect after a real practice or round',destination:'showProfile',routeParams:[],launchStatus:'approved'}
-  ,mini_tee:{type:'mini',title:'Test tee-shot decisions',description:'Three approved reps · corridor, hazard and club',destination:'startSharpenMiniSession',routeParams:['Tee-shot decisions',['QE5_014','QE5_015','QE5_016'],1],launchStatus:'approved'}
-  ,mini_putting:{type:'mini',title:'Test pace under consequence',description:'Three approved reps · lag pace and pressure',destination:'startSharpenMiniSession',routeParams:['Putting pace',['QE5_004','QE5_026','QE5_032'],2],launchStatus:'approved'}
-  ,mini_course:{type:'mini',title:'Read conditions before choosing',description:'Three approved reps · wind, lie and target',destination:'startSharpenMiniSession',routeParams:['Conditions and lies',['QE5_036','Q021','QE5_027'],1],launchStatus:'approved'}
-  ,mini_approach:{type:'mini',title:'Test the approach window',description:'Three approved reps · carry, club and safe target',destination:'startSharpenMiniSession',routeParams:['Approach window',['QE5_007','QE5_017','QE5_021'],0],launchStatus:'approved'}
-  ,mini_short:{type:'mini',title:'Choose the short-game window',description:'Three approved reps · flight, landing and reliability',destination:'startSharpenMiniSession',routeParams:['Short-game selection',['QE5_018','QE5_023','QE5_035'],2],launchStatus:'approved'}
-  ,mini_mental:{type:'mini',title:'Protect the next decision',description:'Three approved reps · reset, expectation and pressure',destination:'startSharpenMiniSession',routeParams:['Pressure and reset',['QE5_030','QE5_037','QE5_039'],3],launchStatus:'approved'}
-  ,hole_target:{type:'hole',title:'Play the Reachable Risk',description:'Exact hole · corridor and club choice',destination:'startSharpenHole',routeParams:[0],launchStatus:'approved'}
-  ,hole_hazard:{type:'hole',title:'Play White Dogwood',description:'Exact hole · hazard shapes the target',destination:'startSharpenHole',routeParams:[9],launchStatus:'approved'}
-  ,hole_pressure:{type:'hole',title:'Play the Match-Play Closer',description:'Exact hole · score changes the decision',destination:'startSharpenHole',routeParams:[10],launchStatus:'approved'}
-  ,hole_recovery:{type:'hole',title:'Play the Recovery',description:'Exact hole · trees and disciplined escape',destination:'startSharpenHole',routeParams:[11],launchStatus:'approved'}
+  driver_slice:{type:'clinic',title:'Find the Culprit · curve',description:'Shot Clinic · Driver slice',destination:'openClinicFault',routeParams:[0,0],learningKeys:['tee-curve','tee-start'],launchStatus:'approved'},
+  driver_hook:{type:'clinic',title:'Find the Culprit · left curve',description:'Shot Clinic · Snap hook',destination:'openClinicFault',routeParams:[0,2],learningKeys:['tee-curve'],launchStatus:'approved'},
+  driver_strike:{type:'clinic',title:'Find the Culprit · strike',description:'Shot Clinic · Driver contact',destination:'openClinicFault',routeParams:[0,1],learningKeys:['tee-strike'],launchStatus:'approved'},
+  iron_contact:{type:'clinic',title:'Find the Culprit · iron contact',description:'Shot Clinic · Thin and heavy',destination:'openClinicFault',routeParams:[1,0],learningKeys:['approach-contact'],launchStatus:'approved'},
+  wedge_distance:{type:'clinic',title:'Find the Culprit · wedge distance',description:'Shot Clinic · Wedge distance',destination:'openClinicFault',routeParams:[2,0],learningKeys:['approach-distance'],launchStatus:'approved'},
+  chip_contact:{type:'clinic',title:'Find the Culprit · contact',description:'Shot Clinic · Chipping',destination:'openClinicFault',routeParams:[3,0],learningKeys:['green-contact','green-landing'],launchStatus:'approved'},
+  bunker:{type:'clinic',title:'Find the Culprit · bunker',description:'Shot Clinic · Bunker play',destination:'openClinicFault',routeParams:[4,0],learningKeys:['green-bunker'],launchStatus:'approved'},
+  putt_line:{type:'clinic',title:'Find the Culprit · start line',description:'Shot Clinic · Push or pull',destination:'openClinicFault',routeParams:[5,0],learningKeys:['putting-line','putting-read','putting-short'],launchStatus:'approved'},
+  putt_pace:{type:'clinic',title:'Find the Culprit · pace',description:'Shot Clinic · Pace control',destination:'openClinicFault',routeParams:[5,1],learningKeys:['putting-pace','putting-read'],launchStatus:'approved'},
+  three_putt:{type:'clinic',title:'Find the Culprit · three-putt',description:'Shot Clinic · Three-putt pattern',destination:'openClinicFault',routeParams:[5,2],learningKeys:['putting-pace'],launchStatus:'approved'},
+  debrief:{type:'debrief',title:'Review this round now',description:'19th Hole · turn the round into one next focus',destination:'showDebrief',routeParams:[],learningKeys:['round-review'],launchStatus:'approved'},
+  mini_before:{type:'mini',title:'Build today’s plan',description:'Three reviewed reps · conditions, warm-up and transfer',destination:'startSharpenMiniSession',routeParams:['Before the Round',['QE5_040','QE5_041','QE5_042'],1],learningKeys:['before-plan','before-warmup','before-range','before-rushed'],launchStatus:'approved'},
+  mini_first:{type:'mini',title:'Rehearse the opening tee',description:'Three reviewed reps · nerves, club and corridor',destination:'startSharpenMiniSession',routeParams:['First Tee',['QE5_043','QE5_044','QE5_045'],1],learningKeys:['first-nerves','first-corridor','first-club','first-commitment'],launchStatus:'approved'},
+  mini_tee:{type:'mini',title:'Test tee-shot decisions',description:'Three approved reps · corridor, hazard and club',destination:'startSharpenMiniSession',routeParams:['Tee-shot decisions',['QE5_014','QE5_015','QE5_016'],1],learningKeys:['tee-curve','tee-start','tee-choice'],launchStatus:'approved'},
+  mini_putting:{type:'mini',title:'Test pace under consequence',description:'Three approved reps · lag pace and pressure',destination:'startSharpenMiniSession',routeParams:['Putting pace',['QE5_004','QE5_026','QE5_032'],2],learningKeys:['putting-pace'],launchStatus:'approved'},
+  mini_course:{type:'mini',title:'Read conditions before choosing',description:'Three approved reps · wind, lie and target',destination:'startSharpenMiniSession',routeParams:['Conditions and lies',['QE5_036','Q021','QE5_027'],1],learningKeys:['approach-flight','approach-contact','approach-target'],launchStatus:'approved'},
+  mini_approach:{type:'mini',title:'Test the approach window',description:'Three approved reps · carry, club and safe target',destination:'startSharpenMiniSession',routeParams:['Approach window',['QE5_007','QE5_017','QE5_021'],0],learningKeys:['approach-distance','approach-target'],launchStatus:'approved'},
+  mini_short:{type:'mini',title:'Choose the short-game window',description:'Three approved reps · flight, landing and reliability',destination:'startSharpenMiniSession',routeParams:['Short-game selection',['QE5_018','QE5_023','QE5_035'],2],learningKeys:['green-landing','green-selection'],launchStatus:'approved'},
+  mini_pressure:{type:'mini',title:'Protect the next decision',description:'Three approved reps · reset, expectation and consequence',destination:'startSharpenMiniSession',routeParams:['Pressure Moments',['QE5_030','QE5_037','QE5_026'],3],learningKeys:['pressure-score','pressure-consequence','pressure-pace','pressure-reset'],launchStatus:'approved'},
+  hole_target:{type:'hole',title:'Play the Reachable Risk',description:'Exact hole · corridor and club choice',destination:'startSharpenHole',routeParams:[0],learningKeys:['tee-choice','first-club','first-corridor'],launchStatus:'approved'},
+  hole_hazard:{type:'hole',title:'Play White Dogwood',description:'Exact hole · hazard shapes the target',destination:'startSharpenHole',routeParams:[9],learningKeys:['approach-target','pressure-consequence'],launchStatus:'approved'},
+  hole_pressure:{type:'hole',title:'Play the Match-Play Closer',description:'Exact hole · score changes the decision',destination:'startSharpenHole',routeParams:[10],learningKeys:['pressure-score','pressure-pace','pressure-reset'],launchStatus:'approved'},
+  hole_recovery:{type:'hole',title:'Play the Recovery',description:'Exact hole · trees and disciplined escape',destination:'startSharpenHole',routeParams:[11],learningKeys:['approach-flight','green-selection'],launchStatus:'approved'}
+});
+const GSS_QUESTION_LEARNING=Object.freeze({
+ QE5_040:['before-plan','before-rushed'],QE5_041:['before-warmup','before-range'],QE5_042:['before-range','before-rushed'],
+ QE5_043:['first-nerves','first-commitment'],QE5_044:['first-club'],QE5_045:['first-corridor'],
+ QE5_014:['tee-curve','tee-start','tee-choice'],QE5_015:['tee-choice'],QE5_016:['tee-choice'],
+ QE5_004:['putting-pace'],QE5_026:['putting-pace','pressure-consequence','pressure-score'],QE5_032:['putting-pace'],
+ QE5_036:['approach-flight'],Q021:['approach-flight'],QE5_027:['approach-contact','approach-target'],
+ QE5_007:['approach-distance'],QE5_017:['approach-distance','approach-target'],QE5_021:['approach-target'],
+ QE5_018:['green-selection'],QE5_023:['green-selection','green-landing'],QE5_035:['green-selection'],
+ QE5_030:['pressure-score','pressure-reset'],QE5_037:['pressure-pace','pressure-reset']
 });
 const GSS_BLUEPRINTS=Object.freeze({
+ before:{label:'Before the Round',description:'Conditions, plan and useful preparation',issues:[
+  ['plan','I started without a clear plan','What was missing before you arrived?','today’s conditions and danger','a simple target plan'],
+  ['warmup','The warm-up gave me no useful picture','What did you leave without knowing?','today’s stock flight','today’s contact or pace'],
+  ['range','I tried to take a perfect range swing out','What replaced the shot you actually had?','a technical thought','an unrealistic ball flight'],
+  ['rushed','I arrived rushed or unprepared','What disappeared first?','time to read conditions','a calm first-shot decision']]},
+ first:{label:'First Tee',description:'Nerves, corridor, club and commitment',issues:[
+  ['nerves','The first tee felt bigger than the shot','Was the decision still clear?','yes, but my body felt quick','no, I changed the shot'],
+  ['club','The opening club choice felt unclear','What mattered more?','removing reachable trouble','leaving a playable next shot'],
+  ['corridor','I had no clear start corridor','What did you aim around?','my stock shape','the perfect straight shot'],
+  ['commitment','I steered or forced the opening swing','When did doubt arrive?','before I addressed the ball','once I was over it']]},
  mental:{label:'Mental Game',description:'Pressure, confidence and staying present',pos:[50,19,'left',180],issues:[
   ['pressure','Failed mainly under pressure','Did the decision change, or did execution feel rushed?','decision stayed clear','decision changed'],
   ['reset','One bad shot carried into the next','What lingered most?','the outcome','the mechanics'],
@@ -11118,6 +11150,11 @@ const GSS_BLUEPRINTS=Object.freeze({
   ['inconsistent','My routine changed shot to shot','Which part was least stable?','decision and picture','breath and trigger'],
   ['rushed','I felt rushed','What disappeared first?','target clarity','physical readiness'],
   ['blank','I had no clear cue','What would help more?','one external target','one tempo word']]},
+ pressure:{label:'Pressure Moments',description:'Score, consequence, tempo and reset',issues:[
+  ['score','The score changed my shot choice','Which temptation appeared?','protect what I had','win back a shot immediately'],
+  ['consequence','Trouble felt larger when it mattered','Was the playable miss already clear?','yes, but I fixated on trouble','no, the target stayed vague'],
+  ['pace','My routine sped up or froze','What changed first?','my walking and breathing pace','the time spent deciding'],
+  ['reset','The previous hole followed me','What lingered?','the score or outcome','a swing explanation']]},
  nineteenth:{label:'19th Hole',description:'Review, learn and choose tomorrow’s focus',issues:[
   ['cost','I’m not sure what cost me most','Which evidence is clearer?','one expensive decision','one repeated execution pattern'],
   ['pattern','The same mistake kept returning','Where did it repeat?','in the decision','after I addressed the ball'],
@@ -11126,17 +11163,25 @@ const GSS_BLUEPRINTS=Object.freeze({
 });
 const GOLF_SHARPEN_REGIONS={}; const GOLF_SHARPEN_ROUTES={}; const GOLF_SHARPEN_RESULTS={};
 const GSS_ROUND_STAGES=Object.freeze({
- before:{number:1,label:'Before the Round',description:'Plan with purpose',source:'routine'},
- first:{number:2,label:'First Tee',description:'Start with clarity',source:'mental'},
+ before:{number:1,label:'Before the Round',description:'Plan with purpose',source:'before'},
+ first:{number:2,label:'First Tee',description:'Start with clarity',source:'first'},
  tee:{number:3,label:'Off the Tee',description:'Find more fairways',source:'tee'},
  approach:{number:4,label:'Approach',description:'Choose the right window',source:'approach'},
  green:{number:5,label:'Around the Green',description:'Assess, choose, execute',source:'short'},
  putting:{number:6,label:'Putting',description:'Read it, pace it, roll it',source:'putting'},
- pressure:{number:7,label:'Pressure Moments',description:'Play your game when it matters',source:'mental'},
+ pressure:{number:7,label:'Pressure Moments',description:'Play your game when it matters',source:'pressure'},
  nineteenth:{number:8,label:'19th Hole',description:'Review, learn, sharpen tomorrow',source:'nineteenth'}
 });
-const GSS_ASSET_BY_REGION={mental:['mini_mental','debrief'],course:['mini_course','course'],tee:['mini_tee','driver_slice'],approach:['mini_approach','iron_contact'],short:['mini_short','chip_contact'],putting:['mini_putting','putt_line'],routine:['mini_mental','debrief'],nineteenth:['debrief','advanced']};
+const GSS_ASSET_BY_REGION={before:['mini_before'],first:['mini_first'],tee:['mini_tee','driver_slice'],approach:['mini_approach'],short:['mini_short'],putting:['mini_putting'],pressure:['mini_pressure','hole_pressure'],nineteenth:['debrief']};
 const GSS_FOCUS_BY_ISSUE=Object.freeze({
+ before_plan:['Check conditions, name the expensive miss and choose one conservative default.','Write one target rule you can use before every full shot.'],
+ before_warmup:['Use the warm-up to discover today’s start and curve—not to rebuild your swing.','Test contact and pace, then take the most reliable version to the first tee.'],
+ before_range:['Carry one observable ball-flight cue to the course; leave the swing rebuild behind.','Choose the playable stock shot you own today, not the flight you produced once.'],
+ before_rushed:['Read wind, firmness and first-hole trouble before hitting another ball.','Slow the first decision: club, corridor, committed picture.'],
+ first_nerves:['Keep the chosen shot and lengthen the exhale before beginning the routine.','Step back, choose again once, then keep that decision over the ball.'],
+ first_club:['Choose the club that cannot reach the opening disaster.','Choose the club that leaves a normal next shot without inventing precision.'],
+ first_corridor:['Aim the whole stock-flight window into playable ground.','Replace “straight” with a start corridor wide enough for your normal shape.'],
+ first_commitment:['Finish the decision behind the ball; step in only with one picture.','If doubt appears over the ball, step away and restart—do not steer.'],
  mental_pressure:['Keep the shot choice unchanged and slow only the start of your routine.','Make the choice before the pressure conversation starts.'],
  mental_reset:['Use a physical finish line: one breath, name the next target, then walk on.','Describe the miss once, then return attention to the next target.'],
  mental_confidence:['Choose the safest clear picture before you address the ball.','Keep one go-signal once the club is grounded.'],
@@ -11165,12 +11210,24 @@ const GSS_FOCUS_BY_ISSUE=Object.freeze({
  routine_inconsistent:['Keep the decision-picture sequence identical for five shots.','Use the same breath and physical trigger for five shots.'],
  routine_rushed:['Name the target corridor before approaching the ball.','Do not start until balance and readiness are present.'],
  routine_blank:['Use one external start or landing target.','Use one neutral tempo word—nothing else.']
+ ,pressure_score:['Keep the target and routine that produced the position you are protecting.','Return to the normal plan; the previous score does not price this shot.']
+ ,pressure_consequence:['Look once at trouble, then hold attention on the playable corridor.','Choose the safe edge explicitly before selecting the club.']
+ ,pressure_pace:['Restore walking pace and one full exhale before the decision.','Finish the choice behind the ball; do not borrow time from execution.']
+ ,pressure_reset:['Name the score once, then choose this shot on its own evidence.','Do not diagnose mid-round; collect the observation and play the next target.']
  ,nineteenth_cost:['Replay the expensive decision before judging the swing.','Track the repeated observable pattern, not the worst result.']
  ,nineteenth_pattern:['Name the decision that repeated and choose one safer default.','Observe the earliest repeatable change after address.']
  ,nineteenth_strength:['Save the choice that travelled well and use it as tomorrow’s baseline.','Keep the routine sequence that survived the round.']
  ,nineteenth_next:['Replay one decision and write the choice you would make now.','Collect one clean observation before choosing a fix.']
 });
 const GSS_LENS_BY_ISSUE=Object.freeze({
+ before_plan:'Preparation is not predicting every shot. It is deciding how today’s conditions and expensive misses will shape a few dependable defaults.',
+ before_warmup:'A warm-up samples today’s ball flight, contact and pace. Treat it as information gathering, not a last-minute swing rebuild.',
+ before_range:'Range success does not guarantee a course pattern. Take one observable flight and one playable stock shot—not a catalogue of mechanics.',
+ before_rushed:'Rushing becomes expensive when it removes information or forces a decision over the ball. Recover the decision sequence before chasing feel.',
+ first_nerves:'Nerves are normal information, not proof that the swing has changed. Preserve the decision and give the routine a calm beginning.',
+ first_club:'The opening club is a consequence decision. Remove reachable disaster without creating an unnecessarily demanding next shot.',
+ first_corridor:'A target is not a point. The useful first-tee picture contains the expected start and curve window with a playable miss.',
+ first_commitment:'Commitment does not mean swinging harder. It means the choice is finished before address and does not get renegotiated during motion.',
  tee_curve:'A ball can begin near the intended line and still curve out of the corridor. An immediately offline start demands a different first look.',
  tee_start:'Start direction and curvature are separate observations. Watch the opening flight before judging the final position.',
  tee_strike:'Launch height cannot identify strike by itself. Pair the flight with a visible face-contact mark before changing technique.',
@@ -11185,8 +11242,30 @@ const GSS_LENS_BY_ISSUE=Object.freeze({
  course_club:'Club and target are one decision: the club’s normal window must fit the required carry and safe miss.',
  approach_distance:'Distance control is a front-to-back problem. Separate carry from total finish before blaming club selection.',
  approach_contact:'The lie may change strike, launch and spin together. Observe contact before treating final distance as a yardage error.',
+ approach_target:'Attack or protect is decided by the safe miss and required carry—not by confidence alone. Price the consequence before looking at the flag.',
+ approach_flight:'Wind, lie and obstacles constrain the available flight. Choose among shots you own rather than manufacturing a trajectory under pressure.',
  short_contact:'A heavy or thin result is an outcome. Use strike and landing evidence to distinguish contact from rollout prediction.',
  short_landing:'Landing spot is the bridge between technique and result. Hold the shot constant while learning the first bounce.'
+ ,short_selection:'Shot selection begins with lie, obstacle and landing surface. Use the lowest-complexity option that satisfies all three.'
+ ,short_bunker:'First secure a predictable exit. Distance control becomes the next task only after the ball reliably leaves the bunker.'
+ ,pressure_score:'Score awareness changes emotion, but it need not change the evidence for the shot. Re-price target, miss and club before altering the plan.'
+ ,pressure_consequence:'Attention naturally moves toward danger under pressure. The corrective task is a clearer playable corridor, not pretending the danger is absent.'
+ ,pressure_pace:'Pressure often changes timing before technique. Restore the decision and routine pace before assigning a swing fault.'
+ ,pressure_reset:'A previous outcome can bias the next choice toward fear or recovery aggression. Grade the new decision independently.'
+ ,nineteenth_cost:'One expensive decision and one repeated shot pattern are different evidence. Separate them before deciding what deserves tomorrow’s attention.'
+ ,nineteenth_pattern:'A repeated outcome becomes useful only when you can name the earliest repeated observation. Avoid turning a score pattern into a swing diagnosis.'
+ ,nineteenth_strength:'A review should preserve what held up as well as identify leakage. A reliable choice or routine is part of tomorrow’s plan.'
+ ,nineteenth_next:'When evidence is unclear, the next focus is observation—not correction. Choose one thing you can actually notice and record.'
+});
+const GSS_CUE_BY_ISSUE=Object.freeze({
+ before_plan:'Conditions. Danger. Default.',before_warmup:'Sample, don’t rebuild.',before_range:'Take today’s shot.',before_rushed:'Slow the first decision.',
+ first_nerves:'Exhale. Picture. Go.',first_club:'Remove the disaster.',first_corridor:'Shape inside space.',first_commitment:'Decide, then step in.',
+ tee_curve:'Start. Curve. Corridor.',tee_start:'Start before finish.',tee_strike:'Mark the strike.',tee_choice:'Fit the corridor.',
+ approach_distance:'Carry before total.',approach_contact:'Lie. Strike. Launch.',approach_target:'Safe miss first.',approach_flight:'Choose the available flight.',
+ short_contact:'Strike, then finish.',short_landing:'Land it there.',short_selection:'Lie. Route. Landing.',short_bunker:'Out, then close.',
+ putting_pace:'Finish in the zone.',putting_line:'Start it there.',putting_read:'One line, one pace.',putting_short:'Same picture. Roll.',
+ pressure_score:'This shot, normal plan.',pressure_consequence:'See playable space.',pressure_pace:'Restore your pace.',pressure_reset:'New shot, new evidence.',
+ nineteenth_cost:'Decision or pattern?',nineteenth_pattern:'Name what repeated.',nineteenth_strength:'Keep what travelled.',nineteenth_next:'Observe one thing.'
 });
 const GSS_WATCH_BY_ISSUE=Object.freeze({
  tee_curve:'Watch only the opening start line, then the direction of curve.',tee_start:'Watch the first section of flight before the apex.',tee_strike:'Notice strike location and launch height as separate clues.',tee_choice:'Notice whether the corridor fits the stock shot.',
@@ -11213,17 +11292,28 @@ Object.entries(GSS_ROUND_STAGES).forEach(([rid,stage])=>{
     GOLF_SHARPEN_ROUTES[routeId]={question:q,boundaryCopy:'Choose what felt closest. This creates a useful hypothesis—not a diagnosis of your swing.',answers:[a,bAnswer].map((answer,idx)=>({label:answer,resultId:issueId+'_'+idx}))};
     [a,bAnswer].forEach((answer,idx)=>{
       const observable=label.toLowerCase();
-      const sourceIssue=source+'_'+iid,decisionFirst=/mental|course|routine|nineteenth/.test(source);
+      const sourceIssue=source+'_'+iid,decisionFirst=/before|first|mental|course|routine|pressure|nineteenth/.test(source);
       const focus=GSS_FOCUS_BY_ISSUE[sourceIssue][idx];
       let assets=GSS_ASSET_BY_REGION[source].slice(0,2);
       if(source==='tee'&&iid==='curve') assets=idx?['driver_slice','mini_tee']:['driver_hook','mini_tee'];
-      if(source==='tee'&&iid==='strike') assets=['driver_strike','mini_tee'];
-      if(source==='putting'&&iid==='pace') assets=['putt_pace','three_putt'];
-      if(source==='short'&&iid==='bunker') assets=['bunker','mini_short'];
+      if(source==='tee'&&iid==='strike') assets=['driver_strike'];
+      if(source==='approach'&&iid==='distance') assets=['mini_approach','wedge_distance'];
+      if(source==='approach'&&iid==='contact') assets=['iron_contact','mini_course'];
+      if(source==='approach'&&iid==='target') assets=['mini_approach','hole_hazard'];
+      if(source==='approach'&&iid==='flight') assets=['mini_course','hole_recovery'];
+      if(source==='putting'&&iid==='pace') assets=idx===0?['putt_pace','three_putt']:['putt_pace','mini_putting'];
+      if(source==='putting'&&iid==='line') assets=['putt_line'];
+      if(source==='putting'&&iid==='read') assets=['putt_pace','putt_line'];
+      if(source==='putting'&&iid==='short') assets=['putt_line'];
+      if(source==='short'&&iid==='contact') assets=['chip_contact'];
+      if(source==='short'&&iid==='landing') assets=['chip_contact','mini_short'];
+      if(source==='short'&&iid==='selection') assets=['mini_short','hole_recovery'];
+      if(source==='short'&&iid==='bunker') assets=['bunker'];
       if(source==='tee'&&iid==='choice') assets=['mini_tee','hole_target'];
-      if((rid==='first'||rid==='pressure')&&iid==='pressure') assets=['mini_mental','hole_pressure'];
-      const cue=source==='putting'?'Line. Pace. Roll.':source==='tee'?'Start. Curve. Corridor.':source==='short'?'Land it there.':source==='approach'?'Window, then target.':rid==='nineteenth'?'Keep one. Learn one. Choose one.':decisionFirst?'Choose it. See it. Go.':'Name the window.';
-      GOLF_SHARPEN_RESULTS[issueId+'_'+idx]={regionId:rid,issue:label,distinction:answer,read:'You reported that '+observable+' and that “'+answer+'” felt closest. That observation narrows where to look, but more than one mechanism can produce the same result.',coachLens:GSS_LENS_BY_ISSUE[sourceIssue]||(decisionFirst?'The useful gain is often clarity before execution: choose the constraint, name the intended shot, then notice whether commitment survives.':'The final outcome is the symptom. Observe the earliest difference you can verify before changing technique.'),watchFor:GSS_WATCH_BY_ISSUE[sourceIssue]||'Notice whether the selected focus changes what you can observe.',focus,cue,assetIds:assets,confidence:'guided-hypothesis',reviewStatus:'launch-reviewed',sources:source==='putting'?[GSS_SOURCE.pgaPutting,GSS_SOURCE.pgaRoutine]:source==='routine'?[GSS_SOURCE.usgaPace]:[GSS_SOURCE.pgaPractice]};
+      if(source==='pressure'&&iid==='consequence') assets=['mini_pressure','hole_hazard'];
+      const cue=GSS_CUE_BY_ISSUE[sourceIssue];
+      const sources=source==='before'?[GSS_SOURCE.pgaPrepare,GSS_SOURCE.pgaWarmup,GSS_SOURCE.pgaGamePlan]:source==='first'?[GSS_SOURCE.pgaFirstTee]:source==='pressure'?[GSS_SOURCE.pgaPressure]:source==='putting'?[GSS_SOURCE.pgaPutting,GSS_SOURCE.pgaRoutine]:source==='nineteenth'?[GSS_SOURCE.pgaReview]:[GSS_SOURCE.pgaPractice];
+      GOLF_SHARPEN_RESULTS[issueId+'_'+idx]={regionId:rid,issue:label,distinction:answer,read:'You reported that '+observable+' and that “'+answer+'” felt closest. That observation narrows where to look, but more than one mechanism can produce the same result.',coachLens:GSS_LENS_BY_ISSUE[sourceIssue],watchFor:GSS_WATCH_BY_ISSUE[sourceIssue]||'Notice whether the selected focus changes what you can observe.',focus,cue,learningKeys:[rid+'-'+iid,...(rid==='nineteenth'?['round-review']:[])],assetIds:assets,confidence:'guided-hypothesis',reviewStatus:'launch-reviewed',sources};
     });
   });
 });
@@ -11244,7 +11334,7 @@ function startSharpenHole(index){
  const safeLoad=()=>{try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&x.version===VERSION)state={...state,...x}}catch(e){}};
  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- function set(html,label){main.innerHTML=html;stageLabel.textContent=label;persist();requestAnimationFrame(()=>main.focus({preventScroll:true}))}
+ function set(html,label){main.innerHTML=html;stageLabel.textContent=label;el.scrollTop=0;persist();requestAnimationFrame(()=>main.focus({preventScroll:true}))}
  function regions(){
   state.stage='regions';state.regionId=state.issueId=state.routeId=state.resultId=null;
   const moments=Object.entries(GOLF_SHARPEN_REGIONS).map(([id,r])=>`<button class="gss-moment${id==='nineteenth'?' recommended':''}" data-region="${id}" aria-label="${esc(r.label)}: ${esc(r.description)}"><span class="gss-moment-num" aria-hidden="true">${r.number}</span><span class="gss-moment-copy"><b>${esc(r.label)}</b><small>${esc(r.description)}</small>${id==='nineteenth'?'<span class="gss-moment-tag">Best after a round</span>':''}</span><span class="gss-moment-arrow" aria-hidden="true">›</span></button>`).join('');
@@ -11289,8 +11379,8 @@ function startSharpenHole(index){
   const errors=[];const required=['before','first','tee','approach','green','putting','pressure','nineteenth'];
   required.forEach((id,index)=>{const r=GOLF_SHARPEN_REGIONS[id];if(!r)errors.push('missing-region:'+id);else{if(r.number!==index+1)errors.push('round-order:'+id);if(r.issues.length<3||r.issues.length>5)errors.push('issue-count:'+id)}});
   Object.values(GOLF_SHARPEN_ROUTES).forEach(r=>r.answers.forEach(a=>{if(!GOLF_SHARPEN_RESULTS[a.resultId])errors.push('result:'+a.resultId)}));
-  Object.entries(GOLF_SHARPEN_RESULTS).forEach(([id,r])=>{if(!r.read||!r.coachLens||!r.focus||!r.cue)errors.push('copy:'+id);if(r.assetIds.length<1||r.assetIds.length>3)errors.push('assets:'+id);r.assetIds.forEach(a=>{if(!GOLF_SHARPEN_ASSETS[a]||GOLF_SHARPEN_ASSETS[a].launchStatus!=='approved')errors.push('asset:'+id+':'+a)});if(!r.reviewStatus||!r.sources.length)errors.push('review:'+id)});
-  Object.entries(GOLF_SHARPEN_ASSETS).forEach(([id,a])=>{if(a.type==='mini'){const ids=a.routeParams[1]||[];if(ids.length!==3||ids.some(qid=>!LAUNCH_QUESTIONS.some(q=>q.id===qid)))errors.push('mini:'+id)}if(a.destination==='startSharpenHole'){const hi=a.routeParams[0];if(!Number.isInteger(hi)||!ALL_HOLES[hi]||!LIVE_HOLE_INDEXES.includes(hi))errors.push('hole:'+id)}});
+  Object.entries(GOLF_SHARPEN_RESULTS).forEach(([id,r])=>{if(!r.read||!r.coachLens||!r.focus||!r.cue||!r.learningKeys?.length)errors.push('copy:'+id);if(/^The useful gain is often|^The final outcome is the symptom/.test(r.coachLens))errors.push('generic-lens:'+id);if(r.assetIds.length<1||r.assetIds.length>3)errors.push('assets:'+id);r.assetIds.forEach(a=>{const asset=GOLF_SHARPEN_ASSETS[a];if(!asset||asset.launchStatus!=='approved')errors.push('asset:'+id+':'+a);else if(!asset.learningKeys?.some(k=>r.learningKeys.includes(k)))errors.push('semantic:'+id+':'+a)});if(!r.reviewStatus||!r.sources.length)errors.push('review:'+id)});
+  Object.entries(GOLF_SHARPEN_ASSETS).forEach(([id,a])=>{if(a.type==='mini'){const ids=a.routeParams[1]||[],covered=new Set(ids.flatMap(qid=>GSS_QUESTION_LEARNING[qid]||[]));if(ids.length!==3||ids.some(qid=>!LAUNCH_QUESTIONS.some(q=>q.id===qid))||a.learningKeys.some(k=>!covered.has(k)))errors.push('mini:'+id)}if(a.destination==='startSharpenHole'){const hi=a.routeParams[0];if(!Number.isInteger(hi)||!ALL_HOLES[hi]||!LIVE_HOLE_INDEXES.includes(hi))errors.push('hole:'+id)}});
   return {version:'2.0.0',model:'round-journey',ok:!errors.length,regions:Object.keys(GOLF_SHARPEN_REGIONS).length,routes:Object.keys(GOLF_SHARPEN_ROUTES).length,results:Object.keys(GOLF_SHARPEN_RESULTS).length,assets:Object.keys(GOLF_SHARPEN_ASSETS).length,errors};
  })();
  document.documentElement.dataset.gsgSharpenIntegrity=integrity.ok?'pass':'fail';document.documentElement.dataset.gsgSharpenReport=JSON.stringify(integrity);

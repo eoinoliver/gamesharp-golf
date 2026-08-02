@@ -156,16 +156,16 @@
         {
           "region": "before",
           "stage": "result",
-          "assets": 2,
-          "focus": "Step away when the decision changes; restart with one picture.",
+          "assets": 1,
+          "focus": "Check conditions, name the expensive miss and choose one conservative default.",
           "mentor": "Know the day’s conditions, your safe targets and the game you brought.",
           "mentorLink": 0
         },
         {
           "region": "first",
           "stage": "result",
-          "assets": 2,
-          "focus": "Keep the shot choice unchanged and slow only the start of your routine.",
+          "assets": 1,
+          "focus": "Keep the chosen shot and lengthen the exhale before beginning the routine.",
           "mentor": "One clear picture. One committed start. Let the round come to you.",
           "mentorLink": 0
         },
@@ -188,7 +188,7 @@
         {
           "region": "green",
           "stage": "result",
-          "assets": 2,
+          "assets": 1,
           "focus": "Use one landing spot and record strike before judging the finish.",
           "mentor": "See the shot the lie allows—not the shot you hoped to have.",
           "mentorLink": 1
@@ -205,14 +205,14 @@
           "region": "pressure",
           "stage": "result",
           "assets": 2,
-          "focus": "Keep the shot choice unchanged and slow only the start of your routine.",
+          "focus": "Keep the target and routine that produced the position you are protecting.",
           "mentor": "Feel the moment. Keep the decision and routine recognisably yours.",
           "mentorLink": 0
         },
         {
           "region": "nineteenth",
           "stage": "result",
-          "assets": 2,
+          "assets": 1,
           "focus": "Replay the expensive decision before judging the swing.",
           "mentor": "Keep what travelled. Learn from what repeated. Choose one thing for tomorrow.",
           "mentorLink": 0
@@ -260,15 +260,15 @@
           "exists": true
         },
         {
-          "id": "course",
-          "exists": true
-        },
-        {
-          "id": "advanced",
-          "exists": true
-        },
-        {
           "id": "debrief",
+          "exists": true
+        },
+        {
+          "id": "mini_before",
+          "exists": true
+        },
+        {
+          "id": "mini_first",
           "exists": true
         },
         {
@@ -292,7 +292,7 @@
           "exists": true
         },
         {
-          "id": "mini_mental",
+          "id": "mini_pressure",
           "exists": true
         },
         {

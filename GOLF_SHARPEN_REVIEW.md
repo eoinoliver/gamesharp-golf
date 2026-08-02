@@ -2,18 +2,18 @@
 
 ## Coverage
 
-The authoritative graph contains eight ordered round moments, 32 observable issues, 32 discriminating routes, 64 cautious results and 23 reviewed asset definitions. These round moments are the Sharpen navigation model; they do not replace the app's five educational pillars.
+The authoritative graph contains eight ordered round moments, 32 observable issues, 32 discriminating routes, 64 cautious results and 23 reviewed asset definitions. The launch bank contains 67 questions; 337 legacy questions remain quarantined. These round moments are the Sharpen navigation model; they do not replace the app's five educational pillars.
 
 | Region | Issues | Existing content pulled through |
 |---|---:|---|
-| Before the Round | 4 | focused routine rep, 19th Hole reflection |
-| First Tee | 4 | focused pressure rep, exact pressure hole |
+| Before the Round | 4 | three newly reviewed preparation, warm-up and transfer reps |
+| First Tee | 4 | three newly reviewed nerves, opening-club and corridor reps |
 | Off the Tee | 4 | exact driver fault comparisons, Play a Hole |
 | Approach | 4 | iron contact, focused approach session |
 | Around the Green | 4 | chipping, bunker and focused short-game session |
 | Putting | 4 | start-line, pace and three-putt comparisons |
-| Pressure Moments | 4 | focused pressure rep, exact pressure hole |
-| 19th Hole | 4 | post-round debrief, focused decision replay |
+| Pressure Moments | 4 | differentiated score, consequence, routine-pace and reset routes; exact pressure/hazard holes |
+| 19th Hole | 4 | direct post-round debrief with exact Sharpen return |
 
 ## Golf-native entry model
 
@@ -23,7 +23,13 @@ Sharpen now begins with the chronological journey of a round: Before the Round, 
 
 The highest-frequency tee-flight, putting, Course IQ, approach-contact and short-game routes now use individually authored Coach's Lens explanations. Every linked legacy asset receives the current focus and a route-specific observation instruction, keeps that context visible during the asset, and offers an exact one-tap return to the originating Sharpen result. This turns Shot Clinic, Play a Hole, Play a Course and decision content into continuations of the lesson rather than generic destinations.
 
-Six focused mini-sessions each contain exactly three named launch-approved questions. Four high-value routes enter an exact authored Play-a-Hole scenario: Reachable Risk, White Dogwood, Match-Play Closer and Recovery. Generic Play-a-Hole routing is not reachable from Sharpen. Both the coaching-strip return and each destination's normal exit restore the originating result.
+Eight focused mini-sessions each contain exactly three named launch-approved questions. Four high-value routes enter an exact authored Play-a-Hole scenario: Reachable Risk, White Dogwood, Match-Play Closer and Recovery. Conditions, hazard and recovery content that became unreachable during the round-model migration is now distributed across Approach and Pressure. Generic Play-a-Hole routing is not reachable from Sharpen. Both the coaching-strip return and each destination's normal exit restore the originating result. The 19th Hole action opens the debrief itself—not Profile—and its native close restores Sharpen context.
+
+## Semantic synchronization gate
+
+Every result and every Sharpen asset declares reviewed learning keys. A result cannot link an asset unless at least one learning key agrees. Focused question sessions also declare question-level keys; the build fails if their three questions do not substantiate every learning claim made by the asset. The contract additionally fails duplicate moment issue/focus sets, generic fallback lenses, unused assets, dead destinations and a 19th Hole action that does not open the debrief directly.
+
+The second-pass audit found and repaired two semantic failures before rollout: a pre-round result initially claimed coverage not taught by its question set, and a pressure-consequence result initially pointed to the wrong authored hole. The gate rejected both mappings.
 
 ## Result-page simplification and identity
 
@@ -45,4 +51,4 @@ No weak Sharpen route is reachable. "I'm not sure" deliberately returns an evide
 
 ## Current release state
 
-The round-journey replacement and result-page simplification are locally audited. Production publication is approved by the user for this batch.
+This semantic/content rebuild is locally audited and intentionally not published. It requires the contract's explicit audited-preview approval before production publication.
