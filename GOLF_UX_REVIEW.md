@@ -8,7 +8,7 @@ The hero is now a stable 96px brand strip in portrait and 72px in short landscap
 
 ## Jobs-style hierarchy
 
-Home exposes three immediate actions: today's edge, Play a Hole and Play a Course. The 3-hole and 9-hole decision runs remain available under `More ways to play`. No content was deleted and no learning or scoring logic was duplicated.
+Home now follows the Tennis hierarchy with two immediate actions: today's edge and one `Put today’s edge in play` invitation. Play a Course plus the 3-hole and 9-hole decision runs remain available under `More ways to play`. The former competing image-card grid is gone. No content was deleted and no learning or scoring logic was duplicated.
 
 Daily Complete already follows the same hierarchy: Today's Edge and one primary `Use it now` action are visible; rationale and secondary actions are progressively disclosed. Sharpen likewise shows three human intentions, one focus and one primary test. Profile/Review remains the secondary destination for progress and the broader library.
 
@@ -22,4 +22,4 @@ The launch-trust, Sharpen structural and semantic routing contracts continue to 
 
 ## Release state
 
-Audited locally at 320x568, 390x844 and 844x390. Production has not been changed; explicit preview approval remains required.
+Audited locally at 320x568, 390x844 and 844x390. The 320px surface scrolls from 0 to its available extent, keeps the hero at 96px throughout, and returns to 0 when Today is tapped again. Production publication was explicitly approved for this combined release.

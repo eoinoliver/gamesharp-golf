@@ -160,7 +160,7 @@ svg { display:block; }
 /* =============================================
    HOME
 ============================================= */
-#view-home { background:var(--dark); padding-top:0; padding-bottom:80px; }
+#view-home { background:linear-gradient(180deg,rgba(3,18,10,.73),rgba(4,14,8,.92)),url('GolfHero.png') center/cover fixed; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:auto; overflow-x:hidden; overscroll-behavior-y:contain; touch-action:pan-y; overflow-anchor:none; }
 .hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:flex-start; justify-content:space-between; padding:max(14px,env(safe-area-inset-top)) 14px 0; }
 .hero-topbar .logo-wordmark { font-size:30px; line-height:1; text-shadow:0 2px 10px rgba(0,0,0,.7); }
 .hero-tagline { font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:rgba(255,255,255,.82); margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.75); }
@@ -216,6 +216,7 @@ svg { display:block; }
   #view-home.gs-home-hero-image-failed .home-hero{background:radial-gradient(120% 100% at 70% 10%,#355c31 0%,#152619 52%,#080d09 100%);}
   #view-home.gs-home-hero-image-failed .home-hero-img{visibility:hidden;}
 }
+.home-play{display:block;width:calc(100% - 28px);min-height:116px;margin:12px 14px 0;padding:17px 19px;border:1px solid #ffffff22;border-radius:20px;background:linear-gradient(135deg,#102b1bcc,#07130dde);color:#fff;text-align:left;font:inherit;box-shadow:0 14px 34px #0005}.home-play-kicker{display:block;color:#c8a84b;font-size:10px;font-weight:850;letter-spacing:1.7px}.home-play strong{display:block;margin-top:7px;font-family:'Bebas Neue',sans-serif;font-size:29px;letter-spacing:.5px}.home-play .hec-hod{display:block;margin-top:5px;color:#c8d0ca;font-size:12px;line-height:1.35}.home-play-arrow{float:right;color:#d6ba58;font-size:24px}.home-screen-promise{margin:17px 20px 3px;color:#d8ddd9;font-size:12px;letter-spacing:.08em;text-align:center;text-transform:uppercase}.home-screen-promise b{color:#c8a84b}
 @media(orientation:landscape) and (max-height:500px){
   #view-home .home-hero{height:72px;max-height:72px;aspect-ratio:auto;margin-bottom:8px;border-radius:0 0 14px 14px;filter:brightness(.76) saturate(.9)}
   #view-home .home-hero-img{object-position:center 42%;filter:brightness(.68) contrast(1.08) saturate(.92)}
@@ -1630,33 +1631,9 @@ svg { display:block; }
     <button class="daily-btn" id="daily-btn" onclick="startDaily()">GET TODAY'S EDGE →</button>
   </div>
 
-  <!-- Signature Modes: Play a Hole | Play a Course (two thumbnails) -->
-  <p class="mode-heading">Signature Modes</p>
-  <div class="mode-grid">
-    <button class="mode-card" onclick="startHole()" aria-label="Play the hole of the day">
-      <div class="mode-thumb">
-        <img src="play-a-hole-hero.jpg" alt="Play a Hole">
-        <div class="mode-thumb-veil"></div>
-        <span class="mode-tag">Signature</span>
-        <div class="mode-title">PLAY A HOLE</div>
-      </div>
-      <div class="mode-cap" id="hec-hod">Shot-by-shot · scorecard</div>
-    </button>
-    <button class="mode-card" onclick="openCoursePicker()" aria-label="Choose a course to play">
-      <div class="mode-thumb">
-        <img src="play-a-course-hero.jpg" alt="Play a Course">
-
-        <div class="mode-thumb-veil"></div>
-        <span class="mode-tag blue">New</span>
-        <div class="mode-title">PLAY A COURSE</div>
-      </div>
-      <div class="mode-cap">⛳ <strong>2 courses:</strong> Laytown · Baltray</div>
-    </button>
-  </div>
-  <details class="home-more"><summary>More ways to play</summary><div class="home-more-actions"><button class="btn btn-dark" onclick="startDecisionRun()">PLAY A 3-HOLE DECISION RUN</button><button class="btn btn-dark" onclick="startDecisionRun(9)">PLAY A 9-HOLE DECISION RUN</button></div></details>
-
-  <!-- Free value, zero taps: today's pocket cue (tennis "one thing to remember") -->
-  <div class="one-thing" id="one-thing"></div>
+  <div class="home-screen-promise"><b>One decision.</b> One useful edge.</div>
+  <button class="home-play" onclick="startHole()" aria-label="Play the hole of the day"><span class="home-play-arrow" aria-hidden="true">›</span><span class="home-play-kicker">PLAY A HOLE</span><strong>Put today’s edge in play</strong><span class="hec-hod" id="hec-hod">Shot-by-shot · scorecard</span></button>
+  <details class="home-more"><summary>More ways to play</summary><div class="home-more-actions"><button class="btn btn-dark" onclick="openCoursePicker()">PLAY A COURSE</button><button class="btn btn-dark" onclick="startDecisionRun()">PLAY A 3-HOLE DECISION RUN</button><button class="btn btn-dark" onclick="startDecisionRun(9)">PLAY A 9-HOLE DECISION RUN</button></div></details>
 
   <div style="height:20px"></div>
 
