@@ -17,7 +17,9 @@ The authoritative graph contains eight ordered round moments, 32 observable issu
 
 ## Golf-native entry model
 
-Sharpen now begins with the chronological journey of a round: Before the Round, First Tee, Off the Tee, Approach, Around the Green, Putting, Pressure Moments and 19th Hole. The former illustrated golfer/body-hotspot entry has been removed from the reachable UI. The supplied `Your Round` artwork informed the sequence and tone, but is not shipped as an unreadable mobile image; the production UI renders the stages as semantic, accessible controls with no image dependency.
+Sharpen now begins with one human question—`What do you need now?`—and three intentions: `I'm about to play`, `Something cost me shots`, and `I've just finished`. Only then does it reveal the relevant moments of a round. Preparation exposes Before the Round and First Tee; in-round sharpening exposes Off the Tee through Pressure Moments; reflection enters the 19th Hole route directly. The eight-moment taxonomy remains authoritative without becoming eight simultaneous doors.
+
+The former illustrated golfer/body-hotspot entry has been removed from the reachable UI. The supplied `Your Round` artwork informed the sequence and tone, but is not shipped as an unreadable mobile image; the production UI renders the stages as semantic, accessible controls with no image dependency.
 
 ## High-leverage legacy integration
 
@@ -33,7 +35,7 @@ The second-pass audit found and repaired two semantic failures before rollout: a
 
 ## Result-page simplification and identity
 
-The visible `The Read` block has been removed; its useful distinction is carried once by Coach's Lens. A first result now follows one hierarchy: human playing identity, Coach's Lens, one focus and cue, then one or two exact actions. Copy and restart controls sit behind `More`. On a repeat view the focus comes first, introductory language disappears, the identity line compresses and the claim-boundary explanation is not repeated.
+The visible `The Read` block has been removed. Every first and repeat result now leads with one large focus, one short cue, one primary test and one benefit-led course action. Coach's Lens, the cautious hypothesis, mentor identity and any secondary test are collapsed under `Why this focus?`; copy and restart controls sit under `More`. A repeat visit changes the label to `Back to your focus` and does not restore the polite explanation stack.
 
 Shot Clinic actions are explicitly named `Find the Culprit` and open the exact relevant fault comparison. The current focus and observation instruction stay visible inside that legacy experience, and its native close returns to the same compact Sharpen result. Short-game identity includes a reviewed Seve Ballesteros film link from the DP World Tour; no quotation or mechanical claim is attributed to a player without a source.
 
@@ -50,5 +52,7 @@ The launch graph stores reviewable PGA and USGA source URLs on every technical r
 No weak Sharpen route is reachable. "I'm not sure" deliberately returns an evidence-collection plan instead of a guessed mechanism. Physical pain is outside the feature's selectable taxonomy; no injury prescription is offered.
 
 ## Current release state
+
+The simplified build passed the structural contract (8 moments, 32 routes, 64 results, 23 real assets), launch-trust audit, semantic journey audit and automated mobile audit at 320x568, 375x812, 390x844, 430x932 and 844x390. The audit also passed exact Shot Clinic, focused-session, Play-a-Hole and 19th Hole returns; interruption recovery; saved-focus check-back; reduced motion; 48px targets; and zero horizontal overflow or relevant browser errors.
 
 This semantic/content rebuild is locally audited and intentionally not published. It requires the contract's explicit audited-preview approval before production publication.

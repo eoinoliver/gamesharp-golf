@@ -46,7 +46,12 @@ assert(!/else if\(id === 'sharpen'\)\{ renderSharpen\(\)/.test(html),'Legacy lob
 assert(/prefers-reduced-motion:reduce/.test(html),'Reduced-motion treatment missing');
 assert(/class="gss-round"/.test(html)&&/class="gss-moment/.test(html),'round journey UI missing');
 assert(!/class="gss-player"|class="gss-hotspot"/.test(html),'legacy golfer/body-map entry remains reachable');
-assert(/Where did your round need you most\?/.test(html),'round-first prompt missing');
+assert(/What do you need now\?/.test(html),'three-state entry prompt missing');
+assert.equal((html.match(/data-mode="(prepare|sharpen|reflect)"/g)||[]).length,3,'entry must expose exactly three human states');
+assert(/mode==='prepare'\?\['before','first'\]:\['tee','approach','green','putting','pressure'\]/.test(html),'entry-state moment filtering is not authoritative');
+assert(/if\(mode==='reflect'\)\{state\.entryMode=mode;issues\('nineteenth'\)/.test(html),'reflect must enter the 19th Hole without another menu');
+assert(/const focus=`<section class="gss-result-lead"[\s\S]{0,1000}Test it now[\s\S]{0,700}<details class="gss-why"/.test(html),'result does not lead with one focus and one test before explanation');
+assert(!/data-save>Save this focus/.test(html)&&/Take this to the course/.test(html)&&/Make this tomorrow’s focus/.test(html),'benefit-led save language missing');
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');
 assert(/function set\(html,label\)\{[^}]*el\.scrollTop=0/.test(html),'Sharpen stage transitions can inherit stale mobile scroll');
 assert(/returnPending/.test(html)&&/returnFromAsset/.test(html),'Asset return context missing');

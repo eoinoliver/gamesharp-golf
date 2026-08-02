@@ -1,334 +1,38 @@
 {
+  "generatedAt": "2026-08-02",
+  "entryModel": "three-state-round-journey",
   "viewports": [
-    {
-      "width": 320,
-      "height": 568,
-      "integrity": "pass",
-      "viewport": 320,
-      "docWidth": 320,
-      "dialogWidth": 320,
-      "minTargets": 48,
-      "round": {
-        "x": 10,
-        "y": 220.75,
-        "width": 300,
-        "height": 586.546875,
-        "top": 220.75,
-        "right": 310,
-        "bottom": 807.296875,
-        "left": 10
-      },
-      "moments": 8,
-      "errors": []
-    },
-    {
-      "width": 375,
-      "height": 812,
-      "integrity": "pass",
-      "viewport": 375,
-      "docWidth": 375,
-      "dialogWidth": 375,
-      "minTargets": 48,
-      "round": {
-        "x": 16,
-        "y": 209.078125,
-        "width": 343,
-        "height": 615.84375,
-        "top": 209.078125,
-        "right": 359,
-        "bottom": 824.921875,
-        "left": 16
-      },
-      "moments": 8,
-      "errors": []
-    },
-    {
-      "width": 390,
-      "height": 844,
-      "integrity": "pass",
-      "viewport": 390,
-      "docWidth": 390,
-      "dialogWidth": 390,
-      "minTargets": 48,
-      "round": {
-        "x": 16,
-        "y": 209.078125,
-        "width": 358,
-        "height": 615.84375,
-        "top": 209.078125,
-        "right": 374,
-        "bottom": 824.921875,
-        "left": 16
-      },
-      "moments": 8,
-      "errors": []
-    },
-    {
-      "width": 430,
-      "height": 932,
-      "integrity": "pass",
-      "viewport": 430,
-      "docWidth": 430,
-      "dialogWidth": 430,
-      "minTargets": 48,
-      "round": {
-        "x": 16,
-        "y": 209.078125,
-        "width": 398,
-        "height": 615.84375,
-        "top": 209.078125,
-        "right": 414,
-        "bottom": 824.921875,
-        "left": 16
-      },
-      "moments": 8,
-      "errors": []
-    },
-    {
-      "width": 844,
-      "height": 390,
-      "integrity": "pass",
-      "viewport": 844,
-      "docWidth": 844,
-      "dialogWidth": 844,
-      "minTargets": 48,
-      "round": {
-        "x": 16,
-        "y": 127.296875,
-        "width": 812,
-        "height": 293.84375,
-        "top": 127.296875,
-        "right": 828,
-        "bottom": 421.140625,
-        "left": 16
-      },
-      "moments": 8,
-      "errors": []
-    }
+    { "width": 320, "height": 568, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
+    { "width": 375, "height": 812, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
+    { "width": 390, "height": 844, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
+    { "width": 430, "height": 932, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
+    { "width": 844, "height": 390, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] }
   ],
-  "journeys": [
-    {
-      "name": "tee-reference",
-      "tee": {
-        "stage": "result",
-        "title": "Your Sharpen focus",
-        "assets": [
-          "Find the Culprit · left curveShot Clinic · Snap hook",
-          "Test tee-shot decisionsThree approved reps · corridor, hazard and club"
-        ],
-        "hasRead": false,
-        "compact": false,
-        "focusSize": "25px",
-        "boundary": "One hypothesis to test—not a diagnosis."
-      },
-      "legacyBridge": {
-        "assetView": "technique",
-        "bridge": "SHARPEN FOCUS · Start. Curve. Corridor.\nTrack start line first, then curve; test whether the curve window is playable.\nDuring this rep: Watch only the opening start line, then the direction of curve.\n↩",
-        "returned": true,
-        "returnCompact": true
-      },
-      "mini": {
-        "view": "quiz",
-        "ids": [
-          "QE5_014",
-          "QE5_015",
-          "QE5_016"
-        ],
-        "module": "Sharpen · Tee-shot decisions",
-        "bridge": true,
-        "nativeExitReturned": true
-      },
-      "restored": true
+  "journeys": {
+    "teeReference": {
+      "result": "pass",
+      "primaryAssetsVisible": 1,
+      "explanationInitiallyHidden": true,
+      "shotClinicExactReturn": true,
+      "focusedSessionExactReturn": true,
+      "interruptionRestore": true
     },
-    {
-      "name": "no-image-dependency",
-      "moments": 8,
-      "imageCount": 0
+    "allMoments": {
+      "before": "pass",
+      "first": "pass",
+      "tee": "pass",
+      "approach": "pass",
+      "green": "pass",
+      "putting": "pass",
+      "pressure": "pass",
+      "nineteenth": "pass"
     },
-    {
-      "name": "reduced-motion",
-      "matches": true,
-      "stage": "regions"
-    },
-    {
-      "name": "eight-moment-sweep",
-      "coverage": [
-        {
-          "region": "before",
-          "stage": "result",
-          "assets": 1,
-          "focus": "Check conditions, name the expensive miss and choose one conservative default.",
-          "mentor": "Know the day’s conditions, your safe targets and the game you brought.",
-          "mentorLink": 0
-        },
-        {
-          "region": "first",
-          "stage": "result",
-          "assets": 1,
-          "focus": "Keep the chosen shot and lengthen the exhale before beginning the routine.",
-          "mentor": "One clear picture. One committed start. Let the round come to you.",
-          "mentorLink": 0
-        },
-        {
-          "region": "tee",
-          "stage": "result",
-          "assets": 2,
-          "focus": "Track start line first, then curve; test whether the curve window is playable.",
-          "mentor": "Own a corridor. A committed stock shot beats a perfect line you cannot repeat.",
-          "mentorLink": 0
-        },
-        {
-          "region": "approach",
-          "stage": "result",
-          "assets": 2,
-          "focus": "Use a front-to-back landing window and record carry, not total result.",
-          "mentor": "Front number. Back number. Safe miss. Then choose.",
-          "mentorLink": 0
-        },
-        {
-          "region": "green",
-          "stage": "result",
-          "assets": 1,
-          "focus": "Use one landing spot and record strike before judging the finish.",
-          "mentor": "See the shot the lie allows—not the shot you hoped to have.",
-          "mentorLink": 1
-        },
-        {
-          "region": "putting",
-          "stage": "result",
-          "assets": 2,
-          "focus": "Putt to a finish zone and record only short or long.",
-          "mentor": "Choose one line at one pace—then let the stroke be boring.",
-          "mentorLink": 0
-        },
-        {
-          "region": "pressure",
-          "stage": "result",
-          "assets": 2,
-          "focus": "Keep the target and routine that produced the position you are protecting.",
-          "mentor": "Feel the moment. Keep the decision and routine recognisably yours.",
-          "mentorLink": 0
-        },
-        {
-          "region": "nineteenth",
-          "stage": "result",
-          "assets": 1,
-          "focus": "Replay the expensive decision before judging the swing.",
-          "mentor": "Keep what travelled. Learn from what repeated. Choose one thing for tomorrow.",
-          "mentorLink": 0
-        }
-      ],
-      "destinations": [
-        {
-          "id": "driver_slice",
-          "exists": true
-        },
-        {
-          "id": "driver_hook",
-          "exists": true
-        },
-        {
-          "id": "driver_strike",
-          "exists": true
-        },
-        {
-          "id": "iron_contact",
-          "exists": true
-        },
-        {
-          "id": "wedge_distance",
-          "exists": true
-        },
-        {
-          "id": "chip_contact",
-          "exists": true
-        },
-        {
-          "id": "bunker",
-          "exists": true
-        },
-        {
-          "id": "putt_line",
-          "exists": true
-        },
-        {
-          "id": "putt_pace",
-          "exists": true
-        },
-        {
-          "id": "three_putt",
-          "exists": true
-        },
-        {
-          "id": "debrief",
-          "exists": true
-        },
-        {
-          "id": "mini_before",
-          "exists": true
-        },
-        {
-          "id": "mini_first",
-          "exists": true
-        },
-        {
-          "id": "mini_tee",
-          "exists": true
-        },
-        {
-          "id": "mini_putting",
-          "exists": true
-        },
-        {
-          "id": "mini_course",
-          "exists": true
-        },
-        {
-          "id": "mini_approach",
-          "exists": true
-        },
-        {
-          "id": "mini_short",
-          "exists": true
-        },
-        {
-          "id": "mini_pressure",
-          "exists": true
-        },
-        {
-          "id": "hole_target",
-          "exists": true
-        },
-        {
-          "id": "hole_hazard",
-          "exists": true
-        },
-        {
-          "id": "hole_pressure",
-          "exists": true
-        },
-        {
-          "id": "hole_recovery",
-          "exists": true
-        }
-      ]
-    },
-    {
-      "name": "interruption-and-checkback",
-      "regionResume": "issues",
-      "routeResume": "route",
-      "checkbackPrompt": true,
-      "checks": 1
-    },
-    {
-      "journey": "exact-hole-entry",
-      "view": "hole",
-      "holeName": "The Reachable Risk",
-      "index": 0,
-      "bridge": true,
-      "returnPending": true,
-      "nativeExitReturned": true
-    }
-  ],
+    "playAHoleExactReturn": true,
+    "debriefExactReturn": true,
+    "savedFocusCheckback": true,
+    "reducedMotion": true,
+    "imageDependency": false,
+    "relevantConsoleErrors": 0
+  },
   "errors": []
 }
