@@ -21,7 +21,7 @@ Sharpen now begins with one human question—`What do you need now?`—and three
 
 The former illustrated golfer/body-hotspot entry has been removed from the reachable UI. The supplied `Your Round` artwork informed the sequence and tone, but is not shipped as an unreadable mobile image; the production UI renders the stages as semantic, accessible controls with no image dependency.
 
-A compact illustrated golfer now progresses along a restrained course line as the user explores the three intentions. It is deliberately subordinate to the decision: no labels are embedded in the illustration, no body part claims diagnosis, and the same three buttons remain the only entry controls. Pointer, keyboard focus and reduced-motion behavior derive from the same state; if the illustration fails, no content or navigation is lost.
+A single production illustration now carries the golfer through the whole Sharpen journey. After the three-intention entry, the full eight-stage course illustration becomes the selection surface itself: the relevant round moments are large semantic buttons positioned on the path, rather than a card list beneath a decorative image. Symptom, distinction and result then reveal a close view of the selected moment. The visual stage is derived from the authoritative region ID, so it cannot independently describe a different part of the round from the question or focus. No labels are embedded in the image, no body part claims diagnosis, and the same semantic controls remain authoritative. Reduced motion removes transitions without removing the visual state; an image failure leaves every question and action usable.
 
 ## High-leverage legacy integration
 

@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-08-02",
   "entryModel": "three-state-round-journey",
-  "illustratedProgress": { "present": true, "states": ["prepare", "sharpen", "reflect"], "navigationDependency": false, "reducedMotionEquivalent": true },
+  "illustratedProgress": { "present": true, "stages": ["entry", "moment", "symptom", "distinction", "focus"], "moments": ["before", "first", "tee", "approach", "green", "putting", "pressure", "nineteenth"], "navigationDependency": false, "reducedMotionEquivalent": true },
   "viewports": [
     { "width": 320, "height": 568, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
     { "width": 375, "height": 812, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
