@@ -41,7 +41,9 @@ assert(Object.values(A).filter(a=>a.destination==='startSharpenHole').length>=4,
 assert.equal(A.debrief.destination,'showDebrief','19th Hole promise must open the debrief directly');
 assert(/19TH HOLE DEBRIEF[\s\S]{0,300}GameSharpGolfSharpen\.returnFromAsset/.test(html)||/GameSharpGolfSharpen\.returnFromAsset[\s\S]{0,300}19TH HOLE DEBRIEF/.test(html),'debrief native close loses Sharpen context');
 for(const id of ['QE5_040','QE5_041','QE5_042','QE5_043','QE5_044','QE5_045']){assert.equal((html.match(new RegExp('"id"\\s*:\\s*"'+id+'"','g'))||[]).length,1,id+' must exist exactly once');assert(new RegExp('"id"\\s*:\\s*"'+id+'"[\\s\\S]{0,500}"visual_must_show"\\s*:\\s*false').test(html),id+' unexpectedly requires an uncontracted visual')}
-assert(/else if\(id === 'sharpen'\)\{ GameSharpGolfSharpen\.open\(\); \}/.test(html),'Practice must open the round journey directly');
+assert(/else if\(id === 'sharpen'\)\{ GameSharpGolfSharpen\.open\(\); \}/.test(html),'Sharpen must open the round journey directly');
+assert.equal((html.match(/<span class="nav-label">Sharpen<\/span>/g)||[]).length,3,'every bottom navigation must call the feature Sharpen');
+assert(!/<span class="nav-label">Practice<\/span>/.test(html),'legacy Practice navigation label remains');
 assert(!/else if\(id === 'sharpen'\)\{ renderSharpen\(\)/.test(html),'Legacy lobby remains primary');
 assert(/prefers-reduced-motion:reduce/.test(html),'Reduced-motion treatment missing');
 assert(/class="gss-journey-map"/.test(html)&&/class="gss-map-node/.test(html),'interactive round journey UI missing');
@@ -51,16 +53,25 @@ assert.equal((html.match(/data-mode="(prepare|sharpen|reflect)"/g)||[]).length,3
 assert(fs.existsSync(new URL('./gamesharp-round-journey-v1.png',import.meta.url)),'production round-journey artwork missing');
 const journeyWebp=new URL('./gamesharp-round-journey-v1.webp',import.meta.url);assert(fs.existsSync(journeyWebp),'optimized journey artwork missing');assert(fs.statSync(journeyWebp).size<=160000,'journey artwork exceeds 160KB mid-tier-phone budget');assert(/\.gss-journey-map,\.gss-cinema\{background-image:url\('gamesharp-round-journey-v1\.webp'\)\}/.test(html),'rendered journey does not use optimized artwork');
 const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-round-journey-v1\.webp/.test(sw),'journey artwork is unavailable in the offline course shell');
+assert(/const CACHE = 'gamesharp-golf-v12'/.test(sw),'release cache version must evict the pre-animation v11 shell');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent cinematic journey layer missing');
 assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*height:clamp\(300px,48vh,430px\)[^}]*background-size:auto 100%[^}]*background-position:center/.test(html),'full journey hero is not visible on the Sharpen entry');
 assert(/\.gss-cinema\[data-stage="entry"\]\+#gss-main \.gss-mode\{[^}]*min-height:54px/.test(html),'three entry questions are not compact beneath the hero');
 assert(/\.gss-cinema\[data-stage="entry"\]\+#gss-main \.gss-modes\{order:2/.test(html)&&/\.gss-cinema\[data-stage="entry"\]\+#gss-main \.gss-habit[^}]*\{order:3/.test(html),'habit panel interrupts the three entry questions');
 assert(/const CINEMA_ORDER=\['before','first','tee','approach','green','putting','pressure','nineteenth'\]/.test(html),'cinematic round order is not authoritative');
 assert(/function cinema\(stage,moment='tee',resultId=null\)/.test(html),'authoritative cinematic renderer missing');
+assert(/const roundMotionMarkup=\(\)=>`[\s\S]*gss-route-progress[\s\S]*gss-tour-player/.test(html),'full journey must include an independently animated route and golfer');
+assert(/gss-entry-hotspot[\s\S]{0,1200}data-entry-region/.test(html)&&/cinemaEl\.addEventListener\('click',[\s\S]{0,400}issues\(rid\)/.test(html),'all eight entry hotspots must be visible, tappable and route directly into Sharpen');
+assert(/\.gss-entry-hotspot\{[^}]*width:48px[^}]*height:48px/.test(html),'entry hotspots must preserve 48px touch targets');
+for(const rid of required)assert(new RegExp(`\\.gss-entry-hotspot\\[data-entry-region="${rid}"\\]\\{left:[0-9.]+%;top:[0-9.]+%\\}`).test(html),`entry hotspot ${rid} has no explicit visual coordinate`);
+assert(/@keyframes gssDrawRound/.test(html)&&/@keyframes gssWalkRound/.test(html)&&/@keyframes gssNodeVisit/.test(html),'full journey motion choreography missing');
+assert(/\.gss-route-progress\{[^}]*animation:gssDrawRound/.test(html)&&/\.gss-tour-player\{[^}]*animation:gssWalkRound/.test(html),'journey animation is decorative or disconnected');
+assert(!/\.gss-cinema\[data-moment="[^"]+"\] \.gss-tour-player\{[^}]*animation:none/.test(html),'moment positioning must not disable the animated entry journey');
+assert(/@media\(prefers-reduced-motion:reduce\)\{[^}]*\.gss-route-progress\{animation:none;stroke-dashoffset:0/.test(html),'reduced motion must preserve the completed journey route');
 assert(/result\?result\.cue/.test(html),'cinematic result caption must derive from the authoritative result cue');
 assert(/grid-template-columns:repeat\(8,1fr\)/.test(html),'cinematic journey rail must expose all eight round moments');
 assert(/previewMoment=mode=>\(\{prepare:'before',sharpen:'tee',reflect:'nineteenth'\}\[mode\]/.test(html),'entry cinema does not respond to all three intentions');
-assert(/function journeyMap\(allowed\)[\s\S]{0,500}gss-map-node/.test(html),'interactive full-round map renderer missing');
+assert(/function journeyMap\(allowed\)[\s\S]{0,1200}CINEMA_ORDER\.map[\s\S]{0,500}gss-map-node/.test(html),'interactive full-round map must render all eight moments');
 assert(/\$\{journeyMap\(allowed\)\}/.test(html),'full-round map is not the moment-selection surface');
 for(const id of ['before','first','tee','approach','green','putting','pressure','nineteenth'])assert(new RegExp(`gss-map-node\\[data-region="${id}"\\]`).test(html),`map position missing: ${id}`);
 assert(/cinema\('issue',rid\)/.test(html),'persistent illustration missing from symptom selection');

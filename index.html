@@ -83,7 +83,7 @@ svg { display:block; }
 
 /* ---- App Shell ---- */
 #app {
-  position:fixed; inset:0;
+  position:fixed; inset:0; height:100dvh; min-height:0;
   display:flex; justify-content:center;
 }
 .view {
@@ -91,8 +91,9 @@ svg { display:block; }
   display:none; flex-direction:column;
   max-width:430px; width:100%;
   margin:0 auto;
-  overflow-y:auto; overflow-x:hidden;
+  height:100dvh; min-height:0; overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:auto;
 }
 .view.active { display:flex; }
 .view { padding-top: env(safe-area-inset-top); }
@@ -160,7 +161,8 @@ svg { display:block; }
 /* =============================================
    HOME
 ============================================= */
-#view-home { background:linear-gradient(180deg,rgba(3,18,10,.73),rgba(4,14,8,.92)),url('GolfHero.png') center/cover fixed; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:auto; overflow-x:hidden; overscroll-behavior-y:contain; touch-action:pan-y; overflow-anchor:none; }
+#view-home { background:linear-gradient(180deg,rgba(3,18,10,.73),rgba(4,14,8,.92)),url('GolfHero.png') center/cover scroll; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:scroll; overflow-x:hidden; overscroll-behavior-y:auto; touch-action:pan-y; overflow-anchor:none; }
+#view-home > * { flex-shrink:0; }
 .hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:flex-start; justify-content:space-between; padding:max(14px,env(safe-area-inset-top)) 14px 0; }
 .hero-topbar .logo-wordmark { font-size:30px; line-height:1; text-shadow:0 2px 10px rgba(0,0,0,.7); }
 .hero-tagline { font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:rgba(255,255,255,.82); margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.75); }
@@ -1645,7 +1647,7 @@ svg { display:block; }
       <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
     </button>
     <button class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
-      <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
+      <span class="nav-icon">⛳</span><span class="nav-label">Sharpen</span>
     </button>
     <button class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">↗</span><span class="nav-label">Review</span>
@@ -1726,7 +1728,7 @@ svg { display:block; }
       <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
     </button>
     <button class="nav-item active" data-nav="sharpen" onclick="navTo('sharpen')">
-      <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
+      <span class="nav-icon">⛳</span><span class="nav-label">Sharpen</span>
     </button>
     <button class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">↗</span><span class="nav-label">Review</span>
@@ -1917,7 +1919,7 @@ svg { display:block; }
       <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
     </button>
     <button class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
-      <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
+      <span class="nav-icon">⛳</span><span class="nav-label">Sharpen</span>
     </button>
     <button class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">↗</span><span class="nav-label">Review</span>
@@ -3134,7 +3136,9 @@ function showView(id){
   if(el){
     el.classList.add('active');
     // Preserve scroll for the main tabs; sub-flows always start at top.
-    el.scrollTop = PP_TAB_VIEWS.includes(id) ? (viewScroll[id] || 0) : 0;
+    const restoreTop = PP_TAB_VIEWS.includes(id) ? (viewScroll[id] || 0) : 0;
+    el.scrollTop = restoreTop;
+    requestAnimationFrame(()=>{ if(el.classList.contains('active')) el.scrollTop=Math.min(restoreTop,Math.max(0,el.scrollHeight-el.clientHeight)); });
   }
   S.view = id;
   // sync bottom nav
@@ -11007,17 +11011,27 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 @media(orientation:landscape) and (max-height:500px){.gss-shell{width:min(100%,850px);padding-top:4px}.gss-top{min-height:46px}.gss-intro{margin:0 0 6px}.gss-intro p{font-size:12px}.gss h1{font-size:24px;margin:3px 0}.gss-modes{grid-template-columns:repeat(3,1fr);gap:8px;margin-top:7px}.gss-mode{grid-template-columns:34px 1fr;min-height:62px;padding:8px}.gss-mode-icon{width:34px;height:34px}.gss-mode-arrow{display:none}.gss-mode-copy b{font-size:14px}.gss-mode-copy small{font-size:10px}.gss-round{grid-template-columns:1fr 1fr}.gss-round::before{display:none}.gss-moment{min-height:62px}}
 .gss-habit{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid #c8a84b3d;border-radius:14px;background:#c8a84b0d}.gss-habit strong{display:block;color:#f0d573;font-size:13px}.gss-habit span{display:block;margin-top:2px;color:#aebbb3;font-size:10px}.gss-habit-count{flex:0 0 auto;min-width:42px;text-align:center;color:#fff;font-size:20px;font-weight:850}.gss-map-share{width:100%;min-height:48px;margin:10px 0 2px;border:1px solid #c8a84b66;border-radius:14px;background:#c8a84b12;color:#efd36f;font:750 13px 'DM Sans',sans-serif}.gss-taken{padding:12px;border:1px solid #75bd7b55;border-radius:14px;background:#75bd7b12;color:#d8efda;font-size:13px;line-height:1.4}.gss-taken strong{display:block;color:#fff;margin-bottom:3px}
 .gss-journey-map,.gss-cinema{background-image:url('gamesharp-round-journey-v1.webp')}
+.gss-route-layer{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;overflow:visible}.gss-route-track{fill:none;stroke:#42543a;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;opacity:.72}.gss-route-progress{fill:none;stroke:#c8a84b;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 2px #c8a84b99);stroke-dasharray:410;stroke-dashoffset:410;animation:gssDrawRound 7.2s var(--ease-camera) .25s forwards}.gss-tour-player{position:absolute;z-index:4;left:35%;top:11.5%;width:34px;height:42px;transform:translate(-50%,-65%);filter:drop-shadow(0 5px 5px #0007);pointer-events:none;animation:gssWalkRound 7.2s var(--ease-camera) .25s forwards}.gss-tour-player svg{width:100%;height:100%;overflow:visible}.gss-map-node{--pulse-delay:0s}.gss-map-node::after{content:"";position:absolute;inset:-5px;border:1px solid #d9bd57;border-radius:999px;opacity:0;animation:gssNodeVisit 7.2s ease-out var(--pulse-delay) forwards}.gss-map-node[data-region="before"]{--pulse-delay:.25s}.gss-map-node[data-region="first"]{--pulse-delay:1.15s}.gss-map-node[data-region="tee"]{--pulse-delay:2.05s}.gss-map-node[data-region="approach"]{--pulse-delay:2.95s}.gss-map-node[data-region="green"]{--pulse-delay:3.85s}.gss-map-node[data-region="putting"]{--pulse-delay:4.75s}.gss-map-node[data-region="pressure"]{--pulse-delay:5.65s}.gss-map-node[data-region="nineteenth"]{--pulse-delay:6.55s}.gss-map-node[disabled]{opacity:.48;cursor:default}.gss-map-node.is-current{border-color:#d7bb55;box-shadow:0 0 0 4px #d7bb5524,0 7px 18px #0003}.gss-map-node.is-current b{background:#c8a84b;color:#102016}
+.gss-entry-hotspot{position:absolute;z-index:6;display:grid;place-items:center;width:48px;height:48px;border:0;background:transparent;color:#102016;transform:translate(-50%,-50%)}.gss-entry-hotspot::before{content:attr(data-number);display:grid;place-items:center;width:30px;height:30px;border:2px solid #f1d46a;border-radius:50%;background:#123820;color:#fff6c5;font-size:12px;font-weight:900;box-shadow:0 0 0 6px #d6bd5430,0 5px 12px #0008;animation:gssHotspotReady 2.2s ease-in-out infinite}.gss-entry-hotspot::after{content:attr(data-short);position:absolute;top:39px;left:50%;min-width:max-content;max-width:92px;padding:3px 6px;border-radius:7px;background:#07130de6;color:#fff;font-size:8px;font-weight:850;line-height:1.1;text-align:center;transform:translateX(-50%);box-shadow:0 3px 10px #0007}.gss-entry-hotspot:focus-visible{outline:3px solid #fff1a7;outline-offset:2px;border-radius:50%}.gss-entry-hotspot[data-region="before"]{left:35%;top:11.5%}.gss-entry-hotspot[data-region="first"]{left:82%;top:18%}.gss-entry-hotspot[data-region="tee"]{left:14%;top:31%}.gss-entry-hotspot[data-region="approach"]{left:84%;top:45.5%}.gss-entry-hotspot[data-region="green"]{left:14%;top:58%}.gss-entry-hotspot[data-region="putting"]{left:84%;top:70.5%}.gss-entry-hotspot[data-region="pressure"]{left:15%;top:84%}.gss-entry-hotspot[data-region="nineteenth"]{left:83%;top:92%}
+@keyframes gssDrawRound{to{stroke-dashoffset:0}}
+@keyframes gssNodeVisit{0%,72%{opacity:0;transform:scale(.82)}78%{opacity:.8;transform:scale(1.08)}86%,100%{opacity:0;transform:scale(1.28)}}
+@keyframes gssWalkRound{0%{left:35%;top:11.5%}12.5%{left:82%;top:18%}25%{left:14%;top:31%}37.5%{left:84%;top:45.5%}50%{left:14%;top:58%}62.5%{left:84%;top:70.5%}75%{left:15%;top:84%}87.5%,100%{left:83%;top:94%}}
+@keyframes gssHotspotReady{0%,100%{box-shadow:0 0 0 5px #d6bd5424,0 5px 12px #0008}50%{box-shadow:0 0 0 10px #d6bd5440,0 5px 12px #0008}}
+.gss-entry-hotspot[data-entry-region="before"]{left:35%;top:11.5%}.gss-entry-hotspot[data-entry-region="first"]{left:82%;top:18%}.gss-entry-hotspot[data-entry-region="tee"]{left:14%;top:31%}.gss-entry-hotspot[data-entry-region="approach"]{left:84%;top:45.5%}.gss-entry-hotspot[data-entry-region="green"]{left:14%;top:58%}.gss-entry-hotspot[data-entry-region="putting"]{left:84%;top:70.5%}.gss-entry-hotspot[data-entry-region="pressure"]{left:15%;top:84%}.gss-entry-hotspot[data-entry-region="nineteenth"]{left:83%;top:92%}
+.gss-cinema .gss-route-layer{opacity:.55}.gss-cinema .gss-tour-player{width:27px;height:33px}.gss-cinema:not([data-stage="entry"])[data-moment="before"] .gss-tour-player{left:35%;top:11.5%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="first"] .gss-tour-player{left:82%;top:18%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="tee"] .gss-tour-player{left:14%;top:31%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="approach"] .gss-tour-player{left:84%;top:45.5%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="green"] .gss-tour-player{left:14%;top:58%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="putting"] .gss-tour-player{left:84%;top:70.5%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="pressure"] .gss-tour-player{left:15%;top:84%;animation:none}.gss-cinema:not([data-stage="entry"])[data-moment="nineteenth"] .gss-tour-player{left:83%;top:94%;animation:none}
 .gss-cinema[data-stage="entry"]{height:clamp(300px,48vh,430px);background-size:auto 100%;background-position:center;background-color:#eee9dc}.gss-cinema[data-stage="entry"]::after{background:linear-gradient(180deg,transparent 62%,#06130dcc 100%)}.gss-cinema[data-stage="entry"]+.gss-main .gss-intro{margin-bottom:8px}.gss-cinema[data-stage="entry"]~.gss-main .gss-modes{gap:7px;margin-top:8px}.gss-cinema[data-stage="entry"]~.gss-main .gss-mode{min-height:54px;padding:7px 10px}.gss-cinema[data-stage="entry"]~.gss-main .gss-mode-icon{width:32px;height:32px;font-size:15px}.gss-cinema[data-stage="entry"]~.gss-main .gss-mode-copy b{font-size:13px}.gss-cinema[data-stage="entry"]~.gss-main .gss-mode-copy small{font-size:10px}.gss-cinema[data-stage="entry"]~.gss-main .gss-unsure,.gss-cinema[data-stage="entry"]~.gss-main .gss-secondary{min-height:44px;font-size:11px}
 .gss-cinema[data-stage="entry"]+#gss-main{display:flex;flex-direction:column}.gss-cinema[data-stage="entry"]+#gss-main .gss-intro{order:1;margin-bottom:8px}.gss-cinema[data-stage="entry"]+#gss-main .gss-modes{order:2;gap:7px;margin-top:8px}.gss-cinema[data-stage="entry"]+#gss-main .gss-mode{min-height:54px;padding:7px 10px;grid-template-columns:32px 1fr 8px}.gss-cinema[data-stage="entry"]+#gss-main .gss-mode-icon{width:32px;height:32px;font-size:15px}.gss-cinema[data-stage="entry"]+#gss-main .gss-mode-copy b{font-size:13px}.gss-cinema[data-stage="entry"]+#gss-main .gss-mode-copy small{font-size:10px}.gss-cinema[data-stage="entry"]+#gss-main .gss-habit,.gss-cinema[data-stage="entry"]+#gss-main .gss-recent{order:3;margin-top:8px;margin-bottom:0}.gss-cinema[data-stage="entry"]+#gss-main .gss-unsure{order:4;min-height:44px;font-size:11px}.gss-cinema[data-stage="entry"]+#gss-main .gss-secondary{order:5;min-height:44px;font-size:11px}
 @media(prefers-reduced-motion:reduce){.gss,.gss *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 @media(max-width:350px){.gss-cinema{height:116px}.gss-cinema[data-stage="result"]{height:132px}.gss-cinema-caption{font-size:11px;bottom:25px}}
 @media(orientation:landscape) and (max-height:500px){.gss-cinema{height:78px;margin-bottom:6px}.gss-cinema[data-stage="result"]{height:88px}.gss-cinema-caption{font-size:10px;bottom:22px}.gss-cinema-stage{display:none}}
 @media(orientation:landscape) and (max-height:500px){.gss-cinema[data-stage="entry"]{height:150px;background-size:auto 100%}.gss-cinema[data-stage="entry"]+#gss-main .gss-modes{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:350px){.gss-entry-hotspot::after{font-size:7px;padding:2px 4px}.gss-entry-hotspot::before{width:27px;height:27px}}
+@media(prefers-reduced-motion:reduce){.gss-route-progress{animation:none;stroke-dashoffset:0}.gss-tour-player{animation:none;left:83%;top:94%}.gss-map-node::after,.gss-entry-hotspot::before{animation:none}.gss-cinema .gss-tour-player{display:none}}
 </style>
 <div class="gss" id="gss" role="dialog" aria-modal="true" aria-labelledby="gss-title" hidden>
   <div class="gss-shell">
     <div class="gss-top"><button class="gss-icon" id="gss-back" aria-label="Go back">‹</button><div class="gss-brand">GAMESHARP · SHARPEN<span id="gss-stage-label">Choose one area</span></div><button class="gss-icon" id="gss-close" aria-label="Close Sharpen">×</button></div>
-    <div class="gss-cinema" id="gss-cinema" aria-hidden="true" hidden><div class="gss-cinema-caption"></div><div class="gss-cinema-rail"></div></div>
+    <div class="gss-cinema" id="gss-cinema" hidden><div class="gss-cinema-caption"></div><div class="gss-cinema-rail"></div></div>
     <main id="gss-main" tabindex="-1"></main>
   </div>
 </div>
@@ -11303,19 +11317,24 @@ function startSharpenHole(index){
  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  function set(html,label){main.innerHTML=html;stageLabel.textContent=label;el.scrollTop=0;persist();requestAnimationFrame(()=>main.focus({preventScroll:true}))}
  const CINEMA_ORDER=['before','first','tee','approach','green','putting','pressure','nineteenth'];
+ const roundMotionMarkup=()=>`<svg class="gss-route-layer" viewBox="0 0 100 177.8" preserveAspectRatio="none" aria-hidden="true"><path class="gss-route-track" d="M35 20 C58 18 72 24 82 32 S37 43 14 55 S59 67 84 81 S40 93 14 103 S57 116 84 125 S42 139 15 149 S52 165 83 167"/><path class="gss-route-progress" d="M35 20 C58 18 72 24 82 32 S37 43 14 55 S59 67 84 81 S40 93 14 103 S57 116 84 125 S42 139 15 149 S52 165 83 167"/></svg><span class="gss-tour-player" aria-hidden="true"><svg viewBox="0 0 34 42"><circle cx="14" cy="6" r="4" fill="#efd6b5"/><path d="M9 11 Q14 8 19 12 L22 25 15 29 8 23Z" fill="#173a25" stroke="#d4b750" stroke-width="1"/><path d="M12 27 9 39M18 27l5 12" stroke="#eee8db" stroke-width="4" stroke-linecap="round"/><path d="M20 13q8 2 9 12v13" fill="none" stroke="#c8a84b" stroke-width="1.6"/><path d="M24 15 31 22 27 30" fill="#26362a" stroke="#d4b750" stroke-width="1"/></svg></span>`;
  const habitStats=()=>{const tested=state.focusHistory.filter(x=>x.status==='tested'),days=[...new Set(tested.map(x=>String(x.testedAt||'').slice(0,10)).filter(Boolean))].sort().reverse();let streak=0,cursor=new Date();cursor.setHours(0,0,0,0);for(const day of days){const d=new Date(day+'T00:00:00');const gap=Math.round((cursor-d)/86400000);if(gap===0||gap===1){streak++;cursor=d}else break}return {taken:state.focusHistory.length,tested:tested.length,streak}};
  const habitMarkup=()=>{const h=habitStats();return `<div class="gss-habit" aria-label="Sharpen focus history"><div><strong>${h.streak?`${h.streak}-day tested-focus streak`:'Build your tested-focus streak'}</strong><span>${h.taken} taken to play · ${h.tested} checked back</span></div><div class="gss-habit-count" aria-hidden="true">${h.streak||'—'}</div></div>`};
  function cinema(stage,moment='tee',resultId=null){
   if(stage==='map'){cinemaEl.hidden=true;return}
   const region=GOLF_SHARPEN_REGIONS[moment]||GOLF_SHARPEN_REGIONS.tee,result=resultId&&GOLF_SHARPEN_RESULTS[resultId];
   cinemaEl.hidden=false;cinemaEl.dataset.stage=stage;cinemaEl.dataset.moment=moment;
+  cinemaEl.querySelectorAll('.gss-route-layer,.gss-tour-player').forEach(x=>x.remove());
+  cinemaEl.insertAdjacentHTML('afterbegin',roundMotionMarkup());
+  cinemaEl.querySelectorAll('.gss-entry-hotspot').forEach(x=>x.remove());
+  if(stage==='entry')cinemaEl.insertAdjacentHTML('beforeend',CINEMA_ORDER.map(id=>{const r=GOLF_SHARPEN_REGIONS[id];return `<button class="gss-entry-hotspot" data-entry-region="${id}" data-number="${r.number}" data-short="${esc(r.label)}" aria-label="Sharpen ${esc(r.label)}: ${esc(r.description)}"></button>`}).join(''));
   const idx=Math.max(0,CINEMA_ORDER.indexOf(moment));
   const stageCopy=stage==='entry'?'Your round':stage==='issue'?'The moment':stage==='route'?'What to notice':stage==='result'?'Take it with you':'Observe first';
   const message=result?result.cue:stage==='entry'?'Every decision has a place in the round.':stage==='route'?(GOLF_SHARPEN_REGIONS[state.regionId]?.issues.find(x=>x.id===state.issueId)?.label||region.description):region.description;
   cinemaEl.querySelector('.gss-cinema-caption').innerHTML=`<span class="gss-cinema-stage">${esc(stageCopy)} · ${idx+1} of 8</span>${esc(message)}`;
   cinemaEl.querySelector('.gss-cinema-rail').innerHTML=CINEMA_ORDER.map((_,i)=>`<i class="gss-cinema-stop${i<idx?' done':''}${i===idx?' current':''}"></i>`).join('');
  }
- function journeyMap(allowed){return `<div class="gss-journey-map" role="group" aria-label="Your round journey">${allowed.map(id=>{const r=GOLF_SHARPEN_REGIONS[id];return `<button class="gss-map-node" data-region="${id}" aria-label="${esc(r.label)}: ${esc(r.description)}"><b aria-hidden="true">${r.number}</b><span>${esc(r.label)}</span></button>`}).join('')}</div><button class="gss-map-share" data-share-map>Share where I’m sharpening</button>`}
+ function journeyMap(allowed){const allowedSet=new Set(allowed);return `<div class="gss-journey-map" role="group" aria-label="Your complete round journey">${roundMotionMarkup()}${CINEMA_ORDER.map(id=>{const r=GOLF_SHARPEN_REGIONS[id],enabled=allowedSet.has(id);return `<button class="gss-map-node${state.regionId===id?' is-current':''}" data-region="${id}" aria-label="${esc(r.label)}: ${esc(r.description)}"${enabled?'':` disabled aria-disabled="true"`}><b aria-hidden="true">${r.number}</b><span>${esc(r.label)}</span></button>`}).join('')}</div><button class="gss-map-share" data-share-map>Share where I’m sharpening</button>`}
  function regions(){
   state.stage='regions';state.entryMode=null;state.regionId=state.issueId=state.routeId=state.resultId=null;
   const saved=habitMarkup()+(state.saved?`<button class="gss-recent" data-recent>Current focus · ${esc(GOLF_SHARPEN_RESULTS[state.saved.resultId]?.cue||'Review your saved focus')}</button>`:'');
@@ -11354,9 +11373,9 @@ function recent(){
   const saved=state.saved,r=GOLF_SHARPEN_RESULTS[saved.resultId];if(!r){regions();return}state.resultId=saved.resultId;
   set(`<div class="gss-check"><div class="gss-context">Your current focus</div><h2 id="gss-title">${esc(r.cue)}</h2><p>Did this help in your next practice or round?</p><div class="gss-check-grid">${['Yes, noticeably','A little','Not really','I haven’t tried it yet'].map(x=>`<button data-check="${esc(x)}">${esc(x)}</button>`).join('')}</div><p class="gss-boundary">This check-back records reflection, not measured improvement.</p></div><button class="gss-secondary gss-wide" data-show-result>Review the full focus</button>`,'Check back');cinema('result',r.regionId,saved.resultId);
  }
- function open(from){opener=from&&from.nodeType?from:document.activeElement;safeLoad();bridge.hidden=true;el.hidden=false;el.classList.add('open');document.body.style.overflow='hidden';const checkDue=state.saved&&!state.saved.checkedAt&&Date.now()-new Date(state.saved.savedAt).getTime()>6*60*60*1000;if(state.returnPending&&state.resultId){state.returnPending=false;result(state.resultId)}else if(checkDue)recent();else renderState()}
+ function open(from){opener=from&&from.nodeType?from:document.activeElement;safeLoad();bridge.hidden=true;el.hidden=false;el.classList.add('open');const checkDue=state.saved&&!state.saved.checkedAt&&Date.now()-new Date(state.saved.savedAt).getTime()>6*60*60*1000;if(state.returnPending&&state.resultId){state.returnPending=false;result(state.resultId)}else if(checkDue)recent();else renderState()}
  function renderState(){if(state.stage==='moments'&&state.entryMode)moments(state.entryMode);else if(state.stage==='issues'&&state.regionId)issues(state.regionId);else if(state.stage==='route'&&state.issueId)route(state.issueId);else if(state.stage==='result'&&state.resultId)result(state.resultId);else if(state.stage==='observe')observation();else regions()}
- function closeSharpen(){el.classList.remove('open');el.hidden=true;document.body.style.overflow='';persist();if(opener&&opener.focus)opener.focus({preventScroll:true})}
+ function closeSharpen(){el.classList.remove('open');el.hidden=true;persist();const active=document.querySelector('.view.active');if(active)requestAnimationFrame(()=>{active.scrollTop=Math.min(active.scrollTop,Math.max(0,active.scrollHeight-active.clientHeight))});if(opener&&opener.focus)opener.focus({preventScroll:true})}
  function returnFromAsset(){if(!state.returnPending)return false;bridge.hidden=true;showView('home');open();return true}
  function showBridge(){const r=GOLF_SHARPEN_RESULTS[state.resultId],v=document.querySelector('.view.active');if(!r||!v)return;const top=v.querySelector('.tech-topbar,.quiz-top,.pp-topbar,.hole-view-header,.hole-topbar,.adv-topbar');if(top)top.after(bridge);else v.prepend(bridge);bridge.innerHTML=`<div class="gss-bridge-kicker">SHARPEN FOCUS · ${esc(r.cue)}</div><div class="gss-bridge-focus">${esc(r.focus)}</div><div class="gss-bridge-watch"><strong>During this rep:</strong> ${esc(r.watchFor)}</div><button class="gss-bridge-back" type="button" aria-label="Return to your Sharpen focus">↩</button>`;bridge.hidden=false;bridge.querySelector('button').addEventListener('click',returnFromAsset)}
  function launchAsset(id){const a=GOLF_SHARPEN_ASSETS[id];if(!a||a.launchStatus!=='approved')return;state.returnPending=true;persist();closeSharpen();const fn=window[a.destination];if(typeof fn==='function'){fn(...a.routeParams);showBridge()}else{state.returnPending=false;open()}}
@@ -11372,6 +11391,7 @@ function recent(){
  function checkFocus(answer,button){const at=new Date().toISOString(),isTested=answer!=='I haven’t tried it yet';state.saved.checkedAt=at;state.checkbacks.push({resultId:state.saved.resultId,answer,at});if(isTested){const item=[...state.focusHistory].reverse().find(x=>x.resultId===state.saved.resultId&&x.status==='taken');if(item){item.status='tested';item.testedAt=at;item.answer=answer}}persist();button.parentElement.querySelectorAll('button').forEach(x=>x.disabled=true);button.closest('.gss-check').querySelector('.gss-boundary').textContent=isTested?`${habitStats().streak}-day tested-focus streak · reflection saved, not measured improvement.`:'No pressure. Your focus stays ready for when you play.'}
  const previewMoment=mode=>({prepare:'before',sharpen:'tee',reflect:'nineteenth'}[mode]||'tee');
  main.addEventListener('pointerover',e=>{const b=e.target.closest('[data-mode]');if(b)cinema('entry',previewMoment(b.dataset.mode))});main.addEventListener('focusin',e=>{const b=e.target.closest('[data-mode]');if(b)cinema('entry',previewMoment(b.dataset.mode))});
+ cinemaEl.addEventListener('click',e=>{const b=e.target.closest('[data-entry-region]');if(!b)return;const rid=b.dataset.entryRegion;if(rid==='nineteenth'){state.entryMode='reflect'}else if(rid==='before'||rid==='first'){state.entryMode='prepare'}else{state.entryMode='sharpen'}issues(rid)});
  main.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.mode){b.classList.add('is-chosen');moments(b.dataset.mode)}else if(b.hasAttribute('data-mode-back'))regions();else if(b.dataset.region)issues(b.dataset.region);else if(b.dataset.issue)route(b.dataset.issue);else if(b.dataset.result)result(b.dataset.result);else if(b.dataset.asset)launchAsset(b.dataset.asset);else if(b.hasAttribute('data-share-map'))shareJourney();else if(b.hasAttribute('data-library')){closeSharpen();renderSharpen();showView('sharpen')}else if(b.hasAttribute('data-observe')||b.hasAttribute('data-unsure')||b.hasAttribute('data-unsure-region'))observation();else if(b.hasAttribute('data-restart'))regions();else if(b.hasAttribute('data-recent'))recent();else if(b.hasAttribute('data-show-result'))result(state.saved.resultId);else if(b.hasAttribute('data-save'))takeFocus();else if(b.dataset.check)checkFocus(b.dataset.check,b);else if(b.hasAttribute('data-copy')){const r=GOLF_SHARPEN_RESULTS[state.resultId],txt='GameSharp Golf focus: '+r.focus+' Cue: '+r.cue;(navigator.clipboard?.writeText(txt)||Promise.resolve()).then(()=>main.querySelector('.gss-status').textContent='Focus copied.')}});
  back.addEventListener('click',()=>{if(state.stage==='result')route(state.issueId);else if(state.stage==='route')issues(state.regionId);else if(state.stage==='issues'&&state.entryMode&&state.entryMode!=='reflect')moments(state.entryMode);else if(state.stage==='issues'||state.stage==='moments'||state.stage==='observe')regions();else closeSharpen()});close.addEventListener('click',closeSharpen);
  el.addEventListener('keydown',e=>{if(e.key==='Escape')closeSharpen();if(e.key==='Tab'){const f=[...el.querySelectorAll('button:not([disabled]),[tabindex="0"]')].filter(x=>x.offsetParent!==null);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
