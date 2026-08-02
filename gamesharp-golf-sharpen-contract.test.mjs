@@ -52,6 +52,9 @@ assert(fs.existsSync(new URL('./gamesharp-round-journey-v1.png',import.meta.url)
 const journeyWebp=new URL('./gamesharp-round-journey-v1.webp',import.meta.url);assert(fs.existsSync(journeyWebp),'optimized journey artwork missing');assert(fs.statSync(journeyWebp).size<=160000,'journey artwork exceeds 160KB mid-tier-phone budget');assert(/\.gss-journey-map,\.gss-cinema\{background-image:url\('gamesharp-round-journey-v1\.webp'\)\}/.test(html),'rendered journey does not use optimized artwork');
 const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-round-journey-v1\.webp/.test(sw),'journey artwork is unavailable in the offline course shell');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent cinematic journey layer missing');
+assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*height:clamp\(300px,48vh,430px\)[^}]*background-size:auto 100%[^}]*background-position:center/.test(html),'full journey hero is not visible on the Sharpen entry');
+assert(/\.gss-cinema\[data-stage="entry"\]\+#gss-main \.gss-mode\{[^}]*min-height:54px/.test(html),'three entry questions are not compact beneath the hero');
+assert(/\.gss-cinema\[data-stage="entry"\]\+#gss-main \.gss-modes\{order:2/.test(html)&&/\.gss-cinema\[data-stage="entry"\]\+#gss-main \.gss-habit[^}]*\{order:3/.test(html),'habit panel interrupts the three entry questions');
 assert(/const CINEMA_ORDER=\['before','first','tee','approach','green','putting','pressure','nineteenth'\]/.test(html),'cinematic round order is not authoritative');
 assert(/function cinema\(stage,moment='tee',resultId=null\)/.test(html),'authoritative cinematic renderer missing');
 assert(/result\?result\.cue/.test(html),'cinematic result caption must derive from the authoritative result cue');

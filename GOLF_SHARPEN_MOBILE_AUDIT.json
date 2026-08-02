@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-08-02",
   "entryModel": "closed-loop-cinematic-round-journey",
-  "illustratedProgress": { "present": true, "persistentElement": "gss-cinema", "stages": ["entry", "moment-map", "symptom", "distinction", "focus", "asset-return", "check-back"], "moments": ["before", "first", "tee", "approach", "green", "putting", "pressure", "nineteenth"], "resultCaptionSource": "authoritative result cue", "navigationDependency": false, "reducedMotionEquivalent": true },
+  "illustratedProgress": { "present": true, "persistentElement": "gss-cinema", "entryHero": "complete artwork fitted without cropping", "entryQuestions": "three compact choices immediately below the prompt", "stages": ["entry", "moment-map", "symptom", "distinction", "focus", "asset-return", "check-back"], "moments": ["before", "first", "tee", "approach", "green", "putting", "pressure", "nineteenth"], "resultCaptionSource": "authoritative result cue", "navigationDependency": false, "reducedMotionEquivalent": true },
   "viewports": [
     { "width": 320, "height": 568, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
     { "width": 375, "height": 812, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
