@@ -174,7 +174,7 @@ svg { display:block; }
 /* Signature Modes — two-up thumbnails (Play a Hole | Play a Course) */
 .mode-heading { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); padding:0 16px; margin:10px 0 10px; }
 .mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; padding:0 16px; }
-.mode-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; cursor:pointer; transition:transform var(--motion-micro),border-color var(--motion-fast); }
+.mode-card { display:block; width:100%; background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; cursor:pointer; text-align:left; font:inherit; transition:transform var(--motion-micro),border-color var(--motion-fast); }
 .mode-card:active { transform:scale(.98); }
 .mode-thumb { position:relative; aspect-ratio:5/4; overflow:hidden; }
 .mode-thumb svg { width:100%; height:100%; display:block; }
@@ -198,36 +198,33 @@ svg { display:block; }
 .home-hero-tag .t1 span { color:var(--gold); }
 .home-hero-tag .t2 { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:.6px; color:#fff; line-height:1.0; margin-top:1px; text-shadow:0 3px 14px rgba(0,0,0,.75); }
 
-/* ── DAILY HERO CONTRACT — full emotion once, compact utility thereafter ──
-   This is presentation state only; challenge, streak and profile truth remain
-   owned by renderHome() and the existing state model. */
+/* Stable home contract: the page never changes height underneath a touch. */
 @media(max-width:767px){
-  #view-home .home-hero,
-  #view-home .daily-card{transition:max-height .62s cubic-bezier(.22,1,.36,1),height .62s cubic-bezier(.22,1,.36,1),margin .62s cubic-bezier(.22,1,.36,1),padding .62s cubic-bezier(.22,1,.36,1),border-radius .62s cubic-bezier(.22,1,.36,1),filter .62s ease;}
   #view-home .home-hero{overflow-anchor:none;}
-  #view-home.gs-home-hero-collapsed .home-hero{height:92px;max-height:92px;aspect-ratio:auto;margin-bottom:9px;border-radius:0 0 16px 16px;filter:brightness(.74) saturate(.88);}
-  #view-home.gs-home-hero-collapsed .home-hero-img{object-position:center 42%;filter:brightness(.68) contrast(1.08) saturate(.92);}
-  #view-home.gs-home-hero-collapsed .home-hero-veil{background:linear-gradient(90deg,rgba(4,10,6,.25),rgba(4,10,6,.72));}
-  #view-home.gs-home-hero-collapsed .hero-topbar{padding:max(9px,env(safe-area-inset-top)) 12px 0;align-items:flex-start;}
-  #view-home.gs-home-hero-collapsed .hero-topbar .logo-wordmark{font-size:27px;}
-  #view-home.gs-home-hero-collapsed .brand-beside{font-size:8px;}
-  #view-home.gs-home-hero-collapsed .brand-under{display:none;}
-  #view-home.gs-home-hero-collapsed .profile-btn{width:44px;height:44px;}
-  #view-home.gs-home-hero-collapsed .daily-card{margin:0 14px 10px;padding:13px 18px 14px;}
-  #view-home.gs-home-hero-collapsed .daily-card .dc-title{font-size:25px;}
-  #view-home.gs-home-hero-collapsed .daily-card .dc-hook{margin:5px 0 8px;line-height:1.34;}
-  #view-home.gs-home-hero-collapsed .daily-card .dc-streak{margin-bottom:9px;}
-  #view-home.gs-home-hero-collapsed .daily-btn{min-height:44px;padding:10px 20px;}
+  #view-home .home-hero{height:96px;max-height:96px;aspect-ratio:auto;margin-bottom:10px;border-radius:0 0 16px 16px;filter:brightness(.78) saturate(.9);}
+  #view-home .home-hero-img{object-position:center 42%;filter:brightness(.7) contrast(1.08) saturate(.94);}
+  #view-home .home-hero-veil{background:linear-gradient(90deg,rgba(4,10,6,.25),rgba(4,10,6,.72));}
+  #view-home .hero-topbar{padding:max(9px,env(safe-area-inset-top)) 12px 0;align-items:flex-start;}
+  #view-home .hero-topbar .logo-wordmark{font-size:27px;}
+  #view-home .brand-beside,#view-home .brand-under{display:none;}
+  #view-home .profile-btn{width:44px;height:44px;}
+  #view-home .daily-card{margin:0 14px 10px;padding:13px 18px 14px;}
+  #view-home .daily-card .dc-title{font-size:25px;}
+  #view-home .daily-card .dc-hook{margin:5px 0 8px;line-height:1.34;}
+  #view-home .daily-card .dc-streak{margin-bottom:9px;}
+  #view-home .daily-btn{min-height:48px;padding:10px 20px;}
   #view-home.gs-home-hero-image-failed .home-hero{background:radial-gradient(120% 100% at 70% 10%,#355c31 0%,#152619 52%,#080d09 100%);}
   #view-home.gs-home-hero-image-failed .home-hero-img{visibility:hidden;}
 }
-@media(max-width:360px){
-  #view-home.gs-home-hero-collapsed .brand-beside{display:none;}
-  #view-home.gs-home-hero-collapsed .hero-streak{padding:5px 8px;}
+@media(orientation:landscape) and (max-height:500px){
+  #view-home .home-hero{height:72px;max-height:72px;aspect-ratio:auto;margin-bottom:8px;border-radius:0 0 14px 14px;filter:brightness(.76) saturate(.9)}
+  #view-home .home-hero-img{object-position:center 42%;filter:brightness(.68) contrast(1.08) saturate(.92)}
+  #view-home .home-hero-veil{background:linear-gradient(90deg,rgba(4,10,6,.24),rgba(4,10,6,.74))}
+  #view-home .hero-topbar{padding:7px 11px 0}.hero-topbar .logo-wordmark{font-size:25px}#view-home .brand-beside,#view-home .brand-under{display:none}#view-home .profile-btn{width:42px;height:42px}
+  #view-home .daily-card{margin:0 12px 8px;padding:11px 15px}.daily-card .dc-title{font-size:23px}.daily-card .dc-hook{margin:4px 0 7px}.daily-card .dc-streak{margin-bottom:7px}.daily-btn{min-height:44px;padding:9px 18px}
+  #view-home .mode-thumb{height:86px;aspect-ratio:auto}
 }
-@media(prefers-reduced-motion:reduce){
-  #view-home .home-hero,#view-home .daily-card{transition:none!important;}
-}
+.home-more{margin:9px 16px 0;border:1px solid var(--border);border-radius:14px;background:#171717}.home-more summary{display:flex;align-items:center;justify-content:center;min-height:48px;color:#bfc5c0;font-size:13px;font-weight:700;cursor:pointer;list-style:none}.home-more summary::-webkit-details-marker{display:none}.home-more[open] summary{border-bottom:1px solid var(--border)}.home-more-actions{display:grid;gap:8px;padding:10px}.home-more-actions .btn{margin:0!important}
 #view-home > * { flex-shrink:0; }
 #view-sharpen { background:var(--dark); padding-bottom:90px; }
 #view-sharpen > * { flex-shrink:0; }
@@ -529,7 +526,7 @@ svg { display:block; }
 }
 .nav-item {
   flex:1; display:flex; flex-direction:column; align-items:center;
-  gap:3px; padding:4px; cursor:pointer; opacity:.45; transition:opacity var(--motion-fast);
+  gap:3px; padding:4px; cursor:pointer; opacity:.45; transition:opacity var(--motion-fast); background:transparent; color:inherit;
 }
 .nav-item.active { opacity:1; }
 .nav-item .nav-icon  { font-size:22px; }
@@ -1636,7 +1633,7 @@ svg { display:block; }
   <!-- Signature Modes: Play a Hole | Play a Course (two thumbnails) -->
   <p class="mode-heading">Signature Modes</p>
   <div class="mode-grid">
-    <div class="mode-card" onclick="startHole()">
+    <button class="mode-card" onclick="startHole()" aria-label="Play the hole of the day">
       <div class="mode-thumb">
         <img src="play-a-hole-hero.jpg" alt="Play a Hole">
         <div class="mode-thumb-veil"></div>
@@ -1644,8 +1641,8 @@ svg { display:block; }
         <div class="mode-title">PLAY A HOLE</div>
       </div>
       <div class="mode-cap" id="hec-hod">Shot-by-shot · scorecard</div>
-    </div>
-    <div class="mode-card" onclick="openCoursePicker()">
+    </button>
+    <button class="mode-card" onclick="openCoursePicker()" aria-label="Choose a course to play">
       <div class="mode-thumb">
         <img src="play-a-course-hero.jpg" alt="Play a Course">
 
@@ -1654,10 +1651,9 @@ svg { display:block; }
         <div class="mode-title">PLAY A COURSE</div>
       </div>
       <div class="mode-cap">⛳ <strong>2 courses:</strong> Laytown · Baltray</div>
-    </div>
+    </button>
   </div>
-  <button class="btn btn-dark" onclick="startDecisionRun()" style="width:100%;margin-top:10px">PLAY A 3-HOLE DECISION RUN →</button>
-  <button class="btn btn-dark" onclick="startDecisionRun(9)" style="width:100%;margin-top:8px">PLAY A 9-HOLE DECISION RUN →</button>
+  <details class="home-more"><summary>More ways to play</summary><div class="home-more-actions"><button class="btn btn-dark" onclick="startDecisionRun()">PLAY A 3-HOLE DECISION RUN</button><button class="btn btn-dark" onclick="startDecisionRun(9)">PLAY A 9-HOLE DECISION RUN</button></div></details>
 
   <!-- Free value, zero taps: today's pocket cue (tennis "one thing to remember") -->
   <div class="one-thing" id="one-thing"></div>
@@ -1665,15 +1661,15 @@ svg { display:block; }
   <div style="height:20px"></div>
 
   <nav class="bottom-nav" id="bottom-nav">
-    <div class="nav-item active" data-nav="home" onclick="navTo('home')">
+    <button class="nav-item active" data-nav="home" onclick="navTo('home')">
       <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
-    </div>
-    <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
+    </button>
+    <button class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
       <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
-    </div>
-    <div class="nav-item" data-nav="profile" onclick="showProfile()">
+    </button>
+    <button class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">↗</span><span class="nav-label">Review</span>
-    </div>
+    </button>
   </nav>
 </div>
 
@@ -1746,15 +1742,15 @@ svg { display:block; }
   <div style="height:20px"></div>
 
   <nav class="bottom-nav">
-    <div class="nav-item" data-nav="home" onclick="navTo('home')">
+    <button class="nav-item" data-nav="home" onclick="navTo('home')">
       <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
-    </div>
-    <div class="nav-item active" data-nav="sharpen" onclick="navTo('sharpen')">
+    </button>
+    <button class="nav-item active" data-nav="sharpen" onclick="navTo('sharpen')">
       <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
-    </div>
-    <div class="nav-item" data-nav="profile" onclick="showProfile()">
+    </button>
+    <button class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">↗</span><span class="nav-label">Review</span>
-    </div>
+    </button>
   </nav>
 </div>
 
@@ -1937,15 +1933,15 @@ svg { display:block; }
   </div>
 
   <nav class="bottom-nav">
-    <div class="nav-item" data-nav="home" onclick="navTo('home')">
+    <button class="nav-item" data-nav="home" onclick="navTo('home')">
       <span class="nav-icon">☀️</span><span class="nav-label">Today</span>
-    </div>
-    <div class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
+    </button>
+    <button class="nav-item" data-nav="sharpen" onclick="navTo('sharpen')">
       <span class="nav-icon">⛳</span><span class="nav-label">Practice</span>
-    </div>
-    <div class="nav-item" data-nav="profile" onclick="showProfile()">
+    </button>
+    <button class="nav-item" data-nav="profile" onclick="showProfile()">
       <span class="nav-icon">↗</span><span class="nav-label">Review</span>
-    </div>
+    </button>
   </nav>
 </div>
 
@@ -3168,6 +3164,8 @@ function showView(id){
 }
 
 function navTo(id){
+  const active=document.getElementById('view-'+id);
+  if(active&&active.classList.contains('active')){viewScroll[id]=0;active.scrollTop=0;return}
   if(id === 'home')        { renderHome();    showView('home'); }
   else if(id === 'sharpen'){ GameSharpGolfSharpen.open(); }
   else if(id === 'profile'){ showProfile(); }
@@ -3199,24 +3197,11 @@ function gsCollapseHomeHero(){
 }
 function gsPrepareHomeHero(){
   const home = document.getElementById('view-home');
-  if(!home || window.innerWidth >= 768) return;
-  const day = todayStr();
+  if(!home) return;
   window.clearTimeout(gsHomeHeroTimer);
-  if(gsHomeHeroSeen(day)){
-    home.classList.remove('gs-home-hero-expanded');
-    home.classList.add('gs-home-hero-collapsed');
-    return;
-  }
-  gsMarkHomeHeroSeen(day);
   home.classList.remove('gs-home-hero-collapsed');
-  home.classList.add('gs-home-hero-expanded');
-  gsHomeHeroTimer = window.setTimeout(gsCollapseHomeHero, 1800);
-  if(!home.dataset.heroCollapseBound){
-    home.dataset.heroCollapseBound = '1';
-    home.addEventListener('pointerdown', gsCollapseHomeHero, {passive:true});
-    home.addEventListener('scroll', gsCollapseHomeHero, {passive:true});
-    home.addEventListener('touchmove', gsCollapseHomeHero, {passive:true});
-  }
+  home.classList.remove('gs-home-hero-expanded');
+  home.dataset.heroStable = 'true';
 }
 function gsGuardHomeHeroImage(){
   const home = document.getElementById('view-home');
@@ -3256,7 +3241,7 @@ function renderHome(){
         </div>
         <div class="hero-topbar-right">
           <div class="streak-badge hero-streak"><span class="flame">🔥</span><span class="count" id="streak-count">0</span></div>
-          <button class="profile-btn" id="profile-btn" onclick="showProfile()">👤</button>
+          <button class="profile-btn" id="profile-btn" onclick="showProfile()" aria-label="Open progress and profile">👤</button>
         </div>
       </div>`;
   }
