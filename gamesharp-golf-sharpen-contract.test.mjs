@@ -48,6 +48,9 @@ assert(/class="gss-round"/.test(html)&&/class="gss-moment/.test(html),'round jou
 assert(!/class="gss-player"|class="gss-hotspot"/.test(html),'legacy golfer/body-map entry remains reachable');
 assert(/What do you need now\?/.test(html),'three-state entry prompt missing');
 assert.equal((html.match(/data-mode="(prepare|sharpen|reflect)"/g)||[]).length,3,'entry must expose exactly three human states');
+assert(/class="gss-course-progress"[\s\S]{0,700}class="gss-golfer"/.test(html),'golf-native progressing golfer illustration missing');
+assert(/data-preview="prepare"[\s\S]*data-preview="sharpen"[\s\S]*data-preview="reflect"/.test(html),'golfer does not respond to all three entry states');
+assert(/\.gss-course-progress\[data-preview="prepare"\][\s\S]*\.gss-course-progress\[data-preview="reflect"\]/.test(html),'golfer progression positions missing');
 assert(/mode==='prepare'\?\['before','first'\]:\['tee','approach','green','putting','pressure'\]/.test(html),'entry-state moment filtering is not authoritative');
 assert(/if\(mode==='reflect'\)\{state\.entryMode=mode;issues\('nineteenth'\)/.test(html),'reflect must enter the 19th Hole without another menu');
 assert(/const focus=`<section class="gss-result-lead"[\s\S]{0,1000}Test it now[\s\S]{0,700}<details class="gss-why"/.test(html),'result does not lead with one focus and one test before explanation');

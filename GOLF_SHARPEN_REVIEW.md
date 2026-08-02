@@ -21,6 +21,8 @@ Sharpen now begins with one human question—`What do you need now?`—and three
 
 The former illustrated golfer/body-hotspot entry has been removed from the reachable UI. The supplied `Your Round` artwork informed the sequence and tone, but is not shipped as an unreadable mobile image; the production UI renders the stages as semantic, accessible controls with no image dependency.
 
+A compact illustrated golfer now progresses along a restrained course line as the user explores the three intentions. It is deliberately subordinate to the decision: no labels are embedded in the illustration, no body part claims diagnosis, and the same three buttons remain the only entry controls. Pointer, keyboard focus and reduced-motion behavior derive from the same state; if the illustration fails, no content or navigation is lost.
+
 ## High-leverage legacy integration
 
 The highest-frequency tee-flight, putting, Course IQ, approach-contact and short-game routes now use individually authored Coach's Lens explanations. Every linked legacy asset receives the current focus and a route-specific observation instruction, keeps that context visible during the asset, and offers an exact one-tap return to the originating Sharpen result. This turns Shot Clinic, Play a Hole, Play a Course and decision content into continuations of the lesson rather than generic destinations.
