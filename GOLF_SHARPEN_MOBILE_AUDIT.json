@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-08-02",
-  "entryModel": "persistent-cinematic-round-journey",
+  "entryModel": "closed-loop-cinematic-round-journey",
   "illustratedProgress": { "present": true, "persistentElement": "gss-cinema", "stages": ["entry", "moment-map", "symptom", "distinction", "focus", "asset-return", "check-back"], "moments": ["before", "first", "tee", "approach", "green", "putting", "pressure", "nineteenth"], "resultCaptionSource": "authoritative result cue", "navigationDependency": false, "reducedMotionEquivalent": true },
   "viewports": [
     { "width": 320, "height": 568, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
@@ -31,6 +31,12 @@
     "playAHoleExactReturn": true,
     "debriefExactReturn": true,
     "savedFocusCheckback": true,
+    "takeTestHistory": true,
+    "testedFocusStreak": true,
+    "journeyShareCard": { "nativeFileShare": true, "fallback": "clipboard", "verifiedJpegBytes": 175929 },
+    "todayDepthAction": true,
+    "singlePracticeFrontDoor": true,
+    "androidPerformanceReport": "GOLF_ANDROID_PERFORMANCE_AUDIT.json",
     "reducedMotion": true,
     "imageDependency": false,
     "relevantConsoleErrors": 0

@@ -1,7 +1,7 @@
 // GameSharp Golf — service worker
 // Makes the app open offline once visited (critical: golf courses have poor signal).
-const CACHE = 'gamesharp-golf-v10';
-const SHELL = ['./', './index.html', './manifest.json', './icon.svg', './laytown-hero.jpg', './baltray-hero.jpg', './play-a-hole-hero.jpg', './play-a-course-hero.jpg'];
+const CACHE = 'gamesharp-golf-v11';
+const SHELL = ['./', './index.html', './manifest.json', './icon.svg', './laytown-hero.jpg', './baltray-hero.jpg', './play-a-hole-hero.jpg', './play-a-course-hero.jpg', './gamesharp-round-journey-v1.webp'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(

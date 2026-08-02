@@ -49,6 +49,8 @@ assert(!/class="gss-player"|class="gss-hotspot"/.test(html),'legacy golfer/body-
 assert(/What do you need now\?/.test(html),'three-state entry prompt missing');
 assert.equal((html.match(/data-mode="(prepare|sharpen|reflect)"/g)||[]).length,3,'entry must expose exactly three human states');
 assert(fs.existsSync(new URL('./gamesharp-round-journey-v1.png',import.meta.url)),'production round-journey artwork missing');
+const journeyWebp=new URL('./gamesharp-round-journey-v1.webp',import.meta.url);assert(fs.existsSync(journeyWebp),'optimized journey artwork missing');assert(fs.statSync(journeyWebp).size<=160000,'journey artwork exceeds 160KB mid-tier-phone budget');assert(/\.gss-journey-map,\.gss-cinema\{background-image:url\('gamesharp-round-journey-v1\.webp'\)\}/.test(html),'rendered journey does not use optimized artwork');
+const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-round-journey-v1\.webp/.test(sw),'journey artwork is unavailable in the offline course shell');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent cinematic journey layer missing');
 assert(/const CINEMA_ORDER=\['before','first','tee','approach','green','putting','pressure','nineteenth'\]/.test(html),'cinematic round order is not authoritative');
 assert(/function cinema\(stage,moment='tee',resultId=null\)/.test(html),'authoritative cinematic renderer missing');
@@ -63,10 +65,14 @@ assert(/cinema\('route',state\.regionId\)/.test(html),'persistent illustration m
 assert(/cinema\('result',r\.regionId,id\)/.test(html),'persistent illustration missing from focus result');
 assert(/cinema\('result',r\.regionId,saved\.resultId\)/.test(html),'saved-focus return loses cinematic context');
 assert(!/class="gss-journey-visual"/.test(html),'retired recreated illustration remains reachable');
+assert(/data-share-map/.test(html)&&/function shareJourney\(\)/.test(html)&&/gamesharp-round-focus\.jpg/.test(html),'journey-map share card missing');
+assert(/focusHistory/.test(html)&&/function habitStats\(\)|const habitStats=/.test(html)&&/function takeFocus\(\)/.test(html)&&/function checkFocus\(/.test(html),'take-test-return habit loop missing');
+assert(/Take this to your next round →/.test(html)&&/How did it go\?/.test(html),'practice loop language missing');
+assert(/LEGACY_KEY='gsg_sharpen_state_v3'/.test(html),'Sharpen state migration missing');
 assert(/mode==='prepare'\?\['before','first'\]:\['tee','approach','green','putting','pressure'\]/.test(html),'entry-state moment filtering is not authoritative');
 assert(/if\(mode==='reflect'\)\{state\.entryMode=mode;issues\('nineteenth'\)/.test(html),'reflect must enter the 19th Hole without another menu');
 assert(/const focus=`<section class="gss-result-lead"[\s\S]{0,1000}Test it now[\s\S]{0,700}<details class="gss-why"/.test(html),'result does not lead with one focus and one test before explanation');
-assert(!/data-save>Save this focus/.test(html)&&/Take this to the course/.test(html)&&/Make this tomorrow’s focus/.test(html),'benefit-led save language missing');
+assert(!/data-save>Save this focus/.test(html)&&/Take this to your next round →/.test(html),'benefit-led take-to-round language missing');
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');
 assert(/function set\(html,label\)\{[^}]*el\.scrollTop=0/.test(html),'Sharpen stage transitions can inherit stale mobile scroll');
 assert(/returnPending/.test(html)&&/returnFromAsset/.test(html),'Asset return context missing');
@@ -77,5 +83,9 @@ assert(/PLAY WITH SEVE’S IMAGINATION/.test(html)&&/europeantour\.com\/dpworld-
 assert((html.match(/Find the Culprit ·/g)||[]).length>=8,'Shot Clinic is not explicitly wired as Find the Culprit');
 assert(/function exitQuiz\(\)\{\s*if\(window\.GameSharpGolfSharpen&&GameSharpGolfSharpen\.returnFromAsset\(\)\) return;/.test(html),'focused mini-session native exit loses Sharpen context');
 assert((html.match(/hvh-back" onclick="if\(!GameSharpGolfSharpen\.returnFromAsset\(\)\)/g)||[]).length>=2,'focused hole native exit loses Sharpen context');
+assert(!/function startCrashCourse\(/.test(html)&&!/onclick="startCrashCourse\(\)"/.test(html),'redundant Crash Course launcher remains reachable');
+assert(/id="home-depth"/.test(html)&&/function openTodayDepth\(\)/.test(html),'Today does not surface a differentiating next action');
+assert(!/Change grip immediately/.test(html),'soft Daily distractor remains launch-reachable');
+assert(/Choice copy must describe the shot, never grade it before commitment/.test(html)&&/lower-risk\|aggressive/.test(html),'Play-a-Hole neutrality is not structurally enforced');
 assert(/\.gss-moment\{[^}]*min-height:68px/.test(html),'48px round-moment target missing');
 console.log(JSON.stringify({ok:true,regions:Object.keys(R).length,routes:Object.keys(Q).length,results:Object.keys(Z).length,assets:Object.keys(A).length},null,2));

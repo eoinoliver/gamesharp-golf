@@ -43,6 +43,22 @@ The visible `The Read` block has been removed. Every first and repeat result now
 
 Shot Clinic actions are explicitly named `Find the Culprit` and open the exact relevant fault comparison. The current focus and observation instruction stay visible inside that legacy experience, and its native close returns to the same compact Sharpen result. Short-game identity includes a reviewed Seve Ballesteros film link from the DP World Tour; no quotation or mechanical claim is attributed to a player without a source.
 
+## Closed practice and social loops
+
+`Take this to your next round` now records a focus as taken, keeps it visible on return and asks `How did it go?` only after a plausible testing interval. A check-back changes that specific history item to tested and updates a visible consecutive-day tested-focus streak. `I haven’t tried it yet` does not falsely increment the streak. These remain reflection signals, never performance measurements.
+
+The illustrated map now creates a 1080×1350 branded `My Round Focus` image on demand and hands it to the native share sheet. The share card, caption and moment names derive from the authoritative journey definitions. Its 176KB generated JPEG was verified in the browser; cancelling the share sheet is harmless and clipboard text remains the fallback.
+
+## Judgment training and one front door
+
+Play-a-Hole choice cards pass through one neutral renderer that removes pre-commit grading words across all 382 decision outputs. The renderer now strips labels such as smart, safe, aggressive, lower-risk and hero while preserving the factual club, target, carry, remaining distance and hazard trade-off. The app-wide trust audit fails malformed fragments. The weak `Change grip immediately` Daily distractor was replaced with three plausible process alternatives.
+
+Today now contains one contextual depth card: an untested Sharpen focus returns to the practice loop; a completed Daily opens a Decision Run; otherwise it opens the 19th Hole Debrief. The profile’s former Crash Course launcher now enters Sharpen and the parallel Crash Course function has been removed, leaving one primary Practice front door.
+
+## Android performance budget
+
+The journey map’s delivered artwork is now a 120,740-byte WebP, down from the 2.1MB PNG source (94.6% reduction). Under a Galaxy A52-class profile with 4× CPU slowdown, 120ms latency and 1.6Mbps download, Sharpen became interactive in 80ms after navigation and Shot Clinic rendered in 485ms, with no relevant console errors or horizontal overflow. The structural contract fails if the WebP exceeds 160KB or if the rendered journey stops using it. This is throttled browser emulation; a physical mid-range Android test in variable course connectivity remains an explicit pre-production field check.
+
 ## Claim boundary
 
 Every result is labelled guided-hypothesis, uses observable user-reported distinctions, states that multiple mechanisms can produce the outcome, and supplies one focus and one course cue. No result claims swing capture, diagnosis, measured improvement, probability or strokes gained.
