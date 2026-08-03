@@ -74,7 +74,9 @@ Remedy: a non-positive graph now returns `One Decision to Revisit`, explicitly s
 
 Cause: a previously installed cache could continue to serve the pre-audit shell.
 
-Remedy: the release shell is now `gamesharp-golf-v19`. The contract binds the expected cache version and both current one-hole artwork formats. The hero loader recovers WebP → JPEG, on connectivity/visibility return, or by explicit retry; a transient mobile request failure cannot permanently hide a valid asset.
+Remedy: the release shell is now `gamesharp-golf-v20`. The contract binds the expected cache version and both current one-hole artwork formats. The hero loader recovers WebP → JPEG, on connectivity/visibility return, or by explicit retry; a transient mobile request failure cannot permanently hide a valid asset.
+
+The selected Sharpen moment no longer repeats five generic pulses. Each region has its own camera crop and shot overlay, with a dedicated close-green putting treatment. The contract fails if the retired pulse implementation or a region without a distinct visual returns.
 
 The Home surface also has an explicit iOS scroll boundary, momentum scrolling, isolated stacking context, and pointer-enabled primary action layers. At 390×844 the Daily, Play a Hole and Sharpen entries were each exercised through their destination with zero horizontal overflow.
 

@@ -10,6 +10,8 @@ The hero is now a stable 96px brand strip in portrait and 72px in short landscap
 
 Home now follows the Tennis hierarchy with exactly two immediate actions: today’s decision and `Play a Hole`. The golf-hole image is the sporting canvas rather than another content card. The 19th Hole and secondary formats no longer compete on Today; their underlying journeys remain available contextually elsewhere. No learning or scoring logic was duplicated.
 
+The Home hierarchy is hero-led rather than box-led: a longer uninterrupted course view, translucent borderless Daily treatment and a quieter separated Play a Hole invitation. The questions remain discoverable without arriving as two hard-edged panels directly beneath the masthead.
+
 Daily Complete already follows the same hierarchy: Today's Edge and one primary `Use it now` action are visible; rationale and secondary actions are progressively disclosed. Sharpen likewise shows three human intentions, one focus and one primary test. Profile/Review remains the secondary destination for progress and the broader library.
 
 All bottom-navigation instances are now semantic buttons, the profile icon has an accessible name, and the active tab follows the familiar mobile convention of returning to the top when tapped again.
