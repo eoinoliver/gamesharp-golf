@@ -171,11 +171,19 @@ if ((html.match(/function mountShotSimulator\(/g) || []).length !== 1) failures.
 if ((html.match(/function simulatorReviewMarkup\(/g) || []).length !== 1) failures.push('simulatorReviewMarkup must have one implementation');
 if (!html.includes("setSimulatorCamera('broadcast', false)")) failures.push('Chosen shot does not cut automatically to broadcast flight');
 if (!/orientation:landscape/.test(html)) failures.push('Landscape simulator layout guard is missing');
-if (!/\.sim-camera-btn\s*\{[^}]*min-height:38px/s.test(html)) failures.push('Camera review controls are below the 38px mobile touch target');
+if (!/\.sim-camera-btn\s*\{[^}]*min-height:44px/s.test(html)) failures.push('Camera review controls are below the 44px mobile touch target');
 for (const cue of ['playerCue', 'broadcastCue', 'planCue']) {
   if (!html.includes(`dataset.${cue}`)) failures.push(`Missing camera-specific ${cue}`);
 }
 notes.push('Shot reviews 3 cameras; single renderer/spec implementation; landscape guard present');
+
+if ((html.match(/function presentHoleDecisionTheatre\(/g) || []).length !== 1) failures.push('Play a Hole must have exactly one default-expanded presenter');
+if (!/saveHoleSession\(\);\s*presentHoleDecisionTheatre\(\);/.test(html)) failures.push('Every authored shot is not routed through the default-expanded theatre');
+if (!html.includes("dataset.gsHoleTheatreDefault='expanded-v1'")) failures.push('Production cannot report the Play a Hole presentation contract');
+if (!html.includes("if(theatre.classList.contains('open')){refreshTheatreTitle();theatreBody.scrollTop=0;return;}")) failures.push('Theatre does not reset to the new shot when play advances');
+if (!html.includes("theatreBody.scrollTo({top:0,behavior:'auto'})")) failures.push('A committed choice can leave its shot animation off-screen');
+if (!/id!=='hole'&&window\.GameSharpHoleTheatre[^\n]+\.close\(\)/.test(html)) failures.push('Leaving Play a Hole can strand its modal over another feature');
+notes.push('Play a Hole opens expanded from the authoritative node renderer; answer and next-shot views return to the visual');
 
 const advanced = extractConst('ADV_ITEMS', 'let advState');
 for (const [index, item] of advanced.entries()) {

@@ -1119,7 +1119,7 @@ svg { display:block; }
   border:1px solid rgba(255,255,255,.16);box-shadow:0 5px 18px rgba(0,0,0,.28);
 }
 .sim-camera-btn {
-  min-height:38px;border:0;border-radius:999px;padding:7px 10px;background:transparent;
+  min-height:44px;border:0;border-radius:999px;padding:7px 10px;background:transparent;
   color:rgba(255,255,255,.62);font:700 9px/1 'DM Sans',sans-serif;letter-spacing:.08em;
   text-transform:uppercase;white-space:nowrap;cursor:pointer;
 }
@@ -1324,6 +1324,8 @@ svg { display:block; }
   }
   .splash-pulse,.think-beat,.pp-wind-line,.pp-wv-wind,.cam-preview path{animation:none!important}
 }
+html[data-gs-motion="reduce"] *,html[data-gs-motion="reduce"] *::before,html[data-gs-motion="reduce"] *::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0ms!important}
+html[data-gs-motion="reduce"] .splash-pulse,html[data-gs-motion="reduce"] .think-beat,html[data-gs-motion="reduce"] .pp-wind-line,html[data-gs-motion="reduce"] .pp-wv-wind,html[data-gs-motion="reduce"] .cam-preview path{animation:none!important}
 
 /* =============================================
    INSTALL PROMPT
@@ -3186,6 +3188,7 @@ const PP_TAB_VIEWS = ['home','sharpen','profile'];
 const viewScroll = {};
 function showView(id){
   if (window.gsHideBootSplash) gsHideBootSplash();
+  if(id!=='hole'&&window.GameSharpHoleTheatre&&window.GameSharpHoleTheatre.isOpen())window.GameSharpHoleTheatre.close();
   // Remember scroll position of the tab we're leaving
   const cur = document.querySelector('.view.active');
   if(cur){ const cid = cur.id.replace('view-',''); if(PP_TAB_VIEWS.includes(cid)) viewScroll[cid] = cur.scrollTop; }
@@ -3787,12 +3790,12 @@ function gsSetSvgMotion(root, reduce){
 function gsInstallMotionContract(){
   if(!window.matchMedia) return;
   const mq=window.matchMedia('(prefers-reduced-motion: reduce)');
-  const apply=()=>gsSetSvgMotion(document,mq.matches);
+  const apply=()=>{const reduce=gsReducedMotion();document.documentElement.dataset.gsMotion=reduce?'reduce':'full';gsSetSvgMotion(document,reduce)};
   apply();
   try{ mq.addEventListener('change',apply); }catch(e){ try{ mq.addListener(apply); }catch(_e){} }
   if(window.MutationObserver){
     new MutationObserver(ms=>{
-      if(!mq.matches) return;
+      if(!gsReducedMotion()) return;
       ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) gsSetSvgMotion(n,true); }));
     }).observe(document.documentElement,{childList:true,subtree:true});
   }
@@ -9071,6 +9074,26 @@ function renderHoleNode(nodeId){
   mountShotSimulator(nodeId, node);
   updateHoleLearningBar();
   saveHoleSession();
+  presentHoleDecisionTheatre();
+}
+
+// One authoritative presentation rule: every decision node enters the
+// synchronized full-screen theatre. Because this lives in renderHoleNode(), it
+// covers fresh holes, resumes, Decision Runs, challenge links and every next
+// shot without relying on each launcher remembering to open the experience.
+let holeTheatreOpenToken=0;
+function presentHoleDecisionTheatre(){
+  const token=++holeTheatreOpenToken;
+  requestAnimationFrame(()=>{
+    if(token!==holeTheatreOpenToken)return;
+    const view=document.getElementById('view-hole');
+    const game=document.getElementById('hole-game');
+    const map=document.getElementById('hole-map-wrap');
+    if(!view||!view.classList.contains('active')||!game||game.style.display==='none'||!map)return;
+    if(!window.GameSharpHoleTheatre||typeof window.GameSharpHoleTheatre.open!=='function')return;
+    window.GameSharpHoleTheatre.open(map);
+    document.documentElement.dataset.gsHoleTheatre=`expanded:${HS.currentNode}`;
+  });
 }
 
 // Choice copy must describe the shot, never grade it before commitment.
@@ -10954,14 +10977,14 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 /* Play a Hole has its own synchronized decision theatre. It deliberately
    contains the visual, the choices and the reveal; the generic Focus View
    must never separate those states again. */
-.gs-hole-theatre{position:fixed;inset:0;z-index:100100;display:none;grid-template-rows:auto minmax(0,1fr);box-sizing:border-box;background:#070b08;color:#fff;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+.gs-hole-theatre{position:fixed;inset:0;z-index:100100;display:none;width:100%;height:100dvh;max-height:100dvh;grid-template-rows:auto minmax(0,1fr);box-sizing:border-box;background:#070b08;color:#fff;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));overscroll-behavior:none}
 .gs-hole-theatre.open{display:grid;animation:gsFocusIn .24s cubic-bezier(.2,.8,.3,1)}
-.gs-hole-theatre-bar{display:flex;align-items:center;gap:10px;min-height:54px;padding:0 2px 7px}
+.gs-hole-theatre-bar{display:flex;align-items:center;gap:10px;width:100%;min-width:0;min-height:54px;padding:0 2px 7px}
 .gs-hole-theatre-copy{min-width:0;flex:1}.gs-hole-theatre-kicker{color:var(--gold);font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
 .gs-hole-theatre-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
 .gs-hole-theatre-phase{flex:0 0 auto;border:1px solid rgba(200,168,75,.42);border-radius:999px;padding:6px 9px;color:#e7cf82;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-.gs-hole-theatre-close{width:44px;height:44px;flex:0 0 44px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(255,255,255,.07);color:#fff;font-size:21px}
-.gs-hole-theatre-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;border-radius:16px;background:#0c110d;border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.gs-hole-theatre-close{width:48px;height:48px;flex:0 0 48px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(255,255,255,.07);color:#fff;font-size:21px}
+.gs-hole-theatre-body{width:100%;min-width:0;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;border-radius:16px;background:#0c110d;border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 50px rgba(0,0,0,.45)}
 .gs-hole-theatre-body>.hole-map-wrap{height:clamp(270px,45vh,430px)!important;min-height:270px;margin:0!important;border-radius:0!important}
 .gs-hole-theatre .gs-focus-trigger{display:none!important}
 .gs-hole-theatre-body>.hole-map-wrap>svg{width:100%!important;height:100%!important;max-height:none!important}
@@ -10972,15 +10995,15 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 .gs-hole-theatre-choice.show{display:flex;align-items:center;gap:10px}.gs-hole-theatre-choice-mark{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--gold);color:#111;font-weight:900}
 .gs-hole-theatre-choice-copy{min-width:0}.gs-hole-theatre-choice-label{font-size:12px;font-weight:800}.gs-hole-theatre-choice-sub{font-size:10px;color:rgba(255,255,255,.62);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gs-hole-theatre-body>.outcome-card{margin:12px!important}.gs-hole-theatre-body>.scorecard-overlay{min-height:0!important}
-@media(max-width:600px) and (orientation:portrait){.gs-focus-stage>.anim-container,.gs-focus-stage>#qTechWrap{height:min(66vh,580px)!important}.gs-focus-stage>.tech-visual{height:68vh!important}.gs-focus-stage .gsl-note{font-size:11px}.gs-focus-title{font-size:17px}.gs-hole-theatre-body>.hole-map-wrap{height:clamp(280px,43vh,390px)!important}.gs-hole-theatre-title{font-size:17px}}
+@media(max-width:600px) and (orientation:portrait){.gs-focus-stage>.anim-container,.gs-focus-stage>#qTechWrap{height:min(66vh,580px)!important}.gs-focus-stage>.tech-visual{height:68vh!important}.gs-focus-stage .gsl-note{font-size:11px}.gs-focus-title{font-size:17px}.gs-hole-theatre-body>.hole-map-wrap{height:clamp(210px,38vh,340px)!important;height:clamp(210px,38svh,340px)!important;min-height:210px}.gs-hole-theatre-body>.shot-panel{padding:10px!important}.gs-hole-theatre-body .situation-box{margin-bottom:8px;padding:9px 10px}.gs-hole-theatre-body .sit-text{font-size:13px;line-height:1.45}.gs-hole-theatre-title{font-size:17px}}
 @media(orientation:landscape) and (max-height:540px){.gs-hole-theatre{grid-template-rows:48px minmax(0,1fr)}.gs-hole-theatre-bar{min-height:46px}.gs-hole-theatre-body{display:grid;grid-template-columns:minmax(0,58%) minmax(270px,42%);overflow:hidden}.gs-hole-theatre-body>.hole-map-wrap{height:100%!important;min-height:0}.gs-hole-theatre-body>.shot-panel,.gs-hole-theatre-body>.outcome-card,.gs-hole-theatre-body>.scorecard-overlay{grid-column:2;overflow-y:auto;margin:0!important}.gs-hole-theatre-choice{grid-column:2}.gs-hole-theatre-body>.hole-map-wrap{grid-column:1;grid-row:1/5}.gs-hole-theatre-phase{display:none}}
-@media(prefers-reduced-motion:reduce){.gs-focus-overlay.open{animation:none}}
+@media(prefers-reduced-motion:reduce){.gs-focus-overlay.open,.gs-hole-theatre.open{animation:none}}
 </style>
 <script id="gs-focus-view">
 (()=> {
   const SELECTORS=['#qTechWrap','.anim-container','.tech-visual','#hole-map-wrap'];
   let active=null,parent=null,next=null,opener=null,scrollY=0;
-  let theatreRecords=[],theatreOpener=null;
+  let theatreRecords=[],theatreOpener=null,theatreBackground=null;
   const overlay=document.createElement('div');
   overlay.className='gs-focus-overlay'; overlay.setAttribute('role','dialog'); overlay.setAttribute('aria-modal','true'); overlay.setAttribute('aria-label','GameSharp Focus View');
   overlay.innerHTML=`<div class="gs-focus-bar"><div class="gs-focus-brand"><div class="gs-focus-kicker">◉ GAMESHARP FOCUS VIEW</div><div class="gs-focus-title" id="gsFocusTitle">Study the shot</div></div><button class="gs-focus-screen" type="button" aria-label="Use device fullscreen" title="Use device fullscreen">⛶</button><button class="gs-focus-close" type="button" aria-label="Close Focus View">×</button></div><div class="gs-focus-stage"></div><div class="gs-focus-foot"><div class="gs-focus-cue" id="gsFocusCue"></div><div class="gs-focus-hint">Replay · study · close to continue</div></div>`;
@@ -10988,7 +11011,7 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
   const stage=overlay.querySelector('.gs-focus-stage'),close=overlay.querySelector('.gs-focus-close');
   const theatre=document.createElement('div');
   theatre.className='gs-hole-theatre';theatre.setAttribute('role','dialog');theatre.setAttribute('aria-modal','true');theatre.setAttribute('aria-label','Play a Hole decision theatre');
-  theatre.innerHTML=`<div class="gs-hole-theatre-bar"><div class="gs-hole-theatre-copy"><div class="gs-hole-theatre-kicker">Play a Hole · Decision Theatre</div><div class="gs-hole-theatre-title">Study the shot</div></div><div class="gs-hole-theatre-phase">Study</div><button class="gs-hole-theatre-close" type="button" aria-label="Close decision theatre">×</button></div><div class="gs-hole-theatre-body"><div class="gs-hole-theatre-choice" aria-live="polite"><span class="gs-hole-theatre-choice-mark">✓</span><span class="gs-hole-theatre-choice-copy"><div class="gs-hole-theatre-choice-label"></div><div class="gs-hole-theatre-choice-sub"></div></span></div></div>`;
+  theatre.innerHTML=`<div class="gs-hole-theatre-bar"><div class="gs-hole-theatre-copy"><div class="gs-hole-theatre-kicker">Play a Hole · Decision Theatre</div><div class="gs-hole-theatre-title">Study the shot</div></div><div class="gs-hole-theatre-phase">Study</div><button class="gs-hole-theatre-close" type="button" aria-label="Use compact hole view" title="Use compact hole view">×</button></div><div class="gs-hole-theatre-body"><div class="gs-hole-theatre-choice" aria-live="polite"><span class="gs-hole-theatre-choice-mark">✓</span><span class="gs-hole-theatre-choice-copy"><div class="gs-hole-theatre-choice-label"></div><div class="gs-hole-theatre-choice-sub"></div></span></div></div>`;
   document.body.appendChild(theatre);
   const theatreBody=theatre.querySelector('.gs-hole-theatre-body');
   const phaseLabels={study:'Study',flight:'Watch the shot',result:'Read the result',complete:'Hole complete'};
@@ -10998,28 +11021,36 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
     theatre.querySelector('.gs-hole-theatre-phase').textContent=phase;
     if(value==='study') theatre.querySelector('.gs-hole-theatre-choice').classList.remove('show');
   }
+  function refreshTheatreTitle(){
+    theatre.querySelector('.gs-hole-theatre-title').textContent=(document.getElementById('hvh-name')?.textContent||'Study the shot')+' · '+(document.getElementById('hvh-yardage')?.textContent||'');
+  }
   function openHoleTheatre(button){
-    if(theatre.classList.contains('open'))return;
+    if(theatre.classList.contains('open')){refreshTheatreTitle();theatreBody.scrollTop=0;return;}
     const map=document.getElementById('hole-map-wrap'),panel=document.getElementById('shot-panel'),outcome=document.getElementById('outcome-card'),score=document.getElementById('scorecard-overlay');
     const subjects=[map,panel,outcome,score].filter(Boolean);
     if(!map||!panel)return;
     theatreOpener=button||map;scrollY=window.scrollY;
     theatreRecords=subjects.map(el=>({el,parent:el.parentNode,next:el.nextSibling}));
     subjects.forEach(el=>theatreBody.appendChild(el));
-    theatre.querySelector('.gs-hole-theatre-title').textContent=(document.getElementById('hvh-name')?.textContent||'Study the shot')+' · '+(document.getElementById('hvh-yardage')?.textContent||'');
+    refreshTheatreTitle();
     const currentPhase=(typeof HS!=='undefined'&&HS.phase)||'study';
     setTheatrePhase(currentPhase);
     if(currentPhase!=='study'&&typeof HS!=='undefined'&&HS.decisions&&HS.decisions.length){
       const committed=HS.decisions[HS.decisions.length-1];
       commitTheatreChoice(committed.label,committed.sub);
     }
-    theatre.classList.add('open');document.body.classList.add('gs-focus-open');
+    const app=document.getElementById('app');
+    if(app){theatreBackground={el:app,inert:app.hasAttribute('inert'),ariaHidden:app.getAttribute('aria-hidden')};app.setAttribute('inert','');app.setAttribute('aria-hidden','true')}
+    theatreBody.scrollTop=0;theatre.classList.add('open');document.body.classList.add('gs-focus-open');
+    document.documentElement.dataset.gsHoleTheatre=`expanded:${typeof HS!=='undefined'?HS.currentNode:'shot'}`;
     theatre.querySelector('.gs-hole-theatre-close').focus({preventScroll:true});
   }
   function closeHoleTheatre(){
     if(!theatre.classList.contains('open'))return;
     theatreRecords.forEach(({el,parent,next})=>{if(parent&&parent.isConnected)parent.insertBefore(el,next&&next.parentNode===parent?next:null)});
     theatreRecords=[];theatre.classList.remove('open');document.body.classList.remove('gs-focus-open');window.scrollTo(0,scrollY);
+    if(theatreBackground){const {el,inert,ariaHidden}=theatreBackground;if(!inert)el.removeAttribute('inert');if(ariaHidden===null)el.removeAttribute('aria-hidden');else el.setAttribute('aria-hidden',ariaHidden);theatreBackground=null}
+    document.documentElement.dataset.gsHoleTheatre='compact';
     const restore=theatreOpener;theatreOpener=null;if(restore&&restore.isConnected)restore.focus({preventScroll:true});
   }
   function commitTheatreChoice(label,sub){
@@ -11027,6 +11058,7 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
     chip.querySelector('.gs-hole-theatre-choice-label').textContent=label||'Call committed';
     chip.querySelector('.gs-hole-theatre-choice-sub').textContent=sub||'Watch what this decision creates.';
     chip.classList.add('show');
+    if(theatre.classList.contains('open'))theatreBody.scrollTo({top:0,behavior:'auto'});
   }
   function copyFor(el){
     const card=el.closest('.explanation-card,.quiz-body,.hole-play-view,.technique-card,.view')||el.parentElement;
@@ -11060,12 +11092,21 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
   }
   close.addEventListener('click',closeFocus);
   theatre.querySelector('.gs-hole-theatre-close').addEventListener('click',closeHoleTheatre);
+  theatre.addEventListener('keydown',e=>{
+    if(e.key!=='Tab'||!theatre.classList.contains('open'))return;
+    const focusable=[...theatre.querySelectorAll('button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])')].filter(el=>el.offsetParent!==null);
+    if(!focusable.length)return;
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  });
   overlay.querySelector('.gs-focus-screen').addEventListener('click',()=>{if(!document.fullscreenElement&&overlay.requestFullscreen)overlay.requestFullscreen().catch(()=>{});else if(document.fullscreenElement)document.exitFullscreen().catch(()=>{})});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(theatre.classList.contains('open'))closeHoleTheatre();else if(active)closeFocus()}});
   new MutationObserver(ms=>ms.forEach(m=>{if(m.target&&m.target.nodeType===1)enhance(m.target);m.addedNodes.forEach(n=>{if(n.nodeType===1)enhance(n)})})).observe(document.body,{childList:true,subtree:true});
   enhance();
+  document.documentElement.dataset.gsHoleTheatreDefault='expanded-v1';
   window.GameSharpFocusView={open:openFocus,close:closeFocus,refresh:enhance};
-  window.GameSharpHoleTheatre={open:openHoleTheatre,close:closeHoleTheatre,phase:setTheatrePhase,commit:commitTheatreChoice};
+  window.GameSharpHoleTheatre={open:openHoleTheatre,close:closeHoleTheatre,phase:setTheatrePhase,commit:commitTheatreChoice,isOpen:()=>theatre.classList.contains('open')};
 })();
 </script>
 <style id="gsg-sharpen-style">
