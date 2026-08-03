@@ -8,7 +8,7 @@ The hero is now a stable 96px brand strip in portrait and 72px in short landscap
 
 ## Jobs-style hierarchy
 
-Home now follows the Tennis hierarchy with two immediate actions: today's edge and one `Put today’s edge in play` invitation. Play a Course plus the 3-hole and 9-hole decision runs remain available under `More ways to play`. The former competing image-card grid is gone. No content was deleted and no learning or scoring logic was duplicated.
+Home now follows the Tennis hierarchy with exactly two immediate actions: today’s decision and `Play a Hole`. The golf-hole image is the sporting canvas rather than another content card. The 19th Hole and secondary formats no longer compete on Today; their underlying journeys remain available contextually elsewhere. No learning or scoring logic was duplicated.
 
 Daily Complete already follows the same hierarchy: Today's Edge and one primary `Use it now` action are visible; rationale and secondary actions are progressively disclosed. Sharpen likewise shows three human intentions, one focus and one primary test. Profile/Review remains the secondary destination for progress and the broader library.
 

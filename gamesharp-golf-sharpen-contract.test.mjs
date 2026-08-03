@@ -53,7 +53,7 @@ assert(!/function moments\(mode\)/.test(html),'retired eight-stage journey remai
 assert(fs.existsSync(new URL('./gamesharp-one-hole-v1.png',import.meta.url)),'one-hole source artwork missing');
 const holeWebp=new URL('./gamesharp-one-hole-v1.webp',import.meta.url),holeJpeg=new URL('./gamesharp-one-hole-v1.jpg',import.meta.url);assert(fs.existsSync(holeWebp),'optimized one-hole artwork missing');assert(fs.statSync(holeWebp).size<=160000,'one-hole artwork exceeds 160KB mid-tier-phone budget');assert(fs.existsSync(holeJpeg)&&fs.statSync(holeJpeg).size<=300000,'Safari JPEG fallback is missing or too heavy');assert(/id="gss-hole-image"[^>]+gamesharp-one-hole-v1\.webp\?v=18/.test(html),'Sharpen does not render a real recoverable one-hole image element');
 const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-one-hole-v1\.webp/.test(sw)&&/gamesharp-one-hole-v1\.jpg/.test(sw),'one-hole primary and Safari fallback are unavailable in the offline course shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(sw),'retired winding journey remains in the offline shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(html),'retired winding journey artwork remains referenced by the app');
-assert(/const CACHE = 'gamesharp-golf-v18'/.test(sw),'release cache version must evict every pre-Safari-recovery shell');
+assert(/const CACHE = 'gamesharp-golf-v19'/.test(sw),'release cache version must evict every pre-Home-simplification shell');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent one-hole visual layer missing');
 assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*aspect-ratio:943\/1680[^}]*background-size:100% 100%/.test(html),'the complete hole is not visible on Sharpen entry');
 assert(/const ZONE_ORDER=\['tee','recovery','approach','green','putting'\]/.test(html),'five-zone order is not authoritative');
@@ -97,7 +97,7 @@ assert((html.match(/Find the Culprit ·/g)||[]).length>=8,'Shot Clinic is not ex
 assert(/function exitQuiz\(\)\{\s*if\(window\.GameSharpGolfSharpen&&GameSharpGolfSharpen\.returnFromAsset\(\)\) return;/.test(html),'focused mini-session native exit loses Sharpen context');
 assert((html.match(/hvh-back" onclick="if\(!GameSharpGolfSharpen\.returnFromAsset\(\)\)/g)||[]).length>=2,'focused hole native exit loses Sharpen context');
 assert(!/function startCrashCourse\(/.test(html)&&!/onclick="startCrashCourse\(\)"/.test(html),'redundant Crash Course launcher remains reachable');
-assert(/id="home-depth"/.test(html)&&/function openTodayDepth\(\)/.test(html),'Today does not surface a differentiating next action');
+assert(!/id="home-depth"/.test(html)&&!/<details class="home-more">/.test(html),'Today must preserve the two-action Daily + Play a Hole hierarchy');
 assert(!/Change grip immediately/.test(html),'soft Daily distractor remains launch-reachable');
 assert(/Choice copy must describe the shot, never grade it before commitment/.test(html)&&/lower-risk\|aggressive/.test(html),'Play-a-Hole neutrality is not structurally enforced');
 assert(/\.gss-hole-zone\{[^}]*min-width:48px[^}]*min-height:48px/.test(html),'48px one-hole target missing');

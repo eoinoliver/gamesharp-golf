@@ -38,7 +38,7 @@ The 19th Hole or saved-focus prompt remains visible, but it no longer separates 
 
 Cause: Home calculated the next hole while Play a Hole correctly preferred an interrupted session.
 
-Remedy: the Home promise now reads the same persisted session selector. When a session exists it says `Finish your hole` and names the exact hole and shot. The UX contract fails if this mapping disappears.
+Remedy: the Home promise now reads the same persisted session selector. When a session exists it says `Continue your hole` and names the exact hole and shot without a second administrative `Resume` headline. The UX contract fails if this mapping disappears.
 
 ### Play a Hole choices were clickable divs
 
@@ -74,7 +74,7 @@ Remedy: a non-positive graph now returns `One Decision to Revisit`, explicitly s
 
 Cause: a previously installed cache could continue to serve the pre-audit shell.
 
-Remedy: the release shell is now `gamesharp-golf-v18`. The contract binds the expected cache version and both current one-hole artwork formats. The hero loader now recovers WebP → JPEG, on connectivity/visibility return, or by explicit retry; a transient mobile request failure can no longer permanently hide a valid asset.
+Remedy: the release shell is now `gamesharp-golf-v19`. The contract binds the expected cache version and both current one-hole artwork formats. The hero loader recovers WebP → JPEG, on connectivity/visibility return, or by explicit retry; a transient mobile request failure cannot permanently hide a valid asset.
 
 The Home surface also has an explicit iOS scroll boundary, momentum scrolling, isolated stacking context, and pointer-enabled primary action layers. At 390×844 the Daily, Play a Hole and Sharpen entries were each exercised through their destination with zero horizontal overflow.
 

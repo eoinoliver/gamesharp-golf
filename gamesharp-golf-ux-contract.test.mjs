@@ -8,14 +8,15 @@ assert(!/gsHomeHeroTimer = window\.setTimeout\(gsCollapseHomeHero/.test(html),'h
 assert(!/addEventListener\('(pointerdown|scroll|touchmove)', gsCollapseHomeHero/.test(html),'touch and scroll must not move the home layout');
 assert(!/#view-home \.home-hero,[\s\S]{0,120}transition:(max-height|height|margin|padding)/.test(html),'home must not animate layout dimensions');
 assert.equal((html.match(/<button class="home-play"/g)||[]).length,1,'home must expose one direct secondary play choice');
-assert(html.indexOf('<button class="home-play"')<html.indexOf('<button class="home-depth"'),'Daily and Play a Hole must remain the first two primary home actions');
-assert(/savedHole=loadHoleSession\(\)[\s\S]{0,500}Resume:<\/strong>[\s\S]{0,300}setAttribute\('aria-label',`Resume/.test(html),'home must advertise the exact interrupted hole that Play a Hole will resume');
-assert(/if\(sharpenState\?\.saved\)\{GameSharpGolfSharpen\.openSaved/.test(html)&&/openSaved\(from\)\{open\(from\);if\(state\.saved/.test(html),'Your Round Focus must open the saved focus rather than incidental Sharpen state');
+assert(/<div class="daily-card">[\s\S]{0,700}<button class="home-play"/.test(html),'Daily and Play a Hole must be the only ordered Home actions');
+assert(/savedHole=loadHoleSession\(\)[\s\S]{0,500}hod\.name} · Shot \$\{shot}[\s\S]{0,300}setAttribute\('aria-label',`Resume/.test(html),'home must advertise the exact interrupted hole that Play a Hole will resume');
+assert(/openSaved\(from\)\{open\(from\);if\(state\.saved/.test(html),'saved Sharpen focus must reopen its exact result context');
 assert(!/<button class="mode-card"/.test(html),'legacy competing home mode cards remain');
-assert(/<details class="home-more">[\s\S]{0,400}PLAY A COURSE[\s\S]{0,400}PLAY A 3-HOLE DECISION RUN[\s\S]{0,300}PLAY A 9-HOLE DECISION RUN/.test(html),'secondary play formats must use progressive disclosure');
+assert(!/<details class="home-more">/.test(html)&&!/<button class="home-depth"/.test(html),'Home must not expose a third action or feature directory');
+assert(!/id="dc-streak-text"/.test(html),'Home must not repeat the streak already shown in its header');
 assert(/#view-home \{[^}]*touch-action:pan-y[^}]*overflow-anchor:none/.test(html),'home mobile scrolling contract missing');
 assert(/#view-home \{[^}]*-webkit-overflow-scrolling:touch[^}]*isolation:isolate/.test(html),'home lacks an iPhone-native scroll and stacking boundary');
-assert(/#view-home \.daily-card,#view-home \.home-play,#view-home \.home-depth,#view-home \.home-more\{[^}]*z-index:2[^}]*pointer-events:auto/.test(html),'home actions can be obscured by decorative layers');
+assert(/#view-home \.daily-card,#view-home \.home-play\{[^}]*z-index:2[^}]*pointer-events:auto/.test(html),'home actions can be obscured by decorative layers');
 assert(/button \{[^}]*touch-action:manipulation/.test(html),'mobile buttons lack deterministic tap handling');
 assert(/#view-home \{[^}]*background:[^}]*scroll[^}]*overflow-y:scroll/.test(html),'home must use an iPhone-safe scrolling background and explicit scroll container');
 assert(/#view-home > \* \{ flex-shrink:0; \}/.test(html),'home sections must not shrink until the page has no scrollable distance');
@@ -33,4 +34,4 @@ for(const id of ['db-fairways','db-gir','db-putts','db-score'])assert(new RegExp
 assert.equal((html.match(/class="db-sign[^>]+aria-label="(?:Over|Even|Under) par"[^>]+aria-pressed=/g)||[]).length,3,'debrief score-sign controls must expose name and state');
 assert(/gaps\[0\]\.score > 0 \? gaps\[0\] : \{[\s\S]{0,220}One Decision to Revisit/.test(html),'a balanced scorecard must not be assigned a contradictory negative leak');
 
-console.log(JSON.stringify({ok:true,homePrimaryActions:2,playChoices:1,secondaryPlayFormats:3,semanticNavButtons:9},null,2));
+console.log(JSON.stringify({ok:true,homePrimaryActions:2,playChoices:1,homeCompetingDoors:0,semanticNavButtons:9},null,2));

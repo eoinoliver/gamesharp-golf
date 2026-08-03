@@ -162,9 +162,9 @@ svg { display:block; }
 /* =============================================
    HOME
 ============================================= */
-#view-home { background:linear-gradient(180deg,rgba(3,18,10,.73),rgba(4,14,8,.92)),url('GolfHero.png') center/cover scroll; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:scroll; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior-y:auto; touch-action:pan-y; overflow-anchor:none; isolation:isolate; }
+#view-home { background:linear-gradient(180deg,rgba(2,20,10,.69),rgba(2,18,9,.78) 48%,rgba(2,12,7,.94)),url('gamesharp-one-hole-v1.webp?v=19') center/cover scroll; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:scroll; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior-y:auto; touch-action:pan-y; overflow-anchor:none; isolation:isolate; }
 #view-home > * { flex-shrink:0; }
-#view-home .daily-card,#view-home .home-play,#view-home .home-depth,#view-home .home-more{position:relative;z-index:2;pointer-events:auto}
+#view-home .daily-card,#view-home .home-play{position:relative;z-index:2;pointer-events:auto}
 .hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:flex-start; justify-content:space-between; padding:max(14px,env(safe-area-inset-top)) 14px 0; }
 .hero-topbar .logo-wordmark { font-size:30px; line-height:1; text-shadow:0 2px 10px rgba(0,0,0,.7); }
 .hero-tagline { font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:rgba(255,255,255,.82); margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.75); }
@@ -192,8 +192,8 @@ svg { display:block; }
 .one-thing { margin:4px 14px 0; background:var(--card2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:var(--radius-sm); padding:13px 15px; }
 .ot-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; color:var(--gold); margin-bottom:5px; }
 .ot-text { font-size:14px; line-height:1.5; color:var(--text); }
-.home-hero { position:relative; margin:0 0 14px; aspect-ratio:5/4; height:auto; border-radius:0 0 24px 24px; overflow:hidden; box-shadow:0 12px 38px rgba(0,0,0,.6); background:#060e06; }
-.home-hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; display:block; filter:brightness(1.28) contrast(1.06) saturate(1.12); }
+.home-hero { position:relative; margin:0 0 22px; height:136px; overflow:hidden; background:linear-gradient(180deg,rgba(0,0,0,.3),transparent); }
+.home-hero-img { display:none; }
 .home-hero-veil { position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,10,6,.32) 0%, rgba(6,14,8,0) 34%, rgba(6,14,8,.06) 62%, rgba(6,14,8,.78) 100%); pointer-events:none; }
 .wob-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
 .wob-hero .home-hero-veil { position:absolute; inset:0; }
@@ -205,14 +205,14 @@ svg { display:block; }
 /* Stable home contract: the page never changes height underneath a touch. */
 @media(max-width:767px){
   #view-home .home-hero{overflow-anchor:none;}
-  #view-home .home-hero{height:96px;max-height:96px;aspect-ratio:auto;margin-bottom:10px;border-radius:0 0 16px 16px;filter:brightness(.78) saturate(.9);}
+  #view-home .home-hero{height:128px;max-height:128px;aspect-ratio:auto;margin-bottom:18px;border-radius:0;}
   #view-home .home-hero-img{object-position:center 42%;filter:brightness(.7) contrast(1.08) saturate(.94);}
   #view-home .home-hero-veil{background:linear-gradient(90deg,rgba(4,10,6,.25),rgba(4,10,6,.72));}
   #view-home .hero-topbar{padding:max(9px,env(safe-area-inset-top)) 12px 0;align-items:flex-start;}
   #view-home .hero-topbar .logo-wordmark{font-size:27px;}
   #view-home .brand-beside,#view-home .brand-under{display:none;}
   #view-home .profile-btn{width:44px;height:44px;}
-  #view-home .daily-card{margin:0 14px 10px;padding:13px 18px 14px;}
+  #view-home .daily-card{margin:0 18px 18px;padding:22px 22px 21px;background:rgba(5,20,12,.9);border-color:rgba(255,255,255,.13);box-shadow:0 18px 44px rgba(0,0,0,.38);}
   #view-home .daily-card .dc-title{font-size:25px;}
   #view-home .daily-card .dc-hook{margin:5px 0 8px;line-height:1.34;}
   #view-home .daily-card .dc-streak{margin-bottom:9px;}
@@ -220,16 +220,15 @@ svg { display:block; }
   #view-home.gs-home-hero-image-failed .home-hero{background:radial-gradient(120% 100% at 70% 10%,#355c31 0%,#152619 52%,#080d09 100%);}
   #view-home.gs-home-hero-image-failed .home-hero-img{visibility:hidden;}
 }
-.home-play{display:block;width:calc(100% - 28px);min-height:116px;margin:12px 14px 0;padding:17px 19px;border:1px solid #ffffff22;border-radius:20px;background:linear-gradient(135deg,#102b1bcc,#07130dde);color:#fff;text-align:left;font:inherit;box-shadow:0 14px 34px #0005}.home-play-kicker{display:block;color:#c8a84b;font-size:10px;font-weight:850;letter-spacing:1.7px}.home-play strong{display:block;margin-top:7px;font-family:'Bebas Neue',sans-serif;font-size:29px;letter-spacing:.5px}.home-play .hec-hod{display:block;margin-top:5px;color:#c8d0ca;font-size:12px;line-height:1.35}.home-play-arrow{float:right;color:#d6ba58;font-size:24px}.home-screen-promise{margin:17px 20px 3px;color:#d8ddd9;font-size:12px;letter-spacing:.08em;text-align:center;text-transform:uppercase}.home-screen-promise b{color:#c8a84b}
+.home-play{display:block;width:calc(100% - 36px);min-height:154px;margin:0 18px;padding:25px 22px;border:1px solid rgba(255,255,255,.18);border-radius:22px;background:rgba(3,19,11,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;text-align:left;font:inherit;box-shadow:0 18px 42px rgba(0,0,0,.28)}.home-play-kicker{display:block;color:#d4b858;font-size:10px;font-weight:850;letter-spacing:2px}.home-play strong{display:block;max-width:280px;margin-top:14px;font-family:'DM Sans',sans-serif;font-size:25px;line-height:1.12;letter-spacing:-.02em}.home-play .hec-hod{display:block;margin-top:12px;color:#d7ddd9;font-size:12px;line-height:1.4}.home-play-arrow{float:right;color:#d6ba58;font-size:26px}.home-screen-promise{display:none}
 @media(orientation:landscape) and (max-height:500px){
-  #view-home .home-hero{height:72px;max-height:72px;aspect-ratio:auto;margin-bottom:8px;border-radius:0 0 14px 14px;filter:brightness(.76) saturate(.9)}
+  #view-home .home-hero{height:72px;max-height:72px;aspect-ratio:auto;margin-bottom:8px;border-radius:0}
   #view-home .home-hero-img{object-position:center 42%;filter:brightness(.68) contrast(1.08) saturate(.92)}
   #view-home .home-hero-veil{background:linear-gradient(90deg,rgba(4,10,6,.24),rgba(4,10,6,.74))}
   #view-home .hero-topbar{padding:7px 11px 0}.hero-topbar .logo-wordmark{font-size:25px}#view-home .brand-beside,#view-home .brand-under{display:none}#view-home .profile-btn{width:42px;height:42px}
-  #view-home .daily-card{margin:0 12px 8px;padding:11px 15px}.daily-card .dc-title{font-size:23px}.daily-card .dc-hook{margin:4px 0 7px}.daily-card .dc-streak{margin-bottom:7px}.daily-btn{min-height:44px;padding:9px 18px}
+  #view-home .daily-card{margin:0 12px 8px;padding:11px 15px}.daily-card .dc-title{font-size:23px}.daily-card .dc-hook{margin:4px 0 7px}.daily-btn{min-height:44px;padding:9px 18px}
   #view-home .mode-thumb{height:86px;aspect-ratio:auto}
 }
-.home-more{margin:9px 16px 0;border:1px solid var(--border);border-radius:14px;background:#171717}.home-more summary{display:flex;align-items:center;justify-content:center;min-height:48px;color:#bfc5c0;font-size:13px;font-weight:700;cursor:pointer;list-style:none}.home-more summary::-webkit-details-marker{display:none}.home-more[open] summary{border-bottom:1px solid var(--border)}.home-more-actions{display:grid;gap:8px;padding:10px}.home-more-actions .btn{margin:0!important}
 #view-home > * { flex-shrink:0; }
 #view-sharpen { background:var(--dark); padding-bottom:90px; }
 #view-sharpen > * { flex-shrink:0; }
@@ -1544,8 +1543,6 @@ svg { display:block; }
   border:1px solid rgba(158,208,255,.26); box-shadow:0 10px 26px rgba(0,0,0,.4);
   transition:transform var(--motion-micro),border-color var(--motion-fast); }
 .home-decision:active { transform:scale(.99); }
-.home-depth{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 16px 0;padding:14px 15px;border:1px solid rgba(200,168,75,.28);border-radius:16px;background:linear-gradient(135deg,rgba(24,49,31,.96),rgba(9,22,14,.96));color:#fff;text-align:left;cursor:pointer}.home-depth-copy{min-width:0}.home-depth-kicker{font-size:9px;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}.home-depth-title{font-size:15px;font-weight:750;line-height:1.25}.home-depth-arrow{color:var(--gold);font-size:22px;flex:0 0 auto}
-.home-depth-kicker,.home-depth-title{display:block}
 .hd-eyebrow { font-size:9.5px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:#9ed0ff; margin-bottom:8px; }
 .hd-prompt { font-size:14px; line-height:1.5; color:rgba(255,255,255,.9); margin-bottom:10px; }
 .hd-q { font-family:'Bebas Neue',sans-serif; font-size:21px; color:#fff; letter-spacing:.4px; line-height:1.05; display:flex; align-items:center; justify-content:space-between; gap:10px; }
@@ -1632,17 +1629,10 @@ svg { display:block; }
     <div class="dc-label">Daily Challenge</div>
     <div class="dc-title" id="dc-theme">ONE EDGE FOR TODAY</div>
     <div class="dc-hook" id="dc-hook"></div>
-    <div class="dc-streak">
-      <span class="dc-streak-flame">🔥</span>
-      <span class="dc-streak-text" id="dc-streak-text">Keep your streak alive</span>
-    </div>
     <button class="daily-btn" id="daily-btn" onclick="startDaily()">GET TODAY'S EDGE →</button>
   </div>
 
-  <div class="home-screen-promise"><b>One decision.</b> One useful edge.</div>
-  <button class="home-play" id="home-play" onclick="startHole()" aria-label="Play the hole of the day"><span class="home-play-arrow" aria-hidden="true">›</span><span class="home-play-kicker">PLAY A HOLE</span><strong id="home-play-title">Put today’s edge in play</strong><span class="hec-hod" id="hec-hod">Shot-by-shot · scorecard</span></button>
-  <button class="home-depth" id="home-depth" onclick="openTodayDepth()"><span class="home-depth-copy"><span class="home-depth-kicker" id="home-depth-kicker">YOUR NEXT EDGE</span><span class="home-depth-title" id="home-depth-title">Turn your last round into one focus</span></span><span class="home-depth-arrow" aria-hidden="true">›</span></button>
-  <details class="home-more"><summary>More ways to play</summary><div class="home-more-actions"><button class="btn btn-dark" onclick="openCoursePicker()">PLAY A COURSE</button><button class="btn btn-dark" onclick="startDecisionRun()">PLAY A 3-HOLE DECISION RUN</button><button class="btn btn-dark" onclick="startDecisionRun(9)">PLAY A 9-HOLE DECISION RUN</button></div></details>
+  <button class="home-play" id="home-play" onclick="startHole()" aria-label="Play the hole of the day"><span class="home-play-arrow" aria-hidden="true">›</span><span class="home-play-kicker">PLAY A HOLE</span><strong id="home-play-title">Can you protect par from here?</strong><span class="hec-hod" id="hec-hod">One hole. Every decision counts.</span></button>
 
   <div style="height:20px"></div>
 
@@ -1915,6 +1905,10 @@ svg { display:block; }
       <p class="section-title">Next learning opportunity</p>
       <div class="tag-wrap" id="leak-tags"></div>
     </div>
+    <details class="dcc-more" style="margin-top:8px;border:1px solid var(--border);border-radius:14px;background:var(--card);overflow:hidden">
+      <summary style="padding:14px 15px;cursor:pointer;font-size:12px;font-weight:800;color:rgba(255,255,255,.76)">More ways to play</summary>
+      <div style="display:grid;gap:8px;padding:0 10px 10px"><button class="btn btn-dark" onclick="openCoursePicker()">PLAY A COURSE</button><button class="btn btn-dark" onclick="startDecisionRun()">PLAY A 3-HOLE DECISION RUN</button><button class="btn btn-dark" onclick="startDecisionRun(9)">PLAY A 9-HOLE DECISION RUN</button></div>
+    </details>
     <div id="crash-course-profile-wrap" style="margin-top:20px"></div>
     <div class="ig-profile-card" onclick="gsOpenInstallGuide()">
       <div class="ig-profile-title">▣ Put GameSharp on your Home Screen</div>
@@ -3269,13 +3263,13 @@ function renderHome(){
       const playCard=document.getElementById('home-play'),playTitle=document.getElementById('home-play-title'),savedHole=loadHoleSession();
       if(savedHole&&LIVE_HOLE_INDEXES.includes(savedHole.holeIndex)&&ALL_HOLES[savedHole.holeIndex]){
         const hod=ALL_HOLES[savedHole.holeIndex],shot=Math.max(1,(savedHole.shotCount||0)+1);
-        if(playTitle)playTitle.textContent='Finish your hole';
-        hodEl.innerHTML=`↩ <strong>Resume:</strong> ${hod.name} · Shot ${shot}`;
+        if(playTitle)playTitle.textContent='Continue your hole';
+        hodEl.innerHTML=`${hod.name} · Shot ${shot}`;
         if(playCard)playCard.setAttribute('aria-label',`Resume ${hod.name}, shot ${shot}`);
       }else{
         const hod = ALL_HOLES[holeEntryIndex()];
-        if(playTitle)playTitle.textContent='Put today’s edge in play';
-        hodEl.innerHTML = `⚡ <strong>Hole of the day:</strong> ${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
+        if(playTitle)playTitle.textContent='Can you protect par from here?';
+        hodEl.innerHTML = `${hod.name}${hod.course ? ' · ' + hod.course : ''} · Par ${hod.par}`;
         if(playCard)playCard.setAttribute('aria-label',`Play the hole of the day: ${hod.name}`);
       }
     }catch(e){}
@@ -3298,7 +3292,7 @@ function renderHome(){
   const dcBtn  = document.getElementById('daily-btn');
   if(S.dailyDone){
     const hasReview = S.todayDebrief && S.todayDebrief.date === today;
-    dcText.innerHTML = `<strong>Done for today!</strong> ${hasReview ? "Revisit today's edge any time." : 'Come back tomorrow.'}`;
+    if(dcText)dcText.innerHTML = `<strong>Done for today!</strong> ${hasReview ? "Revisit today's edge any time." : 'Come back tomorrow.'}`;
     dcBtn.textContent = hasReview ? "REVIEW TODAY'S EDGE" : '✓ COMPLETED';
     dcBtn.classList.add('done');
     dcBtn.onclick = hasReview ? showDailyReview : null;
@@ -3306,29 +3300,14 @@ function renderHome(){
     const streakMsg = S.streak > 0
       ? `🔥 <strong>${S.streak}-day streak</strong> — keep it going!`
       : `Start your streak today!`;
-    dcText.innerHTML = streakMsg;
+    if(dcText)dcText.innerHTML = streakMsg;
     dcBtn.textContent = "GET TODAY'S EDGE →";
     dcBtn.classList.remove('done');
     dcBtn.onclick = startDaily;
   }
 
-  const depthKicker=document.getElementById('home-depth-kicker'),depthTitle=document.getElementById('home-depth-title');
-  if(depthKicker&&depthTitle){
-    const sharpenState=window.GameSharpGolfSharpen?.state?.();
-    if(sharpenState?.saved){depthKicker.textContent='YOUR ROUND FOCUS';depthTitle.textContent='Take it out. Then tell us how it travelled.'}
-    else if(S.dailyDone){depthKicker.textContent='PUT IT UNDER PRESSURE';depthTitle.textContent='Play a three-hole Decision Run'}
-    else{depthKicker.textContent='19TH HOLE';depthTitle.textContent='Turn your last round into one focus for tomorrow'}
-  }
-
   // (Leak training lives in Sharpen — removed from Home per design.)
 }
-function openTodayDepth(){
-  const sharpenState=window.GameSharpGolfSharpen?.state?.();
-  if(sharpenState?.saved){GameSharpGolfSharpen.openSaved(document.getElementById('home-depth'));return}
-  if(S.dailyDone){startDecisionRun();return}
-  showDebrief();
-}
-
 // ── Sharpen — the training library ─────────────────────
 // Cinematic per-pillar scene art (unique gradient ids so 5 can coexist).
 function pillarSceneSvg(p){
