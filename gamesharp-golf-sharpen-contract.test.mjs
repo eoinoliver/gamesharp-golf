@@ -51,9 +51,9 @@ assert(/Where did the round feel hardest\?/.test(html),'one-hole entry question 
 assert(!/data-mode="(prepare|sharpen|reflect)"/.test(html),'retired preliminary Sharpen menu remains reachable');
 assert(!/function moments\(mode\)/.test(html),'retired eight-stage journey remains implemented');
 assert(fs.existsSync(new URL('./gamesharp-one-hole-v1.png',import.meta.url)),'one-hole source artwork missing');
-const holeWebp=new URL('./gamesharp-one-hole-v1.webp',import.meta.url);assert(fs.existsSync(holeWebp),'optimized one-hole artwork missing');assert(fs.statSync(holeWebp).size<=160000,'one-hole artwork exceeds 160KB mid-tier-phone budget');assert(/\.gss-cinema\{background-image:url\('gamesharp-one-hole-v1\.webp'\)\}/.test(html),'Sharpen does not render the optimized one-hole artwork');
-const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-one-hole-v1\.webp/.test(sw),'one-hole artwork is unavailable in the offline course shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(sw),'retired winding journey remains in the offline shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(html),'retired winding journey artwork remains referenced by the app');
-assert(/const CACHE = 'gamesharp-golf-v17'/.test(sw),'release cache version must evict every pre-mobile-audit shell');
+const holeWebp=new URL('./gamesharp-one-hole-v1.webp',import.meta.url),holeJpeg=new URL('./gamesharp-one-hole-v1.jpg',import.meta.url);assert(fs.existsSync(holeWebp),'optimized one-hole artwork missing');assert(fs.statSync(holeWebp).size<=160000,'one-hole artwork exceeds 160KB mid-tier-phone budget');assert(fs.existsSync(holeJpeg)&&fs.statSync(holeJpeg).size<=300000,'Safari JPEG fallback is missing or too heavy');assert(/id="gss-hole-image"[^>]+gamesharp-one-hole-v1\.webp\?v=18/.test(html),'Sharpen does not render a real recoverable one-hole image element');
+const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-one-hole-v1\.webp/.test(sw)&&/gamesharp-one-hole-v1\.jpg/.test(sw),'one-hole primary and Safari fallback are unavailable in the offline course shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(sw),'retired winding journey remains in the offline shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(html),'retired winding journey artwork remains referenced by the app');
+assert(/const CACHE = 'gamesharp-golf-v18'/.test(sw),'release cache version must evict every pre-Safari-recovery shell');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent one-hole visual layer missing');
 assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*aspect-ratio:943\/1680[^}]*background-size:100% 100%/.test(html),'the complete hole is not visible on Sharpen entry');
 assert(/const ZONE_ORDER=\['tee','recovery','approach','green','putting'\]/.test(html),'five-zone order is not authoritative');
@@ -64,7 +64,9 @@ assert(/\.gss-hole-zone\{[^}]*min-width:48px[^}]*min-height:48px/.test(html),'ho
 for(const rid of required)assert(new RegExp(`\\.gss-hole-zone\\[data-zone="${rid}"\\]\\{left:[0-9.]+%;top:[0-9.]+%\\}`).test(html),`hole hotspot ${rid} has no explicit visual coordinate`);
 assert(/@keyframes gssZoneBreathe/.test(html)&&/\.gss-zone-pulse\{[^}]*animation:gssZoneBreathe/.test(html),'informative zone motion missing');
 assert(/@media\(prefers-reduced-motion:reduce\)\{\.gss-zone-pulse\{animation:none/.test(html),'reduced motion does not preserve zone information');
-assert(/heroProbe\.onerror=\(\)=>cinemaEl\.classList\.add\('gss-hole-image-failed'\)/.test(html)&&/Course image unavailable\. Choose the part of the hole/.test(html),'one-hole image failure lacks a usable text fallback');
+assert(!/heroProbe/.test(html)&&/HERO_JPEG='gamesharp-one-hole-v1\.jpg\?v=18'/.test(html)&&/heroFormat==='webp'\)loadHoleHero\(false\)/.test(html),'one-hole image does not fall back from WebP to JPEG');
+assert(/addEventListener\('online',[\s\S]{0,150}loadHoleHero\(true\)/.test(html)&&/data-gss-image-retry/.test(html),'one-hole image failure cannot recover automatically or manually');
+assert(/Course image unavailable\. Choose the part of the hole/.test(html),'one-hole image failure lacks a usable text fallback');
 assert(/gss-hole-image-failed\[data-stage="entry"\][^}]*display:grid/.test(html)&&/gss-hole-image-failed\[data-stage="entry"\] \.gss-hole-zone\{[^}]*position:relative/.test(html),'image-failure routes are not laid out as a usable grid');
 assert(/result\?result\.cue/.test(html),'one-hole result caption must derive from the authoritative result cue');
 assert(/const bagStatus=rid=>/.test(html)&&/const bagMarkup=\(\)=>/.test(html),'bag is not derived from Sharpen history');

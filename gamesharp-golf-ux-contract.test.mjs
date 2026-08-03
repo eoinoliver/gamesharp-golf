@@ -14,6 +14,9 @@ assert(/if\(sharpenState\?\.saved\)\{GameSharpGolfSharpen\.openSaved/.test(html)
 assert(!/<button class="mode-card"/.test(html),'legacy competing home mode cards remain');
 assert(/<details class="home-more">[\s\S]{0,400}PLAY A COURSE[\s\S]{0,400}PLAY A 3-HOLE DECISION RUN[\s\S]{0,300}PLAY A 9-HOLE DECISION RUN/.test(html),'secondary play formats must use progressive disclosure');
 assert(/#view-home \{[^}]*touch-action:pan-y[^}]*overflow-anchor:none/.test(html),'home mobile scrolling contract missing');
+assert(/#view-home \{[^}]*-webkit-overflow-scrolling:touch[^}]*isolation:isolate/.test(html),'home lacks an iPhone-native scroll and stacking boundary');
+assert(/#view-home \.daily-card,#view-home \.home-play,#view-home \.home-depth,#view-home \.home-more\{[^}]*z-index:2[^}]*pointer-events:auto/.test(html),'home actions can be obscured by decorative layers');
+assert(/button \{[^}]*touch-action:manipulation/.test(html),'mobile buttons lack deterministic tap handling');
 assert(/#view-home \{[^}]*background:[^}]*scroll[^}]*overflow-y:scroll/.test(html),'home must use an iPhone-safe scrolling background and explicit scroll container');
 assert(/#view-home > \* \{ flex-shrink:0; \}/.test(html),'home sections must not shrink until the page has no scrollable distance');
 assert(/#app \{[^}]*height:100dvh[^}]*min-height:0/.test(html)&&/\.view \{[^}]*height:100dvh[^}]*min-height:0/.test(html),'app shell lacks a dynamic mobile viewport scroll contract');

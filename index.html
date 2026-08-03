@@ -78,7 +78,8 @@ body {
   -webkit-tap-highlight-color:transparent;
   -webkit-font-smoothing:antialiased;
 }
-button { border:none; cursor:pointer; font-family:inherit; }
+button { border:none; cursor:pointer; font-family:inherit; touch-action:manipulation; }
+summary { touch-action:manipulation; }
 svg { display:block; }
 
 /* ---- App Shell ---- */
@@ -161,8 +162,9 @@ svg { display:block; }
 /* =============================================
    HOME
 ============================================= */
-#view-home { background:linear-gradient(180deg,rgba(3,18,10,.73),rgba(4,14,8,.92)),url('GolfHero.png') center/cover scroll; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:scroll; overflow-x:hidden; overscroll-behavior-y:auto; touch-action:pan-y; overflow-anchor:none; }
+#view-home { background:linear-gradient(180deg,rgba(3,18,10,.73),rgba(4,14,8,.92)),url('GolfHero.png') center/cover scroll; padding-top:0; padding-bottom:calc(88px + env(safe-area-inset-bottom)); overflow-y:scroll; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior-y:auto; touch-action:pan-y; overflow-anchor:none; isolation:isolate; }
 #view-home > * { flex-shrink:0; }
+#view-home .daily-card,#view-home .home-play,#view-home .home-depth,#view-home .home-more{position:relative;z-index:2;pointer-events:auto}
 .hero-topbar { position:absolute; top:0; left:0; right:0; z-index:3; display:flex; align-items:flex-start; justify-content:space-between; padding:max(14px,env(safe-area-inset-top)) 14px 0; }
 .hero-topbar .logo-wordmark { font-size:30px; line-height:1; text-shadow:0 2px 10px rgba(0,0,0,.7); }
 .hero-tagline { font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:600; color:rgba(255,255,255,.82); margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.75); }
@@ -11053,9 +11055,10 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 @media(orientation:landscape) and (max-height:500px){.gss-cinema[data-stage="entry"]{height:150px;background-size:auto 100%}.gss-cinema[data-stage="entry"]+#gss-main .gss-modes{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:350px){.gss-entry-hotspot::after{font-size:7px;padding:2px 4px}.gss-entry-hotspot::before{width:27px;height:27px}}
 @media(prefers-reduced-motion:reduce){.gss-route-progress{animation:none;stroke-dashoffset:0}.gss-tour-player{animation:none;left:83%;top:94%}.gss-map-node::after,.gss-entry-hotspot::before{animation:none}.gss-cinema .gss-tour-player{display:none}}
-/* Sharpen v5 — one hole is the interface; the bag is its memory. */
-.gss-cinema{background-image:url('gamesharp-one-hole-v1.webp')}
-.gss-hole-fallback{display:none;grid-column:1/-1;color:#d9dfda;font-size:12px;line-height:1.4;text-align:center}.gss-cinema.gss-hole-image-failed{background-image:radial-gradient(circle at 50% 30%,#28552e,#0b2114 65%,#06110a)}.gss-cinema.gss-hole-image-failed[data-stage="entry"]{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;min-height:390px;padding:66px 12px 14px;aspect-ratio:auto}.gss-cinema.gss-hole-image-failed .gss-hole-fallback{display:block}.gss-cinema.gss-hole-image-failed[data-stage="entry"] .gss-hole-zone{position:relative;left:auto!important;top:auto!important;width:100%;min-width:0;transform:none}.gss-cinema.gss-hole-image-failed[data-stage="entry"] .gss-hole-zone:hover,.gss-cinema.gss-hole-image-failed[data-stage="entry"] .gss-hole-zone:focus-visible{transform:scale(1.02)}
+/* Sharpen v6 — one hole is the interface; a real image element can recover on Safari. */
+.gss-cinema{background-image:radial-gradient(circle at 50% 30%,#28552e,#0b2114 65%,#06110a)}
+.gss-hole-image{position:absolute;z-index:0;inset:0;width:100%;height:100%;display:block;object-fit:fill;object-position:center;pointer-events:none;transition:opacity .18s ease,transform .45s var(--ease-camera)}.gss-cinema:not([data-stage="entry"]) .gss-hole-image{object-fit:cover;transform:scale(1.08)}.gss-cinema.gss-hole-image-failed .gss-hole-image{opacity:0}
+.gss-hole-fallback{display:none;grid-column:1/-1;color:#d9dfda;font-size:12px;line-height:1.4;text-align:center}.gss-image-retry{display:none;grid-column:1/-1;min-height:48px;border:1px solid #efd36f;border-radius:12px;background:#efd36f12;color:#efd36f;font-weight:800}.gss-cinema.gss-hole-image-failed[data-stage="entry"]{display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:8px;min-height:390px;padding:66px 12px 14px;aspect-ratio:auto}.gss-cinema.gss-hole-image-failed .gss-hole-fallback,.gss-cinema.gss-hole-image-failed .gss-image-retry{display:block}.gss-cinema.gss-hole-image-failed[data-stage="entry"] .gss-hole-zone{position:relative;left:auto!important;top:auto!important;width:100%;min-width:0;transform:none}.gss-cinema.gss-hole-image-failed[data-stage="entry"] .gss-hole-zone:hover,.gss-cinema.gss-hole-image-failed[data-stage="entry"] .gss-hole-zone:focus-visible{transform:scale(1.02)}
 .gss-cinema[data-stage="entry"]{width:100%;height:auto;aspect-ratio:943/1680;margin:4px 0 10px;background-size:100% 100%;background-position:center;border-color:#d6b9565c;box-shadow:0 18px 44px #0008}
 .gss-cinema[data-stage="entry"]::after{background:linear-gradient(180deg,#0310082b 0%,transparent 28%,transparent 67%,#0310089c 100%)}
 .gss-cinema:not([data-stage="entry"]){height:190px;background-size:cover;background-position:center 48%}
@@ -11071,7 +11074,7 @@ body.gs-focus-open{overflow:hidden!important;overscroll-behavior:none}
 <div class="gss" id="gss" role="dialog" aria-modal="true" aria-labelledby="gss-title" hidden>
   <div class="gss-shell">
     <div class="gss-top"><button class="gss-icon" id="gss-back" aria-label="Go back">‹</button><div class="gss-brand">GAMESHARP · SHARPEN<span id="gss-stage-label">Choose one area</span></div><button class="gss-icon" id="gss-close" aria-label="Close Sharpen">×</button></div>
-    <div class="gss-cinema" id="gss-cinema" hidden><div class="gss-hole-fallback">Course image unavailable. Choose the part of the hole you want to sharpen.</div><div class="gss-cinema-caption"></div><div class="gss-cinema-rail"></div></div>
+    <div class="gss-cinema" id="gss-cinema" hidden><img class="gss-hole-image" id="gss-hole-image" src="gamesharp-one-hole-v1.webp?v=18" alt="" decoding="async" fetchpriority="high"><div class="gss-hole-fallback">Course image unavailable. Choose the part of the hole you want to sharpen.</div><button class="gss-image-retry" type="button" data-gss-image-retry>Retry course image</button><div class="gss-cinema-caption"></div><div class="gss-cinema-rail"></div></div>
     <main id="gss-main" tabindex="-1"></main>
   </div>
 </div>
@@ -11356,7 +11359,17 @@ function startSharpenHole(index){
  const safeLoad=()=>{try{const current=JSON.parse(localStorage.getItem(KEY)),legacy=!current&&JSON.parse(localStorage.getItem(LEGACY_KEY));const x=current||legacy;if(x){state={...state,...x,version:VERSION,focusHistory:Array.isArray(x.focusHistory)?x.focusHistory.filter(h=>GOLF_SHARPEN_RESULTS[h.resultId]):[]};if(state.saved&&!GOLF_SHARPEN_RESULTS[state.saved.resultId])state.saved=null;if(state.resultId&&!GOLF_SHARPEN_RESULTS[state.resultId]){state.stage='regions';state.regionId=state.issueId=state.routeId=state.resultId=null}if(!state.focusHistory.length&&state.saved)state.focusHistory=[{resultId:state.saved.resultId,takenAt:state.saved.savedAt,status:'taken'}];persist()}}catch(e){}};
  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- const heroProbe=new Image();heroProbe.onload=()=>cinemaEl.classList.remove('gss-hole-image-failed');heroProbe.onerror=()=>cinemaEl.classList.add('gss-hole-image-failed');heroProbe.src='gamesharp-one-hole-v1.webp';
+ const heroImg=document.getElementById('gss-hole-image'),HERO_WEBP='gamesharp-one-hole-v1.webp?v=18',HERO_JPEG='gamesharp-one-hole-v1.jpg?v=18';
+ let heroFormat='webp';
+ function loadHoleHero(preferWebp=true){
+  heroFormat=preferWebp?'webp':'jpeg';cinemaEl.classList.remove('gss-hole-image-failed');heroImg.src=(preferWebp?HERO_WEBP:HERO_JPEG)+(heroImg.dataset.retry?`&retry=${Date.now()}`:'');heroImg.dataset.retry='1';
+ }
+ heroImg.addEventListener('load',()=>{cinemaEl.classList.remove('gss-hole-image-failed');document.documentElement.dataset.gsgHoleHero=heroFormat;});
+ heroImg.addEventListener('error',()=>{if(heroFormat==='webp')loadHoleHero(false);else{cinemaEl.classList.add('gss-hole-image-failed');document.documentElement.dataset.gsgHoleHero='fallback'}});
+ if(heroImg.complete){if(heroImg.naturalWidth)document.documentElement.dataset.gsgHoleHero='webp';else loadHoleHero(false)}
+ window.addEventListener('online',()=>{if(cinemaEl.classList.contains('gss-hole-image-failed'))loadHoleHero(true)});
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&cinemaEl.classList.contains('gss-hole-image-failed'))loadHoleHero(true)});
+ cinemaEl.querySelector('[data-gss-image-retry]').addEventListener('click',e=>{e.stopPropagation();loadHoleHero(true)});
  function set(html,label){main.innerHTML=html;stageLabel.textContent=label;el.scrollTop=0;persist();requestAnimationFrame(()=>main.focus({preventScroll:true}))}
  const ZONE_ORDER=['tee','recovery','approach','green','putting'];
  const habitStats=()=>{const tested=state.focusHistory.filter(x=>x.status==='tested'),days=[...new Set(tested.map(x=>String(x.testedAt||'').slice(0,10)).filter(Boolean))].sort().reverse();let streak=0,cursor=new Date();cursor.setHours(0,0,0,0);for(const day of days){const d=new Date(day+'T00:00:00');const gap=Math.round((cursor-d)/86400000);if(gap===0||gap===1){streak++;cursor=d}else break}return {taken:state.focusHistory.length,tested:tested.length,streak}};

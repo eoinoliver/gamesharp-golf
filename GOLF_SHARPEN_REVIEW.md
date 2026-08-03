@@ -72,7 +72,8 @@ Reduced motion removes pulsing/transition motion without removing state or learn
 - `gamesharp-golf-ux-contract.test.mjs`: PASS.
 - `tools/launch-trust-audit.js index.html`: PASS — 404 questions; 67 launch-approved and 337 quarantined; 12 holes, 237 nodes and 92 decisions.
 - JavaScript syntax/integrity and whitespace checks: PASS.
-- Service-worker shell updated to cache v17 and the current one-hole WebP, evicting every pre-mobile-audit shell and the retired journey artwork.
+- Service-worker shell updated to cache v18 with the current one-hole WebP and JPEG recovery asset, evicting every pre-recovery shell and the retired journey artwork.
+- The one-hole hero is now a real image element rather than a one-shot preload probe. It falls back WebP → JPEG, retries after connectivity/visibility recovery, and exposes a manual retry before using the fully operable five-zone text fallback.
 
 ## Honest limitations and quarantines
 
