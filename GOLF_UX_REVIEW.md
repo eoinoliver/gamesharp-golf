@@ -14,6 +14,8 @@ The Home hierarchy is hero-led rather than box-led: a longer uninterrupted cours
 
 On the first Home arrival in a session, the course now receives the opening beat before Daily and Play a Hole fade in. The reveal is skipped after the first view and entirely bypassed for reduced-motion users, so atmosphere never becomes repeated friction.
 
+Daily and Play a Hole now float directly on the shared course canvas. Both have transparent backgrounds, square geometry, no panel edge, blur or shadow; only the Daily CTA remains solid. A restrained text shadow and the page-level course gradient provide contrast without creating two new containers.
+
 Daily Complete already follows the same hierarchy: Today's Edge and one primary `Use it now` action are visible; rationale and secondary actions are progressively disclosed. Sharpen likewise shows three human intentions, one focus and one primary test. Profile/Review remains the secondary destination for progress and the broader library.
 
 All bottom-navigation instances are now semantic buttons, the profile icon has an accessible name, and the active tab follows the familiar mobile convention of returning to the top when tapped again.

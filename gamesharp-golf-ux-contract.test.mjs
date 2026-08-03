@@ -20,6 +20,8 @@ assert(/#view-home \.daily-card,#view-home \.home-play\{[^}]*z-index:2[^}]*point
 assert(/button \{[^}]*touch-action:manipulation/.test(html),'mobile buttons lack deterministic tap handling');
 assert(/#view-home \{[^}]*background:[^}]*scroll[^}]*overflow-y:scroll/.test(html),'home must use an iPhone-safe scrolling background and explicit scroll container');
 assert(/function gsStartHomeReveal\(\)[\s\S]{0,700}gsg_home_reveal_v21/.test(html)&&/gs-home-reveal \.daily-card[^{]*\{[^}]*1\.85s forwards/.test(html),'Home does not provide a course-first reveal before its decisions');
+assert(/#view-home \.daily-card\{[^}]*background:transparent[^}]*border-radius:0[^}]*backdrop-filter:none/.test(html),'Daily content has regressed into a card container');
+assert(/\.home-play\{[^}]*border-radius:0[^}]*background:transparent[^}]*backdrop-filter:none/.test(html),'Play a Hole has regressed into a card container');
 assert(/prefers-reduced-motion:reduce[^}]*#view-home\.gs-home-reveal/.test(html),'Home reveal does not respect reduced motion');
 assert(!/\.gss-option:hover,\.gss-option:focus-visible/.test(html)&&/@media\(hover:hover\) and \(pointer:fine\)\{\.gss-option:hover/.test(html),'touch can leave an unchosen Sharpen option looking selected');
 assert(/#view-home > \* \{ flex-shrink:0; \}/.test(html),'home sections must not shrink until the page has no scrollable distance');
