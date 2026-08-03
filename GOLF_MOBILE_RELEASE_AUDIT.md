@@ -74,9 +74,11 @@ Remedy: a non-positive graph now returns `One Decision to Revisit`, explicitly s
 
 Cause: a previously installed cache could continue to serve the pre-audit shell.
 
-Remedy: the release shell is now `gamesharp-golf-v22`. The contract binds the expected cache version and both current one-hole artwork formats. The hero loader recovers WebP → JPEG, on connectivity/visibility return, or by explicit retry; a transient mobile request failure cannot permanently hide a valid asset.
+Remedy: the release shell is now `gamesharp-golf-v23`. The contract binds the expected cache version and both current one-hole artwork formats. The hero loader recovers WebP → JPEG, on connectivity/visibility return, or by explicit retry; a transient mobile request failure cannot permanently hide a valid asset.
 
-The selected Sharpen moment no longer repeats five generic pulses. Each region has its own camera crop and shot overlay, with a dedicated close-green putting treatment. The contract fails if the retired pulse implementation or a region without a distinct visual returns.
+The symptom-recognition screen now contains no marks to interpret: it is a clean crop of the relevant course moment. Only a selected issue can trigger an instructional overlay, every abstract mark is labelled, and its caption names the one observation the golfer should make. Putting uses the same photographed-course language as every other moment rather than a disconnected synthetic green.
+
+True-size browser renders were captured at 320×568, 390×844, 430×932 and 844×390. Each recognition screen rendered zero overlays; each selected route rendered exactly its issue visual and lesson; every measured viewport reported zero horizontal overflow. Forward, back and reload were exercised, including the putting-read and bunker routes.
 
 The contract also binds issue-level meaning to the visual variant. A wind question cannot render trees, a putting-read question cannot render an approach target, and a tee-curve question cannot render the generic corridor. Forward, back and reload restore stage, region, issue and the matching visual at scroll top.
 

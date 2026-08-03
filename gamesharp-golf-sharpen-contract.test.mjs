@@ -11,10 +11,11 @@ const {GOLF_SHARPEN_REGIONS:R,GOLF_SHARPEN_ROUTES:Q,GOLF_SHARPEN_RESULTS:Z,GOLF_
 const required=['tee','recovery','approach','green','putting'];
 assert.deepEqual(Object.keys(R),required,'Five one-hole decision zones must be authoritative and ordered');
 const ids=new Set();
-const issueSignatures=new Set(),focusSignatures=new Set();
+const issueSignatures=new Set(),focusSignatures=new Set(),studyCues=new Set();
 for(const [rid,r] of Object.entries(R)){
  assert.equal(r.number,required.indexOf(rid)+1,rid+' has wrong round order');
  assert.equal(typeof r.club,'string',rid+' does not carry its bag identity');
+ assert.equal(typeof r.studyCue,'string',rid+' lacks a first-interaction learning cue');assert(!studyCues.has(r.studyCue),rid+' duplicates another moment learning cue');studyCues.add(r.studyCue);
  assert(r.issues.length>=3&&r.issues.length<=5,rid+' must have 3-5 issues');
  const issueSignature=r.issues.map(x=>x.label).sort().join('|');assert(!issueSignatures.has(issueSignature),rid+' duplicates another moment journey');issueSignatures.add(issueSignature);
  for(const issue of r.issues){assert(!ids.has(issue.id),'duplicate issue '+issue.id);ids.add(issue.id);assert(Q[issue.route],'unreachable route '+issue.route)}
@@ -53,7 +54,7 @@ assert(!/function moments\(mode\)/.test(html),'retired eight-stage journey remai
 assert(fs.existsSync(new URL('./gamesharp-one-hole-v1.png',import.meta.url)),'one-hole source artwork missing');
 const holeWebp=new URL('./gamesharp-one-hole-v1.webp',import.meta.url),holeJpeg=new URL('./gamesharp-one-hole-v1.jpg',import.meta.url);assert(fs.existsSync(holeWebp),'optimized one-hole artwork missing');assert(fs.statSync(holeWebp).size<=160000,'one-hole artwork exceeds 160KB mid-tier-phone budget');assert(fs.existsSync(holeJpeg)&&fs.statSync(holeJpeg).size<=300000,'Safari JPEG fallback is missing or too heavy');assert(/id="gss-hole-image"[^>]+gamesharp-one-hole-v1\.webp\?v=18/.test(html),'Sharpen does not render a real recoverable one-hole image element');
 const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-one-hole-v1\.webp/.test(sw)&&/gamesharp-one-hole-v1\.jpg/.test(sw),'one-hole primary and Safari fallback are unavailable in the offline course shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(sw),'retired winding journey remains in the offline shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(html),'retired winding journey artwork remains referenced by the app');
-assert(/const CACHE = 'gamesharp-golf-v22'/.test(sw),'release cache version must evict the card-based Home shell');
+assert(/const CACHE = 'gamesharp-golf-v23'/.test(sw),'release cache version must evict the ambiguous Sharpen visual shell');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent one-hole visual layer missing');
 assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*aspect-ratio:943\/1680[^}]*background-size:100% 100%/.test(html),'the complete hole is not visible on Sharpen entry');
 assert(/const ZONE_ORDER=\['tee','recovery','approach','green','putting'\]/.test(html),'five-zone order is not authoritative');
@@ -66,8 +67,20 @@ assert(/\.gss-hole-zone\{[^}]*min-width:48px[^}]*min-height:48px/.test(html),'ho
 for(const rid of required)assert(new RegExp(`\\.gss-hole-zone\\[data-zone="${rid}"\\]\\{left:[0-9.]+%;top:[0-9.]+%\\}`).test(html),`hole hotspot ${rid} has no explicit visual coordinate`);
 for(const rid of required)assert(new RegExp(`data-moment="${rid}"[^}]+\\.gss-hole-image`).test(html),`Sharpen moment ${rid} lacks a distinct camera crop`);
 for(const rid of required)assert(new RegExp(`data-moment="${rid}"[^}]+\\.gss-shot-(?:ball|block)`).test(html),`Sharpen moment ${rid} lacks a distinct instructional overlay`);
-assert(/if\(stage!=='entry'\)cinemaEl\.insertAdjacentHTML\('beforeend',zoneVisualMarkup\(moment,state\.issueId\)\)/.test(html),'selected issue does not render its synchronized visual');
+assert(/if\(\(stage==='route'\|\|stage==='result'\)\&\&state\.issueId\)cinemaEl\.insertAdjacentHTML\('beforeend',zoneVisualMarkup\(moment,state\.issueId\)\)/.test(html),'instructional markings must appear only after a symptom is selected');
+assert(!/if\(stage!=='entry'\)cinemaEl\.insertAdjacentHTML\('beforeend',zoneVisualMarkup/.test(html),'unlabelled markings still appear on the symptom-recognition screen');
 for(const issue of ['curve','start','strike','wind','lie','club','contact','bunker','read','pace','short'])assert(new RegExp(`key==='${issue}'|data-variant="${issue}"`).test(html),'issue-level visual variant missing: '+issue);
+for(const label of ['content:"BALL"','content:"LAND"','content:"WINDOW"','content:"SAFE SIDE"'])assert(html.includes(label),'instructional mark lacks an explicit visual label: '+label);
+assert(/GSS_WATCH_BY_ISSUE\[watchKey\]\|\|selectedIssue\?\.label/.test(html),'route visual does not state the one thing to notice');
+for(const key of ['tee_curve','tee_start','tee_strike','tee_choice','course_wind','course_lie','course_hazard','course_club','approach_distance','approach_contact','approach_target','approach_flight','short_contact','short_landing','short_selection','short_bunker','putting_pace','putting_line','putting_read','putting_short'])assert(new RegExp(`${key}:'[^']+'`).test(html),'reachable issue lacks an explicit what-to-notice lesson: '+key);
+assert(/stage==='issue'\?region\.studyCue/.test(html),'symptom-selection interaction does not teach the region distinction');
+assert(!/\$\{idx\+1\} of 5/.test(html),'moment counter adds hierarchy without adding learning');
+assert(/data-moment="putting"\] \.gss-hole-image\{opacity:1;[^}]*filter:brightness/.test(html),'putting must retain the photographed-course visual language');
+assert(!/data-moment="putting"\] \.gss-hole-image\{opacity:\.12/.test(html),'synthetic blurred putting surface remains reachable');
+assert(/if\(key==='bunker'\)return wrap\('<i class="gss-bunker-zone"><\/i><i class="gss-shot-ball"><\/i><i class="gss-landing-spot"><\/i>'\)/.test(html),'bunker route does not identify the real bunker and landing area');
+assert(/if\(key==='target'\)return wrap\('[^']*gss-safe-zone/.test(html)&&/if\(key==='flight'\)return wrap\('[^']*gss-shot-window/.test(html),'approach target and flight routes reuse an ambiguous visual');
+assert(/if\(key==='contact'\)return wrap\('[^']*gss-contact-mark/.test(html)&&/if\(key==='selection'\)return wrap\('[^']*gss-corridor-a[^']*gss-corridor-b/.test(html),'around-the-green contact and selection routes reuse an ambiguous visual');
+assert(/data-moment="putting"\] \.gss-shot-ball\{left:39%;top:32%\}/.test(html)&&/data-moment="putting"\] \.gss-shot-cup\{left:67%;top:23%\}/.test(html),'putting ball and cup are not aligned to the photographed green');
 assert(!/gss-zone-pulse|gssZoneBreathe/.test(html),'retired five-circle animation remains implemented');
 assert(/@media\(prefers-reduced-motion:reduce\)[\s\S]{0,300}\.gss-putt-line[^}]*animation:none/.test(html),'reduced motion does not preserve shot information');
 assert(!/heroProbe/.test(html)&&/HERO_JPEG='gamesharp-one-hole-v1\.jpg\?v=18'/.test(html)&&/heroFormat==='webp'\)loadHoleHero\(false\)/.test(html),'one-hole image does not fall back from WebP to JPEG');
