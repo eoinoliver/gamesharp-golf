@@ -72,8 +72,9 @@ Reduced motion removes pulsing/transition motion without removing state or learn
 - `gamesharp-golf-ux-contract.test.mjs`: PASS.
 - `tools/launch-trust-audit.js index.html`: PASS — 404 questions; 67 launch-approved and 337 quarantined; 12 holes, 237 nodes and 92 decisions.
 - JavaScript syntax/integrity and whitespace checks: PASS.
-- Service-worker shell updated to cache v20 with the current one-hole WebP and JPEG recovery asset, evicting the repeated-marker Sharpen shell.
+- Service-worker shell updated to cache v21 with the current one-hole WebP and JPEG recovery asset, evicting the pre-synchrony mobile shell.
 - The five generic post-selection pulses were removed entirely. Tee, recovery, approach, around-the-green and putting now render distinct camera crops and instructional overlays; putting uses a close green, start line and cup rather than a distant fairway treatment.
+- Visuals now narrow again at issue level: wind uses directional arrows, trouble uses an obstruction and escape, lie uses slope, curve uses a curved flight, strike uses a contact mark, green-side landing uses bounce points, and putting read uses a breaking line. Safari touch hover cannot leave an unchosen answer looking selected.
 - The one-hole hero is now a real image element rather than a one-shot preload probe. It falls back WebP → JPEG, retries after connectivity/visibility recovery, and exposes a manual retry before using the fully operable five-zone text fallback.
 
 ## Honest limitations and quarantines

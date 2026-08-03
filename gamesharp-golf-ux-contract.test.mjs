@@ -19,6 +19,9 @@ assert(/#view-home \{[^}]*-webkit-overflow-scrolling:touch[^}]*isolation:isolate
 assert(/#view-home \.daily-card,#view-home \.home-play\{[^}]*z-index:2[^}]*pointer-events:auto/.test(html),'home actions can be obscured by decorative layers');
 assert(/button \{[^}]*touch-action:manipulation/.test(html),'mobile buttons lack deterministic tap handling');
 assert(/#view-home \{[^}]*background:[^}]*scroll[^}]*overflow-y:scroll/.test(html),'home must use an iPhone-safe scrolling background and explicit scroll container');
+assert(/function gsStartHomeReveal\(\)[\s\S]{0,700}gsg_home_reveal_v21/.test(html)&&/gs-home-reveal \.daily-card[^{]*\{[^}]*1\.85s forwards/.test(html),'Home does not provide a course-first reveal before its decisions');
+assert(/prefers-reduced-motion:reduce[^}]*#view-home\.gs-home-reveal/.test(html),'Home reveal does not respect reduced motion');
+assert(!/\.gss-option:hover,\.gss-option:focus-visible/.test(html)&&/@media\(hover:hover\) and \(pointer:fine\)\{\.gss-option:hover/.test(html),'touch can leave an unchosen Sharpen option looking selected');
 assert(/#view-home > \* \{ flex-shrink:0; \}/.test(html),'home sections must not shrink until the page has no scrollable distance');
 assert(/#app \{[^}]*height:100dvh[^}]*min-height:0/.test(html)&&/\.view \{[^}]*height:100dvh[^}]*min-height:0/.test(html),'app shell lacks a dynamic mobile viewport scroll contract');
 assert(!/function open\(from\)[\s\S]{0,400}document\.body\.style\.overflow='hidden'/.test(html),'Sharpen must not mutate the body scroll lock ad hoc');

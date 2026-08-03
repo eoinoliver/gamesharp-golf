@@ -12,6 +12,8 @@ Home now follows the Tennis hierarchy with exactly two immediate actions: todayâ
 
 The Home hierarchy is hero-led rather than box-led: a longer uninterrupted course view, translucent borderless Daily treatment and a quieter separated Play a Hole invitation. The questions remain discoverable without arriving as two hard-edged panels directly beneath the masthead.
 
+On the first Home arrival in a session, the course now receives the opening beat before Daily and Play a Hole fade in. The reveal is skipped after the first view and entirely bypassed for reduced-motion users, so atmosphere never becomes repeated friction.
+
 Daily Complete already follows the same hierarchy: Today's Edge and one primary `Use it now` action are visible; rationale and secondary actions are progressively disclosed. Sharpen likewise shows three human intentions, one focus and one primary test. Profile/Review remains the secondary destination for progress and the broader library.
 
 All bottom-navigation instances are now semantic buttons, the profile icon has an accessible name, and the active tab follows the familiar mobile convention of returning to the top when tapped again.
