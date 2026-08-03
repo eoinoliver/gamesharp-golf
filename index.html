@@ -1597,18 +1597,69 @@ svg { display:block; }
 </style>
 </head>
 <body>
-<!-- BOOT SPLASH — paints from the first streamed bytes, before the full app
-     parses (the in-app view-splash below only appears once the CSS + this
-     chunk of body are downloaded; this one is self-contained and instant).
-     Hidden by gsHideBootSplash() on the first showView(); 12s safety timer. -->
-<div id="bootSplash" style="position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0d1a0f;opacity:1;transition:opacity var(--motion-base) var(--ease-standard);">
-  <div style="font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:36px;letter-spacing:1.5px;line-height:1;"><span style="color:#fff">GAME</span><span style="color:#c8a84b">SHARP</span></div>
-  <div style="margin-top:8px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:13px;letter-spacing:5px;color:#c8a84b;text-transform:uppercase;">Golf</div>
-  <div style="margin-top:10px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:600;font-size:11px;letter-spacing:2.5px;color:rgba(255,255,255,.45);text-transform:uppercase;">See the game differently</div>
-  <div style="margin-top:30px;width:44px;height:3px;background:rgba(200,168,75,.22);border-radius:2px;overflow:hidden;"><div style="width:18px;height:100%;background:#c8a84b;border-radius:2px;animation:gsBootSlide var(--motion-deliberate) ease-in-out infinite alternate;"></div></div>
-  <style>@keyframes gsBootSlide{from{transform:translateX(-2px)}to{transform:translateX(28px)}}@media(prefers-reduced-motion:reduce){#bootSplash div div{animation:none!important}}</style>
+<!-- MASTER BRAND INTRO — one GameSharp system, two connected sports. It paints
+     from the first streamed body bytes while the app initializes underneath. -->
+<div id="bootSplash" class="gs-master-intro" data-product="GOLF" role="button" tabindex="0" aria-label="GameSharp introduction. Tap, click, scroll or press a key to continue.">
+  <div class="gs-master-glow" aria-hidden="true"></div>
+  <div class="gs-master-lockup">
+    <div class="gs-master-word" aria-label="GameSharp">
+      <span class="gs-master-g">G</span><span class="gs-master-fill gs-master-game">AME</span><span class="gs-master-s">S</span><span class="gs-master-fill gs-master-sharp">HARP</span>
+    </div>
+    <div class="gs-master-offerings" aria-label="GameSharp sports">
+      <div class="gs-master-offering is-primary" data-gs-primary><i class="gs-master-ball" aria-hidden="true"></i><span></span></div>
+      <span class="gs-master-separator" aria-hidden="true">·</span>
+      <div class="gs-master-offering is-alternative" data-gs-alternative><i class="gs-master-ball" aria-hidden="true"></i><span></span></div>
+    </div>
+    <div class="gs-master-site" data-gs-site></div>
+  </div>
+  <div class="gs-master-skip">Tap or scroll to continue</div>
 </div>
-<script>window.gsBootAfter=function(ms,fn){return window.setTimeout(fn,ms)};window.gsHideBootSplash=function(){var s=document.getElementById('bootSplash');if(!s)return;s.style.opacity='0';window.gsBootAfter(360,function(){if(s.parentNode)s.parentNode.removeChild(s);});};window.gsBootAfter(12000,function(){window.gsHideBootSplash();});</script>
+<style id="gs-master-brand-styles">
+.gs-master-intro{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#242a25 0%,#191d1a 46%,#131614 100%);color:#f4f3ef;opacity:1;transition:opacity .38s cubic-bezier(.2,.8,.2,1);touch-action:pan-y;cursor:pointer;isolation:isolate;animation:gsMasterSafety .35s 5s forwards}
+.gs-master-intro::before{content:"";position:absolute;inset:-20%;background:repeating-linear-gradient(112deg,transparent 0 34px,rgba(255,255,255,.018) 35px,transparent 36px 71px);opacity:.55;transform:rotate(-3deg);pointer-events:none}.gs-master-glow{position:absolute;width:min(84vw,520px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(200,168,75,.105),transparent 66%);filter:blur(12px);opacity:.8}.gs-master-lockup{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:min(92vw,720px);transform:translateY(-1vh)}
+.gs-master-word{display:flex;align-items:baseline;justify-content:center;height:clamp(66px,15vw,112px);font-family:'Bebas Neue','Arial Narrow',sans-serif;font-size:clamp(66px,15vw,112px);line-height:1;letter-spacing:.015em;white-space:nowrap;filter:drop-shadow(0 10px 28px rgba(0,0,0,.3))}.gs-master-g,.gs-master-s{display:block;will-change:transform}.gs-master-g{color:#fff}.gs-master-s,.gs-master-sharp{color:#c8a84b}.gs-master-fill{display:block;width:0;max-width:0;overflow:hidden;opacity:0;clip-path:inset(0 100% 0 0);will-change:width,max-width,clip-path,opacity}.gs-master-game{--gs-word-width:1.49em;color:#fff}.gs-master-sharp{--gs-word-width:1.94em}
+.gs-master-intro.is-ready .gs-master-g{animation:gsMasterGIn .52s cubic-bezier(.2,.8,.2,1) both}.gs-master-intro.is-ready .gs-master-s{animation:gsMasterSIn .52s cubic-bezier(.2,.8,.2,1) both}.gs-master-intro.is-ready .gs-master-fill{animation:gsMasterConstruct .86s cubic-bezier(.22,1,.36,1) .52s forwards}
+.gs-master-offerings{display:flex;align-items:center;justify-content:center;gap:clamp(14px,4vw,28px);min-height:42px;margin-top:clamp(13px,3vw,22px);font:700 clamp(12px,3.3vw,17px)/1 'DM Sans',sans-serif;letter-spacing:.26em;opacity:0;transform:translateY(12px);animation:gsMasterOfferings .5s cubic-bezier(.22,1,.36,1) 1.48s forwards}.gs-master-offering{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.52);transition:color .35s ease,transform .35s ease,opacity .35s ease}.gs-master-offering.is-primary{color:#fff;transform:scale(1.075)}.gs-master-separator{color:rgba(200,168,75,.58);font-size:17px;letter-spacing:0}
+.gs-master-ball{position:relative;display:block;width:18px;height:18px;flex:0 0 18px;border-radius:50%;box-shadow:0 3px 10px rgba(0,0,0,.35);will-change:transform}.gs-master-ball.is-tennis{background:radial-gradient(circle at 32% 28%,#eef37e 0%,#d4df4e 48%,#929d31 100%);animation:gsMasterTennisBall .62s cubic-bezier(.3,.8,.3,1) 1.68s both}.gs-master-ball.is-tennis::before,.gs-master-ball.is-tennis::after{content:"";position:absolute;left:1px;width:15px;height:8px;border-top:1px solid rgba(255,255,255,.72);border-radius:50%}.gs-master-ball.is-tennis::before{top:4px;transform:rotate(24deg)}.gs-master-ball.is-tennis::after{top:8px;transform:rotate(-24deg)}.gs-master-ball.is-golf{background:radial-gradient(circle at 31% 26%,#fff 0%,#ecece8 58%,#b7b8b3 100%);animation:gsMasterGolfBall .62s cubic-bezier(.2,.8,.2,1) 1.68s both}.gs-master-ball.is-golf::after{content:"";position:absolute;width:2px;height:2px;left:5px;top:5px;border-radius:50%;background:#c8c9c5;box-shadow:5px -1px #c8c9c5,8px 4px #c8c9c5,2px 7px #c8c9c5}
+.gs-master-site{min-height:18px;margin-top:16px;color:rgba(255,255,255,.58);font:600 clamp(9px,2.5vw,12px)/1 'DM Sans',sans-serif;letter-spacing:.18em;text-transform:lowercase;opacity:0;transform:translateY(7px);animation:gsMasterSiteIn .4s ease 2.04s forwards}.gs-master-skip{position:absolute;z-index:3;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);color:rgba(255,255,255,.34);font:600 9px/1 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;opacity:0;animation:gsMasterSkipIn .35s ease 2.25s forwards}
+.gs-master-intro.is-leaving .gs-master-offering.is-primary .gs-master-ball{animation:gsMasterLeadOut .46s cubic-bezier(.4,0,.8,.2) forwards}.gs-master-intro.is-leaving{opacity:0;pointer-events:none}.gs-master-intro.is-return .gs-master-g,.gs-master-intro.is-return .gs-master-s,.gs-master-intro.is-return .gs-master-fill{animation:none}.gs-master-intro.is-return .gs-master-fill{width:var(--gs-word-width);max-width:var(--gs-word-width);opacity:1;clip-path:inset(0)}.gs-master-intro.is-return .gs-master-word{font-size:clamp(46px,11vw,72px);height:72px}.gs-master-intro.is-return .gs-master-offerings,.gs-master-intro.is-return .gs-master-site{opacity:1;transform:none;animation:none}.gs-master-intro.is-return .gs-master-offerings{margin-top:8px}.gs-master-intro.is-return .gs-master-skip{display:none}
+@keyframes gsMasterGIn{from{opacity:0;transform:translateX(18px) scale(.92)}to{opacity:1;transform:none}}@keyframes gsMasterSIn{from{opacity:0;transform:translateX(-18px) scale(.92)}to{opacity:1;transform:none}}@keyframes gsMasterConstruct{0%{width:0;max-width:0;opacity:0;clip-path:inset(0 100% 0 0)}28%{opacity:1}100%{width:var(--gs-word-width);max-width:var(--gs-word-width);opacity:1;clip-path:inset(0)}}@keyframes gsMasterOfferings{to{opacity:1;transform:none}}@keyframes gsMasterSiteIn{to{opacity:1;transform:none}}@keyframes gsMasterSkipIn{to{opacity:1}}@keyframes gsMasterTennisBall{0%{opacity:0;transform:translate(-13px,-8px) scale(.82)}55%{opacity:1;transform:translate(-4px,3px) scale(1)}76%{transform:translate(-1px,-2px)}100%{opacity:1;transform:none}}@keyframes gsMasterGolfBall{0%{opacity:0;transform:translateX(15px) rotate(100deg)}100%{opacity:1;transform:none}}@keyframes gsMasterLeadOut{to{transform:translate3d(0,54px,0) scale(.58);opacity:0}}@keyframes gsMasterSafety{to{opacity:0;pointer-events:none;visibility:hidden}}
+.gs-master-intro.is-reduced .gs-master-fill{width:var(--gs-word-width);max-width:var(--gs-word-width);opacity:1;clip-path:inset(0)}.gs-master-intro.is-reduced .gs-master-offerings,.gs-master-intro.is-reduced .gs-master-site{opacity:1;transform:none}.gs-master-intro.is-reduced .gs-master-skip{display:none}.gs-master-intro.is-reduced *{animation:none!important}
+@media(prefers-reduced-motion:reduce){.gs-master-intro *{animation:none!important}.gs-master-intro{transition:opacity .12s linear}}
+@media(max-width:350px){.gs-master-offerings{gap:10px;letter-spacing:.18em}.gs-master-word{font-size:60px;height:62px}.gs-master-site{margin-top:12px}}
+</style>
+<script id="gs-master-brand-engine">
+(function(){
+  var el=document.getElementById('bootSplash');if(!el)return;
+  var product=el.getAttribute('data-product')==='TENNIS'?'TENNIS':'GOLF';
+  var alternative=product==='TENNIS'?'GOLF':'TENNIS';
+  var meta=document.querySelector('meta[property="og:url"]');
+  var siteUrl=meta&&meta.content?meta.content:location.href;
+  var siteHost='';try{siteHost=new URL(siteUrl,location.href).hostname.replace(/^www\./,'')}catch(e){siteHost=location.hostname.replace(/^www\./,'')}
+  var seenKey='gamesharp_master_brand_intro_v1';
+  var force=/[?&]brandIntro=1(?:&|$)/.test(location.search);
+  // The query flag is a deterministic audit hook; real visitors follow their
+  // operating-system preference through matchMedia.
+  var forcedReduced=/[?&]brandMotion=reduce(?:&|$)/.test(location.search);
+  var reduced=forcedReduced||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var seen=false;try{seen=localStorage.getItem(seenKey)==='1'}catch(e){}
+  function paint(node,name){node.querySelector('span').textContent=name;node.querySelector('.gs-master-ball').classList.add(name==='TENNIS'?'is-tennis':'is-golf')}
+  paint(el.querySelector('[data-gs-primary]'),product);paint(el.querySelector('[data-gs-alternative]'),alternative);el.querySelector('[data-gs-site]').textContent=siteHost;
+  window.GS_MASTER_BRAND_CONFIG=Object.freeze({product:product,alternative:alternative,siteUrl:siteUrl,version:'v1'});
+  window.gsMasterIntroActive=true;document.documentElement.dataset.gsMasterBrand=JSON.stringify({product:product,alternative:alternative,siteHost:siteHost,firstVisit:!seen||force,reducedMotion:reduced});
+  var done=false,leaveTimer,finishTimer;
+  function finish(fast,skipped){if(done)return;done=true;window.clearTimeout(leaveTimer);window.clearTimeout(finishTimer);try{localStorage.setItem(seenKey,'1')}catch(e){}el.classList.add('is-leaving');var delay=fast?140:420;window.setTimeout(function(){window.gsMasterIntroCanClose=true;window.gsMasterIntroActive=false;if(el.parentNode)el.parentNode.removeChild(el);window.dispatchEvent(new CustomEvent('gs-master-intro-done',{detail:{product:product,skipped:!!skipped}}));},delay)}
+  window.gsHideBootSplash=function(){if(!window.gsMasterIntroCanClose)return;finish(true,false)};
+  function skip(){finish(true,true)}
+  ['pointerdown','wheel','touchmove'].forEach(function(type){el.addEventListener(type,skip,{once:true,passive:true})});
+  el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '||e.key==='Escape'||e.key==='ArrowDown'){e.preventDefault();skip()}},{once:true});
+  requestAnimationFrame(function(){el.classList.add('is-ready')});
+  if(reduced){el.classList.add('is-reduced');finishTimer=window.setTimeout(function(){finish(true,false)},260)}
+  else if(seen&&!force){el.classList.add('is-return');leaveTimer=window.setTimeout(function(){el.classList.add('is-leaving')},260);finishTimer=window.setTimeout(function(){finish(true,false)},620)}
+  else{leaveTimer=window.setTimeout(function(){el.classList.add('is-leaving')},3050);finishTimer=window.setTimeout(function(){finish(true,false)},3600)}
+  window.setTimeout(function(){finish(true,false)},5000);
+})();
+</script>
 <div id="app">
 
 <!-- ============================== SPLASH ============================== -->
@@ -3157,6 +3208,16 @@ function showView(id){
 
 function gsStartHomeReveal(){
   const home=document.getElementById('view-home');if(!home)return;
+  // The master brand reveal and the home landscape reveal are consecutive
+  // chapters, never competing animations. Preserve the homepage effect and
+  // start it only after the shared GameSharp introduction has handed off.
+  if(window.gsMasterIntroActive){
+    window.addEventListener('gs-master-intro-done',()=>{
+      document.documentElement.dataset.gsMasterHandoff='golf-home-reveal';
+      if(home.classList.contains('active')) gsStartHomeReveal();
+    },{once:true});
+    return;
+  }
   let seen=false;try{seen=sessionStorage.getItem('gsg_home_reveal_v21')==='1'}catch(e){}
   if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches){home.classList.remove('gs-home-reveal');return}
   home.classList.add('gs-home-reveal');try{sessionStorage.setItem('gsg_home_reveal_v21','1')}catch(e){}
