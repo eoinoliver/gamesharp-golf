@@ -54,7 +54,7 @@ assert(!/function moments\(mode\)/.test(html),'retired eight-stage journey remai
 assert(fs.existsSync(new URL('./gamesharp-one-hole-v1.png',import.meta.url)),'one-hole source artwork missing');
 const holeWebp=new URL('./gamesharp-one-hole-v1.webp',import.meta.url),holeJpeg=new URL('./gamesharp-one-hole-v1.jpg',import.meta.url);assert(fs.existsSync(holeWebp),'optimized one-hole artwork missing');assert(fs.statSync(holeWebp).size<=160000,'one-hole artwork exceeds 160KB mid-tier-phone budget');assert(fs.existsSync(holeJpeg)&&fs.statSync(holeJpeg).size<=300000,'Safari JPEG fallback is missing or too heavy');assert(/id="gss-hole-image"[^>]+gamesharp-one-hole-v1\.webp\?v=18/.test(html),'Sharpen does not render a real recoverable one-hole image element');
 const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-one-hole-v1\.webp/.test(sw)&&/gamesharp-one-hole-v1\.jpg/.test(sw),'one-hole primary and Safari fallback are unavailable in the offline course shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(sw),'retired winding journey remains in the offline shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(html),'retired winding journey artwork remains referenced by the app');
-assert(/const CACHE = 'gamesharp-golf-v25'/.test(sw),'release cache version must evict stale shells before the expanded Play a Hole release');
+assert(/const CACHE = 'gamesharp-golf-v26'/.test(sw),'release cache version must evict stale shells before the Sharpen hero-entry release');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent one-hole visual layer missing');
 assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*aspect-ratio:943\/1680[^}]*background-size:100% 100%/.test(html),'the complete hole is not visible on Sharpen entry');
 assert(/const ZONE_ORDER=\['tee','recovery','approach','green','putting'\]/.test(html),'five-zone order is not authoritative');
@@ -101,8 +101,13 @@ assert(!/class="gss-journey-visual"/.test(html),'retired recreated illustration 
 assert(/data-share-map/.test(html)&&/function shareJourney\(\)/.test(html)&&/gamesharp-bag-focus\.jpg/.test(html),'one-hole bag share card missing');
 assert(/focusHistory/.test(html)&&/function habitStats\(\)|const habitStats=/.test(html)&&/function takeFocus\(\)/.test(html)&&/function checkFocus\(/.test(html),'take-test-return habit loop missing');
 assert(/Take this to your next round →/.test(html)&&/How did it go\?/.test(html),'practice loop language missing');
-assert(/KEY='gsg_sharpen_state_v5',LEGACY_KEY='gsg_sharpen_state_v4'/.test(html),'five-zone Sharpen state migration missing');
+assert(/KEY='gsg_sharpen_state_v6',LEGACY_KEY='gsg_sharpen_state_v5'/.test(html),'hero-first Sharpen state migration missing');
 assert(/state\.saved&&!GOLF_SHARPEN_RESULTS\[state\.saved\.resultId\]/.test(html),'incompatible winding-journey state is not safely ignored');
+assert(/function open\(from\)[\s\S]{0,650}if\(state\.returnPending&&state\.resultId\)[\s\S]{0,180}result\(state\.resultId\)[\s\S]{0,300}else\{const draft=captureSharpenDraft\(\);if\(draft\)state\.draft=draft;regions\(true\)\}/.test(html),'primary Sharpen navigation can bypass the hero or asset return can lose exact context');
+assert(!/function open\(from\)[^\n]*(?:checkDue|else renderState\(\))/.test(html),'persisted narrowing state still auto-opens ahead of the hero');
+assert(/data-continue-draft/.test(html)&&/function continueDraft\(\)/.test(html)&&/data-continue-draft'\)\)continueDraft\(\)/.test(html),'interrupted Sharpen work lacks an explicit hero-level continuation');
+assert(/function issues\(rid\)\{\s*state\.draft=null/.test(html)&&/function observation\(\)\{\s*state\.draft=null/.test(html),'choosing a new Sharpen path can leave a stale continuation behind');
+assert(/dataset\.gsgSharpenEntry='hero-v1'/.test(html),'production cannot report the hero-first Sharpen entry contract');
 assert(/const focus=`<section class="gss-result-lead"[\s\S]{0,1000}Test it now[\s\S]{0,700}<details class="gss-why"/.test(html),'result does not lead with one focus and one test before explanation');
 assert(!/data-save>Save this focus/.test(html)&&/Take this to your next round →/.test(html),'benefit-led take-to-round language missing');
 assert(/aria-modal="true"/.test(html)&&/if\(e\.key==='Tab'\)/.test(html),'Modal focus contract missing');

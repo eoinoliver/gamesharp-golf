@@ -185,6 +185,12 @@ if (!html.includes("theatreBody.scrollTo({top:0,behavior:'auto'})")) failures.pu
 if (!/id!=='hole'&&window\.GameSharpHoleTheatre[^\n]+\.close\(\)/.test(html)) failures.push('Leaving Play a Hole can strand its modal over another feature');
 notes.push('Play a Hole opens expanded from the authoritative node renderer; answer and next-shot views return to the visual');
 
+if (!/function open\(from\)[^\n]+state\.returnPending[^\n]+else\{const draft=captureSharpenDraft\(\);if\(draft\)state\.draft=draft;regions\(true\)\}/.test(html)) failures.push('Primary Sharpen navigation does not deterministically open the hero');
+if (/function open\(from\)[^\n]*(?:checkDue|else renderState\(\))/.test(html)) failures.push('Sharpen can still auto-resume a hidden narrowing stage ahead of its hero');
+if (!html.includes('data-continue-draft')||!html.includes('function continueDraft()')) failures.push('Interrupted Sharpen work is not explicitly recoverable from the hero');
+if (!html.includes("dataset.gsgSharpenEntry='hero-v1'")) failures.push('Production cannot report the hero-first Sharpen contract');
+notes.push('Sharpen primary entry is hero-first; deep restoration is explicit except for exact asset returns');
+
 const advanced = extractConst('ADV_ITEMS', 'let advState');
 for (const [index, item] of advanced.entries()) {
   if (!item.options?.some(o => o.id === item.answer)) failures.push(`ADV_ITEMS ${index}: answer missing from options`);
