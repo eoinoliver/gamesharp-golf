@@ -8,6 +8,9 @@ assert(!/gsHomeHeroTimer = window\.setTimeout\(gsCollapseHomeHero/.test(html),'h
 assert(!/addEventListener\('(pointerdown|scroll|touchmove)', gsCollapseHomeHero/.test(html),'touch and scroll must not move the home layout');
 assert(!/#view-home \.home-hero,[\s\S]{0,120}transition:(max-height|height|margin|padding)/.test(html),'home must not animate layout dimensions');
 assert.equal((html.match(/<button class="home-play"/g)||[]).length,1,'home must expose one direct secondary play choice');
+assert(html.indexOf('<button class="home-play"')<html.indexOf('<button class="home-depth"'),'Daily and Play a Hole must remain the first two primary home actions');
+assert(/savedHole=loadHoleSession\(\)[\s\S]{0,500}Resume:<\/strong>[\s\S]{0,300}setAttribute\('aria-label',`Resume/.test(html),'home must advertise the exact interrupted hole that Play a Hole will resume');
+assert(/if\(sharpenState\?\.saved\)\{GameSharpGolfSharpen\.openSaved/.test(html)&&/openSaved\(from\)\{open\(from\);if\(state\.saved/.test(html),'Your Round Focus must open the saved focus rather than incidental Sharpen state');
 assert(!/<button class="mode-card"/.test(html),'legacy competing home mode cards remain');
 assert(/<details class="home-more">[\s\S]{0,400}PLAY A COURSE[\s\S]{0,400}PLAY A 3-HOLE DECISION RUN[\s\S]{0,300}PLAY A 9-HOLE DECISION RUN/.test(html),'secondary play formats must use progressive disclosure');
 assert(/#view-home \{[^}]*touch-action:pan-y[^}]*overflow-anchor:none/.test(html),'home mobile scrolling contract missing');
@@ -21,5 +24,10 @@ assert(/if\(active&&active\.classList\.contains\('active'\)\)\{viewScroll\[id\]=
 assert(/id="profile-btn"[^>]*aria-label="Open progress and profile"/.test(html),'profile control lacks an accessible name');
 assert(/@media\(prefers-reduced-motion:reduce\)/.test(html),'reduced-motion contract missing');
 assert(/@media\(orientation:landscape\) and \(max-height:500px\)[\s\S]{0,500}#view-home \.home-hero\{height:72px/.test(html),'landscape home compaction missing');
+assert(/\(node\.choices \|\| \[\]\)\.forEach[\s\S]{0,180}document\.createElement\('button'\);[\s\S]{0,100}card\.type = 'button'/.test(html),'Play a Hole decisions must be semantic keyboard-operable buttons');
+assert(/#shot-panel \.decision-card'\)\.forEach\(c => \{[\s\S]{0,120}c\.disabled = true/.test(html),'committed Play a Hole choices must expose their locked state');
+for(const id of ['db-fairways','db-gir','db-putts','db-score'])assert(new RegExp(`<label[^>]+for="${id}"`).test(html),`Debrief input ${id} lacks a programmatic label`);
+assert.equal((html.match(/class="db-sign[^>]+aria-label="(?:Over|Even|Under) par"[^>]+aria-pressed=/g)||[]).length,3,'debrief score-sign controls must expose name and state');
+assert(/gaps\[0\]\.score > 0 \? gaps\[0\] : \{[\s\S]{0,220}One Decision to Revisit/.test(html),'a balanced scorecard must not be assigned a contradictory negative leak');
 
 console.log(JSON.stringify({ok:true,homePrimaryActions:2,playChoices:1,secondaryPlayFormats:3,semanticNavButtons:9},null,2));

@@ -1,45 +1,61 @@
 {
-  "generatedAt": "2026-08-02",
-  "entryModel": "closed-loop-cinematic-round-journey",
-  "illustratedProgress": { "present": true, "persistentElement": "gss-cinema", "entryHero": "complete artwork fitted without cropping", "entryQuestions": "three compact choices immediately below the prompt", "stages": ["entry", "moment-map", "symptom", "distinction", "focus", "asset-return", "check-back"], "moments": ["before", "first", "tee", "approach", "green", "putting", "pressure", "nineteenth"], "resultCaptionSource": "authoritative result cue", "navigationDependency": false, "reducedMotionEquivalent": true },
+  "generatedAt": "2026-08-03",
+  "releaseState": "audited-local-preview-not-deployed",
+  "entryModel": "one-hole-five-zone-direct-router",
+  "illustratedNavigation": {
+    "asset": "gamesharp-one-hole-v1.webp",
+    "assetBytes": 140872,
+    "zones": ["tee", "recovery", "approach", "green", "putting"],
+    "preliminaryLobby": false,
+    "minimumTargetPx": 48,
+    "imageFallback": "five-zone semantic text grid",
+    "reducedMotionEquivalent": true
+  },
+  "bagModel": {
+    "clubs": ["Driver", "Hybrid", "Iron", "Wedge", "Putter"],
+    "stateSource": "saved-and-tested-focus-history",
+    "abilityDiagnosis": false,
+    "sameRouterAsHole": true,
+    "reviewProjection": true
+  },
   "viewports": [
-    { "width": 320, "height": 568, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
-    { "width": 375, "height": 812, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
-    { "width": 390, "height": 844, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
-    { "width": 430, "height": 932, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
-    { "width": 844, "height": 390, "integrity": "pass", "modes": 3, "minTarget": 48, "horizontalOverflow": false, "errors": [] }
+    { "width": 320, "height": 568, "rendered": true, "zones": 5, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
+    { "width": 375, "height": 812, "rendered": false, "coverage": "responsive-contract", "zones": 5, "minTarget": 48, "horizontalOverflow": false },
+    { "width": 390, "height": 844, "rendered": true, "zones": 5, "minTarget": 48, "horizontalOverflow": false, "errors": [] },
+    { "width": 430, "height": 932, "rendered": false, "coverage": "responsive-contract", "zones": 5, "minTarget": 48, "horizontalOverflow": false },
+    { "width": 844, "height": 390, "rendered": true, "zones": 5, "minTarget": 48, "horizontalOverflow": false, "errors": [] }
   ],
   "journeys": {
-    "teeReference": {
+    "wholeAppReleaseSweep": {
+      "dailyAnswerRevealExit": true,
+      "playAHoleTwoConsecutiveShots": true,
+      "interruptedHolePromiseMatchesResume": true,
+      "semanticHoleChoices": true,
+      "homePrimaryOrder": ["daily", "play-a-hole", "contextual-depth"],
+      "puttingSharpenShotClinicReturn": true,
+      "reviewBagSameRouter": true,
+      "debriefSubmission": true,
+      "debriefBalancedFallback": "One Decision to Revisit",
+      "threeHoleDecisionRunEntry": true,
+      "consoleWarningsOrErrors": 0
+    },
+    "recoveryReference": {
       "result": "pass",
-      "primaryAssetsVisible": 1,
-      "explanationInitiallyHidden": true,
-      "shotClinicExactReturn": true,
-      "focusedSessionExactReturn": true,
-      "interruptionRestore": true
+      "path": "recovery > trouble > unclear corridor > playable side first",
+      "playAHoleDestination": "The Recovery — Out of Trouble",
+      "exactReturn": true,
+      "saveUpdatesHybrid": true
     },
-    "allMoments": {
-      "before": "pass",
-      "first": "pass",
-      "tee": "pass",
-      "approach": "pass",
-      "green": "pass",
-      "putting": "pass",
-      "pressure": "pass",
-      "nineteenth": "pass"
-    },
-    "playAHoleExactReturn": true,
-    "debriefExactReturn": true,
-    "savedFocusCheckback": true,
-    "takeTestHistory": true,
-    "testedFocusStreak": true,
-    "journeyShareCard": { "nativeFileShare": true, "fallback": "clipboard", "verifiedJpegBytes": 175929 },
-    "todayDepthAction": true,
-    "singlePracticeFrontDoor": true,
-    "androidPerformanceReport": "GOLF_ANDROID_PERFORMANCE_AUDIT.json",
-    "reducedMotion": true,
-    "imageDependency": false,
+    "interruptionRestore": true,
+    "reviewBagSameRouter": true,
+    "homeSmallPhoneScroll": true,
+    "imageFailure": "structural-contract-pass",
+    "reducedMotion": "structural-contract-pass",
     "relevantConsoleErrors": 0
   },
+  "limitations": [
+    "375x812 and 430x932 are covered by the same responsive contract but were not separately rendered in this final pass.",
+    "A physical mid-range Android handset field test remains pending."
+  ],
   "errors": []
 }

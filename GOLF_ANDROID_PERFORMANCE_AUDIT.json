@@ -1,27 +1,23 @@
 {
-  "generatedAt": "2026-08-02",
-  "profile": "Galaxy A52-class emulation",
-  "method": {
-    "viewport": "360x800 at 2x device scale",
-    "cpuSlowdown": "4x",
-    "latencyMs": 120,
-    "downloadMbps": 1.6,
-    "uploadKbps": 750
+  "generatedAt": "2026-08-03",
+  "releaseState": "audited-local-preview-not-deployed",
+  "assetBudget": {
+    "oneHoleArtworkMaxBytes": 160000,
+    "oneHoleArtworkBytes": 140872,
+    "sourcePngBytes": 2449065,
+    "weightReductionPercent": 94.2,
+    "status": "pass"
   },
-  "budgets": {
-    "journeyArtworkBytes": 160000,
-    "sharpenReadyMs": 1800,
-    "shotClinicReadyMs": 1800
-  },
-  "results": {
-    "journeyArtworkBytes": 120740,
-    "sourcePngBytes": 2235441,
-    "weightReductionPercent": 94.6,
-    "sharpenReadyMs": 80,
-    "shotClinicReadyMs": 485,
+  "renderedChecks": {
+    "smallestViewport": "320x568",
+    "landscapeViewport": "844x390",
     "horizontalOverflow": false,
     "consoleErrors": 0,
     "status": "pass"
   },
-  "limitation": "This is reproducible throttled browser emulation, not a physical Android handset field test. A physical mid-range Android check in variable course-car-park connectivity remains a pre-production operational check."
+  "notClaimed": {
+    "freshThrottledRuntimeTiming": true,
+    "physicalAndroidFieldTest": true
+  },
+  "limitation": "The current one-hole asset passes the enforced 160KB delivery budget and rendered layout checks. Fresh throttled timings and a physical mid-range Android test in variable course connectivity remain pre-production operational checks; no timing from the retired journey is reused."
 }
