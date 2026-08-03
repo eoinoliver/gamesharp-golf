@@ -189,7 +189,12 @@ if (!/function open\(from\)[^\n]+state\.returnPending[^\n]+else\{const draft=cap
 if (/function open\(from\)[^\n]*(?:checkDue|else renderState\(\))/.test(html)) failures.push('Sharpen can still auto-resume a hidden narrowing stage ahead of its hero');
 if (!html.includes('data-continue-draft')||!html.includes('function continueDraft()')) failures.push('Interrupted Sharpen work is not explicitly recoverable from the hero');
 if (!html.includes("dataset.gsgSharpenEntry='hero-v1'")) failures.push('Production cannot report the hero-first Sharpen contract');
-notes.push('Sharpen primary entry is hero-first; deep restoration is explicit except for exact asset returns');
+if (!html.includes("dataset.gsgSharpenShare='branded-exact-deep-link-v1'")) failures.push('Production cannot report the exact Sharpen sharing contract');
+if (!/async function shareFocus\(button\)[\s\S]{0,850}navigator\.share\(\{title,text,url\}\)/.test(html)) failures.push('Sharpen focus share does not include a clickable destination');
+if (!/async function shareJourney\(\)[\s\S]{0,850}navigator\.share\(\{title,text,url\}\)/.test(html)) failures.push('Sharpen journey share does not include a clickable destination');
+if (/async function shareFocus\(button\)[\s\S]{0,1400}navigator\.share\(\{[^}]*files/.test(html)) failures.push('Sharpen focus primary share is still a file attachment');
+if (!html.includes('function openShared(resultId,from)')||!html.includes('function routeURL()')) failures.push('Sharpen recipient cannot restore the exact shared focus');
+notes.push('Sharpen primary entry is hero-first; shares are branded exact deep links; image export is secondary');
 
 const advanced = extractConst('ADV_ITEMS', 'let advState');
 for (const [index, item] of advanced.entries()) {

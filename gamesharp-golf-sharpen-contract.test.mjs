@@ -54,7 +54,7 @@ assert(!/function moments\(mode\)/.test(html),'retired eight-stage journey remai
 assert(fs.existsSync(new URL('./gamesharp-one-hole-v1.png',import.meta.url)),'one-hole source artwork missing');
 const holeWebp=new URL('./gamesharp-one-hole-v1.webp',import.meta.url),holeJpeg=new URL('./gamesharp-one-hole-v1.jpg',import.meta.url);assert(fs.existsSync(holeWebp),'optimized one-hole artwork missing');assert(fs.statSync(holeWebp).size<=160000,'one-hole artwork exceeds 160KB mid-tier-phone budget');assert(fs.existsSync(holeJpeg)&&fs.statSync(holeJpeg).size<=300000,'Safari JPEG fallback is missing or too heavy');assert(/id="gss-hole-image"[^>]+gamesharp-one-hole-v1\.webp\?v=18/.test(html),'Sharpen does not render a real recoverable one-hole image element');
 const sw=fs.readFileSync(new URL('./sw.js',import.meta.url),'utf8');assert(/gamesharp-one-hole-v1\.webp/.test(sw)&&/gamesharp-one-hole-v1\.jpg/.test(sw),'one-hole primary and Safari fallback are unavailable in the offline course shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(sw),'retired winding journey remains in the offline shell');assert(!/gamesharp-round-journey-v1\.(?:png|webp)/.test(html),'retired winding journey artwork remains referenced by the app');
-assert(/const CACHE = 'gamesharp-golf-v26'/.test(sw),'release cache version must evict stale shells before the Sharpen hero-entry release');
+assert(/const CACHE = 'gamesharp-golf-v27'/.test(sw),'release cache version must evict stale shells before the Sharpen deep-link release');
 assert(/id="gss-cinema"[^>]*hidden/.test(html),'persistent one-hole visual layer missing');
 assert(/\.gss-cinema\[data-stage="entry"\]\{[^}]*aspect-ratio:943\/1680[^}]*background-size:100% 100%/.test(html),'the complete hole is not visible on Sharpen entry');
 assert(/const ZONE_ORDER=\['tee','recovery','approach','green','putting'\]/.test(html),'five-zone order is not authoritative');
@@ -98,7 +98,22 @@ assert(/cinema\('route',state\.regionId\)/.test(html),'persistent illustration m
 assert(/cinema\('result',r\.regionId,id\)/.test(html),'persistent illustration missing from focus result');
 assert(/cinema\('result',r\.regionId,saved\.resultId\)/.test(html),'saved-focus return loses cinematic context');
 assert(!/class="gss-journey-visual"/.test(html),'retired recreated illustration remains reachable');
-assert(/data-share-map/.test(html)&&/function shareJourney\(\)/.test(html)&&/gamesharp-bag-focus\.jpg/.test(html),'one-hole bag share card missing');
+assert(/data-share-map/.test(html)&&/function shareJourney\(\)/.test(html),'one-hole bag share action missing');
+assert(/function gssShareURL\(resultId=null\)/.test(html)&&/searchParams\.set\('sharpenFocus',resultId\)/.test(html)&&/searchParams\.set\('sharpen','1'\)/.test(html),'Sharpen links do not resolve to a configured exact destination');
+assert(/async function shareFocus\(button\)[\s\S]{0,850}navigator\.share\(\{title,text,url\}\)/.test(html),'primary focus share does not include a clickable URL');
+assert(/async function shareJourney\(\)[\s\S]{0,850}navigator\.share\(\{title,text,url\}\)/.test(html),'primary bag share does not include a clickable URL');
+assert(!/async function shareFocus\(button\)[\s\S]{0,1400}navigator\.share\(\{[^}]*files/.test(html),'primary focus share silently degraded to a file attachment');
+assert(!/async function shareJourney\(\)[\s\S]{0,1400}navigator\.share\(\{[^}]*files/.test(html),'primary bag share silently degraded to a file attachment');
+assert(/data-download-focus>Download branded card/.test(html)&&/GameSharp-Golf-\$\{slug\|\|'Sharpen'\}-Focus\.jpg/.test(html),'secondary image export is not explicitly separated and branded');
+assert(/function findSharpenPath\(resultId\)/.test(html)&&/function openShared\(resultId,from\)/.test(html)&&/function routeURL\(\)/.test(html),'exact focus recipient routing is missing');
+for(const id of Object.keys(Z)){let reachable=false;for(const region of Object.values(R))for(const issue of region.issues)if(Q[issue.route]?.answers.some(a=>a.resultId===id))reachable=true;assert(reachable,'shared result cannot restore route context: '+id)}
+assert(/GameSharpGolfSharpen=\{open,openShared,routeURL,shareURL:gssShareURL/.test(html),'deep-link contract is not exposed for production audit');
+assert(/dataset\.gsgSharpenShare='branded-exact-deep-link-v1'/.test(html),'production cannot report the Sharpen sharing contract');
+assert(/const _sharpenInvite = new URLSearchParams\(location\.search\)\.has\('sharpenFocus'\)/.test(html),'first-time recipient cannot be recognized before onboarding');
+assert(/if\(!LS\.get\('onboarded'\) && !_sharpenInvite\)/.test(html),'onboarding can block the value promised by an explicit Sharpen invitation');
+assert(/const routedSharpenInvite=window\.GameSharpGolfSharpen\?\.routeURL\?\.\(\)===true/.test(html),'initial routing does not honor the Sharpen invitation');
+assert(/if\(!routedSharpenInvite&&getChallenge\(\)\)/.test(html),'a stored Daily challenge can override an incoming Sharpen invitation');
+assert(/<meta property="og:image" content="https:\/\/www\.gamesharpgolf\.com\/og-image\.jpg">/.test(html)&&fs.existsSync(new URL('./og-image.jpg',import.meta.url)),'shared links lack a branded social preview');
 assert(/focusHistory/.test(html)&&/function habitStats\(\)|const habitStats=/.test(html)&&/function takeFocus\(\)/.test(html)&&/function checkFocus\(/.test(html),'take-test-return habit loop missing');
 assert(/Take this to your next round →/.test(html)&&/How did it go\?/.test(html),'practice loop language missing');
 assert(/KEY='gsg_sharpen_state_v6',LEGACY_KEY='gsg_sharpen_state_v5'/.test(html),'hero-first Sharpen state migration missing');
