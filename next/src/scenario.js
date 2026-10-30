@@ -1,24 +1,48 @@
-// Explicit catalogue: only this reviewed-for-structure pilot is eligible.
-export const VERSION = 'golf-next-2026-10-30.1';
-export const SCENARIO = Object.freeze({
-  id: 'the-flag-isnt-the-target',
-  title: 'The flag isn’t the target.',
-  course: 'North Point',
-  subtitle: 'An original coastal practice hole',
-  distance: 145,
-  start: { x: 0, z: 142 },
-  green: { x: -3, z: 0, rx: 22, rz: 25 },
-  rounds: [
-    { id: 'protected-pin', pin: { x: 11, z: -8 }, title: 'A tempting flag. An expensive miss.', prompt: 'Where would you aim?', situation: '145 metres. A clean fairway lie. The flag is close to the water on the right.', cue: 'Give your normal misses somewhere to finish.' },
-    { id: 'open-pin', pin: { x: -8, z: -3 }, title: 'The flag moved. Does your plan?', prompt: 'Same club. Same shot pattern. Your target?', situation: 'The flag is now on the left half. There is room around it, and the water has not moved.', cue: 'Protect the costly miss. Then use the opportunity.' },
-  ],
-  profile: 'Assume this club reaches the green. The dots show an example pattern, not your measured shots.',
-  modelNote: 'An authored teaching example: 12 fixed shot offsets, reused for every target. These are possible finishes, not measured probabilities or a prediction of your game. The hole is fictional. No handicap or strokes-saved claim.',
+// Explicit catalogue. These authored examples require coaching and player validation.
+export const VERSION = 'golf-next-2026-10-30.2';
+export const COURSE = Object.freeze({
+ id:'north-point', course:'North Point', start:{x:-10,z:148},
+ green:{x:-3,z:0,rx:22,rz:25},
+ bunker:{x:-29,z:23,rx:8,rz:11},
+ modelNote:'12 authored finishes, not measured probabilities. Club distances and practice points belong to these fictional exercises. Ball flights illustrate a finish; they are not a physics simulation. No handicap or strokes-saved claim.'
 });
-// Metres relative to target. Same errors for both targets and both pin positions.
 export const SHOT_OFFSETS = Object.freeze([
-  {x:1,z:1}, {x:5,z:-6}, {x:11,z:1}, {x:2,z:5},
-  {x:-4,z:10}, {x:-9,z:7}, {x:7,z:-10}, {x:10,z:6},
-  {x:-2,z:-5}, {x:8,z:9}, {x:0,z:-2}, {x:-6,z:-12},
-].map(Object.freeze));
-export const APPROVED_SCENARIOS = Object.freeze([SCENARIO.id]);
+ [1,1],[5,-6],[11,1],[2,5],[-4,10],[-9,7],[7,-10],[10,6],[-2,-5],[8,9],[0,-2],[-6,-12]
+].map(([x,z])=>Object.freeze({x,z})));
+const club=(id,name,z,sx=1,sz=1,bx=0,bz=0)=>({id,name,z,sx,sz,bx,bz});
+const hole=(id,props)=>({id,pin:{x:-3,z:0},start:{x:-10,z:148},bunkers:[],trees:[],objective:'approach',initialAim:-3,shotIndex:0,...props});
+const pinch=z=>[{x:-20,z,rx:7,rz:12},{x:0,z,rx:7,rz:12}];
+export const LESSONS = [
+ {id:'distance',number:'01',name:'The distance',teaser:'The number you can hit. The number you usually hit.',cue:'Plan with your normal carry, not your longest shot.',
+ cases:[
+  hole('distance-first',{title:'138 metres to the flag.',brief:'Clean lie. A front bunker begins about 120 m away. These club labels are intended carries; the dots show what this example player actually produces.',pin:{x:-3,z:10},clubs:[club('8i','8 iron',12,.75,.7,0,10),club('7i','7 iron',-2,.75,.7,0,10)],bunkers:[{x:-3,z:24,rx:19,rz:7}],insight:'The 8 iron has the right number on paper, but much of its actual pattern finishes short, in the bunker. The 7 iron moves the whole pattern onto the green.',transferNote:'New player. New carry pattern. A different bunker.',success:'You used the actual carry window.',alternative:'The longer club moves the short finishes past the front bunker.'}),
+  hole('distance-transfer',{title:'Read these carries afresh.',brief:'A different example player. Same front flag, but their shots carry closer to the intended number. The bunker is now behind the green. Inspect both patterns.',pin:{x:-3,z:10},clubs:[club('8i','8 iron',12,.7,.7),club('7i','7 iron',-11,.7,1.3)],bunkers:[{x:-3,z:-24,rx:21,rz:8}],insight:'Here the 8 iron already reaches the front flag. The 7 iron brings the rear bunker into the pattern. “Take more club” was never the rule.',success:'Your plan fits this player’s carry window.',alternative:'The shorter club already reaches this flag and keeps the rear bunker out of the sample.'})
+ ]},
+ {id:'shape',number:'02',name:'The shot shape',teaser:'The centre of your pattern may not be your aim line.',cue:'Move your aim for the pattern you bring.',
+ cases:[
+  hole('shape-first',{title:'Where is this pattern centred?',brief:'One club reaches the green. The white dots are this player’s 12 example finishes relative to the aim line. Choose where to place that pattern.',pin:{x:-1,z:0},clubs:[club('7i','7 iron',0,.7,.7,-10)],insight:'This pattern finishes left of its aim line. A target right of the flag can place the actual finishes nearer it. Moving the aim and moving the pattern are different things.',success:'You allowed for the leftward pattern.',alternative:'A rightward aim moves these leftward finishes toward the pin.'}),
+  hole('shape-transfer',{title:'Same green. A different pattern.',brief:'This player’s finishes sit on the other side of the aim line. The flag has also moved left. Use the evidence shown below.',pin:{x:-7,z:1},clubs:[club('7i','7 iron',0,.7,.7,9)],insight:'This pattern finishes right of its aim line. A leftward aim brings the actual finishes back toward the flag, and away from the coast.',success:'You adapted to the opposite shot shape.',alternative:'A leftward aim brings this rightward pattern back toward the pin.'})
+ ]},
+ {id:'landing',number:'03',name:'The landing area',teaser:'A shorter club is only part of the safety calculation.',cue:'Choose the landing area before you choose the club.',
+ cases:[
+  hole('landing-first',{title:'Which landing area gives you room?',brief:'Lay-up from 260 m. Your task is to finish on fairway. Bunkers pinch the shorter landing area; the longer landing area is open. Compare each club’s width as well as its carry.',start:{x:-12,z:260},objective:'fairway',initialAim:-10,clubs:[club('5i','5 iron',100,.58,.65),club('5w','5 wood',65,1.05,.9)],bunkers:pinch(100),insight:'The 5 wood scatters more widely, but its landing area is wider too. The shorter, tighter pattern still has to fit between those bunkers.',success:'You matched the shot window to the available space.',alternative:'The longer landing area gives the wider pattern more room.'}),
+  hole('landing-transfer',{title:'The bottleneck has moved.',brief:'The longer landing area is now pinched by bunkers. The shorter area is open. Same clubs and same shot patterns; choose the area that fits.',start:{x:-12,z:260},objective:'fairway',initialAim:-10,clubs:[club('5i','5 iron',100,.58,.65),club('5w','5 wood',65,1.05,.9)],bunkers:pinch(65),insight:'Now the 5 iron’s tighter pattern fits the open fairway. The useful choice changed when the landing areas changed.',success:'Your plan fits the new landing window.',alternative:'The shorter landing area now gives this pattern clear fairway.'})
+ ]},
+ {id:'next-shot',number:'04',name:'The next shot',teaser:'A good finish can leave an awkward beginning.',cue:'Choose where the next shot begins.',
+ cases:[
+  hole('next-first',{title:'What will you leave yourself?',brief:'A two-shot practice game: first lay up, then play a straight ground-running approach. A route through the marked tree patch is blocked. Find fairway with an open route to the flag.',objective:'route',start:{x:-12,z:205},initialAim:-10,pin:{x:-3,z:0},clubs:[club('6i','6 iron',70,.65,.6)],trees:[{x:-11,z:30,rx:6,rz:8}],insight:'A finish on fairway is only half this task. The right side opens the straight running route around the tree patch. This is a constrained practice game, not advice to run every approach.',success:'You made room for the next shot.',alternative:'The right-hand fairway opens more running routes around this tree patch.'}),
+  hole('next-transfer',{title:'Find the route again.',brief:'Same two-shot game. The tree patch is now on the right and the flag is on the left. Finish on fairway with a clear straight running route.',objective:'route',start:{x:-12,z:205},initialAim:-10,pin:{x:-8,z:0},clubs:[club('6i','6 iron',70,.65,.6)],trees:[{x:0,z:30,rx:6,rz:8}],insight:'The left side now opens the route. The cue is to look one shot ahead, not to keep choosing the same side.',success:'You found the new route to the flag.',alternative:'A leftward finish leaves more clear running routes in this setup.'})
+ ]},
+ {id:'pin',number:'05',name:'The invitation',teaser:'Some flags invite you closer. Some ask for restraint.',cue:'Protect the costly miss. Then use the opportunity.',
+ cases:[
+  hole('pin-first',{title:'How much of this flag would you take?',brief:'The pin sits near the coast. This club reaches the green. Set an aim line that balances proximity with room for the whole pattern.',pin:{x:11,z:-3},clubs:[club('7i','7 iron',0,1,1)],insight:'Aiming at this flag puts several ordinary finishes in the water. Moving left keeps more of the pattern on the green, even though the average ball finishes farther from the pin.',success:'You gave the costly miss some room.',alternative:'A little more room left of the pin protects the right-hand misses.'}),
+  hole('pin-transfer',{title:'The flag is offering something different.',brief:'The flag has moved to the open left half. The club, water and shot pattern are unchanged. Decide whether the previous aim still serves you.',pin:{x:-9,z:0},clubs:[club('7i','7 iron',0,1,1)],insight:'The pattern can now sit closer to the pin without reaching water. Safety depends on the setup; it is not a permanent spot in the middle.',success:'You used the opportunity when the pin moved.',alternative:'A target closer to this open pin improves proximity without adding water finishes.'})
+ ]},
+ {id:'last-ball',number:'06',name:'The last ball',teaser:'A bad result. A good result. Two tempting conclusions.',cue:'Judge the plan by its pattern, not the last ball.',
+ cases:[
+  hole('outcome-first',{title:'That ball went in the water.',brief:'The last shot was the far-right outlier marked in the pattern below. The starting plan aimed near the centre. Keep it or change it after seeing all 12 finishes.',pin:{x:-3,z:0},clubs:[club('7i','7 iron',0,.8,.8)],outlier:{index:2,x:55,z:1},shotIndex:2,review:{club:'7i',aim:-6},insight:'The extreme right outlier reaches water from every available aim line. Moving the other eleven balls away from a useful target does not fix that miss. One bad finish is not enough to reject the plan.',success:'You protected the useful part of the pattern.',alternative:'The centre keeps the other eleven finishes useful; the outlier remains beyond every available aim line.'}),
+  hole('outcome-transfer',{title:'That ball finished close.',brief:'The last shot finished close to this flag. The starting plan aimed near it. Keep it or change it after inspecting the full pattern; the highlighted dot is only one finish.',pin:{x:11,z:0},clubs:[club('7i','7 iron',0,1,1)],shotIndex:10,review:{club:'7i',aim:11},insight:'The close ball hid a plan that sends several ordinary finishes into water. This time a changed aim improves the whole pattern. A good result does not certify a good plan.',success:'You challenged the plan after a flattering result.',alternative:'Moving left protects ordinary misses even though the last ball looked good.'})
+ ]}
+];
+export const CASES=LESSONS.flatMap(l=>l.cases);
+export const APPROVED_SCENARIOS=Object.freeze(LESSONS.map(l=>l.id));
