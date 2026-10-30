@@ -176,7 +176,7 @@ void main(){vec2 p=vWorld.xz;float bank=18.+2.2*sin((p.y+8.)/22.);float d=max(0.
   }
  }
  pick(e){
-  if(this.mode!=='decision')return;const r=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);this.raycaster.setFromCamera(this.pointer,this.camera);
+  if(!['decision','review'].includes(this.mode))return;const r=this.renderer.domElement.getBoundingClientRect();this.pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);this.raycaster.setFromCamera(this.pointer,this.camera);
   const hit=this.raycaster.intersectObject(this.terrain)[0];if(hit)this.onSelect?.(Math.max(AIM_MIN,Math.min(AIM_MAX,Math.round(hit.point.x))));
  }
  clearPattern(){this.clearGroup(this.patternGroup);this.dots=[];if(this.tracer){this.scene.remove(this.tracer);this.tracer.geometry.dispose();this.tracer.material.dispose();this.tracer=null;}}

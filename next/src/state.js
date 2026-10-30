@@ -6,7 +6,7 @@ export function readState(storage){
  try{
   const x=JSON.parse((storage??globalThis.localStorage).getItem(KEY));if(x?.version!==VERSION)return freshState();
   const firstAttempts={},completed={};
-  for(const c of CASES){const a=x.firstAttempts?.[c.id];if(a&&validPlan(c,a.plan)&&typeof a.at==='string')firstAttempts[c.id]={plan:{club:a.plan.club,aim:a.plan.aim},at:a.at,strong:evaluate(c,a.plan).strong,confidence:a.confidence==='sure'?'sure':'exploring',action:a.action==='keep'?'keep':'adjust'};}
+  for(const c of CASES){const a=x.firstAttempts?.[c.id];if(a&&validPlan(c,a.plan)&&typeof a.at==='string')firstAttempts[c.id]={plan:{club:a.plan.club,aim:a.plan.aim},at:a.at,strong:evaluate(c,a.plan).strong,confidence:['sure','exploring','not-asked'].includes(a.confidence)?a.confidence:'exploring',action:a.action==='keep'?'keep':'adjust'};}
   for(const l of LESSONS)if(typeof x.completed?.[l.id]==='string'&&l.cases.every(c=>firstAttempts[c.id]))completed[l.id]=x.completed[l.id];
   return {...freshState(),firstAttempts,completed,cues:Array.isArray(x.cues)?[...new Set(x.cues.filter(id=>LESSONS.some(l=>l.id===id)))]:[],events:Array.isArray(x.events)?x.events.filter(e=>e&&typeof e==='object'&&typeof e.type==='string').slice(-500):[],sound:x.sound===true};
  }catch{return freshState();}

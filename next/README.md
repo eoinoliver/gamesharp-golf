@@ -4,11 +4,11 @@ A clean, isolated Golf prototype. `next/src` is the runtime; Vite builds only th
 
 ## Learning loop
 
-Six selectable reads, each with an initial decision and a changed setup: distance, shot shape, landing area, next-shot route, pin position, and judging a plan after one flattering or poor result. Players choose a club where relevant and move an aim line sideways. Club choice determines depth. The example pattern is shown before commitment. Reveal and comparison reuse the same twelve latent errors; they never re-roll a favourable outcome for the reference plan.
+Six selectable reads, each with an initial decision and a changed setup: distance, shot shape, landing area, next-shot route, pin position, and judging a plan after one flattering or poor result. Players read a short situation above the course, then choose a lettered answer below it. Each answer sets a complete club-and-aim plan, previews its target, and requires an explicit Play action. Nothing is preselected. Two cards cover genuine two-way choices; four cover different target positions. Free aiming and club controls remain under “Make your own plan”. Club choice determines depth. The example pattern is shown before commitment. Reveal and comparison reuse the same twelve latent errors; they never re-roll a favourable outcome for the reference plan.
 
 Question 2 begins with a separate setup preview: matching overhead maps, the facts that change, and the facts that stay the same. The learner explicitly starts the next question, and its number and setup label remain visible beside the course. `setup.js` owns these factual comparisons; its maps use the same geometry as play. This orientation step does not recommend a club or aim and does not change practice scoring or stored first attempts.
 
-`scenario.js` is the explicit catalogue; `model.js` owns geometry, outcomes, practice scoring and the reference-plan search. `scene.js` renders that geometry. `main.js` owns the browser flow and simple SVG fallback. `state.js` preserves first attempts separately from practice in `gamesharp-golf-next-v2`. No previous Golf scores or v1 pilot results are imported.
+`choices.js` defines the twelve direct questions, complete answer plans and evidence summaries; `scenario.js` is the explicit catalogue; `model.js` owns geometry, outcomes, practice scoring and the reference-plan search. `scene.js` renders that geometry. `main.js` owns the browser flow and simple SVG fallback. `state.js` preserves first attempts separately from practice in `gamesharp-golf-next-v2`. No previous Golf scores or v1 pilot results are imported.
 
 ## Model boundaries
 
@@ -18,7 +18,7 @@ Practice points are visible before play. Approach: green 3, plus 2 if within 8 m
 
 ## Checks and limits
 
-`npm test` checks all twelve cases, accepted aim ranges, reversed useful choices, invariant samples, hazard geometry, outcome-bias examples, first-attempt preservation and corrupt/unavailable storage. `npm run build` also checks the publish boundary: only the app HTML, icon and hashed JS/CSS may ship.
+`npm test` checks card reachability, meaningful alternatives, changed accepted answers, flag-relative labels, evidence consistency, all twelve cases, accepted aim ranges, reversed useful choices, invariant samples, hazard geometry, outcome-bias examples, first-attempt preservation and corrupt/unavailable storage. `npm run build` also checks the publish boundary: only the app HTML, icon and hashed JS/CSS may ship.
 
 Browser QA must cover desktop and phone width, keyboard controls, the full two-decision loop, reduced motion, local persistence, replay, and SVG fallback. A browser viewport test is not a physical-device test. Neither passing tests nor a strong result in two authored decisions establishes learning transfer, retention or demand. Coach review and tests with golfers are the next validation steps.
 
