@@ -46,3 +46,14 @@ export const LESSONS = [
 ];
 export const CASES=LESSONS.flatMap(l=>l.cases);
 export const APPROVED_SCENARIOS=Object.freeze(LESSONS.map(l=>l.id));
+
+// Separate illustrative shot lesson; not a measured swing or proficiency score.
+export const SHOT_LAB_LESSON = Object.freeze({
+ id:'face-path', version:1, title:'The face. The path. The flight.',
+ assumptions:'Right-handed iron · Centre strike · No wind',
+ cue:'Read the face against the path—not just against the target.',
+ cases:Object.freeze([
+  Object.freeze({id:'face-path-first',label:'A surprising curve',face:8,path:18,question:'Where will this ball go?',situation:'The face points right of the target. The club travels even farther right.',correct:'left',explanation:'The face points right of the target, but left of the path. With a centre strike, the ball starts right and curves left.'}),
+  Object.freeze({id:'face-path-transfer',label:'Same face. A new path.',face:8,path:-10,question:'And now—which way will it curve?',situation:'The face still points right of the target. This time, the club travels left.',correct:'right',explanation:'The face is now right of the path. With a centre strike, the ball starts right and curves farther right.'}),
+ ]),
+});
