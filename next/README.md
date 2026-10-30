@@ -6,6 +6,8 @@ A clean, isolated Golf prototype. `next/src` is the runtime; Vite builds only th
 
 Six selectable reads, each with an initial decision and a changed setup: distance, shot shape, landing area, next-shot route, pin position, and judging a plan after one flattering or poor result. Players choose a club where relevant and move an aim line sideways. Club choice determines depth. The example pattern is shown before commitment. Reveal and comparison reuse the same twelve latent errors; they never re-roll a favourable outcome for the reference plan.
 
+Question 2 begins with a separate setup preview: matching overhead maps, the facts that change, and the facts that stay the same. The learner explicitly starts the next question, and its number and setup label remain visible beside the course. `setup.js` owns these factual comparisons; its maps use the same geometry as play. This orientation step does not recommend a club or aim and does not change practice scoring or stored first attempts.
+
 `scenario.js` is the explicit catalogue; `model.js` owns geometry, outcomes, practice scoring and the reference-plan search. `scene.js` renders that geometry. `main.js` owns the browser flow and simple SVG fallback. `state.js` preserves first attempts separately from practice in `gamesharp-golf-next-v2`. No previous Golf scores or v1 pilot results are imported.
 
 ## Model boundaries
