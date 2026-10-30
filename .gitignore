@@ -6,3 +6,8 @@ L and B hero.png
 Laytown and Bettystown.png
 Play a Course Hero.png
 Play a Hole Hero.png
+
+# Clean Golf application
+node_modules/
+dist/
+.vercel/
