@@ -38,15 +38,29 @@ the address pose to a stable local frame. It exports 448 frames, 31 joints at
 120 Hz. The browser displays frames 135–447 with interpolation, including an
 authored impact marker at frame 334. These markers are editorial, not detected
 club/ball contact from the capture. This is joint-position processing in Blender,
-not a GLB character export or a validated biomechanical reconstruction.
+not a validated biomechanical reconstruction.
 
 ## Authored elements and limits
 
-- The visible character, clothing, joint volumes, grip and club were authored in
-  Three.js. The capture contains no club or complete finger grip.
-- Club direction is keyed. A small authored contact window follows each lesson's
-  specified path; hand placement adapts to keep contact with the shaft. The body
-  reference is shared between examples. Do not teach the character's technique.
+- The connected character is a tailored derivative of Quaternius Universal Base
+  Characters Standard (CC0): https://quaternius.com/packs/universalbasecharacters.html.
+  The original license is retained in `assets/QUATERNIUS-LICENSE.txt`.
+- `tools/build-golf-player.py` imports the male base in Blender, makes clothing,
+  poses real finger bones around a diagonal grip cylinder, bakes the hand pose
+  into the bind skeleton, and exports a self-contained GLB. No legacy app assets
+  or unselected files from the source pack are shipped.
+- The iron has one rigid transform for the handle, shaft, hosel and lofted head.
+  Its orientation uses a continuous transported frame, corrected to the lesson's
+  face bearing at impact. The club motion is authored; it is not measured mocap.
+- Both hands use fixed anchors on that rigid grip. Two-bone arm IK maintains
+  30 cm upper-arm and forearm lengths; the common grip is projected into the
+  arms' reach instead of stretching an arm. These are character proportions,
+  not inferred measurements of the captured athlete.
+- A small authored contact window follows each lesson's path. At impact the
+  authored sweet spot on the lofted face is tangent to the ball, and its horizontal normal matches
+  the displayed face angle. The body reference remains shared between examples.
+- Player, Grip and Club cameras inspect the same world geometry and timeline.
+  Do not teach the character's grip or technique from this study.
 - Face and path angles are deliberately exaggerated examples. They are never
   described as measurements of the capture or of a learner.
 - The flight is an illustrative curve. Its face/path launch weighting, height,
@@ -65,3 +79,28 @@ Before calling this instruction-ready, a qualified golf coach should review the
 lesson's conditions, explanations, illustrative delivery and rendered contact.
 Before investing in more shots, test whether golfers can explain and transfer
 the concept after using this one. Browser QA alone establishes neither result.
+
+## Character rebuild and verification
+
+Download the free Standard pack from the official Quaternius page, extract it, then:
+
+```sh
+blender --background --python tools/build-golf-player.py -- \
+  --source-dir '/path/to/Universal Base Characters[Standard]' \
+  --output next/src/motion/assets/golf-player.glb \
+  --blend-output /path/to/golf-player.blend
+```
+
+With the dev server running and Playwright installed, run:
+
+```sh
+node tools/verify-shot-rig.mjs
+```
+
+`PLAYWRIGHT_MODULE` can point to an existing Playwright module; `RIG_URL` can
+select a different local dev server. The browser test checks all 313 frames of
+both deliveries: arm lengths, finger joints on the grip cylinder, continuous
+club orientation, centred impact and agreement with the lesson's face bearing.
+The inspection hook is guarded by `import.meta.env.DEV` and omitted from the
+production bundle. Numerical checks supplement visual inspection; they do not
+validate golf technique or learning transfer.

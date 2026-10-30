@@ -1,11 +1,12 @@
 import './shot-lab.css';
 import {ShotLabScene} from './shot-lab-scene.js';
+import {loadGolfer} from './motion/golfer.js';
 import {LESSON,duration,impactTime,topTime,directionDiagram,readRecord,commitAnswer,saveRecord} from './shot-lab-model.js';
 
 const $=s=>document.querySelector(s),media=matchMedia('(prefers-reduced-motion: reduce)');
 let storage;try{storage=localStorage;}catch{/* The lesson also works without storage. */}
 const record=readRecord(storage),home=new URL(location.href);home.searchParams.delete('lesson');home.searchParams.delete('renderer');
-let index=0,choice=null,answer=null,scene=null,reduced=media.matches,fallback=false,phase='question',shownCase=0,saveFailed=false;
+let index=0,choice=null,answer=null,scene=null,reduced=media.matches,fallback=false,phase='question',shownCase=0,saveFailed=false,loading=true;
 const current=()=>LESSON.cases[index];
 document.title='The face. The path. The flight. · GameSharp Golf';
 document.querySelector('meta[name="theme-color"]').content='#0c1a13';
@@ -16,6 +17,7 @@ $('#app').innerHTML=`
  <section class="lab-viewer" aria-label="Interactive shot illustration">
   <div class="view-tabs" aria-label="Camera views"><button data-view="swing" aria-pressed="true">1 <span>Swing</span></button><button data-view="impact" aria-pressed="false">2 <span>Impact</span></button><button data-view="flight" aria-pressed="false" disabled>3 <span>Flight</span></button></div>
   <div id="shot-stage" role="img" aria-label="A right-handed golfer on a coastal practice range. Use Watch to impact, or choose Impact to inspect the delivery."></div>
+  <div class="detail-tools" role="group" aria-label="Inspect the 3D model"><button data-detail="player" aria-pressed="true">Player</button><button data-detail="grip" aria-pressed="false">Grip</button><button data-detail="club" aria-pressed="false">Club</button></div>
   <span class="scene-badge" id="scene-badge">THE SHOT LAB</span>
   <div id="diagram-key" class="diagram-key" hidden><span class="face-key">Face = where it points</span><span class="path-key">Path = where it travels</span></div>
   <div class="transport"><button id="play" aria-label="Watch swing to impact">▶ <span>Watch to impact</span></button><label class="scrubber"><span class="sr-only">Swing position</span><input id="scrub" type="range" min="0" max="${impactTime}" step=".005" value="0" aria-valuetext="Address"></label><span id="phase-label">Address</span></div>
@@ -40,17 +42,19 @@ function clock(time){
 }
 function transport(){
  const playing=scene?.playing;
- $('#play').disabled=reduced||fallback||phase==='setup'||phase==='complete';
+ document.querySelectorAll('[data-detail]').forEach(b=>b.disabled=loading||fallback);
+ $('#play').disabled=loading||reduced||fallback||phase==='setup'||phase==='complete';
  $('#play').innerHTML=playing?'Ⅱ <span>Pause</span>':`▶ <span>${answer?'Replay the shot':'Watch to impact'}</span>`;
  $('#play').setAttribute('aria-label',playing?'Pause swing':answer?'Replay the shot':'Watch swing to impact');
- $('#scrub').disabled=fallback||phase==='setup'||phase==='complete';
+ $('#scrub').disabled=loading||fallback||phase==='setup'||phase==='complete';
  $('#scrub').max=answer?duration+1.8:impactTime;
  $('#motion').textContent=`Motion ${reduced?'reduced':'on'}`;$('#motion').setAttribute('aria-pressed',String(reduced));
 }
 function updateView(view){
+ $('.detail-tools').hidden=view!=='swing'||fallback;
  if(view==='flight'&&!answer)return;
  scene?.pause();scene?.setView(view);
- for(const button of document.querySelectorAll('[data-view]')){button.setAttribute('aria-pressed',String(button.dataset.view===view));button.disabled=(button.dataset.view==='flight'&&!answer)||phase==='setup'||phase==='complete'||(fallback&&button.dataset.view==='swing');}
+ for(const button of document.querySelectorAll('[data-view]')){button.setAttribute('aria-pressed',String(button.dataset.view===view));button.disabled=loading||(button.dataset.view==='flight'&&!answer)||phase==='setup'||phase==='complete'||(fallback&&button.dataset.view==='swing');}
  $('#diagram-key').hidden=view!=='impact';
  $('#scene-badge').textContent=fallback?'DIAGRAM VIEW':view==='impact'?'AT IMPACT':view==='flight'?'ILLUSTRATIVE FLIGHT':'THE SHOT LAB';
  const c=LESSON.cases[shownCase];
@@ -59,9 +63,10 @@ function updateView(view){
  transport();
 }
 function useDiagram(){
- scene?.destroy();scene=null;fallback=true;$('#shot-stage').classList.add('diagram-stage');
+ scene?.destroy();scene=null;fallback=true;loading=false;$('#shot-stage').classList.add('diagram-stage');
  updateView(answer?'flight':'impact');
  for(const button of document.querySelectorAll('[data-time]'))button.disabled=true;
+ document.querySelectorAll('[data-choice]').forEach(b=>b.disabled=false);
  announce('Diagram view is active. You can complete both questions without 3D.');
 }
 function renderQuestion({focus=false}={}){
@@ -69,9 +74,9 @@ function renderQuestion({focus=false}={}){
  $('#case-label').textContent=c.label;$('#progress').textContent=`${index+1} of 2`;
  $('#question').textContent=c.question;$('#situation').textContent=c.situation;
  $('#decision').innerHTML=`<h2>What’s your prediction?</h2><p class="decision-help">Both start right. Choose what happens next.</p><div class="answer-grid"><button class="answer-card" data-choice="left" aria-pressed="false"><span class="answer-letter">A</span><span>Starts right.<br><strong>Curves left.</strong></span><svg viewBox="0 0 60 64" aria-hidden="true"><path d="M25 58Q54 24 17 7M17 7l5 14M17 7l14 1"/></svg></button><button class="answer-card" data-choice="right" aria-pressed="false"><span class="answer-letter">B</span><span>Starts right.<br><strong>Curves right.</strong></span><svg viewBox="0 0 60 64" aria-hidden="true"><path d="M14 58Q17 28 49 9M49 9l-15 1M49 9l-2 15"/></svg></button></div><button class="lab-primary" id="commit" disabled>Choose A or B to see the shot <span>↗</span></button><p class="quiet-note">${record.first[c.id]?'Practice round. Your first prediction is kept.':'Make a prediction, then see why.'}</p>`;
- document.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('[data-choice]').forEach(b=>{b.disabled=loading;b.onclick=()=>{
   choice=b.dataset.choice;document.querySelectorAll('[data-choice]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('#commit').disabled=false;$('#commit').innerHTML='See the shot <span>↗</span>';
- });
+ };});
  $('#commit').onclick=submit;
  scene?.setCase(c);scene?.setView('swing');clock(0);updateView(fallback?'impact':'swing');
  for(const b of document.querySelectorAll('[data-time]'))b.disabled=fallback;
@@ -84,7 +89,7 @@ function submit(){
  if(scene&&!reduced){scene.play({full:true});updateViewButtons('swing');transport();}else updateView('flight');
  announce(`${answer.correct?'Correct.':'A different result.'} ${current().explanation}`);
 }
-function updateViewButtons(view){for(const b of document.querySelectorAll('[data-view]')){b.setAttribute('aria-pressed',String(b.dataset.view===view));b.disabled=(b.dataset.view==='flight'&&!answer)||(fallback&&b.dataset.view==='swing');}$('#diagram-key').hidden=view!=='impact';}
+function updateViewButtons(view){$('.detail-tools').hidden=view!=='swing'||fallback;for(const b of document.querySelectorAll('[data-view]')){b.setAttribute('aria-pressed',String(b.dataset.view===view));b.disabled=loading||(b.dataset.view==='flight'&&!answer)||(fallback&&b.dataset.view==='swing');}$('#diagram-key').hidden=view!=='impact';}
 function renderResult(){
  const c=current();
  $('#decision').innerHTML=`<div class="result-heading"><span class="result-mark">${answer.correct?'✓':'↗'}</span><div><span class="lab-meta">${answer.first?'YOUR FIRST PREDICTION':'PRACTICE PREDICTION'}</span><h2>${answer.correct?'You read it.':`It curves ${c.correct}. Here’s why.`}</h2></div></div><p class="result-explanation">${c.explanation}</p><div class="takeaway"><span>THE USEFUL PART</span><p>Start: face against target.<br><strong>Curve: face against path.</strong></p></div><button class="lab-secondary" id="inspect-impact">Look closer at impact <span>⌕</span></button>${index===1?'<div class="compare"><span>Compare the two deliveries</span><div><button data-compare="0" aria-pressed="false">First path · right</button><button data-compare="1" aria-pressed="true">New path · left</button></div><p id="compare-copy">The face stayed the same. The curve changed.</p></div>':''}<button class="lab-primary" id="next">${index===0?'Now change one thing':'Keep the useful part'} <span>→</span></button><p class="quiet-note">${saveFailed?'Prediction kept for this visit.':answer.first?'First prediction saved on this browser.':'Practice recorded separately from your first prediction.'}</p>`;
@@ -119,10 +124,11 @@ function complete(){
  event('lesson_completed');$('#question').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});
 }
 function details(){
- scene?.pause();$('#dialog-content').innerHTML=`<span class="lab-meta">A MOTION STUDY</span><h2>The body is captured.<br>The delivery is illustrated.</h2><p>This prototype tests whether seeing the swing, impact and flight helps a golfer explain a shot—and apply the idea when the path changes.</p><h3>What you are seeing</h3><p>The body movement comes from <a href="https://mocap.cs.cmu.edu/search.php?subjectnumber=64" target="_blank" rel="noopener">Carnegie Mellon’s motion-capture database, subject 64, take 01</a>, processed with Blender. The character, hand placement and club animation are authored. The source did not capture a club or a complete finger grip.</p><p>The impact directions are deliberately exaggerated. The flight is an illustrative curve, not a measured ball flight or a calibrated simulator. The body reference is shared between examples; the authored club delivery and flight change.</p><h3>Conditions matter</h3><p>This lesson assumes a right-handed iron shot, centre contact and no wind. It does not model off-centre contact, gear effect, turf, lie or individual technique. Coaching review is still pending. This is not an analysis of your swing.</p><h3>Data on this browser</h3><p>Your first predictions, later practice and saved cue stay on this browser. They are separate from Six Reads progress. No account, video upload or server analytics are involved.</p><p class="attribution">The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.</p><button class="lab-secondary" id="use-diagram">Use the lightweight diagram view</button>`;
+ scene?.pause();$('#dialog-content').innerHTML=`<span class="lab-meta">A MOTION STUDY</span><h2>The body is captured.<br>The delivery is illustrated.</h2><p>This prototype tests whether seeing the swing, impact and flight helps a golfer explain a shot—and apply the idea when the path changes.</p><h3>What you are seeing</h3><p>The body movement comes from <a href="https://mocap.cs.cmu.edu/search.php?subjectnumber=64" target="_blank" rel="noopener">Carnegie Mellon’s motion-capture database, subject 64, take 01</a>, processed with Blender. The character uses a tailored <a href="https://quaternius.com/packs/universalbasecharacters.html" target="_blank" rel="noopener">Quaternius base character (CC0)</a>, prepared in Blender. Finger poses, arm retargeting and the rigid iron are authored for this lesson. The source did not capture a club or a complete finger grip. The close-ups show an authored grip, not a measured or coach-approved grip lesson.</p><p>The impact directions are deliberately exaggerated. The flight is an illustrative curve, not a measured ball flight or a calibrated simulator. The body reference is shared between examples; the authored club delivery and flight change.</p><h3>Conditions matter</h3><p>This lesson assumes a right-handed iron shot, centre contact and no wind. It does not model off-centre contact, gear effect, turf, lie or individual technique. Coaching review is still pending. This is not an analysis of your swing.</p><h3>Data on this browser</h3><p>Your first predictions, later practice and saved cue stay on this browser. They are separate from Six Reads progress. No account, video upload or server analytics are involved.</p><p class="attribution">The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.</p><button class="lab-secondary" id="use-diagram">Use the lightweight diagram view</button>`;
  $('#use-diagram').onclick=()=>{$('#lab-dialog').close();useDiagram();};$('#lab-dialog').showModal();
 }
 $('#about').onclick=details;$('#sources').onclick=details;$('#close-dialog').onclick=()=>$('#lab-dialog').close();
+document.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>{scene?.setDetail(b.dataset.detail);document.querySelectorAll('[data-detail]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));announce(b.dataset.detail==='player'?'Full player view.':b.dataset.detail==='grip'?'Close-up of the hands and grip.':'Close-up of the iron head.');});
 $('#play').onclick=()=>{if(!scene)return;if(scene.playing)scene.pause();else{scene.play({full:!!answer});updateViewButtons('swing');$('#scene-badge').textContent='THE SHOT LAB';}transport();};
 $('#scrub').oninput=e=>{scene?.setView('swing');scene?.seek(Number(e.target.value));updateViewButtons('swing');transport();};
 document.querySelectorAll('[data-time]').forEach(b=>b.onclick=()=>{const t=Number(b.dataset.time);updateView(t===impactTime?'impact':'swing');scene?.seek(t);clock(t);});
@@ -133,9 +139,14 @@ renderQuestion();
 try{
  if(new URLSearchParams(location.search).get('renderer')==='diagram')useDiagram();
  else{
-  scene=new ShotLabScene($('#shot-stage'),{reduced,onTime:clock,onStop:({finished})=>{transport();if(finished&&scene?.time>=impactTime-.001&&!scene.playing&&phase!=='setup'&&phase!=='complete')updateView(answer&&scene.time>=duration?'flight':'impact');},onFailure:()=>useDiagram()});
-  scene.setCase(current());
+  $('#shot-stage').innerHTML='<div class=loading-model><span>Preparing the swing…</span><button id=skip-model>Use diagram view</button></div>';$('#skip-model').onclick=()=>useDiagram();
+  const asset=await loadGolfer();
+  if(fallback){asset.scene.traverse(o=>{o.geometry?.dispose();if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material]){m.map?.dispose();m.dispose();}});}
+  else {$('#shot-stage').replaceChildren();
+  scene=new ShotLabScene($('#shot-stage'),{asset,reduced,onTime:clock,onStop:({finished})=>{transport();if(finished&&scene?.time>=impactTime-.001&&!scene.playing&&phase!=='setup'&&phase!=='complete')updateView(answer&&scene.time>=duration?'flight':'impact');},onFailure:()=>useDiagram()});
+  scene.setCase(current());if(import.meta.env.DEV)window.__labScene=scene;
+  }
  }
 }catch{useDiagram();}
-setMotion(reduced);event('lesson_started',{practice:!!record.first[LESSON.cases[0].id],renderer:fallback?'diagram':'3d'});
+loading=false;document.querySelectorAll('[data-choice]').forEach(b=>b.disabled=false);if(scene)updateView(scene.view);setMotion(reduced);event('lesson_started',{practice:!!record.first[LESSON.cases[0].id],renderer:fallback?'diagram':'3d'});
 window.addEventListener('pagehide',()=>scene?.pause());
