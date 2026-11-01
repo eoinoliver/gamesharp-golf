@@ -112,7 +112,7 @@ export class ShotmakerScene {
   const group=new T.Group();group.position.set(0,height(0,0)+.09,0);const pole=new T.Mesh(new T.CylinderGeometry(.045,.052,3.1,12),standard('#f4edda',.4));pole.position.y=1.55;pole.castShadow=true;group.add(pole);
   const hole=new T.Mesh(new T.CircleGeometry(.13,24),new T.MeshBasicMaterial({color:'#1b3023'}));hole.rotation.x=-Math.PI/2;hole.position.y=.015;group.add(hole);
   const geo=new T.PlaneGeometry(1.2,.65,16,6);geo.translate(.6,2.72,0);this.flag=new T.Mesh(geo,new T.MeshStandardMaterial({color:'#e9b956',roughness:.7,side:T.DoubleSide}));group.add(this.flag);this.scene.add(group);
-  const target=new T.Mesh(new T.RingGeometry(3.9,4.03,100),new T.MeshBasicMaterial({color:'#eee8bf',side:T.DoubleSide,transparent:true,opacity:.7,depthWrite:false}));target.rotation.x=-Math.PI/2;target.position.set(0,height(0,0)+.12,0);this.scene.add(target);
+  const target=new T.Mesh(new T.RingGeometry(3.9,4.03,100),new T.MeshBasicMaterial({color:'#eee8bf',side:T.DoubleSide,transparent:true,opacity:.7,depthWrite:false}));target.rotation.x=-Math.PI/2;target.position.set(0,height(0,0)+.12,0);this.scene.add(target);this.targetRing=target;
  }
  makeBall(){
   this.ball=new T.Mesh(new T.SphereGeometry(.19,24,16),standard('#fffef0',.32));this.ball.castShadow=true;this.scene.add(this.ball);this.ball.position.set(0,height(0,160)+.2,160);
@@ -123,14 +123,28 @@ export class ShotmakerScene {
  clearLines(){dispose(this.lines);this.lines.clear();this.trace=null;}
  point(face,path,u){const p=shotPoint(face,path,u);const ground=p.x>coast(p.z)?-2:height(p.x,p.z);return V(p.x,lerp(height(0,160),ground,u)+p.y+.22,p.z);}
  makeFlight(face,path,color,opacity=1){this.dirty=true;const points=Array.from({length:121},(_,i)=>this.point(face,path,i/120));const curve=new T.CatmullRomCurve3(points);const tube=new T.Mesh(new T.TubeGeometry(curve,120,.11,6,false),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false}));this.lines.add(tube);return tube;}
+ setChallenge(challenge){
+  if(this.gateGroup){dispose(this.gateGroup);this.scene.remove(this.gateGroup);this.gateGroup=null;}
+  this.challenge=challenge;this.gatePoint=null;this.targetRing.scale.setScalar((challenge?.radius??4)/4);this.targetRing.material.color.set('#edcf87');this.targetRing.material.opacity=challenge ? .9 : .7;
+  if(challenge?.gate){const [left,right]=challenge.gate,mid=(left+right)/2,y=this.point(0,0,.25).y,z=120;
+   this.gateGroup=new T.Group();this.scene.add(this.gateGroup);const color='#83c9be';
+   const frame=[V(left,y-3,z),V(left,y+3,z),V(right,y+3,z),V(right,y-3,z),V(left,y-3,z)];
+   for(let i=1;i<frame.length;i++){const delta=frame[i].clone().sub(frame[i-1]),mesh=new T.Mesh(new T.CylinderGeometry(.065,.065,delta.length(),8),new T.MeshBasicMaterial({color}));mesh.position.copy(frame[i]).add(frame[i-1]).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(V(0,1,0),delta.normalize());this.gateGroup.add(mesh);}
+   const pane=new T.Mesh(new T.PlaneGeometry(right-left,6),new T.MeshBasicMaterial({color,transparent:true,opacity:.13,side:T.DoubleSide,depthWrite:false}));pane.position.set(mid,y,z);this.gateGroup.add(pane);
+   this.gateGroup.add(this.makeLine([V(mid,height(mid,z)+.2,z),V(mid,y-3,z)],color,.35,true));this.gatePoint=V(mid,y+4,z);
+  }
+  if(challenge&&this.mode==='decision')this.updateCamera();this.dirty=true;
+ }
+ markChallenge(result){this.targetRing.material.color.set(result.checks[1].pass?'#83c9be':'#edcf87');this.dirty=true;}
  setMode(mode,instant=false){this.mode=mode;this.playing=false;this.targetLine.visible=mode!=='hero';this.isOverview=false;this.updateCamera(instant);}
  updateCamera(instant=false){
   this.dirty=true;
   const mobile=this.host.clientWidth<640;let p,l;
   if(this.isOverview){p=V(0,240,84);l=V(0,8,80);}
   else if(this.mode==='hero'){p=mobile?V(85,71,146):V(81,34,116);l=V(1,9,15);}
+  else if(this.mode==='decision'&&this.challenge?.gate){p=mobile?V(24,74,191):V(37,66,172);l=V(0,17,74);}
   else if(this.mode==='decision'){p=mobile?V(23,45,117):V(44,43,123);l=V(0,9,31);}
-  else {p=mobile?V(31,53,63):V(45,43,61);l=V(0,10,9);}
+  else {const x=this.ball?.position.x??0;p=mobile?V(x*.6+31,53,63):V(x*.6+45,43,61);l=V(x*.7,10,9);}
   this.destination.copy(p);this.lookDestination.copy(l);if(instant||this.reduced){this.camera.position.copy(p);this.look.copy(l);this.camera.lookAt(l);}
  }
  prepare(face,path=0){this.face=face;this.path=path;this.clearLines();this.ball.position.set(0,height(0,160)+.2,160);this.ball.visible=true;this.ripple.material.opacity=0;this.setMode('decision');}
@@ -158,7 +172,8 @@ export class ShotmakerScene {
   if(this.landedAt!==undefined&&!this.reduced){const t=this.clock-this.landedAt;this.ripple.scale.setScalar(1+t*3);this.ripple.material.opacity=Math.max(0,1-t/2.5);}
   const speed=this.reduced?1:1-Math.exp(-dt*3.6);this.camera.position.lerp(this.destination,speed);this.look.lerp(this.lookDestination,speed);this.camera.lookAt(this.look);
   this.ballShadow.visible=this.ball.visible&&this.ball.position.x<=coast(this.ball.position.z);this.ballShadow.position.set(this.ball.position.x,height(this.ball.position.x,this.ball.position.z)+.1,this.ball.position.z);
-  const pin=V(0,height(0,0)+3.5,0).project(this.camera),ball=this.ball.position.clone().project(this.camera);this.host.dispatchEvent(new CustomEvent('shotproject',{detail:{pin:{x:(pin.x*.5+.5)*this.host.clientWidth,y:(-.5*pin.y+.5)*this.host.clientHeight,visible:Math.abs(pin.x)<.9&&Math.abs(pin.y)<.9},ball:{x:(ball.x*.5+.5)*this.host.clientWidth,y:(-.5*ball.y+.5)*this.host.clientHeight}}}));
+  const project=point=>{const p=point.clone().project(this.camera);return {x:(p.x*.5+.5)*this.host.clientWidth,y:(-.5*p.y+.5)*this.host.clientHeight,visible:Math.abs(p.x)<.9&&Math.abs(p.y)<.78&&p.z<1};};
+  this.host.dispatchEvent(new CustomEvent('shotproject',{detail:{pin:project(V(0,height(0,0)+3.5,0)),ball:project(this.ball.position),gate:this.gatePoint?project(this.gatePoint):null,target:this.challenge?project(V(0,height(0,0)+4,0)):null}}));
   this.renderer.render(this.scene,this.camera);this.dirty=false;
  }
  destroy(){this.live=false;cancelAnimationFrame(this.frame);this.observer.disconnect();this.renderer.domElement.removeEventListener('webglcontextlost',this.contextLost);dispose(this.scene);this.skyTexture?.dispose();this.renderer.dispose();this.renderer.domElement.remove();}

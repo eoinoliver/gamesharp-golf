@@ -4,7 +4,7 @@ A clean, isolated Golf prototype. `next/src` is the runtime; Vite builds only th
 
 ## Shotmaker — current entry experience
 
-The default route is now Shotmaker: a fixed fictional coastal par 3, three face/path decisions, an authored close-up of the strike followed by the flight, a controlled comparison and a free-play range. The mobile brief is above the course; each lettered answer requires a separate Hit action. The draw, straight push and mirrored fade require different answers. The key mechanism is face relative to path, not simply aim relative to the flag.
+The default route is Shotmaker: a fixed fictional coastal par 3, three face/path decisions, an authored close-up of the strike followed by the flight, a controlled comparison, the Shotmaker Nine progression, and a free-play range. The mobile brief is above the course; each lettered answer requires a separate Hit action. The draw, straight push and mirrored fade require different answers. The key mechanism is face relative to path, not simply aim relative to the flag.
 
 `SHOTMAKER` in `scenario.js` is the explicit manifest. `shotmaker-model.js` defines the deterministic illustrative flights and versioned local state. `shotmaker-scene.js` owns the single permanent course; `shotmaker-impact.js` shows a rigid iron moving through contact. This is an authored impact mechanism, not a measured full-body swing, a grip reconstruction or a calibrated launch monitor. Carry stays at 160 m; curvature is exaggerated for readability. Coaching, physical-device performance, learning transfer and demand have not been validated.
 
@@ -14,7 +14,18 @@ All new fonts and environment images are bundled locally. See `shotmaker-assets/
 
 `node tools/export-shotmaker.mjs /absolute/path/Shotmaker.html https://preview-host/` creates a portable file with the current Shotmaker code, textures and fonts embedded. Only the optional practice-library link and shared-shot URL leave that file.
 
-## Learning loop
+## The Shotmaker Nine
+
+The three introductory reads now lead into three construction challenges, then three single-attempt transfer challenges. In the workshop, a fixed face, a fixed path, and finally two adjustable directions progressively remove scaffolding. A teal window marks the ball’s lateral position 40 m into the flight; the gold circle marks the finishing tolerance. All challenges use the exact same flight equation, coordinates, fixed course and condition set. There is no flight forecast before commitment. Slider and one-degree buttons have explicit direction labels; the mobile brief remains above the scene. Feedback separately evaluates start/shape and finish, with an optional cue or worked route in the workshop.
+
+`SHOTMAKER_NINE` in `scenario.js` owns authored constraints. `shotmaker-journey-model.js` judges them and owns the versioned `gamesharp-shotmaker-journey-v1` record. It derives success from validated settings rather than trusting persisted result flags. A workshop preserves its first attempt and first successful build through bounded practice history. Each final-three card records immediately on commitment, resumes after interruption, closes after three attempts, and preserves the first card through subsequent practice cards. Replaying a flight never records another attempt. Progress and prior reads remain local; no analytics, accounts or remote backend have been added.
+
+Completing the nine opens a daily shot on the home screen. Twenty-four authored constraint combinations rotate by the device’s local date, with the first daily attempt kept separate from practice. A shared `?mode=daily&day=YYYY-MM-DD` invitation is directly playable without completing the nine and preserves the requested date. These are repeating variations of the same face/path mechanism, not twenty-four different golf skills. Returning users resume unfinished cards or go directly to the daily shot. Field notes download as text. Shared result text always uses the saved first daily attempt.
+
+The Nine is a hypothesis for a useful return loop, not evidence of retention or on-course learning. First cards measure performance on these particular authored problems. No golf handicap or general proficiency is inferred. The mechanical motion remains an authored close-up; the full-body reconstruction is still experimental.
+
+## Earlier Six Reads library
+
 
 Six selectable reads, each with an initial decision and a changed setup: distance, shot shape, landing area, next-shot route, pin position, and judging a plan after one flattering or poor result. Players read a short situation above the course, then choose a lettered answer below it. Each answer sets a complete club-and-aim plan, previews its target, and requires an explicit Play action. Nothing is preselected. Two cards cover genuine two-way choices; four cover different target positions. Free aiming and club controls remain under “Make your own plan”. Club choice determines depth. The example pattern is shown before commitment. Reveal and comparison reuse the same twelve latent errors; they never re-roll a favourable outcome for the reference plan.
 
@@ -30,7 +41,7 @@ Practice points are visible before play. Approach: green 3, plus 2 if within 8 m
 
 ## Checks and limits
 
-`npm test` checks card reachability, meaningful alternatives, changed accepted answers, flag-relative labels, evidence consistency, all twelve cases, accepted aim ranges, reversed useful choices, invariant samples, hazard geometry, outcome-bias examples, first-attempt preservation and corrupt/unavailable storage. Shotmaker checks cover the three different relationships, the complete face/path control range, mirrored flights and first-read preservation. `npm run build` checks an explicit publish allowlist for app HTML, icon, hashed JS/CSS, the approved experimental player, three coastal textures and three font files.
+`npm test` checks card reachability, meaningful alternatives, changed accepted answers, flag-relative labels, evidence consistency, all twelve cases, accepted aim ranges, reversed useful choices, invariant samples, hazard geometry, outcome-bias examples, first-attempt preservation and corrupt/unavailable storage. Shotmaker checks cover the three different relationships, the complete face/path control range, mirrored flights and first-read preservation. Nine checks cover reachable targets, meaningful misses, changed transfer constraints, 365 daily dates, bounded-history preservation, interrupted cards, first-attempt separation, invalid state and blocked storage. `npm run build` checks an explicit publish allowlist for app HTML, icon, hashed JS/CSS, the approved experimental player, three coastal textures and three font files.
 
 Browser QA must cover desktop and phone width, keyboard controls, the full two-decision loop, reduced motion, local persistence, replay, and SVG fallback. A browser viewport test is not a physical-device test. Neither passing tests nor a strong result in two authored decisions establishes learning transfer, retention or demand. Coach review and tests with golfers are the next validation steps.
 

@@ -89,3 +89,22 @@ export const SHOTMAKER = Object.freeze({
    takeaway:'Open or closed only makes sense when you say “relative to what?”.',compare:-3}
  ]
 });
+
+// The Nine extends the same illustrative flight model. These are target
+// constraints, not prescriptions for the player's actual swing.
+export const SHOTMAKER_NINE = Object.freeze({
+ version:1,
+ workshop:[
+  {id:'build-draw',title:'Make the comeback.',brief:'The face is fixed 3° right. Set the club path to draw the ball back into the gold circle.',face:3,path:null,initial:[3,0],shape:'Draw',radius:4,
+   cue:'To draw it, the face must point left of the path. Move the path right of the face, then find how much brings it home.'},
+  {id:'build-fade',title:'Give it the other partner.',brief:'The path is fixed 6° left. This time, you control the face. Fade the ball into the gold circle.',face:null,path:-6,initial:[0,-6],shape:'Fade',radius:4,
+   cue:'A fade needs the face right of the path. It can still point left of the flag. Find that space between the two.'},
+  {id:'build-window',title:'Thread the window.',brief:'You control both directions. Pass through the teal window, then finish inside the gold circle. Set the start first; use the path to bring it back.',face:null,path:null,initial:[0,0],gate:[1.2,1.8],radius:4,
+   cue:'The face mostly sets the start. A path farther right makes the ball bend back left. Change one control at a time.'}
+ ],
+ pressure:[
+  {id:'card-right',title:'A different draw.',brief:'The path is fixed 5° right. Set the face to start right and draw back inside 3 metres. One shot goes on your card.',face:null,path:5,initial:[0,5],shape:'Draw',gate:[1.1,2.7],radius:3},
+  {id:'card-left',title:'Turn it around.',brief:'The face is fixed 2° left. Choose a path that starts left, then fades back inside 3 metres. One shot.',face:-2,path:null,initial:[-2,0],shape:'Fade',gate:[-2.7,-1.1],radius:3},
+  {id:'card-window',title:'The smallest window.',brief:'Both controls are yours. Pass through the smaller teal window, then finish inside 2 metres. Make this one count.',face:null,path:null,initial:[0,0],gate:[.55,1.1],radius:2}
+ ]
+});

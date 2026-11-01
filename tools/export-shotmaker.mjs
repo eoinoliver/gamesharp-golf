@@ -12,7 +12,7 @@ const result=await build({configFile:false,root:resolve('next'),logLevel:'warn',
   if(!id.endsWith('/shotmaker.js'))return null;
   return code.replaceAll('href="?view=library"',`href="${publicURL.href}?view=library"`)
    .replace('href="/" aria-label="GameSharp Golf home"',`href="./${basename(destination)}" aria-label="GameSharp Golf home"`)
-   .replace('const url=new URL(location.href);url.search=',`const url=new URL(${JSON.stringify(publicURL.href)});url.search=`);
+   .replaceAll('const url=new URL(location.href);url.search=',`const url=new URL(${JSON.stringify(publicURL.href)});url.search=`);
  }
 }],build:{write:false,minify:true,cssCodeSplit:false,lib:{entry:resolve('next/src/shotmaker.js'),name:'GameSharpShotmaker',formats:['iife']},rollupOptions:{output:{inlineDynamicImports:true}},chunkSizeWarningLimit:4000}});
 const files=(Array.isArray(result)?result:[result]).flatMap(r=>r.output),js=files.filter(f=>f.type==='chunk').map(f=>f.code).join('\n'),css=files.filter(f=>f.type==='asset'&&f.fileName.endsWith('.css')).map(f=>f.source).join('\n');
