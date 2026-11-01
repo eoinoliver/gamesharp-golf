@@ -120,9 +120,9 @@ export class ShotmakerScene {
   this.ripple=new T.Mesh(new T.RingGeometry(.94,1,80),new T.MeshBasicMaterial({color:'#ffdc83',side:T.DoubleSide,transparent:true,opacity:0,depthWrite:false}));this.ripple.rotation.x=-Math.PI/2;this.scene.add(this.ripple);
  }
  makeLine(points,color,opacity=1,dashed=false){const material=dashed?new T.LineDashedMaterial({color,transparent:true,opacity,dashSize:2,gapSize:2}):new T.LineBasicMaterial({color,transparent:true,opacity});const line=new T.Line(new T.BufferGeometry().setFromPoints(points),material);if(dashed)line.computeLineDistances();return line;}
- clearLines(){dispose(this.lines);this.lines.clear();this.trace=null;}
+ clearLines(){dispose(this.lines);this.lines.clear();this.trace=null;this.pair=null;if(this.pairMarker){dispose(this.pairMarker);this.scene.remove(this.pairMarker);this.pairMarker=null;}}
  point(face,path,u){const p=shotPoint(face,path,u);const ground=p.x>coast(p.z)?-2:height(p.x,p.z);return V(p.x,lerp(height(0,160),ground,u)+p.y+.22,p.z);}
- makeFlight(face,path,color,opacity=1){this.dirty=true;const points=Array.from({length:121},(_,i)=>this.point(face,path,i/120));const curve=new T.CatmullRomCurve3(points);const tube=new T.Mesh(new T.TubeGeometry(curve,120,.11,6,false),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false}));this.lines.add(tube);return tube;}
+ makeFlight(face,path,color,opacity=1,radius=.11){this.dirty=true;const points=Array.from({length:121},(_,i)=>this.point(face,path,i/120));const curve=new T.CatmullRomCurve3(points);const tube=new T.Mesh(new T.TubeGeometry(curve,120,radius,6,false),new T.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false}));this.lines.add(tube);return tube;}
  setChallenge(challenge){
   if(this.gateGroup){dispose(this.gateGroup);this.scene.remove(this.gateGroup);this.gateGroup=null;}
   this.challenge=challenge;this.gatePoint=null;this.targetRing.scale.setScalar((challenge?.radius??4)/4);this.targetRing.material.color.set('#edcf87');this.targetRing.material.opacity=challenge ? .9 : .7;
@@ -149,7 +149,14 @@ export class ShotmakerScene {
  }
  prepare(face,path=0){this.face=face;this.path=path;this.clearLines();this.ball.position.set(0,height(0,160)+.2,160);this.ball.visible=true;this.ripple.material.opacity=0;this.setMode('decision');}
  compare(face,path,other){this.clearLines();this.face=face;this.path=path;this.makeFlight(face,path,'#ffdd8c');this.makeFlight(face,other,'#72d4d1',.8);this.mode='compare';this.playing=false;this.isOverview=true;this.ball.visible=false;this.updateCamera();}
- preview(face,path){this.clearLines();this.face=face;this.path=path;this.makeFlight(face,path,'#ffdd8c');this.ball.position.copy(this.point(face,path,1));this.ball.visible=true;this.mode='range';this.updateCamera();}
+ compareShots(original,changed){
+  this.clearLines();this.face=changed.face;this.path=changed.path;
+  const width=this.host.clientWidth<640?.65:.35;const before=this.makeFlight(original.face,original.path,'#ffdd8c',.95,width),after=this.makeFlight(changed.face,changed.path,'#72d4d1',1,width);
+  this.pair={original,changed,before,after};this.pairMarker=new T.Mesh(new T.SphereGeometry(.55,12,12),new T.MeshBasicMaterial({color:'#ffdd8c'}));this.scene.add(this.pairMarker);
+  this.playing=false;this.mode='compare';this.isOverview=true;this.landedAt=undefined;this.ripple.material.opacity=0;this.seekPair(1);this.updateCamera();
+ }
+ seekPair(value){if(!this.pair)return;const u=clamp(value,0,1),p=this.pair,count=u===1?Infinity:Math.floor(u*120)*36;p.before.geometry.setDrawRange(0,count);p.after.geometry.setDrawRange(0,count);this.pairMarker.position.copy(this.point(p.original.face,p.original.path,u));this.ball.position.copy(this.point(p.changed.face,p.changed.path,u));this.ball.visible=true;this.dirty=true;}
+ preview(face,path,{overview=false,emphasis=false}={}){this.clearLines();this.face=face;this.path=path;this.makeFlight(face,path,'#ffdd8c',1,emphasis?(this.host.clientWidth<640?.65:.35):.11);if(overview)this.isOverview=true;this.ball.position.copy(this.point(face,path,1));this.ball.visible=true;this.mode='range';this.updateCamera();}
  shoot(face,path,{replay=false}={}){
   this.face=face;this.path=path;this.clearLines();this.trace=this.makeFlight(face,path,'#ffdf96');this.trace.geometry.setDrawRange(0,0);this.flightStart=this.clock;this.playing=true;this.mode='flight';this.isOverview=false;this.ball.visible=true;this.replay=replay;this.ripple.material.opacity=0;
   this.camera.position.set(-5,16,178);this.look.set(0,19,85);this.destination.copy(this.camera.position);this.lookDestination.copy(this.look);this.camera.lookAt(this.look);

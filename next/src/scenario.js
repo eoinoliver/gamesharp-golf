@@ -108,3 +108,57 @@ export const SHOTMAKER_NINE = Object.freeze({
   {id:'card-window',title:'The smallest window.',brief:'Both controls are yours. Pass through the smaller teal window, then finish inside 2 metres. Make this one count.',face:null,path:null,initial:[0,0],gate:[.55,1.1],radius:2}
  ]
 });
+
+// A remembered ball flight selects an authored example, never estimated swing
+// measurements. Left/right describe the target view, not a grip prescription.
+const rememberedSide = sign => sign > 0 ? 'right' : 'left';
+function rememberedCase(kind, sign) {
+ const side = rememberedSide(sign), other = rememberedSide(-sign);
+ const settings = (face, path) => ({face: face * sign, path: path * sign});
+ const shared = {side, other, sign, radius:4};
+ if (kind === 'straight') return {...shared, id:`${side}-straight`, start:side, curve:'straight', family:'alignment',
+  title:`Straight. Still ${side}.`, observation:`Started ${side}. Flew straight.`, original:settings(4,4),
+  question:'How would you send a straight shot at the flag?',
+  brief:`In this example, the face and club path both point 4° ${side}. Choose the change you want to make at impact.`,
+  options:[
+   {id:'face',title:'Point only the face at the flag',detail:`Keep the path 4° ${side}.`,...settings(0,4),feedback:`Moving the face alone introduced a curve to the ${other}. The face and path no longer match.`},
+   {id:'together',title:'Bring both directions to the flag',detail:'Move the face and path together.',...settings(0,0),feedback:'Both directions now match the target. The shot is straight and on line in this example.'},
+   {id:'path',title:'Move only the path to the flag',detail:`Keep the face 4° ${side}.`,...settings(4,0),feedback:`Moving the path alone added a curve to the ${side}. The face still points ${side}.`}], correct:'together',
+  insight:'Straight describes the curve. On target describes the direction. They are two different things.',
+  takeaway:'A straight miss can have matching face and path—both pointing away from the target.',
+  practice:'Choose a distant target and a nearer reference on the same line. Watch five comfortable iron shots. Record where each starts, then whether it curves. A straight miss is useful information; do not automatically treat it as a curve problem.'};
+ const crossing=kind==='crossing', centred=kind==='centre';
+ const face=crossing||centred?2:4, path=crossing?8:centred?-8:-2, good=crossing||centred?5:8;
+ return {...shared, id:`${centred?'centre':side}-${crossing?other:side}`, start:centred?'centre':side, curve:crossing?other:side, family:crossing?'amount':'relationship',
+  title:crossing?`It came back. Too far.`:centred?`On line. Then ${side}.`:`Right idea. Wrong bend.`,
+  observation:`${centred?'Started near the target line':`Started ${side}`}. Curved ${crossing?other:side}.`,original:settings(face,path),
+  question:crossing?`How would you keep the ${other} curve, but reduce it?`:`Which path bends this shot back to the ${other}?`,
+  brief:`Keep the face ${face}° ${side} in this example. ${crossing?'The original path is much farther out. Change only the club path.':'Choose where the club head travels through the ball.'}`,
+  options:[
+   {id:'match',title:'Match the face',detail:`Path ${face}° ${side}.`,...settings(face,face),feedback:`Matching the face removed the curve. The shot still travels ${side} of the flag.`},
+   {id:'across',title:`Move the path ${centred?'slightly ':''}${crossing?'across':'towards the flag'}`,detail:`Path ${crossing?'2° '+other:centred?'1° '+other:'at the flag'}.`,...settings(face,crossing?-2:centred?-1:0),feedback:`The face is ${side} of this path. That relationship makes the ball curve ${side}.`},
+   {id:'partner',title:crossing?'Bring the path closer to the face':`Move the path farther ${side}`,detail:`Path ${good}° ${side}.`,...settings(face,good),feedback:crossing?`A smaller gap keeps the ${other} curve but reduces it. You controlled the bend instead of removing it.`:`The face still points ${side} of the flag, but ${other} of the path. That is why the ball can curve back.`}],correct:'partner',
+  insight:crossing?'The useful change is often a smaller bend. A straight ball can miss on the other side.':`A face pointing ${side} of the flag can produce a curve to the ${other}. Compare the face with the path, not just with the target.`,
+  takeaway:crossing?'Control the amount of curve. Removing it completely can create a different miss.':'The face strongly influences the start. Face relative to path influences the bend.',
+  practice:'With a comfortable iron, choose one target and watch five normal shots. Name the start first, then the bend. If you can, film from safely behind the target line or ask a coach to help observe. Use the pattern to ask a better question before changing your swing.'};
+}
+const memoryTransfer = (family, sign, delayed=false) => {
+ const side=rememberedSide(-sign), other=rememberedSide(sign);
+ if(family==='alignment')return {id:delayed?'alignment-later':'alignment-new',face:(delayed?2:3)*-sign,path:(delayed?2:3)*-sign,
+  title:delayed?'Does straight mean on target?':'Same idea. The other side.',
+  brief:`The face and path now both point ${delayed?2:3}° ${side}. Where will the ball go in this example?`,
+  options:[{id:'target',title:'Straight at the flag',detail:'Matching directions means on target.'},{id:'away',title:`Straight to the ${side}`,detail:'Very little curve; it stays off line.'},{id:'back',title:`Starts ${side}, bends back`,detail:'It curves towards the flag.'}],correct:'away',
+  insight:`Matching directions remove the curve from this relationship. Both point ${side}, so the straight ball stays ${side}.`};
+ const face=(delayed?3:2)*-sign,path=(delayed?3:5)*-sign;
+ if(delayed)return {id:'relationship-later',face,path,title:'One day later. A fresh read.',brief:`The face and path both point 3° ${side}. Which flight follows?`,
+  options:[{id:'back',title:`Starts ${side}, bends back`,detail:'Returns towards the flag.'},{id:'away',title:`Straight to the ${side}`,detail:'Very little curve; it stays off line.'},{id:'more',title:`Starts ${side}, curves farther ${side}`,detail:'Moves farther away.'}],correct:'away',insight:`Face and path match, so this example flies straight ${side}. A remembered answer about “swing farther out” would not solve this one.`};
+ return {id:'relationship-new',face,path,title:'Now turn the idea around.',brief:`The face points 2° ${side}. The path points 5° ${side}. Before seeing the flight, call the bend.`,
+  options:[{id:'same',title:`It bends ${side}`,detail:'The same side as the face points.'},{id:'none',title:'It flies straight',detail:'Both directions are on the same side.'},{id:'opposite',title:`It bends ${other}`,detail:`The face points ${other} of the path.`}],correct:'opposite',
+  insight:`The face points ${side} of the target but ${other} of the path. The ball bends ${other} in this centred-strike example.`};
+};
+export const SHOT_MEMORIES = Object.freeze({
+ version:1,
+ cases:[...['away','straight','crossing','centre'].flatMap(kind=>[1,-1].map(sign=>rememberedCase(kind,sign)))],
+ transfer:memoryTransfer,
+ modelNote:'An illustrative iron shot in still air, with a centred strike. Your description selects the flight pattern; it cannot tell us your actual face, path or swing. The numbers and distances belong to this example.',
+});
