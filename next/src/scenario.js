@@ -57,3 +57,35 @@ export const SHOT_LAB_LESSON = Object.freeze({
   Object.freeze({id:'face-path-transfer',label:'Same face. A new path.',face:8,path:-10,question:'And now—which way will it curve?',situation:'The face still points right of the target. This time, the club travels left.',correct:'right',explanation:'The face is now right of the path. With a centre strike, the ball starts right and curves farther right.'}),
  ]),
 });
+
+// Shotmaker: one fixed fictional hole. Geometry never changes between reads.
+// Face/path signs are relative to the target for a right-handed, centred iron strike.
+export const SHOTMAKER = Object.freeze({
+ version:1, id:'shotmaker-1', name:'The Headland', distance:160,
+ assumptions:'Right-handed iron · Centre strike · No wind',
+ modelNote:'An authored flight illustration, not a launch monitor or a prediction of your swing. Carry is held at 160 m. Curvature is exaggerated for visibility. Lie, strike variation, wind and speed are held constant.',
+ source:'https://www.trackman.com/blog/face-to-path',
+ cases:[
+  {id:'comeback',number:'01',title:'Bring it back.',subtitle:'Start right. Curve left. Find the green.',face:3,correct:6,
+   question:'Which club path brings it back?',
+   brief:'The face points 3° right of the flag at impact. Keep it there. Choose the direction the club moves through the ball.',
+   options:[{path:0,title:'Straight at the flag',detail:'Club path · 0°'},{path:6,title:'Farther to the right',detail:'Club path · 6° right'},{path:-6,title:'Across to the left',detail:'Club path · 6° left'}],
+   win:'That’s a draw.',loss:'The face needs a different partner.',
+   insight:'The face can point right of the flag and still produce a draw. It must point left of the club’s path.',
+   takeaway:'The face starts it. Face relative to path bends it.',compare:0},
+  {id:'straight',number:'02',title:'Take out the curve.',subtitle:'Same face. A different intention.',face:3,correct:3,
+   question:'Which path makes it fly straight?',
+   brief:'Keep the face 3° right. This time, remove the curve—even if the ball finishes right of the flag.',
+   options:[{path:6,title:'Farther to the right',detail:'Club path · 6° right'},{path:-3,title:'Across to the left',detail:'Club path · 3° left'},{path:3,title:'Match the face',detail:'Club path · 3° right'}],
+   win:'Straight. But not at the flag.',loss:'There’s still a gap between face and path.',
+   insight:'When face and path match, there is little curvature from their relationship. Both point right here, so the ball stays right.',
+   takeaway:'A straight ball is not necessarily an on-target ball.',compare:6},
+  {id:'mirror',number:'03',title:'Make the mirror image.',subtitle:'Start left. Fade it home.',face:-3,correct:-6,
+   question:'Which path curves it back right?',
+   brief:'Now the face points 3° left of the flag. Start the ball left and bring it back with a fade.',
+   options:[{path:-6,title:'Farther to the left',detail:'Club path · 6° left'},{path:-3,title:'Match the face',detail:'Club path · 3° left'},{path:3,title:'Across to the right',detail:'Club path · 3° right'}],
+   win:'You’ve seen both sides.',loss:'Read the face against the path again.',
+   insight:'The face points left of the flag, but right of this path. That relationship produces the rightward curve.',
+   takeaway:'Open or closed only makes sense when you say “relative to what?”.',compare:-3}
+ ]
+});
