@@ -140,7 +140,7 @@ export class ShotmakerScene {
  updateCamera(instant=false){
   this.dirty=true;
   const mobile=this.host.clientWidth<640;let p,l;
-  if(this.isOverview){p=V(0,240,84);l=V(0,8,80);}
+  if(this.isOverview){p=V(0,290,84);l=V(0,8,80);}
   else if(this.mode==='hero'){p=mobile?V(85,71,146):V(81,34,116);l=V(1,9,15);}
   else if(this.mode==='decision'&&this.challenge?.gate){p=mobile?V(24,74,191):V(37,66,172);l=V(0,17,74);}
   else if(this.mode==='decision'){p=mobile?V(23,45,117):V(44,43,123);l=V(0,9,31);}

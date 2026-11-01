@@ -33,7 +33,7 @@ export class ShotmakerJourney {
   if(this.reads){const returning=completed.length&&last?.attempts.length===3;$('#sm-start').innerHTML=`${returning?daily?'Revisit today’s shot':'Take today’s shot':'Continue your nine'} ${arrow}`;$('#sm-start').onclick=()=>this.continue();$('#sm-nine-meta').innerHTML=`<span>${completed.length?9:this.reads+this.built+(last?.attempts.length||0)} of 9 complete</span><i></i><span>${this.saved&&this.api.readsSaved()?'Your progress is saved here':'Progress in this visit'}</span>`;}
  }
  continue(){if(this.reads<3){this.api.startCase(Math.max(0,SHOTMAKER.cases.findIndex(c=>!this.api.reads.first[c.id])));return;}if(this.built<3){this.startWorkshop();return;}if(this.finished.length&&this.state.cards.at(-1)?.attempts.length===3){this.startDaily();return;}this.cardBrief();}
- openBoard(){this.syncBoard();$('#sm-journey').scrollIntoView({behavior:this.api.reduced()?'instant':'smooth',block:'start'});const h=$('#sm-journey h2');h.tabIndex=-1;h.focus({preventScroll:true});}
+ openBoard(){this.api.showHome?.();this.syncBoard();$('#sm-journey').scrollIntoView({behavior:this.api.reduced()?'instant':'smooth',block:'start'});const h=$('#sm-journey h2');h.tabIndex=-1;h.focus({preventScroll:true});}
  startWorkshop(n){if(this.reads<3)return;const i=n??Math.max(0,SHOTMAKER_NINE.workshop.findIndex(c=>!workshopCleared(this.state,c)));this.startChallenge('workshop',i,SHOTMAKER_NINE.workshop[i]);}
  cardBrief(){
   this.api.leaveMemory?.();

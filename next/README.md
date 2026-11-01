@@ -60,3 +60,42 @@ The current test suite has 33 checks. Remembered-shot coverage includes all eigh
 Browser QA must cover desktop and phone width, keyboard controls, the full two-decision loop, reduced motion, local persistence, replay, and SVG fallback. A browser viewport test is not a physical-device test. Neither passing tests nor a strong result in two authored decisions establishes learning transfer, retention or demand. Coach review and tests with golfers are the next validation steps.
 
 The first coastal preview remains on `codex/golf-next-first-hole`; the Six Reads iteration is `codex/golf-six-dilemmas`. Shotmaker and the earlier experimental motion work are on `codex/golf-shot-lab` (draft PR 3). Production promotion was explicitly authorised on 1 November 2026. The release includes a retirement-only `/sw.js` and `legacy-cache.js`: update the known old root worker, remove only `gsg-v1` and `gamesharp-golf-v<number>` CacheStorage entries, then unregister. Local game records are preserved. The retirement worker has no fetch handler; no new offline worker is registered.
+
+
+## Tennis reading journey — 2 November 2026
+
+The reference is the live Tennis player `play.html?l=answer-the-drop`, app version
+`1d8e1511d4`, and the current Tennis source `rally/lesson_body.html` (`stageSit`,
+`typeSit`, `enableAsk`, `startStep`, `verdict`). The observed sequence is scene,
+word-by-word situation at 5.5 words/second, then question and lettered choices.
+Feedback follows the played consequence and stays until the learner continues.
+
+Golf now uses `lesson-sequence.js` for that reading cadence, with a shared vertical
+lesson layout. `shotmaker-presentation.js` adapts the existing remembered-shot,
+Nine, daily and range screens; `main.js` uses the same controller for all six
+library journeys. The original coastal home remains the entry point. Lesson
+navigation is back / centred GameSharp Golf / close; sound stays on the scene.
+The overhead camera is pulled back to include the green, bunker and flag. Hole
+geometry and learning/scoring models are unchanged.
+
+- Situation comes before the question; choices and actions enter afterwards.
+- Hidden controls are inert, with their space reserved to prevent layout jumps.
+- A complete readable sentence is exposed to assistive technology, not individual
+  word announcements. Focus starts on the context and returns safely after skip.
+- Show all, reduced motion, navigation and page hiding drain pending timers.
+- Revisiting a screen in the same session skips its reading delay. Re-rendering a
+  selected answer or a custom plan does not restart the introduction.
+- Exit returns to a visible Shotbook / Nine board. Closing clears the invitation
+  query on the current origin; the portable export's canonical share origin is
+  never used for local navigation.
+- First attempts, saved progress, optional custom controls, replays, downloads
+  and shared links retain their original data semantics.
+
+Build and model checks: `npm test && npm run build`. Browser regression:
+`BASE=http://127.0.0.1:5177 node tools/verify-reading-flow.mjs` with Playwright and
+its Chromium/WebKit browsers available. `PLAYWRIGHT_MODULE` can name a host's
+installed module; `QA_OUTPUT` selects the evidence directory. The regression
+covers reading order, keyboard exclusion, stable layout, skip, preference changes,
+navigation cancellation, custom controls, all twelve library decisions and a
+complete WebKit remembered-shot journey. These are browser checks, not physical
+phone, screen-reader listening, coaching or user-learning validation.

@@ -11,3 +11,6 @@ Play a Hole Hero.png
 node_modules/
 dist/
 .vercel/
+
+# Local browser verification evidence
+work/reading-qa/
