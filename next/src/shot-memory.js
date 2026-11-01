@@ -67,6 +67,11 @@ export class ShotMemory {
   if(c){this.view={...c.original,reveal:true};this.scene?.preview(c.original.face,c.original.path);this.scene?.setMode('hero');$('#sm-scene-message').hidden=false;this.api.setSceneMessage(c.observation,'THE FLIGHT YOU REMEMBER');}else{this.view={face:0,path:0,reveal:false};this.scene?.prepare(0,0);this.scene?.setMode('hero');$('#sm-scene-message').hidden=true;}
   this.api.renderFallback();
  }
+ openShared(id){
+  if(!memoryCase(id)){this.capture();return;}
+  const existing=this.state.entries.find(e=>e.id===this.state.activeId&&e.caseId===id);
+  if(existing)this.resume(existing.id);else this.startExample(id);
+ }
  startExample(id='right-right'){
   const c=memoryCase(id)||memoryCase('right-right');this.entry=beginMemory(this.state,{caseId:c.id,example:true,note:''});this.activate();this.persist();this.playOriginal();
  }
