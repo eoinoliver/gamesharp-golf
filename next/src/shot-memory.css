@@ -184,3 +184,5 @@ textarea:focus-visible {outline:2px solid var(--sm-gold);outline-offset:3px}
  .memory-book-heading h2{font-size:36px}
 }
 @media(max-width:360px){.sm-header nav{gap:9px}.sm-brand{font-size:11px}.sm-hero h1{font-size:60px}.memory-steps b{display:none}.memory-steps>span{border-top:1px solid #506a5366;padding-top:10px}.memory-steps>span.active{border-color:var(--sm-gold)}}
+
+.sm-mobile-context .memory-mobile-fact{display:block;margin-top:8px;font-size:10px;line-height:1.7;color:#9eb399}.sm-mobile-context p>strong{font-size:12px;line-height:1.65;font-weight:500;color:#e2e8ce}
