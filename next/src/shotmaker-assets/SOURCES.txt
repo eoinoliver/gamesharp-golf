@@ -1,0 +1,20 @@
+Shotmaker environment assets
+
+Cape Hill panorama — Greg Zaal / Poly Haven, CC0
+https://polyhaven.com/a/cape_hill
+Source: https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/cape_hill.jpg
+Optimised to a 2048-pixel JPEG for the browser. This is photographic background scenery, not a photograph of the fictional Headland hole.
+
+Aerial Grass Rock diffuse and OpenGL normal — Rob Tuytel / Poly Haven, CC0
+https://polyhaven.com/a/aerial_grass_rock
+Source: https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/aerial_grass_rock/aerial_grass_rock_diff_4k.jpg
+Source: https://dl.polyhaven.org/file/ph-assets/Textures/jpg/4k/aerial_grass_rock/aerial_grass_rock_nor_gl_4k.jpg
+Optimised to 1024-pixel JPEG textures. Used on the authored cliff mesh.
+
+Poly Haven license: https://polyhaven.com/license
+
+DM Sans and Instrument Serif — Google Fonts, SIL Open Font License 1.1.
+Latin WOFF2 subsets downloaded from the official Google Fonts CSS API.
+https://fonts.google.com/specimen/DM+Sans
+https://fonts.google.com/specimen/Instrument+Serif
+License copies are retained beside these assets. No runtime font or texture requests to third parties.

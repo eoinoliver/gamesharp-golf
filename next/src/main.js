@@ -7,6 +7,7 @@ import {COURSE,LESSONS} from './scenario.js';
 import {AIM_MIN,AIM_MAX,bankX,bestPlan,carryWindow,evaluate,fairway,offsets,pattern,rules,summary,targetFor} from './model.js';
 import {readState,record,commitAttempt,completeLesson,saveCue,saveState} from './state.js';
 import {GolfAudio} from './audio.js';
+import {LessonSequence} from './lesson-sequence.js';
 
 const $=s=>document.querySelector(s),arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
 const targetIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M1 12h4m14 0h4"/></svg>';
@@ -36,6 +37,22 @@ $('#app').innerHTML=`
 <div class="sr-only" id="announce" aria-live="polite" aria-atomic="true"></div>
 <dialog id="details-dialog"><button class="dialog-close" aria-label="Close details">×</button><div id="dialog-body"></div></dialog>`;
 
+const reading=new LessonSequence(),seenReads=new Set();
+const readRail=document.createElement('nav');readRail.className='gs-lesson-rail';readRail.setAttribute('aria-label','This decision');$('.course-wrap').after(readRail);
+const closeLesson=document.createElement('a');closeLesson.className='library-close';closeLesson.href='/';closeLesson.textContent='×';closeLesson.setAttribute('aria-label','Close decision library');$('.site-header').append(closeLesson);
+function presentRead(){
+ const root=$('.experience'),context=$('#question-context'),panel=$('#panel');
+ reading.cancel();readRail.hidden=stage==='intro';if(stage==='intro')return;
+ context.hidden=false;
+ const question=['decision','review'].includes(stage),flight=['flight','watch'].includes(stage),key=[current().id,stage,showingAlternative].join(':');
+ if(!question){const lead=panel.querySelector('.lead');if(lead){context.querySelector('p').innerHTML=lead.innerHTML;lead.classList.add('gs-context-copy');}}
+ const tools=document.createElement('div');tools.className='gs-reading-tools';tools.innerHTML='<span></span><button class="gs-show-all" hidden>Show all ↓</button>';context.append(tools);
+ readRail.innerHTML=(flight?['YOUR PLAN','WATCH THE SHOT','SEE THE RESULT']:question?['READ THE HOLE','READ THE SITUATION','YOUR ANSWER']:['SEE THE RESULT','READ THE REASON','TAKE IT FORWARD']).map((label,i)=>`<span data-beat="${i}"><b>${i+1}</b> ${label}</span>`).join('');
+ const children=[...panel.children].filter(el=>!el.matches('.panel-kicker'));
+ const groups=question?[[panel.querySelector('.decision-evidence')],[panel.querySelector('.answer-heading')],[panel.querySelector('.answer-grid')],children.filter(el=>!el.matches('.decision-evidence,.answer-heading,.answer-grid'))]:[children];
+ reading.start({root,text:context.querySelector('p'),groups,skip:tools.querySelector('button'),rail:readRail,reduced:reducedMotion||flight||seenReads.has(key)});
+ seenReads.add(key);if(flight)reading.setBeat(1);
+}
 function announce(s){$('#announce').textContent=s;}
 function miniPattern(c,cl){
  const os=offsets(c,cl),lo=Math.min(-24,...os.map(o=>o.x-4)),hi=Math.max(24,...os.map(o=>o.x+4)),x=v=>12+(v-lo)/(hi-lo)*136,z=v=>42+v*1.15;
@@ -109,12 +126,13 @@ function render({focus=false}={}){
  }
  $('#scene-status').textContent=['decision','review'].includes(stage)?(customOpen?(scene?'CUSTOM PLAN · Tap the course or use the slider':'CUSTOM PLAN · Use the slider below'):selectionSource?`ANSWER ${selectedAnswer||'CUSTOM'} · Aim preview`:'YOUR ANSWER · Choose a card below'):stage==='intro'?'Six reads on one original coastal hole':stage==='compare'?`${showingAlternative?'Alternative':'Your plan'} · 12 authored finishes`:stage==='complete'?'One cue to take to your next round':stage==='setup'?'Question 1 complete · Previewing question 2':`${Math.round(Math.hypot(c.start.x-c.pin.x,c.start.z-c.pin.z))} m to flag · ${c.objective==='approach'?'Approach':'Lay-up'}`;
  $('#below-copy').textContent=saveFailed?'Browser storage unavailable. Export your notes to keep them.':'Train the decision. Take it to the course.';
- updateSelection();updateFallback();
- if(focus){const h=panel.querySelector('h1');h?.setAttribute('tabindex','-1');h?.focus({preventScroll:true});scrollToScene(true);}
+ updateSelection();updateFallback();presentRead();
+ if(focus){const h=stage==='intro'?panel.querySelector('h1'):context;h?.setAttribute('tabindex','-1');h?.focus({preventScroll:true});scrollToScene(true);}
 }
 function scrollToScene(allWidths=false){if(allWidths||matchMedia('(max-width: 800px)').matches)window.scrollTo({top:0,behavior:'instant'});}
 function renderLibrary(){
- $('#library').innerHTML=`<div class="library-header"><div><span class="chapter-label">CHOOSE YOUR NEXT READ</span><h2>Six ways to see more.</h2></div><p>Two decisions in each.<br>Pick any starting point.</p></div><div class="lesson-grid">${LESSONS.map((l,i)=>{const done=state.completed[l.id],strong=state.firstAttempts[l.cases[1].id]?.strong;return `<button class="lesson-card" data-lesson="${i}"><span class="card-top"><span>${l.number} / FIELD NOTE</span><span class="card-glyph" aria-hidden="true">${['↕','↗','◉','⌁','⚑','↺'][i]}</span></span><strong>${l.name}</strong><p>${l.teaser}</p><span class="card-bottom">${done?strong?'First attempt: strong':'Completed · worth another read':'About 3 minutes'} <span>↗</span></span></button>`;}).join('')}</div>`;
+ const labURL=new URL(location.href);labURL.searchParams.set('lesson','shot-lab');labURL.hash='';
+ $('#library').innerHTML=`<a class="shot-lab-entry" href="${labURL.href}"><span>NEW · THE SHOT LAB</span><strong>The face. The path. The flight.</strong><p>Watch the swing. Predict the flight. See what changes at impact.</p><b>Try the motion study ↗</b></a><div class="library-header"><div><span class="chapter-label">CHOOSE YOUR NEXT READ</span><h2>Six ways to see more.</h2></div><p>Two decisions in each.<br>Pick any starting point.</p></div><div class="lesson-grid">${LESSONS.map((l,i)=>{const done=state.completed[l.id],strong=state.firstAttempts[l.cases[1].id]?.strong;return `<button class="lesson-card" data-lesson="${i}"><span class="card-top"><span>${l.number} / FIELD NOTE</span><span class="card-glyph" aria-hidden="true">${['↕','↗','◉','⌁','⚑','↺'][i]}</span></span><strong>${l.name}</strong><p>${l.teaser}</p><span class="card-bottom">${done?strong?'First attempt: strong':'Completed · worth another read':'About 3 minutes'} <span>↗</span></span></button>`;}).join('')}</div>`;
  $('#library').querySelectorAll('[data-lesson]').forEach(b=>b.onclick=()=>begin(Number(b.dataset.lesson)));
 }
 function bindPlanControls(){
@@ -163,7 +181,7 @@ $('.dialog-close').onclick=()=>$('#details-dialog').close();$('#details-dialog')
 $('#back-to-reads').onclick=goHome;$('#about').onclick=()=>showDialog();$('#evidence').onclick=()=>showDialog('evidence');$('#library-link').onclick=goHome;$('.brand').onclick=e=>{e.preventDefault();goHome();};
 function toggleSound(){audio.enabled=!audio.enabled;state.sound=audio.enabled;saveState(state);audio.unlock();$('#sound').setAttribute('aria-pressed',String(audio.enabled));$('#sound-label').textContent=`Sound ${audio.enabled?'on':'off'}`;$('#scene-sound').setAttribute('aria-pressed',String(audio.enabled));$('#scene-sound').setAttribute('aria-label',audio.enabled?'Turn sound off':'Turn sound on');if(audio.enabled)audio.play('success');}
 $('#sound').onclick=toggleSound;$('#scene-sound').onclick=toggleSound;$('#scene-sound').setAttribute('aria-pressed',String(audio.enabled));$('#scene-sound').setAttribute('aria-label',audio.enabled?'Turn sound off':'Turn sound on');
-function setMotion(reduced){reducedMotion=reduced;if(scene)scene.reducedMotion=reduced;$('#motion').textContent=`Motion ${reduced?'reduced':'on'}`;$('#motion').setAttribute('aria-pressed',String(reduced));document.documentElement.dataset.reducedMotion=String(reduced);}
+function setMotion(reduced){reducedMotion=reduced;if(reduced)reading.finish();if(scene)scene.reducedMotion=reduced;$('#motion').textContent=`Motion ${reduced?'reduced':'on'}`;$('#motion').setAttribute('aria-pressed',String(reduced));document.documentElement.dataset.reducedMotion=String(reduced);}
 $('#motion').onclick=()=>setMotion(!reducedMotion);media.addEventListener('change',e=>setMotion(e.matches));
 $('#view').onclick=()=>{if(!scene)return;const overhead=scene.toggleView();$('#view').setAttribute('aria-pressed',String(overhead));$('#view span').textContent=overhead?'Perspective':'Overhead';};
 $('#course').addEventListener('sceneproject',e=>{for(const key of ['flag','aim']){const p=e.detail[key],el=$(`[data-target="${key}"]`);const close=Math.hypot(e.detail.flag.x-e.detail.aim.x,e.detail.flag.y-e.detail.aim.y)<60;el.style.transform=`translate(${p.x}px,${Math.max(84,p.y+(close&&key==='aim'?25:-22))}px) translate(-50%,-100%)`;el.style.opacity=p.visible&&p.x>0&&p.x<$('#course').clientWidth?'1':'0';}});
@@ -171,3 +189,6 @@ window.addEventListener('resize',updateFallback);
 render();
 try{scene=new GolfScene($('#course'),{onSelect:setAim,onLand:landed,reducedMotion});document.documentElement.dataset.renderer='webgl';}catch(error){console.warn('3D scene unavailable. Using the overhead learning view.',error);$('#course').querySelector('canvas')?.remove();$('#course').dataset.fallback='true';document.documentElement.dataset.renderer='fallback';$('#view').hidden=true;$('#motion').hidden=true;updateFallback();}
 setMotion(reducedMotion);
+
+document.addEventListener("visibilitychange",()=>{if(document.hidden)reading.finish();});
+window.addEventListener("pagehide",()=>reading.cancel());
