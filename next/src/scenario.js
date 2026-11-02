@@ -72,7 +72,7 @@ export const SHOTMAKER = Object.freeze({
    options:[{path:0,title:'Straight at the flag',detail:'Club path · 0°'},{path:6,title:'Farther to the right',detail:'Club path · 6° right'},{path:-6,title:'Across to the left',detail:'Club path · 6° left'}],
    win:'That’s a draw.',loss:'The face needs a different partner.',
    insight:'The face can point right of the flag and still produce a draw. It must point left of the club’s path.',
-   takeaway:'The face starts it. Face relative to path bends it.',compare:0},
+   takeaway:'The face strongly influences the start. Face relative to path influences the bend.',compare:0},
   {id:'straight',number:'02',title:'Take out the curve.',subtitle:'Same face. A different intention.',face:3,correct:3,
    question:'Which path makes it fly straight?',
    brief:'Keep the face 3° right. This time, remove the curve—even if the ball finishes right of the flag.',
@@ -147,13 +147,13 @@ const memoryTransfer = (family, sign, delayed=false) => {
  if(family==='alignment')return {id:delayed?'alignment-later':'alignment-new',face:(delayed?2:3)*-sign,path:(delayed?2:3)*-sign,
   title:delayed?'Does straight mean on target?':'Same idea. The other side.',
   brief:`The face and path now both point ${delayed?2:3}° ${side}. Where will the ball go in this example?`,
-  options:[{id:'target',title:'Straight at the flag',detail:'Matching directions means on target.'},{id:'away',title:`Straight to the ${side}`,detail:'Very little curve; it stays off line.'},{id:'back',title:`Starts ${side}, bends back`,detail:'It curves towards the flag.'}],correct:'away',
+  options:[{id:'target',title:'Straight at the flag',detail:'On the target line.'},{id:'away',title:`Straight to the ${side}`,detail:'A straight flight off the target line.'},{id:'back',title:`Starts ${side}, bends back`,detail:'A returning curve.'}],correct:'away',
   insight:`Matching directions remove the curve from this relationship. Both point ${side}, so the straight ball stays ${side}.`};
  const face=(delayed?3:2)*-sign,path=(delayed?3:5)*-sign;
  if(delayed)return {id:'relationship-later',face,path,title:'One day later. A fresh read.',brief:`The face and path both point 3° ${side}. Which flight follows?`,
-  options:[{id:'back',title:`Starts ${side}, bends back`,detail:'Returns towards the flag.'},{id:'away',title:`Straight to the ${side}`,detail:'Very little curve; it stays off line.'},{id:'more',title:`Starts ${side}, curves farther ${side}`,detail:'Moves farther away.'}],correct:'away',insight:`Face and path match, so this example flies straight ${side}. A remembered answer about “swing farther out” would not solve this one.`};
+  options:[{id:'back',title:`Starts ${side}, bends back`,detail:'Returns towards the flag.'},{id:'away',title:`Straight to the ${side}`,detail:'A straight flight off the target line.'},{id:'more',title:`Starts ${side}, curves farther ${side}`,detail:'Moves farther away.'}],correct:'away',insight:`Face and path match, so this example flies straight ${side}. A remembered answer about “swing farther out” would not solve this one.`};
  return {id:'relationship-new',face,path,title:'Now turn the idea around.',brief:`The face points 2° ${side}. The path points 5° ${side}. Before seeing the flight, call the bend.`,
-  options:[{id:'same',title:`It bends ${side}`,detail:'The same side as the face points.'},{id:'none',title:'It flies straight',detail:'Both directions are on the same side.'},{id:'opposite',title:`It bends ${other}`,detail:`The face points ${other} of the path.`}],correct:'opposite',
+  options:[{id:'same',title:`It bends ${side}`,detail:`A curve to the ${side}.`},{id:'none',title:'It flies straight',detail:'Very little curve.'},{id:'opposite',title:`It bends ${other}`,detail:`A curve to the ${other}.`}],correct:'opposite',
   insight:`The face points ${side} of the target but ${other} of the path. The ball bends ${other} in this centred-strike example.`};
 };
 export const SHOT_MEMORIES = Object.freeze({

@@ -5,6 +5,8 @@ import {ShotmakerScene} from './shotmaker-scene.js';
 import {ShotmakerAudio} from './shotmaker-audio.js';
 import {ShotmakerJourney} from './shotmaker-journey.js';
 import {ShotMemory} from './shot-memory.js';
+import {ImpactLesson} from './impact-lesson.js';
+import {impactRead} from './impact-teaching.js';
 import {ShotmakerPresentation} from './shotmaker-presentation.js';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -14,7 +16,7 @@ const targetIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy
 let storage;try{storage=localStorage;}catch{storage=null;}
 const state=readShotState(storage),media=matchMedia('(prefers-reduced-motion: reduce)'),audio=new ShotmakerAudio(false);
 let journey=null,memory=null;
-let reduced=media.matches,stage='intro',index=0,selected=null,committed=null,comparing=false,scene=null,impact=null,impactTicket=0,fallback=false,saveFailed=false,rangeFace=3,rangePath=6,rangeShots=0,round=[],strikeBeat=null,strikeToken=0;
+let reduced=media.matches,stage='intro',index=0,selected=null,committed=null,comparing=false,scene=null,impact=null,impactTicket=0,fallback=false,saveFailed=false,rangeFace=3,rangePath=6,rangeShots=0,round=[],strikeBeat=null,strikeToken=0,activeFlight=null;
 const current=()=>SHOTMAKER.cases[index];
 document.title='Shotmaker · GameSharp Golf';
 $('#app').innerHTML=`<div class="sm-shell">
@@ -34,7 +36,7 @@ $('#app').innerHTML=`<div class="sm-shell">
     <div id="sm-flight-hud" class="sm-flight-hud" hidden><span id="sm-flight-word">WATCH THE START</span><strong><span id="sm-travel">0</span><small>m</small></strong><div><i id="sm-flight-progress"></i></div><button id="sm-skip">Show the finish ${arrow}</button><p id="sm-flight-check" class="sm-flight-check" hidden></p></div>
     <div id="sm-flight-legend" class="sm-flight-legend" hidden></div>
     <div id="sm-strike-beat" class="sm-strike-beat" hidden></div>
-    <div class="sm-world-footer"><span id="sm-world-caption">AN ORIGINAL COASTAL HOLE. ONE MOMENT AT A TIME.</span><button id="sm-impact-open" class="sm-glass" hidden><span class="sm-impact-symbol">↗</span> Inside the strike</button></div>
+    <div class="sm-world-footer"><span id="sm-world-caption">AN ORIGINAL COASTAL HOLE. ONE MOMENT AT A TIME.</span><button id="sm-impact-open" class="sm-glass" hidden><span class="sm-impact-symbol">↗</span> Explain the strike</button></div>
    </div>
    <aside id="sm-panel" class="sm-panel" aria-label="Your shot" hidden></aside>
   </section>
@@ -47,13 +49,13 @@ $('#app').innerHTML=`<div class="sm-shell">
  <div id="sm-live" class="sm-sr" aria-live="polite" aria-atomic="true"></div>
  <dialog id="sm-dialog" class="sm-dialog"><button id="sm-close-dialog" class="sm-close" aria-label="Close dialog">×</button><div id="sm-dialog-body"></div></dialog>`;
 
-const presentation=new ShotmakerPresentation({reduced:()=>reduced,back:()=>{if(memory?.active)memory.openBook();else journey?.openBoard();},close:()=>showHome()});
+const presentation=new ShotmakerPresentation({reduced:()=>reduced,back:()=>{if(memory?.active)memory.openBook();else journey?.openBoard();},close:()=>showHome(),teaching:()=>({...impactContext(),open:openImpact})});
 
 function announce(message){$('#sm-live').textContent=message;}
 function setStage(next){
  presentation.reset(next);
  const personal=next.startsWith('memory-')||(next==='flight'&&memory?.active);$('#sm-shotbook').hidden=!['intro','memory-complete'].includes(next);$('#sm-book-open').disabled=next==='flight';
- stage=next;$('#sm-nine-open').disabled=next==='flight';$('#sm-journey').hidden=next==='flight';$('#sm-chapters').hidden=['challenge','challenge-result','card-brief','scorecard','flight'].includes(next);$('#sm-experience').className=`sm-experience is-${next}`;$('#sm-hero').hidden=next!=='intro';$('#sm-panel').hidden=next==='intro';$('#sm-impact-open').hidden=['intro','flight','complete','card-brief','scorecard'].includes(next);$('#sm-flight-hud').hidden=next!=='flight';$('#sm-overview').disabled=next==='flight';$('#sm-flight-legend').hidden=!comparing;$('#sm-scene-message').hidden=['intro','flight','complete'].includes(next);
+ stage=next;$('#sm-nine-open').disabled=next==='flight';$('#sm-journey').hidden=next==='flight';$('#sm-chapters').hidden=['challenge','challenge-result','card-brief','scorecard','flight'].includes(next);$('#sm-experience').className=`sm-experience is-${next}`;$('#sm-hero').hidden=next!=='intro';$('#sm-panel').hidden=next==='intro';$('#sm-impact-open').hidden=['intro','flight','complete','card-brief','scorecard','challenge'].includes(next);$('#sm-flight-hud').hidden=next!=='flight';$('#sm-overview').disabled=next==='flight';$('#sm-flight-legend').hidden=!comparing;$('#sm-scene-message').hidden=['intro','flight','complete'].includes(next);
  if(personal){$('#sm-chapters').hidden=true;$('#sm-journey').hidden=true;}if(next==='intro')$('#sm-chapters').hidden=true;
  $('#sm-session').textContent=next==='intro'?'GIVE ME THAT SHOT AGAIN.':next==='range'?'FREE PLAY · MAKE A SHOT OF YOUR OWN':next==='complete'?'THREE SHOTS · THREE NEW WAYS TO SEE IT':`SHOT ${index+1} OF 3 · ${current().title.replace('.','').toUpperCase()}`;
  $$('#sm-chapters > div').forEach((el,i)=>{el.classList.toggle('active',next==='complete'||next==='range'||i===index);el.classList.toggle('done',i<index||next==='complete'||next==='range');});
@@ -75,17 +77,17 @@ function renderDecision(){const c=current();
  $('#sm-hit').onclick=commit;$('#sm-help').onclick=()=>openImpact(true);
 }
 function commit(){if(stage!=='decision'||selected===null)return;committed=selected;const attempt=recordShot(state,current(),committed);round[index]=attempt;saveFailed=!saveShotState(storage,state);journey?.syncBoard();playShot(current().face,committed);}
-function playShot(face,path,replay=false,copy){comparing=false;setStage('flight');setSceneMessage('','');$('#sm-panel').innerHTML=`<span class="sm-eyebrow">${copy?.eyebrow??(replay?'WATCH IT AGAIN':'YOUR SHOT IS AWAY')}</span><h2 class="sm-flight-heading">${copy?.title??'Watch the start.<br><em>Then the bend.</em>'}</h2><p class="sm-brief">${copy?.brief??`Face ${bearing(face)}.<br>Path ${bearing(path)}.`}</p><div class="sm-watch-mark">↗</div><p class="sm-small">Same hole. Same conditions.<br>One relationship makes the difference.</p>`;if(copy)$('#sm-session').textContent=copy.eyebrow;$('#sm-travel').textContent='0';$('#sm-flight-progress').style.width='0%';$('#sm-flight-check').hidden=true;
+function playShot(face,path,replay=false,copy){activeFlight={face,path};comparing=false;setStage('flight');setSceneMessage('','');$('#sm-panel').innerHTML=`<span class="sm-eyebrow">${copy?.eyebrow??(replay?'WATCH IT AGAIN':'YOUR SHOT IS AWAY')}</span><h2 class="sm-flight-heading">${copy?.title??'Watch the start.<br><em>Then the bend.</em>'}</h2><p class="sm-brief">${copy?.brief??`Face ${bearing(face)}.<br>Path ${bearing(path)}.`}</p><div class="sm-watch-mark">↗</div><p class="sm-small">Same hole. Same conditions.<br>One relationship makes the difference.</p>`;if(copy)$('#sm-session').textContent=copy.eyebrow;$('#sm-travel').textContent='0';$('#sm-flight-progress').style.width='0%';$('#sm-flight-check').hidden=true;
  presentation.present('flight',{focus:false});
  const launch=()=>{if(scene)scene.shoot(face,path,{replay});else finishShot({replay});};
  if(scene&&!reduced)playImpactBeat(face,path,launch);else {audio.play('strike');launch();}
 }
 async function playImpactBeat(face,path,launch){
  const ticket=++strikeToken;scene.suspended=true;$('#sm-experience').classList.add('is-striking');const host=$('#sm-strike-beat');host.hidden=false;
- host.innerHTML=`<div id="sm-auto-impact"></div><div class="sm-auto-heading"><span>THE STRIKE</span><strong>Everything starts here.</strong></div><div class="sm-auto-facts"><span><i class="gold"></i>FACE <b>${bearing(face)}</b></span><span><i class="teal"></i>PATH <b>${bearing(path)}</b></span></div><button id="sm-strike-skip" class="sm-glass">Show the flight ${arrow}</button>`;
+ host.innerHTML=`<div id="sm-auto-impact"></div><div class="sm-auto-heading"><span>THE STRIKE · FOLLOW THE TEAL ARROW</span><strong>Watch where the head moves.</strong></div><div class="sm-auto-facts"><span><i class="teal"></i>HEAD MOVEMENT <b>${impactRead(face,path).pathTarget}</b></span></div><button id="sm-strike-skip" class="sm-glass">Show the flight ${arrow}</button>`;
  let frame,view,hit=false;const finish=()=>{if(ticket!==strikeToken)return;strikeToken++;cancelAnimationFrame(frame);view?.destroy();strikeBeat=null;host.hidden=true;host.innerHTML='';$('#sm-experience').classList.remove('is-striking');if(scene){scene.suspended=false;scene.dirty=true;}if(!hit)audio.play('strike');launch();};strikeBeat={finish};$('#sm-strike-skip').onclick=finish;
- try{const {ImpactView}=await import('./shotmaker-impact.js');if(ticket!==strikeToken)return;view=new ImpactView($('#sm-auto-impact'),{face,path});view.seek(.22);const start=performance.now();
-  const step=now=>{if(ticket!==strikeToken)return;const u=Math.min(1,(now-start)/1900);view.seek(.22+.4*u);if(u>=.7&&!hit){audio.play('strike');hit=true;}if(u>=1)finish();else frame=requestAnimationFrame(step);};frame=requestAnimationFrame(step);
+ try{const {ImpactView}=await import('./shotmaker-impact.js');if(ticket!==strikeToken)return;view=new ImpactView($('#sm-auto-impact'),{face,path});view.focus('path');view.seek(.22);const start=performance.now();
+  const step=now=>{if(ticket!==strikeToken)return;const u=Math.min(1,(now-start)/2600);view.seek(.22+.4*u);if(u>=.7&&!hit){audio.play('strike');hit=true;}if(u>=1)finish();else frame=requestAnimationFrame(step);};frame=requestAnimationFrame(step);
  }catch{finish();}
 }
 function finishShot(){audio.play('land');if(memory?.finish())return;if(journey?.finish())return;if(rangeShots){rangeShots=0;showRange(false);return;}setStage('result');renderResult();renderFallback();focusPanel();}
@@ -121,12 +123,16 @@ const challenge=journey?.context,cardShot=stage==='scorecard'?journey?.cardView?
  $('#sm-world').innerHTML=`<div class="sm-diagram"><span>DIAGRAM VIEW · SAME SHOT RELATIONSHIP</span>${svg}</div>`;
 }
 function useFallback(){if(fallback)return;fallback=true;scene?.destroy();scene=null;$('#sm-overview').disabled=true;$('#sm-overview').hidden=true;renderFallback();if(strikeBeat)strikeBeat.finish();else if(stage==='flight')finishShot();announce('3D is unavailable. The complete experience is available in diagram view.');}
-async function openImpact(help=false){
- const shot=memory?.active?memory.impactShot:null,face=shot?.face??journey?.context?.face??(stage==='range'?rangeFace:current().face),path=shot?.path??journey?.context?.path??(stage==='range'?rangePath:committed??selected??0);
- openDialog(`<span class="sm-eyebrow">INSIDE THE STRIKE</span><h2>Two directions.<br><em>One moment.</em></h2><p>${help?'Face is where the striking surface points. Path is where the club head is moving. They can point in different directions.':'Keep your eye on the gold face direction and the teal path. Scrub through contact, then look from above.'}</p><div class="sm-impact-stage" id="sm-impact-stage"><span class="sm-impact-loading">Preparing the impact view…</span></div><div class="sm-impact-keys"><span><i class="gold"></i>FACE <b>${bearing(face)}</b></span><span><i class="teal"></i>PATH <b>${bearing(path)}</b></span></div><div class="sm-impact-tools"><button id="sm-impact-angle" class="sm-secondary">3D angle</button><button id="sm-impact-top" class="sm-secondary">From above</button><span>Drag to orbit</span></div><label class="sm-impact-label" for="sm-impact-scrub">Through the strike <output id="sm-impact-moment">CONTACT</output></label><input id="sm-impact-scrub" type="range" min="0" max="100" value="50" step="1" aria-valuetext="At contact"><div class="sm-range-axis"><span>APPROACH</span><span>CONTACT</span><span>RELEASE</span></div><p class="sm-dialog-note">Authored impact mechanism. The grip and body are outside this close-up; this is not a measured reconstruction of a player.</p>`);
- const ticket=++impactTicket;
- try{const {ImpactView}=await import('./shotmaker-impact.js');if(ticket!==impactTicket||!$('#sm-dialog').open)return;impact=new ImpactView($('#sm-impact-stage'),{face,path,reduced});$('.sm-impact-loading')?.remove();$('#sm-impact-angle').onclick=()=>impact.view('angle');$('#sm-impact-top').onclick=()=>impact.view('top');$('#sm-impact-scrub').oninput=e=>{const v=Number(e.target.value);impact.seek(v/100);const moment=v<48?'APPROACH':v>52?'RELEASE':'CONTACT';$('#sm-impact-moment').textContent=moment;e.target.setAttribute('aria-valuetext',moment.toLowerCase());};}
- catch{if(ticket!==impactTicket)return;$('#sm-impact-stage').innerHTML=`<div class="sm-impact-fallback">${pathDiagram(face,path)}<p>Gold: face ${bearing(face)}<br>Teal: path ${bearing(path)}</p></div>`;$$('.sm-impact-tools button,#sm-impact-scrub').forEach(b=>b.disabled=true);}
+function impactContext(){
+ const shot=memory?.active?memory.impactShot:null;
+ const face=shot?.face??journey?.context?.face??(stage==='range'?rangeFace:current().face),path=shot?.path??journey?.context?.path??(stage==='range'?rangePath:committed??selected??0);
+ const label=memory?.active?(stage==='memory-reveal'||stage==='memory-complete'?'Changed example from your replay':stage==='memory-transfer-result'?'The fresh situation you just predicted':'Example of your remembered flight'):stage==='range'?'Your current range settings':stage==='decision'?selected===null?'Direction example · no path chosen yet':'Your selected directions · no flight revealed':'The shot you just played';
+ return {face,path,label};
+}
+function openImpact(){
+ // No worked flight explanation before an assessed prediction or final shot.
+ if(stage==='memory-transfer'||stage==='challenge')return;
+ const context=impactContext();openDialog('');impact=new ImpactLesson($('#sm-dialog-body'),{...context,orientationOnly:stage==='decision',reduced:()=>reduced,onClose:closeDialog});
 }
 function openDialog(html){if(scene)scene.suspended=true;impactTicket++;impact?.destroy();impact=null;$('#sm-dialog-body').innerHTML=html;$('#sm-dialog').showModal();}
 function closeDialog(){if(scene){scene.suspended=false;scene.dirty=true;}impactTicket++;impact?.destroy();impact=null;$('#sm-dialog').close();}
@@ -137,10 +143,10 @@ function saveNote(){const text=`GAMESHARP GOLF · SHOTMAKER\nThe Headland — yo
 $('#sm-start').onclick=()=>startCase(0);$('#sm-nine-open').onclick=()=>{if(memory?.active)showHome();journey.openBoard();};$('#sm-overview').onclick=()=>{const overview=scene?.toggleView();$('#sm-overview').setAttribute('aria-pressed',String(overview));$('#sm-overview span').textContent=overview?'3D view':'Read the hole';$('#sm-overview').setAttribute('aria-label',overview?'Switch to 3D course view':'Switch to overhead course view');};$('#sm-skip').onclick=()=>scene?scene.skip():finishShot();$('#sm-impact-open').onclick=()=>openImpact();$('#sm-close-dialog').onclick=closeDialog;$('#sm-dialog').addEventListener('cancel',()=>{if(scene){scene.suspended=false;scene.dirty=true;}impactTicket++;impact?.destroy();impact=null;});$('#sm-dialog').addEventListener('click',e=>{if(e.target===$('#sm-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeDialog();}});
 $('#sm-about').onclick=about;$('#sm-method').onclick=about;
 $('#sm-sound').onclick=()=>{audio.toggle();$('#sm-sound').setAttribute('aria-pressed',String(audio.enabled));$('#sm-sound').setAttribute('aria-label',`Turn sound ${audio.enabled?'off':'on'}`);$('#sm-sound span').textContent=`Sound ${audio.enabled?'on':'off'}`;if(audio.enabled)audio.play('ready');};
-function setMotion(value){reduced=value;presentation.motionChanged();$('#sm-motion').textContent=`Motion ${value?'reduced':'on'}`;$('#sm-motion').setAttribute('aria-pressed',String(value));scene?.setReduced(value);if(value)strikeBeat?.finish();document.documentElement.classList.toggle('sm-reduced',value);}
+function setMotion(value){reduced=value;presentation.motionChanged();$('#sm-motion').textContent=`Motion ${value?'reduced':'on'}`;$('#sm-motion').setAttribute('aria-pressed',String(value));scene?.setReduced(value);if(value)strikeBeat?.finish();impact?.motionChanged?.();document.documentElement.classList.toggle('sm-reduced',value);}
 $('#sm-motion').onclick=()=>setMotion(!reduced);media.addEventListener('change',e=>setMotion(e.matches));
 $('#sm-world').addEventListener('shotproject',e=>{const p=e.detail.pin;$('#sm-pin').style.transform=`translate(${p.x}px,${p.y}px)`;$('#sm-pin').style.opacity=p.visible&&stage!=='intro'?'1':'0';for(const key of ['gate','target']){const tag=$('#sm-'+key+'-label'),point=e.detail[key];if(point){tag.style.transform=`translate(${point.x}px,${point.y}px)`;tag.style.opacity=point.visible?'1':'0';}else tag.style.opacity='0';}});
-try{scene=new ShotmakerScene($('#sm-world'),{reduced,onFinish:finishShot,onProgress:u=>{$('#sm-travel').textContent=Math.round(u*160);$('#sm-flight-progress').style.width=`${u*100}%`;$('#sm-flight-word').textContent=u<.38?'WATCH THE START':u<.86?'NOW WATCH THE BEND':'LET IT LAND';journey?.flightProgress(u);},onFailure:useFallback});scene.makeFlight(3,6,'#ffdf96',.65);}catch{useFallback();}
+try{scene=new ShotmakerScene($('#sm-world'),{reduced,onFinish:finishShot,onProgress:u=>{$('#sm-travel').textContent=Math.round(u*160);$('#sm-flight-progress').style.width=`${u*100}%`;const read=activeFlight?impactRead(activeFlight.face,activeFlight.path):null;$('#sm-flight-word').textContent=u<.38?read?.start.toUpperCase()??'WATCH THE START':u<.86?read?.bend.toUpperCase()??'NOW WATCH THE BEND':'LET IT LAND';journey?.flightProgress(u);},onFailure:useFallback});scene.makeFlight(3,6,'#ffdf96',.65);}catch{useFallback();}
 setMotion(reduced);
 function shareBase(){const url=new URL(location.href);url.search='';return url.href;}
 journey=new ShotmakerJourney({leaveMemory:()=>memory?.leave(),storage,reads:state,readsSaved:()=>!saveFailed,scene:()=>scene,reduced:()=>reduced,setStage,startCase,playShot,setSceneMessage,renderFallback,focusPanel,announce,openDialog,showRange,showHome,shareURL:shareBase});

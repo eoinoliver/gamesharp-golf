@@ -16,7 +16,7 @@ export class ShotmakerJourney {
  get built(){return SHOTMAKER_NINE.workshop.filter(c=>workshopCleared(this.state,c)).length;}
  get finished(){return this.state.cards.filter(c=>c.attempts.length===3);}
  persist(){this.saved=saveJourney(this.api.storage,this.state);this.syncBoard();}
- leave(){this.context=null;this.pending=false;this.scene?.setChallenge(null);$('#sm-world-caption').textContent='THE FACE STARTS IT. THE RELATIONSHIP BENDS IT.';$('#sm-goal-tags').hidden=true;$('#sm-pin').hidden=false;}
+ leave(){this.context=null;this.pending=false;this.scene?.setChallenge(null);$('#sm-world-caption').textContent='READ THE START. THEN READ THE BEND.';$('#sm-goal-tags').hidden=true;$('#sm-pin').hidden=false;}
  syncBoard(){
   const last=this.state.cards.at(-1),completed=this.finished,first=completed[0],day=localDay(),daily=this.state.daily[day],ready=this.built===3;
   $('#sm-journey').innerHTML=`<div class="sm-journey-heading"><div><span class="sm-eyebrow">THE SHOTMAKER NINE</span><h2>See it. Make it. <em>Own it.</em></h2></div><p>Three reads. Three builds. Three shots under pressure.<br>A little less help. A little more of you.</p></div>

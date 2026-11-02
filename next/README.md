@@ -99,3 +99,9 @@ covers reading order, keyboard exclusion, stable layout, skip, preference change
 navigation cancellation, custom controls, all twelve library decisions and a
 complete WebKit remembered-shot journey. These are browser checks, not physical
 phone, screen-reader listening, coaching or user-learning validation.
+
+### Teaching contract and impact explanation
+
+`TEACHING.md` is the audit-derived compass for new lessons. The impact walkthrough is self-paced: highlighted face → club-head movement → flight. `impact-teaching.js` supplies one face/path interpretation to the direction ruler, flight readout and result cards. `impact-lesson.js` manages the dialog and disposes its timers/3D view. Introductory help explains only face and movement until the shot is committed. Worked explanations remain unavailable before a fresh prediction or a committed challenge; fresh-choice details describe flights without explaining which answer is correct.
+
+Run `tools/verify-impact-teaching.mjs` against the built preview with `BASE`, `QA_OUTPUT` and `PLAYWRIGHT_MODULE` supplied as for the reading-flow check. It exercises the explanatory journey, actual shot context, reduced motion, WebKit mobile and no-WebGL fallback. Set `BROWSER_ENGINE=webkit` to run the main suite in WebKit when the host’s headless Chromium renderer is unavailable. Automated success does not establish golfer comprehension; the next learning gate is in the teaching contract.

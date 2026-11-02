@@ -1,10 +1,11 @@
+import {impactRead} from './impact-teaching.js';
 import {LessonSequence} from './lesson-sequence.js';
 
 const $=s=>document.querySelector(s);
 const sentence=node=>node?.innerHTML.replace(/<br\s*\/?\s*>/gi,' ')||'';
 export class ShotmakerPresentation {
- constructor({reduced,back,close}){
-  this.reduced=reduced;this.sequence=new LessonSequence();this.seen=new Set();this.ticket=0;
+ constructor({reduced,back,close,teaching}){
+  this.teaching=teaching;this.reduced=reduced;this.sequence=new LessonSequence();this.seen=new Set();this.ticket=0;
   this.root=$('#sm-experience');
   this.sound=$('#sm-sound');this.soundHome=this.sound.parentElement;
   const header=document.createElement('nav');header.className='gs-lesson-header';header.hidden=true;header.setAttribute('aria-label','Lesson navigation');
@@ -37,6 +38,10 @@ export class ShotmakerPresentation {
   const decision=['decision','memory-decision','memory-transfer','challenge'].includes(stage),flight=stage==='flight';
   const labels=flight?['YOUR CHOICE','WATCH THE FLIGHT','SEE WHY']:decision?['SEE THE SHOT','READ THE SITUATION','YOUR ANSWER']:stage==='memory-capture'?['YOUR MEMORY','READ THE PROMPT','DESCRIBE THE FLIGHT']:stage==='range'?['SEE THE FLIGHT','READ THE PROMPT','TRY A CHANGE']:stage==='card-brief'?['YOUR NINE','READ THE BRIEF','PLAY THE FINAL THREE']:['complete','memory-complete','scorecard'].includes(stage)?['YOUR SHOTS','KEEP THE INSIGHT','YOUR NEXT STEP']:['SEE THE RESULT','READ THE REASON','TAKE IT FORWARD'];
   this.rail.innerHTML=labels.map((label,i)=>`<span data-beat="${i}"><b>${i+1}</b> ${label}</span>`).join('');
+  panel.querySelector('.it-result')?.remove();
+  if(['result','challenge-result','memory-reveal','memory-transfer-result'].includes(stage)){
+   const shot=this.teaching(),read=impactRead(shot.face,shot.path),card=document.createElement('div');card.className='it-result';card.innerHTML=`<span>WHY THIS FLIGHT · ${shot.label}</span><p>${read.relation}</p><button>Walk through the strike <span>1 → 2 → 3</span></button>`;card.querySelector('button').onclick=shot.open;const insight=panel.querySelector('.sm-insight,.memory-insight');if(insight)insight.after(card);else panel.append(card);
+  }
   const visible=[...panel.children].filter(el=>!el.hasAttribute('data-gs-context')&&!el.hidden);
   const question=panel.querySelector('.sm-question'),answers=panel.querySelector('.sm-answers');
   let groups;
