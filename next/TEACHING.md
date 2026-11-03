@@ -58,3 +58,13 @@ Proposed product gate (a judgment, not a statistical result): at least four of f
 - `impact-teaching.test.mjs` checks direction logic across the available settings and the actual club-face normal.
 - `tools/verify-impact-teaching.mjs` checks normal/reduced motion, mirrored/straight cases, context continuity, mobile layout, no-WebGL fallback and no pre-commit worked explanation.
 - Golf principle reference: https://www.trackman.com/blog/face-to-path (centred-contact assumption and target-versus-path distinction). This supports the principle, not the app's exact numerical flight or teaching effectiveness.
+
+## Invitation and consequence revision · 3 November 2026
+
+- Useful decisions: place the supplied approach pattern; distinguish first bounce from finish; choose putting pace using all supplied leaves; recognise how face and path change flight. Existing lesson misconceptions and model bounds remain in force.
+- Entry previews are rendered from the actual first-question scenes. They must preserve the flag, bunker and starting surface, and contain no demonstrated answer. Home renders the selected connected round's flag. The previews are decorative; the adjacent question conveys the invitation.
+- Watch one event: contact, first bounce, then rollout. Recorded audio follows those events, while phase labels and persistent geometry carry the explanation in silence. The grass effect is recorded ball-on-grass foley, not a measurement of golf-ball acoustics.
+- Payoff states carry and roll separately, then remaining distance. Sub-metre leaves use centimetres; short chip finishes still represent authored distances. No outcome is called a scoring improvement. The fixed nine-strike comparison and tighter-pattern permission-to-attack episode remain intact.
+- Weak distractors were rewritten as plausible decisions while retaining their option indices and the correct relationship. Historical first attempts remain untouched. New question wording is not evidence of improved learning.
+- One shared sound and instant-reading preference applies across journeys. Reduced motion bypasses staged motion. My game surfaces saved cues, the current course focus, connected rounds and remembered shots without migrating those first-attempt stores.
+- Validation for this revision: numerical payoff and preference migration tests; whole-journey browser checks including delayed-return simulation, comparison, mobile widths, keyboard, reduced motion, no WebGL and blocked storage. Independent coaching review, audio audition on physical phones and observed golfer learning are still separate gates.

@@ -1,9 +1,10 @@
 import './lesson-sequence.css';
+import {preferences} from './preferences.js';
 
 // Tennis's reading cadence: 5.5 words / second, then the decision.
 // One owner per journey: navigation, skip and reduced motion all drain this owner.
 export class LessonSequence {
- constructor(){this.timers=new Set();this.restore=[];this.pending=[];this.generation=0;this.active=false;}
+ constructor(){this.timers=new Set();this.restore=[];this.pending=[];this.generation=0;this.active=false;window.addEventListener('golf-preference',event=>{if(event.detail.instantText&&this.active)this.finish();});}
  later(fn,ms){const generation=this.generation;const timer=setTimeout(()=>{this.timers.delete(timer);if(generation===this.generation)fn();},ms);this.timers.add(timer);}
  cancel(){
   this.generation++;this.timers.forEach(clearTimeout);this.timers.clear();
@@ -17,7 +18,7 @@ export class LessonSequence {
  setBeat(index){this.rail?.querySelectorAll('[data-beat]').forEach((el,i)=>{el.classList.toggle('active',i===index);el.classList.toggle('done',i<index);if(i===index)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');});}
  start({root,text,groups=[],skip,rail,reduced=false,onReady}){
   this.cancel();this.root=root;this.skip=skip;this.rail=rail;this.onReady=onReady;
-  if(reduced){this.finish();return;}
+  if(reduced||preferences().instantText){this.finish();return;}
   this.active=true;root.dataset.reading='situation';this.setBeat(0);
   const words=[];
   for(const el of [text].flat().filter(Boolean)){

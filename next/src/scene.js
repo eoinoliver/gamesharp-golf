@@ -32,7 +32,7 @@ export class GolfScene {
   this.camera=new THREE.PerspectiveCamera(43,1,.1,1200);
   this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
   this.renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.7));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFShadowMap;
-  this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.96;
+  this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.12;
   this.renderer.domElement.setAttribute('aria-hidden','true');host.prepend(this.renderer.domElement);
   this.scene.add(new THREE.HemisphereLight('#e6f2f1','#3b492b',1.5));
   const sun=new THREE.DirectionalLight('#fff0c9',2.8);sun.position.set(-70,65,48);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-120;sun.shadow.camera.right=100;sun.shadow.camera.top=140;sun.shadow.camera.bottom=-100;sun.shadow.camera.far=260;sun.shadow.bias=-.0003;sun.shadow.normalBias=.08;sun.target.position.set(-15,0,25);this.scene.add(sun,sun.target);
@@ -45,7 +45,7 @@ export class GolfScene {
  }
  makeTerrain(){
   const geo=new THREE.PlaneGeometry(450,650,260,360);geo.rotateX(-Math.PI/2);geo.translate(-145,0,-45);
-  const p=geo.attributes.position,colors=[];const rough=new THREE.Color('#536d35'),fair=new THREE.Color('#63863b'),green=new THREE.Color('#62873e'),sand=new THREE.Color('#cbb584'),cliff=new THREE.Color('#827761');
+  const p=geo.attributes.position,colors=[];const rough=new THREE.Color('#536d35'),fair=new THREE.Color('#6a9d43'),green=new THREE.Color('#79ab53'),sand=new THREE.Color('#cbb584'),cliff=new THREE.Color('#827761');
   for(let i=0;i<p.count;i++){
    const x=p.getX(i),z=p.getZ(i),edge=bankX(z)-x;p.setY(i,terrainY(x,z));
    const c=rough.clone();const {x:line,width:fwWidth}=fairway(z);

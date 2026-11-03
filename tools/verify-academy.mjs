@@ -10,8 +10,8 @@ const overflow=async p=>assert.equal(await p.evaluate(()=>document.documentEleme
 const answer=async(p,choice)=>{await p.locator(`[data-choice="${choice}"]`).click();await p.locator('#ac-commit').click();await p.locator('.ac-feedback').waitFor();};
 try{
  const p=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});watch(p);
- await p.goto(base);await p.locator('.rh-feature').waitFor();assert.equal(await p.locator('.ac-nav a').count(),3);await p.screenshot({path:resolve(out,'home.png'),fullPage:true});
- await p.getByRole('link',{name:'Explore',exact:true}).click();assert.equal(await p.locator('.ac-card').count(),15);for(const c of ['shot','course','short','putt']){await p.goto(`${base}/?all=1&kind=${c}`);assert.ok(await p.locator('.ac-card').count()>=3);}
+ await p.goto(base);await p.locator('.gs-home-hero').waitFor();assert.equal(await p.locator('.ac-nav a').count(),3);await p.screenshot({path:resolve(out,'home.png'),fullPage:true});
+ await p.getByRole('link',{name:'Explore',exact:true}).click();await p.locator('.ac-card').first().waitFor();assert.equal(await p.locator('.ac-card').count(),15);for(const c of ['shot','course','short','putt']){await p.goto(`${base}/?all=1&kind=${c}`);await p.locator('.ac-card').first().waitFor();assert.ok(await p.locator('.ac-card').count()>=3);}
  report('Home, Sharpen and Explore link one catalogue with 15 eligible lessons in four categories.');
  for(const l of NEW_LESSONS){await p.goto(`${base}/?learn=${l.id}`);for(let i=0;i<3;i++){
   assert.equal(await p.locator('#ac-commit').isDisabled(),true);assert.equal(await p.locator('.ac-feedback').count(),0);await answer(p,l.questions[i].correct);

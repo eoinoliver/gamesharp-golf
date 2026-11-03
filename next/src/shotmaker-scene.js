@@ -24,11 +24,11 @@ function dispose(group){group.traverse(o=>{o.geometry?.dispose();if(o.material)(
 export class ShotmakerScene {
  constructor(host,{reduced=false,onFinish,onProgress,onFailure}={}){
   this.host=host;this.reduced=reduced;this.onFinish=onFinish;this.onProgress=onProgress;this.onFailure=onFailure;this.live=true;this.dirty=true;this.clock=0;this.mode='hero';this.face=3;this.path=6;this.playing=false;this.isOverview=false;this.showGhost=false;
-  this.renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;
+  this.renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.18;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.domElement.setAttribute('aria-hidden','true');host.prepend(this.renderer.domElement);
   this.contextLost=e=>{e.preventDefault();this.onFailure?.();};this.renderer.domElement.addEventListener('webglcontextlost',this.contextLost);
   this.scene=new T.Scene();this.scene.fog=new T.FogExp2('#c9d8d2',.0022);this.camera=new T.PerspectiveCamera(43,1,.15,30000);this.look=V();this.destination=V();this.lookDestination=V();
-  this.scene.add(new T.HemisphereLight('#c0dced','#768363',1.1));
+  this.scene.add(new T.HemisphereLight('#d2ecf4','#7c9261',1.35));
   this.sun=new T.DirectionalLight('#fff0d0',2.5);this.sun.position.set(-65,70,30);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-130,right:100,top:190,bottom:-90,near:1,far:360});this.sun.shadow.bias=-.0002;this.sun.shadow.normalBias=.035;this.sun.target.position.set(-10,5,40);this.scene.add(this.sun,this.sun.target);
   this.makeSky();this.makeTerrain();this.makeSea();this.makeDetails();this.makeFlag();this.makeBall();
   this.lines=new T.Group();this.scene.add(this.lines);this.targetLine=this.makeLine([V(0,height(0,160)+.1,160),V(0,8.5,0)],'#fff6ce',.22,true);this.scene.add(this.targetLine);this.targetLine.visible=false;
@@ -36,7 +36,7 @@ export class ShotmakerScene {
  }
  makeSky(){
   const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:{sun:{value:V(-.5,.36,-.85).normalize()},photo:{value:null},hasPhoto:{value:0}},vertexShader:'varying vec3 vDirection;void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec3 vDirection;uniform vec3 sun;uniform sampler2D photo;uniform float hasPhoto;
-  void main(){vec3 d=normalize(vDirection);float h=max(d.y,0.);vec3 c=mix(vec3(.84,.85,.76),vec3(.27,.49,.65),pow(h,.48));float s=max(dot(d,sun),0.);c+=vec3(1.,.71,.35)*pow(s,28.)*.28;c+=vec3(1.,.86,.55)*pow(s,900.)*.9;float streak=sin(d.x*19.+d.z*7.+sin(d.z*13.))*sin(d.z*22.-d.x*9.);c=mix(c,vec3(.91,.9,.82),smoothstep(.2,.75,streak)*smoothstep(.12,.3,h)*(1.-smoothstep(.3,.6,h))*.18);if(hasPhoto>.5){vec2 uv=vec2(atan(d.z,d.x)/6.2831853+.5,.53+h*.47);c=texture2D(photo,uv).rgb;c=mix(c,vec3(.64,.75,.75),pow(1.-h,18.)*.75);}gl_FragColor=vec4(c,1.);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
+  void main(){vec3 d=normalize(vDirection);float h=max(d.y,0.);vec3 c=mix(vec3(.84,.85,.76),vec3(.27,.49,.65),pow(h,.48));float s=max(dot(d,sun),0.);c+=vec3(1.,.71,.35)*pow(s,28.)*.28;c+=vec3(1.,.86,.55)*pow(s,900.)*.9;float streak=sin(d.x*19.+d.z*7.+sin(d.z*13.))*sin(d.z*22.-d.x*9.);c=mix(c,vec3(.91,.9,.82),smoothstep(.2,.75,streak)*smoothstep(.12,.3,h)*(1.-smoothstep(.3,.6,h))*.18);if(hasPhoto>.5){vec2 uv=vec2(atan(d.z,d.x)/6.2831853+.5,.53+h*.47);c=mix(texture2D(photo,uv).rgb,vec3(.31,.60,.76),.22);c=mix(c,vec3(.64,.75,.75),pow(1.-h,18.)*.75);}gl_FragColor=vec4(c,1.);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
   this.sky=new T.Mesh(new T.SphereGeometry(2200,32,20),mat);this.scene.add(this.sky);
   new T.TextureLoader().load(skyURL,texture=>{if(!this.live){texture.dispose();return;}texture.mapping=T.EquirectangularReflectionMapping;texture.colorSpace=T.SRGBColorSpace;this.dirty=true;this.skyTexture=texture;this.sky.material.uniforms.photo.value=texture;this.sky.material.uniforms.hasPhoto.value=1;this.scene.environment=texture;this.scene.environmentIntensity=.25;this.scene.environmentRotation.y=2.2;},undefined,()=>{});
  }
@@ -66,22 +66,22 @@ export class ShotmakerScene {
   const cg=new T.BufferGeometry();cg.setAttribute('position',new T.Float32BufferAttribute(cp,3));cg.setAttribute('color',new T.Float32BufferAttribute(cc,3));cg.setAttribute('uv',new T.Float32BufferAttribute(cu,2));cg.setIndex(ci);cg.computeVertexNormals();
   const loader=new T.TextureLoader(),rockMap=loader.load(rockURL),normalMap=loader.load(rockNormalURL);rockMap.colorSpace=T.SRGBColorSpace;for(const texture of [rockMap,normalMap]){texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=Math.min(8,this.renderer.capabilities.getMaxAnisotropy());}
   const cliff=new T.Mesh(cg,new T.MeshStandardMaterial({vertexColors:true,map:rockMap,normalMap,normalScale:new T.Vector2(.9,.9),roughness:1,side:T.DoubleSide}));cliff.receiveShadow=true;this.scene.add(cliff);
-  this.oval(0,0,24.5,27.5,'#5b874c',.025);this.oval(0,0,23,26,'#6d9c54',.06,true);this.oval(-24,15,7.6,9.6,'#dbcfac',.08,false,true);
+  this.oval(0,0,24.5,27.5,'#5a944e',.025);this.oval(0,0,23,26,'#79b45f',.06,true);this.oval(-24,15,7.6,9.6,'#f0dfb6',.08,false,true);
   this.oval(0,160,5,3.4,'#64914e',.035);
   for(const x of [-3,3]){const tee=new T.Mesh(new T.BoxGeometry(.38,.27,.32),standard('#eee7c8'));tee.position.set(x,height(x,160)+.15,160);tee.castShadow=true;this.scene.add(tee);}
  }
  oval(cx,cz,rx,rz,color,lift,stripe=false,bunker=false){
-  const p=[],co=[],idx=[],r=24,n=128,base=new T.Color(color);
+  const p=[],co=[],uv=[],idx=[],r=24,n=128,base=new T.Color(color);
   for(let j=0;j<=r;j++)for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,t=j/r,shape=1+.035*Math.sin(3*a)+.025*Math.cos(a*5),x=cx+Math.cos(a)*rx*t*shape,z=cz+Math.sin(a)*rz*t*shape;
-   p.push(x,height(x,z)+lift-(bunker?(1-t*t)*1.05:0),z);const c=base.clone().multiplyScalar(stripe?(Math.floor((x*.3+z)/5)%2?1.015:.97):1-.05*(1-t));co.push(c.r,c.g,c.b);
+   p.push(x,height(x,z)+lift-(bunker?(1-t*t)*1.05:0),z);uv.push((x-cx)/rx/2+.5,(z-cz)/rz/2+.5);const c=base.clone().multiplyScalar(stripe?(Math.floor((x*.3+z)/5)%2?1.015:.97):1-.05*(1-t));co.push(c.r,c.g,c.b);
    if(j<r&&i<n){const k=j*(n+1)+i,b=k+n+1;idx.push(k,b,k+1,b,b+1,k+1);}}
-  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('color',new T.Float32BufferAttribute(co,3));g.setIndex(idx);g.computeVertexNormals();const m=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:1,side:T.DoubleSide}));m.receiveShadow=true;this.scene.add(m);
+  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('color',new T.Float32BufferAttribute(co,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();const detail=grain();detail.repeat.set(rx*1.4,rz*1.4);detail.anisotropy=Math.min(4,this.renderer.capabilities.getMaxAnisotropy());const m=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,map:detail,bumpMap:detail,bumpScale:bunker?.004:.002,roughness:1,side:T.DoubleSide}));m.receiveShadow=true;this.scene.add(m);
  }
  makeSea(){
   this.waterTime={value:0};const mat=new T.ShaderMaterial({uniforms:{time:this.waterTime},vertexShader:'varying vec3 wp;void main(){wp=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(wp,1.);}',fragmentShader:`uniform float time;varying vec3 wp;
   float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
   float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
-  void main(){vec2 p=wp.xz;float edge=28.+5.*sin((p.y+12.)*.031)+2.*sin(p.y*.093);float shore=max(0.,p.x-edge);float n=noise(p*.15+time*.02);float w=sin(p.x*.5+p.y*.73-time*.5+n*5.);float w2=sin(p.y*2.2-p.x*.8+time*.7);vec3 col=mix(vec3(.12,.43,.42),vec3(.095,.27,.32),smoothstep(1.,95.,shore));col+=pow(max(0.,w*w2),9.)*.1;float foam=(1.-smoothstep(3.,10.+n*3.,shore))*smoothstep(-.4,.8,sin(shore*1.3-time*.8+n*2.));col=mix(col,vec3(.78,.85,.78),foam*.75);float glint=pow(max(0.,w),35.)*pow(max(0.,w2),5.);col+=vec3(.7,.61,.36)*glint*.32;float fog=1.-exp(-pow(length(cameraPosition-wp)*.0022,2.));col=mix(col,vec3(.64,.75,.75),fog);gl_FragColor=vec4(col,1.);
+  void main(){vec2 p=wp.xz;float edge=28.+5.*sin((p.y+12.)*.031)+2.*sin(p.y*.093);float shore=max(0.,p.x-edge);float n=noise(p*.15+time*.02);float w=sin(p.x*.5+p.y*.73-time*.5+n*5.);float w2=sin(p.y*2.2-p.x*.8+time*.7);vec3 col=mix(vec3(.10,.55,.52),vec3(.07,.34,.43),smoothstep(1.,95.,shore));col+=pow(max(0.,w*w2),9.)*.1;float foam=(1.-smoothstep(3.,10.+n*3.,shore))*smoothstep(-.4,.8,sin(shore*1.3-time*.8+n*2.));col=mix(col,vec3(.78,.85,.78),foam*.75);float glint=pow(max(0.,w),35.)*pow(max(0.,w2),5.);col+=vec3(.7,.61,.36)*glint*.32;float fog=1.-exp(-pow(length(cameraPosition-wp)*.0022,2.));col=mix(col,vec3(.64,.75,.75),fog);gl_FragColor=vec4(col,1.);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>}`});
   const sea=new T.Mesh(new T.PlaneGeometry(24000,24000),mat);sea.rotation.x=-Math.PI/2;sea.position.y=-2.5;this.scene.add(sea);
@@ -110,7 +110,7 @@ export class ShotmakerScene {
  }
  makeFlag(){
   const group=new T.Group();group.position.set(0,height(0,0)+.09,0);const pole=new T.Mesh(new T.CylinderGeometry(.045,.052,3.1,12),standard('#f4edda',.4));pole.position.y=1.55;pole.castShadow=true;group.add(pole);
-  const hole=new T.Mesh(new T.CircleGeometry(.13,24),new T.MeshBasicMaterial({color:'#1b3023'}));hole.rotation.x=-Math.PI/2;hole.position.y=.015;group.add(hole);
+  const hole=new T.Mesh(new T.CircleGeometry(.48,32),new T.MeshBasicMaterial({color:'#1b3023'}));hole.rotation.x=-Math.PI/2;hole.position.y=.015;group.add(hole);
   const geo=new T.PlaneGeometry(1.2,.65,16,6);geo.translate(.6,2.72,0);this.flag=new T.Mesh(geo,new T.MeshStandardMaterial({color:'#e9b956',roughness:.7,side:T.DoubleSide}));group.add(this.flag);this.scene.add(group);
   const target=new T.Mesh(new T.RingGeometry(3.9,4.03,100),new T.MeshBasicMaterial({color:'#eee8bf',side:T.DoubleSide,transparent:true,opacity:.7,depthWrite:false}));target.rotation.x=-Math.PI/2;target.position.set(0,height(0,0)+.12,0);this.scene.add(target);this.targetRing=target;
  }

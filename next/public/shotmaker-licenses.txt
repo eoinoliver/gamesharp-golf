@@ -208,3 +208,22 @@ INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
 DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
+
+RECORDED GOLF AUDIO · 3 NOVEMBER 2026
+Golf strike: golf_hitting_ball.wav by inbeeld. CC0.
+https://freesound.org/people/inbeeld/sounds/21877/
+Cup: golf_putting.wav by inbeeld. CC0.
+https://freesound.org/people/inbeeld/sounds/21878/
+Putter contacts: putt.wav by 170129. CC0.
+https://freesound.org/people/170129/sounds/408260/
+Wedge contacts and sand landing: HSN golf sand wedge.wav by Bluesy1905.
+https://freesound.org/people/Bluesy1905/sounds/349323/
+Creative Commons Attribution 3.0: https://creativecommons.org/licenses/by/3.0/
+Changes: excerpted, high-pass filtered, levelled, limited and encoded as MP3. No endorsement implied.
+Grass landing foley: Bouncy Ball Bouncing on Dry Grass by NathanaelBray. CC0.
+https://freesound.org/people/NathanaelBray/sounds/650976/
+Coastal ambience: Sea Waves with Tern Calls, DenisChardonnet, BigSoundBank #267. CC0.
+https://bigsoundbank.com/sea-waves-and-seagulls-s0267.html
+CC0: https://creativecommons.org/publicdomain/zero/1.0/
+All recordings have been excerpted/levelled for use in the teaching scenes. No generated strike tones.
+Scene-card images are renders of GameSharp Golf's own lesson geometry, using the materials credited above.

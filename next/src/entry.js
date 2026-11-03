@@ -1,3 +1,4 @@
+import './experience-controls.js';
 import {retireLegacyGolfCache} from './legacy-cache.js';
 try { void retireLegacyGolfCache({serviceWorker:navigator.serviceWorker,caches:window.caches,origin:location.origin}); } catch {}
 

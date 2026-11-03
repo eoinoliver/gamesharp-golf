@@ -6,12 +6,13 @@ import {SETUPS,layoutMap} from './setup.js';
 import {COURSE,LESSONS} from './scenario.js';
 import {AIM_MIN,AIM_MAX,bankX,bestPlan,carryWindow,evaluate,fairway,offsets,pattern,rules,summary,targetFor} from './model.js';
 import {readState,record,commitAttempt,completeLesson,saveCue,saveState} from './state.js';
-import {GolfAudio} from './audio.js';
+import {golfAudio} from './audio.js';
 import {LessonSequence} from './lesson-sequence.js';
 
 const $=s=>document.querySelector(s),arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
 const targetIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M1 12h4m14 0h4"/></svg>';
-const state=readState(),audio=new GolfAudio(state.sound),media=matchMedia('(prefers-reduced-motion: reduce)');
+golfAudio.setScene(true);
+const state=readState(),audio=golfAudio,media=matchMedia('(prefers-reduced-motion: reduce)');
 let scene=null,reducedMotion=media.matches,stage='intro',lessonIndex=0,caseIndex=0,plan=null,committed=null,displayPlan=null,confidence='not-asked',compared=false,showingAlternative=false,saveFailed=false,roundResults=[],lastCommit=null,selectedAnswer=null,selectionSource=null,customOpen=false;
 const lesson=()=>LESSONS[lessonIndex],current=()=>lesson().cases[caseIndex];
 const planText=p=>planDescription(current(),p);
@@ -132,7 +133,7 @@ function render({focus=false}={}){
 function scrollToScene(allWidths=false){if(allWidths||matchMedia('(max-width: 800px)').matches)window.scrollTo({top:0,behavior:'instant'});}
 function renderLibrary(){
  const labURL=new URL(location.href);labURL.searchParams.set('lesson','shot-lab');labURL.hash='';
- $('#library').innerHTML=`<a class="shot-lab-entry" href="${labURL.href}"><span>NEW · THE SHOT LAB</span><strong>The face. The path. The flight.</strong><p>Watch the swing. Predict the flight. See what changes at impact.</p><b>Try the motion study ↗</b></a><div class="library-header"><div><span class="chapter-label">CHOOSE YOUR NEXT READ</span><h2>Six ways to see more.</h2></div><p>Two decisions in each.<br>Pick any starting point.</p></div><div class="lesson-grid">${LESSONS.map((l,i)=>{const done=state.completed[l.id],strong=state.firstAttempts[l.cases[1].id]?.strong;return `<button class="lesson-card" data-lesson="${i}"><span class="card-top"><span>${l.number} / FIELD NOTE</span><span class="card-glyph" aria-hidden="true">${['↕','↗','◉','⌁','⚑','↺'][i]}</span></span><strong>${l.name}</strong><p>${l.teaser}</p><span class="card-bottom">${done?strong?'First attempt: strong':'Completed · worth another read':'About 3 minutes'} <span>↗</span></span></button>`;}).join('')}</div>`;
+ $('#library').innerHTML=`<div class="library-header"><div><span class="chapter-label">CHOOSE YOUR NEXT READ</span><h2>Six ways to see more.</h2></div><p>Two decisions in each.<br>Pick any starting point.</p></div><div class="lesson-grid">${LESSONS.map((l,i)=>{const done=state.completed[l.id],strong=state.firstAttempts[l.cases[1].id]?.strong;return `<button class="lesson-card" data-lesson="${i}"><span class="card-top"><span>${l.number} / FIELD NOTE</span><span class="card-glyph" aria-hidden="true">${['↕','↗','◉','⌁','⚑','↺'][i]}</span></span><strong>${l.name}</strong><p>${l.teaser}</p><span class="card-bottom">${done?strong?'First attempt: strong':'Completed · worth another read':'About 3 minutes'} <span>↗</span></span></button>`;}).join('')}</div>`;
  $('#library').querySelectorAll('[data-lesson]').forEach(b=>b.onclick=()=>begin(Number(b.dataset.lesson)));
 }
 function bindPlanControls(){
@@ -179,7 +180,7 @@ function updateFallback(){
 }
 $('.dialog-close').onclick=()=>$('#details-dialog').close();$('#details-dialog').onclick=e=>{if(e.target===$('#details-dialog'))$('#details-dialog').close();};
 $('#back-to-reads').onclick=goHome;$('#about').onclick=()=>showDialog();$('#evidence').onclick=()=>showDialog('evidence');$('#library-link').onclick=goHome;$('.brand').onclick=e=>{e.preventDefault();goHome();};
-function toggleSound(){audio.enabled=!audio.enabled;state.sound=audio.enabled;saveState(state);audio.unlock();$('#sound').setAttribute('aria-pressed',String(audio.enabled));$('#sound-label').textContent=`Sound ${audio.enabled?'on':'off'}`;$('#scene-sound').setAttribute('aria-pressed',String(audio.enabled));$('#scene-sound').setAttribute('aria-label',audio.enabled?'Turn sound off':'Turn sound on');if(audio.enabled)audio.play('success');}
+function toggleSound(){audio.toggle();state.sound=audio.enabled;saveState(state);audio.unlock();$('#sound').setAttribute('aria-pressed',String(audio.enabled));$('#sound-label').textContent=`Sound ${audio.enabled?'on':'off'}`;$('#scene-sound').setAttribute('aria-pressed',String(audio.enabled));$('#scene-sound').setAttribute('aria-label',audio.enabled?'Turn sound off':'Turn sound on');if(audio.enabled)audio.play('success');}
 $('#sound').onclick=toggleSound;$('#scene-sound').onclick=toggleSound;$('#scene-sound').setAttribute('aria-pressed',String(audio.enabled));$('#scene-sound').setAttribute('aria-label',audio.enabled?'Turn sound off':'Turn sound on');
 function setMotion(reduced){reducedMotion=reduced;if(reduced)reading.finish();if(scene)scene.reducedMotion=reduced;$('#motion').textContent=`Motion ${reduced?'reduced':'on'}`;$('#motion').setAttribute('aria-pressed',String(reduced));document.documentElement.dataset.reducedMotion=String(reduced);}
 $('#motion').onclick=()=>setMotion(!reducedMotion);media.addEventListener('change',e=>setMotion(e.matches));

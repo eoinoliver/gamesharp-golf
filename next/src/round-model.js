@@ -1,3 +1,4 @@
+import {distanceText} from './teaching-payoff.js';
 import {HEADLAND,ERRORS,EPISODES,episodeById} from './round-content.js';
 import {shoreX} from './shotmaker-model.js';
 export const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
@@ -32,7 +33,7 @@ export function puttQuestion(e,start,id='putt'){
 }
 export function questionAt(e,answers){if(!answers.length)return approachQuestion(e);const next=nextQuestion(e,answers[0].choice);if(answers.length===1)return next;if(next.kind!=='putt'&&answers.length===2)return puttQuestion(e,next.options[answers[1].choice].end);return null;}
 export function outcome(e,q,choice){if(q.kind==='approach'){const end=approachEnd(e,choice);return {start:q.start,end,kind:'approach',height:27,lie:lie(end)};}const o=q.options[choice];return {start:q.start,end:o.end,land:o.land,kind:q.kind,height:q.kind==='putt'?0:q.kind==='bunker'?5:3,lie:lie(o.end)};}
-export function resultLabel(e,q,choice){const o=outcome(e,q,choice),d=distance(o.end,e.pin);return `${q.kind==='putt'&&d<.01?'Holed':o.lie==='green'?`${d.toFixed(1)} m putt left`:o.lie==='bunker'?'Front-left bunker':o.lie==='coast'?'Beyond the coast':`${d.toFixed(1)} m from the rough`}`;}
+export function resultLabel(e,q,choice){const o=outcome(e,q,choice),d=distance(o.end,e.pin);return `${q.kind==='putt'&&d<.01?'Holed':o.lie==='green'?`${distanceText(d)} putt left`:o.lie==='bunker'?'Front-left bunker':o.lie==='coast'?'Beyond the coast':`${d.toFixed(1)} m from the rough`}`;}
 export function validAnswers(id,answers){const e=episodeById(id);if(!e||!Array.isArray(answers))return [];const clean=[];for(const a of answers.slice(0,3)){const q=questionAt(e,clean);if(!q||a.id!==q.id||!Number.isInteger(a.choice)||!q.options[a.choice]||!Number.isFinite(Date.parse(a.at)))break;clean.push({id:a.id,choice:a.choice,at:a.at});}return clean;}
 // Fail during authoring if the narrative's green targets contradict the fixed geometry.
 for(const e of EPISODES){if(lie(e.pin)!=='green')throw new Error('Flag outside green');}
