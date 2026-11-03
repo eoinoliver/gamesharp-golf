@@ -165,3 +165,6 @@ export const SHOT_MEMORIES = Object.freeze({
 
 // Approved whole-round curriculum. New prose, options and diagrams live together in academy-content.js.
 export const WHOLE_ROUND_LESSON_IDS=Object.freeze(['start-and-bend','straight-is-not-target','enough-curve','landing-not-hole','carry-the-trouble','surface-changes','pace-and-line','distance-before-perfection','same-distance-new-slope']);
+
+// Explicitly approved connected Headland situations; kept separate from legacy packs.
+export const CONNECTED_ROUND_IDS = ['temptation','bunker','permission'];
