@@ -5,6 +5,8 @@ if (new URLSearchParams(location.search).get('lesson') === 'shot-lab') {
   import('./shot-lab.js');
 } else if (new URLSearchParams(location.search).get('view') === 'library') {
   import('./main.js');
-} else {
+} else if (['shotmaker','memory','range','daily','book'].includes(new URLSearchParams(location.search).get('mode'))) {
   import('./shotmaker.js');
+} else {
+  import('./academy.js');
 }

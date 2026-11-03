@@ -44,12 +44,12 @@ $('#app').innerHTML=`<div class="sm-shell">
   <section id="sm-shotbook" class="memory-book" aria-label="Your personal Shotbook"></section>
   <div id="sm-chapters" class="sm-chapters" aria-label="Three shot sequence" hidden><div class="active"><span>01</span><p>THE COMEBACK<small>A face that points right. A ball that bends left.</small></p><b>↗</b></div><div><span>02</span><p>THE STRAIGHT STORY<small>Why straight and on target are different.</small></p><b>↗</b></div><div><span>03</span><p>THE OTHER SIDE<small>Turn the insight around. Make it yours.</small></p><b>↗</b></div></div>
   <section id="sm-journey" class="sm-journey" aria-label="Your Shotmaker Nine"></section>
-  <footer class="sm-footer"><span>Built for the feeling. Designed for the understanding.</span><button id="sm-method">How the flight works</button></footer>
+  <footer class="sm-footer"><a href="?all=1">← Explore all golf lessons</a><button id="sm-method">How the flight works</button></footer>
  </main></div>
  <div id="sm-live" class="sm-sr" aria-live="polite" aria-atomic="true"></div>
  <dialog id="sm-dialog" class="sm-dialog"><button id="sm-close-dialog" class="sm-close" aria-label="Close dialog">×</button><div id="sm-dialog-body"></div></dialog>`;
 
-const presentation=new ShotmakerPresentation({reduced:()=>reduced,back:()=>{if(memory?.active)memory.openBook();else journey?.openBoard();},close:()=>showHome(),teaching:()=>({...impactContext(),open:openImpact})});
+const presentation=new ShotmakerPresentation({reduced:()=>reduced,back:()=>{if(memory?.active)memory.openBook();else journey?.openBoard();},close:()=>{location.href='?all=1&kind=shot';},teaching:()=>({...impactContext(),open:openImpact})});
 
 function announce(message){$('#sm-live').textContent=message;}
 function setStage(next){
@@ -150,10 +150,10 @@ try{scene=new ShotmakerScene($('#sm-world'),{reduced,onFinish:finishShot,onProgr
 setMotion(reduced);
 function shareBase(){const url=new URL(location.href);url.search='';return url.href;}
 journey=new ShotmakerJourney({leaveMemory:()=>memory?.leave(),storage,reads:state,readsSaved:()=>!saveFailed,scene:()=>scene,reduced:()=>reduced,setStage,startCase,playShot,setSceneMessage,renderFallback,focusPanel,announce,openDialog,showRange,showHome,shareURL:shareBase});
-function showHome(){const homeURL=new URL(location.href);homeURL.search='';try{history.replaceState(null,'',homeURL.href);}catch{}memory?.leave();journey?.leave();comparing=false;rangeShots=0;setStage('intro');scene?.prepare(3,6);scene?.makeFlight(3,6,'#ffdf96',.65);scene?.setMode('hero');renderFallback();memory?.syncBook();window.scrollTo({top:0,behavior:reduced?'instant':'smooth'});}
+function showHome(){const homeURL=new URL(location.href);homeURL.search='?mode=shotmaker';try{history.replaceState(null,'',homeURL.href);}catch{}memory?.leave();journey?.leave();comparing=false;rangeShots=0;setStage('intro');scene?.prepare(3,6);scene?.makeFlight(3,6,'#ffdf96',.65);scene?.setMode('hero');renderFallback();memory?.syncBook();window.scrollTo({top:0,behavior:reduced?'instant':'smooth'});}
 memory=new ShotMemory({storage,scene:()=>scene,reduced:()=>reduced,leaveJourney:()=>{journey.leave();comparing=false;rangeShots=0;},setStage,playShot,setSceneMessage,renderFallback,focusPanel,announce,openImpact,showHome,shareURL:shareBase});
-$('.sm-brand').onclick=e=>{e.preventDefault();if(stage!=='flight')showHome();};
-const params=new URLSearchParams(location.search);if(params.get('mode')==='range'){rangeFace=clamp(Math.round(Number(params.get('face'))||0),-8,8);rangePath=clamp(Math.round(Number(params.get('path'))||0),-8,8);showRange(false);}else if(params.get('mode')==='daily')journey.startDaily(false,params.get('day'));else if(params.get('mode')==='memory'){if(params.get('shot'))memory.openShared(params.get('shot'));else memory.beginOrResume();}
+$('.sm-brand').onclick=e=>{e.preventDefault();if(stage!=='flight')location.href='?home=1';};
+const params=new URLSearchParams(location.search);if(params.get('mode')==='range'){rangeFace=clamp(Math.round(Number(params.get('face'))||0),-8,8);rangePath=clamp(Math.round(Number(params.get('path'))||0),-8,8);showRange(false);}else if(params.get('mode')==='book')memory.openBook();else if(params.get('mode')==='daily')journey.startDaily(false,params.get('day'));else if(params.get('mode')==='memory'){if(params.get('shot'))memory.openShared(params.get('shot'));else memory.beginOrResume();}
 window.addEventListener('pagehide',event=>{presentation.sequence.finish();if(event.persisted){audio.context?.suspend();return;}strikeToken++;scene?.destroy();impact?.destroy();audio.close();});
 window.addEventListener('pageshow',event=>{if(event.persisted){journey.syncBoard();if(audio.enabled)audio.context?.resume().catch(()=>{});}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)presentation.sequence.finish();if(!document.hidden){journey.syncBoard();memory?.syncBook();}});

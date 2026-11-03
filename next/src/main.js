@@ -39,7 +39,7 @@ $('#app').innerHTML=`
 
 const reading=new LessonSequence(),seenReads=new Set();
 const readRail=document.createElement('nav');readRail.className='gs-lesson-rail';readRail.setAttribute('aria-label','This decision');$('.course-wrap').after(readRail);
-const closeLesson=document.createElement('a');closeLesson.className='library-close';closeLesson.href='/';closeLesson.textContent='×';closeLesson.setAttribute('aria-label','Close decision library');$('.site-header').append(closeLesson);
+const closeLesson=document.createElement('a');closeLesson.className='library-close';closeLesson.href='?all=1&kind=course';closeLesson.textContent='×';closeLesson.setAttribute('aria-label','Close decision library');$('.site-header').append(closeLesson);
 function presentRead(){
  const root=$('.experience'),context=$('#question-context'),panel=$('#panel');
  reading.cancel();readRail.hidden=stage==='intro';if(stage==='intro')return;
@@ -155,7 +155,7 @@ function landed(){if(stage==='watch'){stage='review';scene?.setMode('choice');sc
 function reveal(){stage='compare';displayPlan={...committed};scene?.setMode('compare');scene?.showPattern(displayPlan);record(state,'pattern_revealed',{case:current().id});render({focus:true});announce('All twelve finishes are now shown.');}
 function compare(alternative){showingAlternative=alternative;if(alternative)compared=true;displayPlan=alternative?bestPlan(current()):{...committed};scene?.showPattern(displayPlan);record(state,'comparison_viewed',{case:current().id,alternative,plan:displayPlan});render();$(`[data-compare="${alternative?'alternative':'own'}"]`)?.focus({preventScroll:true});scrollToScene();}
 function finish(){saveFailed=!completeLesson(state,lesson());stage='complete';scene?.setMode('complete');render({focus:true});announce('Both decisions complete. Save your course cue.');}
-function goHome(){if(['flight','watch'].includes(stage))return;stage='intro';lessonIndex=0;caseIndex=0;plan=null;scene?.setCase(LESSONS[0].cases[0]);scene?.setMode('intro');render({focus:true});window.scrollTo({top:0,behavior:'instant'});}
+function goHome(){if(['flight','watch'].includes(stage))return;if(new URLSearchParams(location.search).has('read')){location.href='?all=1&kind=course';return;}stage='intro';lessonIndex=0;caseIndex=0;plan=null;scene?.setCase(LESSONS[0].cases[0]);scene?.setMode('intro');render({focus:true});window.scrollTo({top:0,behavior:'instant'});}
 function showDialog(kind='about'){
  const body=$('#dialog-body');
  if(kind==='cues')body.innerHTML=`<span class="eyebrow">YOUR SAVED COURSE CUES</span><h2>Take the useful part.</h2>${state.cues.map(id=>{const l=LESSONS.find(l=>l.id===id);return `<h3>${l.name}</h3><p>${l.cue}</p>`;}).join('')}<p class="micro">These examples are a prompt for practice, not a personal club recommendation.</p>`;
@@ -189,6 +189,9 @@ window.addEventListener('resize',updateFallback);
 render();
 try{scene=new GolfScene($('#course'),{onSelect:setAim,onLand:landed,reducedMotion});document.documentElement.dataset.renderer='webgl';}catch(error){console.warn('3D scene unavailable. Using the overhead learning view.',error);$('#course').querySelector('canvas')?.remove();$('#course').dataset.fallback='true';document.documentElement.dataset.renderer='fallback';$('#view').hidden=true;$('#motion').hidden=true;updateFallback();}
 setMotion(reducedMotion);
+const linkedRead=new URLSearchParams(location.search).get('read');
+const linkedIndex=LESSONS.findIndex(l=>l.id===linkedRead);
+if(linkedIndex>=0)begin(linkedIndex);
 
 document.addEventListener("visibilitychange",()=>{if(document.hidden)reading.finish();});
 window.addEventListener("pagehide",()=>reading.cancel());
