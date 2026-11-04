@@ -1,3 +1,5 @@
+import {RECOVERED_LESSONS} from './recovered-content.js';
+import {decisionVisual} from './course-plan-visual.js';
 const images=import.meta.glob('./scene-assets/*.webp',{eager:true,query:'?url',import:'default'});
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const invitations={
@@ -14,7 +16,7 @@ export const invitations={
  'round-bunker':['Where can you afford to miss?','A tucked flag. A recovery you can avoid.','THE HEADLAND · PIN LEFT'],
  'round-permission':['Is this your moment to attack?','A shorter approach. A different opportunity.','THE HEADLAND · 95 M'],
 };
-export function sceneImage(id,{label='',priority=false}={}){const src=images[`./scene-assets/${id}.webp`];return `<div class="gs-scene-art">${src?`<img src="${src}" alt="" width="960" height="540" loading="${priority?'eager':'lazy'}" decoding="async" ${priority?'fetchpriority="high"':''}>`:''}${label?`<span class="gs-scene-caption">${esc(label)}</span>`:''}</div>`;}
+export function sceneImage(id,{label='',priority=false}={}){const lesson=RECOVERED_LESSONS.find(l=>l.id===id);if(lesson)return `<div class="gs-scene-art rc-preview" aria-hidden="true">${decisionVisual(lesson.questions[0])}${label?`<span class="gs-scene-caption">${esc(label)}</span>`:''}</div>`;const src=images[`./scene-assets/${id}.webp`];return `<div class="gs-scene-art">${src?`<img src="${src}" alt="" width="960" height="540" loading="${priority?'eager':'lazy'}" decoding="async" ${priority?'fetchpriority="high"':''}>`:''}${label?`<span class="gs-scene-caption">${esc(label)}</span>`:''}</div>`;}
 export function invitation(l){const text=invitations[l.id];return {title:text?.[0]||l.title,line:text?.[1]||l.line,label:text?.[2]||'READ THE HOLE · MAKE YOUR CALL'};}
 export function toolCards(){return `<section class="ac-group gs-own"><div class="ac-section-head"><h2>Bring your golf into it.</h2><span>Explore a shot. Keep a discovery.</span></div><div class="ac-tools">${[
  ['memory','?mode=memory','A SHOT STILL ON YOUR MIND','Bring back a shot you wish you could play again.','Choose the flight you remember. Explore what could change it.'],

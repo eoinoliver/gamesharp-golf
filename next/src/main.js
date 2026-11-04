@@ -1,3 +1,4 @@
+import {createFocusService} from './focus-service.js';
 import './style.css';
 import './play.css';
 import {DECISIONS,evidenceFor,planDescription} from './choices.js';
@@ -12,6 +13,10 @@ import {LessonSequence} from './lesson-sequence.js';
 const $=s=>document.querySelector(s),arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
 const targetIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M1 12h4m14 0h4"/></svg>';
 golfAudio.setScene(true);
+let focusStorage;try{focusStorage=localStorage;}catch{}
+const focusService=createFocusService(focusStorage);
+const routeParams=new URLSearchParams(location.search);
+const courseReturn=routeParams.get('from')==='sharpen'?'?review=1'+(['tee','recovery','approach','green','putting'].includes(routeParams.get('zone'))?'&zone='+routeParams.get('zone'):''):'?all=1&kind=course';
 const state=readState(),audio=golfAudio,media=matchMedia('(prefers-reduced-motion: reduce)');
 let scene=null,reducedMotion=media.matches,stage='intro',lessonIndex=0,caseIndex=0,plan=null,committed=null,displayPlan=null,confidence='not-asked',compared=false,showingAlternative=false,saveFailed=false,roundResults=[],lastCommit=null,selectedAnswer=null,selectionSource=null,customOpen=false;
 const lesson=()=>LESSONS[lessonIndex],current=()=>lesson().cases[caseIndex];
@@ -40,7 +45,7 @@ $('#app').innerHTML=`
 
 const reading=new LessonSequence(),seenReads=new Set();
 const readRail=document.createElement('nav');readRail.className='gs-lesson-rail';readRail.setAttribute('aria-label','This decision');$('.course-wrap').after(readRail);
-const closeLesson=document.createElement('a');closeLesson.className='library-close';closeLesson.href='?all=1&kind=course';closeLesson.textContent='×';closeLesson.setAttribute('aria-label','Close decision library');$('.site-header').append(closeLesson);
+const closeLesson=document.createElement('a');closeLesson.className='library-close';closeLesson.href=courseReturn;closeLesson.textContent='×';closeLesson.setAttribute('aria-label','Close decision library');$('.site-header').append(closeLesson);
 function presentRead(){
  const root=$('.experience'),context=$('#question-context'),panel=$('#panel');
  reading.cancel();readRail.hidden=stage==='intro';if(stage==='intro')return;
@@ -121,8 +126,9 @@ function render({focus=false}={}){
  }else if(stage==='complete'){
   const first=state.firstAttempts[c.id],strong=roundResults[1]?.strong,firstRun=lastCommit?.first;
   const title=strong?'You read the changed situation.':'There’s a read worth practising.';
-  panel.innerHTML=`${kicker}<div class="complete-copy"><span class="chapter-label">${strong?'THE NEW SETUP · STRONG PLAN':'THE NEW SETUP · KEEP PRACTISING'}</span><h1>${title}</h1><p class="lead">${strong?c.success:'The new setup exposed something to revisit. Compare the patterns again, then keep this cue for the course.'}</p><div class="cue-card"><span>YOUR NEXT-ROUND CUE</span><p>${l.cue}</p><span class="cue-footer">GAMESHARP GOLF <i>↗</i></span></div></div><p class="first-attempt">${firstRun?'First transfer check recorded.':`Practice run. Your first transfer check stays ${first?.strong?'strong':'needs practice'}.`} Replays stay separate from your first attempt.</p><div class="panel-bottom"><button class="primary ${state.cues.includes(l.id)&&!saveFailed?'saved':''}" id="save-cue">${state.cues.includes(l.id)&&!saveFailed?'Course cue saved ✓':`Save my course cue ${arrow}`}</button><p class="micro" id="save-status">${saveFailed?'Saving is unavailable in this browser. Copy the cue or export your notes.':'Saved on this browser only.'}</p><div class="completion-actions"><button class="secondary" id="next-lesson">${lessonIndex<5?'Next read →':'Back to all six reads'}</button><button class="text-button" id="replay">Practise again</button></div></div>`;
+  panel.innerHTML=`${kicker}<div class="complete-copy"><span class="chapter-label">${strong?'THE NEW SETUP · STRONG PLAN':'THE NEW SETUP · KEEP PRACTISING'}</span><h1>${title}</h1><p class="lead">${strong?c.success:'The new setup exposed something to revisit. Compare the patterns again, then keep this cue for the course.'}</p><div class="cue-card"><span>YOUR NEXT-ROUND CUE</span><p>${l.cue}</p><span class="cue-footer">GAMESHARP GOLF <i>↗</i></span></div></div><p class="first-attempt">${firstRun?'First transfer check recorded.':`Practice run. Your first transfer check stays ${first?.strong?'strong':'needs practice'}.`} Replays stay separate from your first attempt.</p><div class="panel-bottom"><button class="primary ${state.cues.includes(l.id)&&!saveFailed?'saved':''}" id="save-cue">${state.cues.includes(l.id)&&!saveFailed?'Course cue saved ✓':`Save my course cue ${arrow}`}</button><p class="micro" id="save-status">${saveFailed?'Saving is unavailable in this browser. Copy the cue or export your notes.':'Saved on this browser only.'}</p><div class="completion-actions"><button class="secondary" id="take-focus">Take this to my next round →</button><button class="secondary" id="next-lesson">${lessonIndex<5?'Next read →':'Back to all six reads'}</button><button class="text-button" id="replay">Practise again</button></div></div>`;
   $('#save-cue').onclick=()=>{saveFailed=!saveCue(state,l.id);if(!saveFailed)audio.play('success');render();announce(saveFailed?'This browser could not save the cue.':'Course cue saved.');};
+  $('#take-focus').onclick=()=>{saveCue(state,l.id);const ok=focusService.select({kind:'lesson',id:l.id});if(ok)location.href='?prepare=1';else{saveFailed=true;render();announce('This browser could not save the focus.');}};
   $('#next-lesson').onclick=()=>lessonIndex<5?begin(lessonIndex+1):goHome();$('#replay').onclick=()=>begin(lessonIndex);
  }
  $('#scene-status').textContent=['decision','review'].includes(stage)?(customOpen?(scene?'CUSTOM PLAN · Tap the course or use the slider':'CUSTOM PLAN · Use the slider below'):selectionSource?`ANSWER ${selectedAnswer||'CUSTOM'} · Aim preview`:'YOUR ANSWER · Choose a card below'):stage==='intro'?'Six reads on one original coastal hole':stage==='compare'?`${showingAlternative?'Alternative':'Your plan'} · 12 authored finishes`:stage==='complete'?'One cue to take to your next round':stage==='setup'?'Question 1 complete · Previewing question 2':`${Math.round(Math.hypot(c.start.x-c.pin.x,c.start.z-c.pin.z))} m to flag · ${c.objective==='approach'?'Approach':'Lay-up'}`;
@@ -156,7 +162,7 @@ function landed(){if(stage==='watch'){stage='review';scene?.setMode('choice');sc
 function reveal(){stage='compare';displayPlan={...committed};scene?.setMode('compare');scene?.showPattern(displayPlan);record(state,'pattern_revealed',{case:current().id});render({focus:true});announce('All twelve finishes are now shown.');}
 function compare(alternative){showingAlternative=alternative;if(alternative)compared=true;displayPlan=alternative?bestPlan(current()):{...committed};scene?.showPattern(displayPlan);record(state,'comparison_viewed',{case:current().id,alternative,plan:displayPlan});render();$(`[data-compare="${alternative?'alternative':'own'}"]`)?.focus({preventScroll:true});scrollToScene();}
 function finish(){saveFailed=!completeLesson(state,lesson());stage='complete';scene?.setMode('complete');render({focus:true});announce('Both decisions complete. Save your course cue.');}
-function goHome(){if(['flight','watch'].includes(stage))return;if(new URLSearchParams(location.search).has('read')){location.href='?all=1&kind=course';return;}stage='intro';lessonIndex=0;caseIndex=0;plan=null;scene?.setCase(LESSONS[0].cases[0]);scene?.setMode('intro');render({focus:true});window.scrollTo({top:0,behavior:'instant'});}
+function goHome(){if(['flight','watch'].includes(stage))return;if(new URLSearchParams(location.search).has('read')){location.href=courseReturn;return;}stage='intro';lessonIndex=0;caseIndex=0;plan=null;scene?.setCase(LESSONS[0].cases[0]);scene?.setMode('intro');render({focus:true});window.scrollTo({top:0,behavior:'instant'});}
 function showDialog(kind='about'){
  const body=$('#dialog-body');
  if(kind==='cues')body.innerHTML=`<span class="eyebrow">YOUR SAVED COURSE CUES</span><h2>Take the useful part.</h2>${state.cues.map(id=>{const l=LESSONS.find(l=>l.id===id);return `<h3>${l.name}</h3><p>${l.cue}</p>`;}).join('')}<p class="micro">These examples are a prompt for practice, not a personal club recommendation.</p>`;

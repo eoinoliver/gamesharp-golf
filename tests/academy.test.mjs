@@ -6,8 +6,8 @@ import {freshLearning,loadLearning,saveLearning,recordAnswer,finishLearning,dueL
 import {demoFor,comparisonChoice,learningVisual} from '../next/src/academy-visual.js';
 const storage=()=>{let value=null;return{getItem:()=>value,setItem:(k,v)=>value=v};};
 test('the whole-round catalogue is approved, bounded and balanced, with distinct fresh return questions',()=>{
- assert.equal(CATALOG.length,15);assert.equal(CATALOG.reduce((n,l)=>n+coreCount(l),0),39);assert.deepEqual(NEW_LESSONS.map(l=>l.id),WHOLE_ROUND_LESSON_IDS);
- for(const c of CATEGORIES)assert.ok(CATALOG.filter(l=>l.category===c.id).length>=3);
+ assert.equal(CATALOG.length,21);assert.equal(CATALOG.reduce((n,l)=>n+coreCount(l),0),57);assert.deepEqual(NEW_LESSONS.map(l=>l.id),WHOLE_ROUND_LESSON_IDS);
+ for(const c of CATEGORIES)assert.ok(CATALOG.filter(l=>l.category===c.id).length>=(c.id==='rules'?1:3));
  for(const l of NEW_LESSONS){assert.equal(l.questions.length,4);assert.equal(new Set(l.questions.map(q=>q.situation)).size,4);assert.ok(l.cue&&l.practice&&l.misconception&&l.source);for(const q of l.questions){assert.ok(q.watch&&q.explanation&&q.options[q.correct]);assert.equal(new Set(q.options.map(o=>o.text)).size,q.options.length);assert.ok(q.options.every(o=>o.why));}}
 });
 test('chip comparisons preserve the hole, identify sand interceptions, and use different plans after a correct choice',()=>{

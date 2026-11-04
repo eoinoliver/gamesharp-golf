@@ -1,0 +1,55 @@
+import {clubEvidence,windRelation} from './recovered-content.js';
+export const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const isDecisionVisual=q=>['course-plan','decision-context','relief'].includes(q.visual.type);
+export const isGreenVisual=q=>['chip','putt','slope'].includes(q.visual.type);
+const text=(x,y,s,color='#f7f3d9',size=12,anchor='middle')=>`<text x="${x}" y="${y}" fill="${color}" font-size="${size}" text-anchor="${anchor}">${esc(s)}</text>`;
+const dot=(x,y,color,r=4)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="#152e27" stroke-width="1.3"/>`;
+const wrap=(body,label,view='0 0 360 300')=>`<svg class="rc-diagram" viewBox="${view}" role="img" aria-label="${esc(label)}"><defs><linearGradient id="rc-turf" x2=".2" y2="1"><stop stop-color="#376949"/><stop offset="1" stop-color="#173e32"/></linearGradient><linearGradient id="rc-water"><stop stop-color="#255f70"/><stop offset="1" stop-color="#132f45"/></linearGradient></defs><rect width="360" height="300" rx="16" fill="url(#rc-turf)"/>${body}</svg>`;
+const foot=s=>`<p class="ac-model">${esc(s)}</p>`;
+export function decisionVisual(q,choice=null){const v=q.visual,d=choice===null?null:q.options[choice]?.demo;
+ if(v.type==='course-plan'&&v.kind==='tee')return teeVisual(v,d);
+ if(v.type==='course-plan'&&v.kind==='recovery')return recoveryVisual(v,d);
+ if(v.type==='course-plan'&&v.kind==='wind')return windVisual(v,d);
+ if(v.type==='decision-context')return contextVisual(v,d);
+ if(v.type==='relief')return reliefVisual(v,d);
+ return '<p class="rc-fallback">Read the supplied situation and options. This illustration is unavailable.</p>';
+}
+function teeVisual(v,d){const y=z=>270-z*.75,x=a=>180+a*3,colors=['#f4ca7b','#88d9d1','#f2f4e2'],names=['A','B','C'];let s='<path d="M105 280Q85 190 115 120T105 18H250Q245 70 230 110T250 280Z" fill="#5d9053"/>';
+ for(let i=0;i<9;i++)s+=`<path d="M110 ${32+i*27}H244" stroke="#d3e9ad" stroke-opacity=".08" stroke-width="13"/>`;
+ if(v.boundary){const b=v.boundary,edge=x(b.side==='right'?b.edge:-b.edge),right=b.side==='right';s+=`<rect x="${right?edge:20}" y="24" width="${right?340-edge:edge-20}" height="${y(b.from)-24}" fill="#604c42"/><path d="M${edge} 24V${y(b.from)}H${right?340:20}" stroke="#fff" fill="none" stroke-width="2" stroke-dasharray="5 4"/>${text(right?334:26,43,'OB','#fff',12,right?'end':'start')}${text(right?294:65,165,'OB STARTS','#f7e6bc',10)}${text(right?294:65,181,`${b.from} m`,'#f7e6bc',12)}`;}
+ s+=`<path d="M180 262V24" stroke="#dce9d1" stroke-opacity=".35" stroke-dasharray="3 6"/>${text(180,21,'TOWARDS GREEN','#e4eccd',10)}`;
+ for(const z of [100,150,200,250])s+=`<path d="M45 ${y(z)}H60" stroke="#dbe6c9" stroke-opacity=".5"/>${text(39,y(z)+4,`${z}`,'#dae7c9',10,'end')}`;
+ v.clubs.forEach((c,i)=>{const active=d?.club===i;const points=c.points.map(p=>{const px=x(p.x),py=y(p.z),r=active?5:4;return i===0?dot(px,py,colors[i],r):i===1?`<path d="M${px} ${py-r-1}l${r+1} ${r+1}-${r+1} ${r+1}-${r+1}-${r+1}Z" fill="${colors[i]}" stroke="#152e27"/>`:`<rect x="${px-r}" y="${py-r}" width="${r*2}" height="${r*2}" fill="${colors[i]}" stroke="#152e27"/>`;}).join('');s+=`<g opacity="${d&&!active ? .24 : 1}" class="${active?'rc-reveal':''}">${active?`<path d="M180 268Q155 160 ${x(c.points[3].x)} ${y(c.points[3].z)}" fill="none" stroke="${colors[i]}" stroke-width="2" stroke-dasharray="4 5"/>`:''}${points}</g>`;});
+ s+=dot(180,270,'#fff',5)+text(180,290,'TEE · FINISH DISTANCES IN METRES','#e4eccd',10);
+ return wrap(s,'Supplied club finishes, including roll. '+(v.boundary?`OB on the ${v.boundary.side} from ${v.boundary.from} metres.`:'No penalty boundary in these landing areas.'))+`<div class="rc-legend">${v.clubs.map((c,i)=>`<span style="--rc-key:${colors[i]}"><b>${['●','◆','■'][i]} ${names[i]} · ${c.name}</b>${c.leave} m approach</span>`).join('')}</div>`+foot('Six authored finishes per club · fixed for every comparison · not your measured pattern');
+}
+function recoveryVisual(v,d){const fit=v.forwardHeight<v.ceiling&&v.requiredWidth<=v.forwardWidth,gap=v.forwardWidth*12,need=v.requiredWidth*12,ceilingY=280-v.ceiling*20,shotY=280-v.forwardHeight*20;
+ let s=`<rect x="12" y="12" width="336" height="160" rx="12" fill="#264c36"/>${text(180,33,'FROM ABOVE · WIDTH','#efe1b7',11)}<path d="M180 156V50M180 145H40" stroke="#81a965" stroke-width="36"/><rect x="${180-gap/2}" y="55" width="${gap}" height="35" fill="#91b673"/>`;
+ for(const side of [-1,1]){const cx=180+side*(gap/2+23);s+=`<circle cx="${cx}" cy="70" r="24" fill="#123528"/><circle cx="${cx-4}" cy="65" r="19" fill="#487552"/>`;}
+ s+=`<path d="M${180-gap/2} 51H${180+gap/2}" stroke="#f0d18d" stroke-width="2"/>${text(180,47,`${v.forwardWidth} m opening`,'#f7df9d',11)}<path d="M${180-need/2} 111H${180+need/2}" stroke="#b7e1da" stroke-dasharray="3 3" stroke-width="2"/>${text(180,127,`${v.requiredWidth} m shot window`,'#d2eee4',10)}${dot(180,151,'#fff',5)}${text(43,130,'EXIT','#e8e4bf',10)}`;
+ if(d)s+=`<path class="rc-route" d="${d.route==='side'?'M180 151H42':d.route==='forward'?'M180 151V70':'M180 151Q290 90 210 40'}" fill="none" stroke="#f5d48a" stroke-width="3" stroke-dasharray="4 4"/>`;
+ s+=`<rect x="12" y="183" width="336" height="107" rx="12" fill="#15372b"/>${text(180,202,'FROM THE SIDE · HEIGHT','#efe1b7',11)}<path d="M35 280H325" stroke="#a5b278" stroke-width="2"/><path d="M230 211V${ceilingY}H282V211" fill="#405940"/><path d="M230 ${ceilingY}H282" stroke="#bd9e71" stroke-width="5"/><path d="M48 278Q120 ${shotY} 255 ${shotY}" fill="none" stroke="#a4ded4" stroke-width="2" stroke-dasharray="4 4"/>${text(98,shotY-6,`${v.forwardHeight} m shot`,'#d2eee4',11)}${text(285,ceilingY+14,`${v.ceiling} m`,'#f4d295',11)}${dot(48,278,'#fff',4)}`;
+ return wrap(s,`Recovery opening ${v.forwardWidth} m wide and ${v.ceiling} m high. Shot requires ${v.requiredWidth} m width and reaches ${v.forwardHeight} m height.`)+(d?`<div class="rc-context-result rc-reveal"><strong>${d.route==='side'?'A clear sideways exit':d.route==='forward'?(fit?'Width and height fit.':'The forward shot does not fit.'):'The available pitch cannot clear the trees.'}</strong></div>`:'')+foot('Two schematic views of the same opening · supplied rehearsed shot, not a swing prediction');
+}
+function windVisual(v,d){const point=(deg,r)=>({x:180+Math.sin(deg*Math.PI/180)*r,y:150-Math.cos(deg*Math.PI/180)*r});const arrow=(deg,r,color,width,label)=>{const p=point(deg,r),a=point(deg-8,r-15),b=point(deg+8,r-15);return `<path d="M180 150L${p.x} ${p.y}M${a.x} ${a.y}L${p.x} ${p.y}L${b.x} ${b.y}" stroke="${color}" stroke-width="${width}" fill="none"/>`;};let s='<circle cx="180" cy="150" r="106" stroke="#d9e7d1" stroke-opacity=".3" fill="#142f2c"/><circle cx="180" cy="150" r="72" stroke="#d9e7d1" stroke-opacity=".12" fill="none"/>';
+ for(const [deg,label] of [[0,'N'],[90,'E'],[180,'S'],[270,'W']]){const p=point(deg,123);s+=text(p.x,p.y+5,label,'#e8ecd9',14);}
+ s+=`<g opacity=".5">${arrow(v.previous,80,'#b5bcb1',3)}</g>${arrow(v.heading,100,'#f4cf85',7)}${arrow(v.windTo,64,'#80e2de',4)}${dot(180,150,'#fff',5)}`;
+ if(d)s+=text(180,289,windRelation(v.heading,v.windTo).toUpperCase(),'#fff0cc',13);
+ return wrap(s,'Compass: gold new target, grey previous target, turquoise direction air is moving.')+`<div class="rc-legend"><span style="--rc-key:#f4cf85"><b>New target</b>Long gold arrow</span><span style="--rc-key:#80e2de"><b>Air moves this way</b>Short turquoise arrow</span><span style="--rc-key:#b5bcb1"><b>Previous target</b>Grey arrow</span></div>`+foot('Compass view · north stays fixed · no numerical carry or curve forecast');
+}
+function contextVisual(v,d){const match=v.kind==='match';let s=`<path d="M0 260Q130 180 360 225V300H0Z" fill="#5e9454"/><path d="M225 300Q200 245 260 220T360 210V300Z" fill="url(#rc-water)"/><ellipse cx="160" cy="255" rx="63" ry="23" fill="#88ae60"/><path d="M170 255V209l24 7-24 7" stroke="#f3d081" fill="#f3d081"/>${text(180,32,v.title.toUpperCase(),'#e8d39c',11)}`;
+ s+=v.cards.map((c,i)=>{const y=60+i*53;return `<rect x="22" y="${y}" width="316" height="45" rx="8" fill="${match?'#112b26':'#183c32'}" stroke="${d?.focus===i?'#e4c17b':'#5a8066'}"/>${text(36,y+19,c.label.toUpperCase(),'#b8cbb8',10,'start')}${text(324,y+29,c.value,'#f7edd1',18,'end')}`;}).join('');
+ return wrap(s,v.cards.map(c=>c.label+': '+c.value).join('. '))+(d?`<div class="rc-context-result rc-reveal"><strong>${esc(d.title)}</strong><p>${esc(d.detail)}</p></div>`:'')+foot(match?'Scratch singles · supplied scores · tied matches use extra holes here':'Decision context · a course illustration, not a shot simulation');
+}
+function reliefVisual(v,d){const area=v.kind==='area',a={x:135,y:180},b={x:235,y:180},near=v.nearest==='A'?a:b;let s=`<path d="M170 300V58H195V300" fill="#b9b9a4"/><path d="M15 96H130V300H15Z" fill="${v.nearest==='A'?'#294e33':'#6c9e5a'}"/><path d="M240 96H345V300H240Z" fill="${v.nearest==='B'?'#294e33':'#6c9e5a'}"/>${text(180,35,'HOLE DIRECTION ↑','#eee3b8',12)}${text(183,85,'PATH','#243e35',10)}<path d="M183 67v-15l17 5-17 5" fill="#f4d084" stroke="#f4d084"/>`;
+ if(area){const radius=Math.hypot(a.x-183,a.y-52);s+=`<defs><mask id="relief-valid"><rect width="360" height="300" fill="white"/><circle cx="183" cy="52" r="${radius}" fill="black"/></mask></defs><circle cx="135" cy="180" r="40" fill="#8ed4c0" opacity=".45" mask="url(#relief-valid)"/><circle cx="135" cy="180" r="40" fill="none" stroke="#d5ebd6" stroke-dasharray="4 4"/><path d="M135 180h-40" stroke="#e4dfbd"/>${text(86,178,'1 CL','#e9eccd',10,'end')}${dot(126,206,d?.point==='X'?'#f4cc80':'#fff',5)}${text(111,225,'X')}${dot(139,155,d?.point==='Y'?'#f4cc80':'#fff',5)}${text(120,150,'Y')}`;}
+ for(const [name,p] of [['A',a],['B',b]])s+=dot(p.x,p.y,d?.point===name?'#f4cc80':'#fff',6)+text(p.x,p.y-15,name,'#fff2d0',16)+(!area?text(p.x,p.y+29,name===v.nearest?'NEAREST':'FARTHER','#dfebd1',10):'');
+ s+=dot(183,180,d?.point==='ball'?'#f4cc80':'#fff',5)+text(183,250,'BALL ON PATH','#e5ebd3',10)+text(62,115,v.nearest==='A'?'ROUGH':'FAIRWAY','#e5ebd3',10)+text(291,115,v.nearest==='B'?'ROUGH':'FAIRWAY','#e5ebd3',10);
+ return wrap(s,area?'A is the reference point. X is in the permitted relief area, Y is nearer the hole.':`${v.nearest} is the supplied nearest point of complete relief; the farther point is on fairway.`)+foot('Schematic · complete-relief points supplied for the intended stroke · not a stance measurement');
+}
+export function decisionPayoff(q,choice){const v=q.visual,d=q.options[choice]?.demo;if(!d)return null;
+ if(v.kind==='tee'){const e=clubEvidence(v,d.club);return {title:`${e.trouble} of ${e.total} supplied finishes in OB.`,body:`${v.clubs[d.club].name} leaves a ${e.leave} m approach in this example. Compare the removed danger with the next shot.`};}
+ if(v.type==='decision-context')return null;
+ if(v.kind==='wind')return {title:`${windRelation(v.heading,v.windTo)} wind.`,body:'The compass stayed fixed. Your target changed. Read this hole before choosing the shot.'};
+ return null;
+}

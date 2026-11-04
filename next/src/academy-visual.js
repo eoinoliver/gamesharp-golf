@@ -1,14 +1,17 @@
+import {decisionVisual,isDecisionVisual,isGreenVisual} from './course-plan-visual.js';
 import {directionRuler,flightReadout} from './impact-teaching.js';
 export function demoFor(q,choice){const d=q.options[choice]?.demo||q.visual.actual||{face:q.visual.face,path:q.visual.path};return q.visual.hazard&&d.land<q.visual.edge?{...d,end:d.land,blocked:true}:d;}
 export const comparisonChoice=(q,choice)=>choice===q.correct?(q.correct+1)%q.options.length:q.correct;
 const txt=(x,y,s,fill='#d9e5d5',size=12,anchor='middle')=>`<text x="${x}" y="${y}" fill="${fill}" font-size="${size}" text-anchor="${anchor}">${s}</text>`;
 export function learningVisual(q,choice=null,{compare=false}={}){
  const v=q.visual,revealed=choice!==null;
+ if(isDecisionVisual(q))return decisionVisual(q,compare?comparisonChoice(q,choice):choice);
  if(v.type==='flight'){
   const pair=revealed?demoFor(q,compare?comparisonChoice(q,choice):choice):v;
   return `<div class="ac-impact-visual">${revealed?flightReadout(pair.face,pair.path):'<div class="ac-predict"><span>↗</span><strong>Call the flight.</strong><p>The target is 0°. Gold is the face; teal is the head’s movement.</p></div>'}${directionRuler(pair.face,pair.path)}<p class="ac-model">Centred iron · still air · right-handed example${revealed?' · curve exaggerated':''}</p></div>`;
  }
  if(v.type==='spread')return spreadVisual(v,revealed);
+ if(!isGreenVisual(q))return '<p class="rc-fallback">This illustration is unavailable. Read the supplied situation.</p>';
  const max=v.max||v.target*1.6,startY=310,endY=55,y=d=>startY-d/max*(startY-endY),cx=250;
  const d=revealed?demoFor(q,compare?comparisonChoice(q,choice):choice):null;
  const edge=v.edge||0,greenY=y(edge);

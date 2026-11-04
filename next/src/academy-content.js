@@ -1,6 +1,8 @@
+import {RECOVERED_LESSONS,RECOVERY_SOURCES} from './recovered-content.js';
 import {LESSONS} from './scenario.js';
 
 export const SOURCES = {
+ ...RECOVERY_SOURCES,
  impact:{label:'Trackman · Face to Path',url:'https://www.trackman.com/blog/face-to-path'},
  landing:{label:'PGA of America · Choosing a landing spot',url:'https://www.pga.com/story/clutch-kim-two-tips-to-improve-your-chipping-under-pressure'},
  pace:{label:'PGA of America · Match line and speed',url:'https://www.pga.com/story/separate-line-and-speed-in-your-putting-routine'},
@@ -11,6 +13,7 @@ export const CATEGORIES = [
  {id:'shot',name:'Shot-making',symbol:'↗',line:'Read the start. Understand the bend.',need:'My irons keep surprising me.'},
  {id:'course',name:'Course decisions',symbol:'⚑',line:'Give your ordinary shots more room.',need:'I give away shots before I swing.'},
  {id:'short',name:'Short game',symbol:'⌁',line:'Choose the landing. Allow for the roll.',need:'I get close, then waste the chance.'},
+ {id:'rules',name:'Rules in play',symbol:'◇',line:'Know your options before choosing the shot.',need:'I want to make the right relief decision.'},
  {id:'putt',name:'Putting',symbol:'◎',line:'Match the line, the pace and the slope.',need:'My first putt leaves too much work.'},
 ];
 const o=(text,why,demo)=>({text,why,...(demo?{demo}:{})});
@@ -138,9 +141,9 @@ export const NEW_LESSONS=[
    q('Your level 5 m practice putt was well paced. The next 5 m putt is straight downhill on the same surface.','What adjustment fits?',[
     o('More starting speed','The slope already assists the roll.'),o('No adjustment because it is 5 m','Length is not the only input.'),o('Less starting speed','Less is needed to reach the same distance downhill.')],2,'Carry the intention—controlled arrival—not an identical stroke from a different slope.',green('slope',5,{grade:'down',max:9,actual:{side:0,end:5}}),'Read this putt, not the previous one.')
   ])
-];
+,...RECOVERED_LESSONS];
 export const COURSE_LESSONS=LESSONS.map(l=>({id:l.id,category:'course',title:l.name,line:l.teaser,cue:l.cue,minutes:4,legacy:true,questions:l.cases,href:`?view=library&read=${l.id}`}));
-export const CATALOG=[NEW_LESSONS[0],COURSE_LESSONS[0],NEW_LESSONS[3],NEW_LESSONS[6],NEW_LESSONS[1],COURSE_LESSONS[1],NEW_LESSONS[4],NEW_LESSONS[7],NEW_LESSONS[2],COURSE_LESSONS[2],NEW_LESSONS[5],NEW_LESSONS[8],...COURSE_LESSONS.slice(3)];
+export const CATALOG=[NEW_LESSONS[0],COURSE_LESSONS[0],NEW_LESSONS[3],NEW_LESSONS[6],NEW_LESSONS[1],COURSE_LESSONS[1],NEW_LESSONS[4],NEW_LESSONS[7],NEW_LESSONS[2],COURSE_LESSONS[2],NEW_LESSONS[5],NEW_LESSONS[8],...COURSE_LESSONS.slice(3),...RECOVERED_LESSONS];
 export const byId=id=>CATALOG.find(l=>l.id===id);
 export const lessonURL=l=>l.href||`?learn=${l.id}`;
 export const coreCount=l=>l.legacy?2:3;

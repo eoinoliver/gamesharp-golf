@@ -11,8 +11,8 @@ const answer=async(p,choice)=>{await p.locator(`[data-choice="${choice}"]`).clic
 try{
  const p=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});watch(p);
  await p.goto(base);await p.locator('.gs-home-hero').waitFor();assert.equal(await p.locator('.ac-nav a').count(),3);await p.screenshot({path:resolve(out,'home.png'),fullPage:true});
- await p.getByRole('link',{name:'Explore',exact:true}).click();await p.locator('.ac-card').first().waitFor();assert.equal(await p.locator('.ac-card').count(),15);for(const c of ['shot','course','short','putt']){await p.goto(`${base}/?all=1&kind=${c}`);await p.locator('.ac-card').first().waitFor();assert.ok(await p.locator('.ac-card').count()>=3);}
- report('Home, Sharpen and Explore link one catalogue with 15 eligible lessons in four categories.');
+ await p.getByRole('link',{name:'Explore',exact:true}).click();await p.locator('.ac-card').first().waitFor();assert.equal(await p.locator('.ac-card').count(),CATALOG.length);for(const c of ['shot','course','short','putt']){await p.goto(`${base}/?all=1&kind=${c}`);await p.locator('.ac-card').first().waitFor();assert.ok(await p.locator('.ac-card').count()>=3);}
+ report('Home, Sharpen and Explore link one catalogue with the expanded eligible catalogue and category filters.');
  for(const l of NEW_LESSONS){await p.goto(`${base}/?learn=${l.id}`);for(let i=0;i<3;i++){
   assert.equal(await p.locator('#ac-commit').isDisabled(),true);assert.equal(await p.locator('.ac-feedback').count(),0);await answer(p,l.questions[i].correct);
   if(i===0){await p.reload();await p.locator('.ac-feedback').waitFor();assert.match(await p.locator('.ac-your-answer').innerText(),new RegExp('Your answer'));
@@ -26,13 +26,13 @@ try{
  await p.evaluate(id=>{const s=JSON.parse(localStorage.getItem('gamesharp-learning-v1'));s.completed[id]=new Date(Date.now()-25*3600000).toISOString();localStorage.setItem('gamesharp-learning-v1',JSON.stringify(s));},l.id);
  await p.goto(`${base}/?learn=${l.id}&check=1`);await answer(p,l.questions[3].correct);await p.locator('#ac-next').click();assert.match(await p.locator('.ac-result-score').innerText(),/3 of 3 first reads/);
  }
- report('All nine new lessons: 27 core decisions, comparisons, 9 delayed return checks, saved cues, feedback reload and immutable first scores.');
- await p.goto(base+'/?book=1');assert.equal(await p.locator('.ac-cue').count(),9);await p.locator('[data-focus]').first().click();assert.equal(await p.locator('.ac-focus').count(),1);await p.screenshot({path:resolve(out,'my-game.png'),fullPage:true});
- const first=await p.evaluate(()=>JSON.parse(localStorage.getItem('gamesharp-learning-v1')).first);await p.goto(base+'/?review=1');await p.locator('#ac-mix').click();for(let i=0;i<3;i++){await answer(p,0);await p.locator('#ac-next').click();}assert.deepEqual(await p.evaluate(()=>JSON.parse(localStorage.getItem('gamesharp-learning-v1')).first),first);report('My game chooses a course cue; three-decision mixed practice leaves original lesson answers unchanged.');
+ report('All Academy lessons: core decisions, comparisons, delayed return checks, saved cues, feedback reload and immutable first scores.');
+ await p.goto(base+'/?book=1');await p.locator('.ac-cue').first().waitFor();assert.equal(await p.locator('.ac-cue').count(),NEW_LESSONS.length);await p.locator('[data-focus]').first().click();assert.equal(await p.locator('.ac-focus').count(),1);await p.screenshot({path:resolve(out,'my-game.png'),fullPage:true});
+ const first=await p.evaluate(()=>JSON.parse(localStorage.getItem('gamesharp-learning-v1')).first);await p.goto(base+'/?review=1');await p.locator('.sp-practice-details summary').click();await p.locator('#ac-mix').click();for(let i=0;i<3;i++){await answer(p,0);await p.locator('#ac-next').click();}assert.deepEqual(await p.evaluate(()=>JSON.parse(localStorage.getItem('gamesharp-learning-v1')).first),first);report('My game chooses a course cue; three-decision mixed practice leaves original lesson answers unchanged.');
  for(const l of CATALOG.filter(l=>l.legacy)){
   await p.goto(base+'/'+l.href);await p.locator('.answer-grid').waitFor();for(let i=0;i<2;i++){await p.locator('[data-answer]').first().click();await p.locator('#commit').click();if(await p.locator('#reveal').isVisible())await p.locator('#reveal').click();await p.locator('[data-compare="alternative"]').click();await p.locator('#continue').click();if(!i)await p.locator('#play-next-question').click();}await p.locator('#save-cue').click();await p.locator('#back-to-reads').click();await p.locator('.ac-card').first().waitFor();assert.match(p.url(),/kind=course/);
  }
- await p.goto(base+'/?review=1');assert.match(await p.locator('.ac-needs').innerText(),/6\/6 played/);report('All six existing course lessons: 12 decisions, comparison, cue saving, direct catalogue entry and return; earlier progress remains visible.');
+ await p.goto(base+'/?review=1');await p.locator('.sp-practice-details summary').click();const courseCount=CATALOG.filter(l=>l.category==='course').length;assert.ok((await p.locator('.ac-needs').innerText()).includes(`${courseCount}/${courseCount} played`));report('All six existing course lessons: 12 decisions, comparison, cue saving, direct catalogue entry and return; earlier progress remains visible.');
  for(const width of [320,390,768,1440])for(const path of ['/?home=1','/?all=1','/?review=1','/?book=1','/?learn=landing-not-hole&check=1']){await p.setViewportSize({width,height:950});await p.goto(base+path);await p.locator('#ac-main').waitFor();await overflow(p);}
  report('Home, catalogue, Sharpen, My game and lesson layouts fit 320, 390, 768 and 1440 px.');
  await p.close();
