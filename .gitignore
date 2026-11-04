@@ -11,3 +11,10 @@ Play a Hole Hero.png
 node_modules/
 dist/
 .vercel/
+
+# Local browser verification evidence
+work/reading-qa/
+
+# Reproducible design captures and local verification evidence
+next/src/scene-assets/*.png
+tools/redesign/qa/
